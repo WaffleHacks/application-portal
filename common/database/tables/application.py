@@ -53,7 +53,6 @@ class Application(SQLModel, table=True):
     shipping_address: Optional[str]  # this should be formatted prior to insertion
     country_id: int = Field(foreign_key="countries.id")
     country: "Country" = Relationship(back_populates="applications")
-    # TODO: link to country
 
     share_information: bool
     # TODO: figure out resume stuff

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -12,4 +12,4 @@ class Country(SQLModel, table=True):
     id: int = Field(primary_key=True)
     name: str
 
-    applications: "Application" = Relationship(back_populates="country")
+    applications: List["Application"] = Relationship(back_populates="country")
