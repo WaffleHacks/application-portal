@@ -33,8 +33,10 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
-          - sqlalchemy2-stubs==0.0.2-alpha.19
+          - pydantic[email]==1.9.0
           - sqlalchemy[mypy]==1.4.31
+          - sqlalchemy2-stubs==0.0.2-alpha.19
+          - sqlmodel==0.0.6
 
 default_language_version:
   python: python3.9
