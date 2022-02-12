@@ -9,11 +9,10 @@ repos:
       - id: check-toml
       - id: check-yaml
       - id: end-of-file-fixer
-      # Disable while setting up project
-      #- id: no-commit-to-branch
-      #  args:
-      #    - --branch
-      #    - main
+      - id: no-commit-to-branch
+        args:
+          - --branch
+          - main
       - id: trailing-whitespace
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
