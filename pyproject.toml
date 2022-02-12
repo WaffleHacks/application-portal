@@ -8,18 +8,22 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9"
 pydantic = {version = "^1.9.0", extras = ["dotenv"]}
+SQLAlchemy = {version = "^1.4.31", extras = ["mypy", "asyncio"]}
+alembic = {version = "^1.7.6", extras = ["tz"]}
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
 isort = "^5.10.1"
 mypy = "^0.931"
 pre-commit = "^2.17.0"
+sqlalchemy2-stubs = "^0.0.2-alpha.19"
 
 [tool.isort]
 profile = "black"
 
 [tool.mypy]
 python_version = "3.9"
+plugins = "sqlalchemy.ext.mypy.plugin"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

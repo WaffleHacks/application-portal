@@ -32,6 +32,9 @@ repos:
     rev: v0.931
     hooks:
       - id: mypy
+        additional_dependencies:
+          - sqlalchemy2-stubs==0.0.2-alpha.19
+          - sqlalchemy[mypy]==1.4.31
 
 default_language_version:
   python: python3.9
