@@ -1,8 +1,8 @@
 """Add participant and application
 
-Revision ID: 8d99b6e82e06
+Revision ID: 58d2280520b8
 Revises:
-Create Date: 2022-02-12 05:35:35.661366+00:00
+Create Date: 2022-02-12 07:30:30.427270+00:00
 
 """
 import sqlalchemy as sa
@@ -10,7 +10,7 @@ import sqlmodel
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "8d99b6e82e06"
+revision = "58d2280520b8"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,7 +47,7 @@ def upgrade():
             ),
             nullable=True,
         ),
-        sa.Column("participant_id", sa.Integer(), nullable=True),
+        sa.Column("participant_id", sa.Integer(), nullable=False),
         sa.Column("level_of_study", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("graduation_year", sa.Integer(), nullable=False),
         sa.Column("major", sqlmodel.sql.sqltypes.AutoString(), nullable=True),

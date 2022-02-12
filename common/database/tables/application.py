@@ -29,9 +29,7 @@ class RaceEthnicity(Enum):
 class Application(SQLModel, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(
-        default=None, primary_key=True, foreign_key="participants.id"
-    )
+    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
     participant: "Participant" = Relationship(back_populates="application")
 
     # TODO: link to school
