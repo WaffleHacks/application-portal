@@ -7,6 +7,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from .participant import Participant
+    from .school import School
 
 
 class Gender(Enum):
@@ -32,7 +33,8 @@ class Application(SQLModel, table=True):
     participant_id: int = Field(primary_key=True, foreign_key="participants.id")
     participant: "Participant" = Relationship(back_populates="application")
 
-    # TODO: link to school
+    school_id: int = Field(foreign_key="schools.id")
+    school: "School" = Relationship(back_populates="applications")
     level_of_study: str
     graduation_year: int
     major: Optional[str]
