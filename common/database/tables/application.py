@@ -6,6 +6,7 @@ from sqlalchemy import Enum as SQLEnum
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
+    from .country import Country
     from .participant import Participant
     from .school import School
 
@@ -50,6 +51,8 @@ class Application(SQLModel, table=True):
     vcs_url: Optional[str]
 
     shipping_address: Optional[str]  # this should be formatted prior to insertion
+    country_id: int = Field(foreign_key="countries.id")
+    country: "Country" = Relationship(back_populates="applications")
     # TODO: link to country
 
     share_information: bool
