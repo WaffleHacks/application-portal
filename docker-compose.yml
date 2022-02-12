@@ -7,12 +7,5 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    networks:
-      default:
-        ipv4_address: 172.27.0.2
-
-networks:
-  default:
-    ipam:
-      config:
-        - subnet: 172.27.0.0/24
+    ports:
+      - "9427:5432"
