@@ -1,0 +1,19 @@
+name: Lint
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: jpetrucciani/mypy-check@master
+      - uses: isort/isort-action@master
+        with:
+          configuration: --check-only --diff --profile black
+      - uses: psf/black@stable
