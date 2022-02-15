@@ -12,6 +12,7 @@ from .legal_agreements import (
     LegalAgreementBase,
     LegalAgreementCreate,
     LegalAgreementRead,
+    LegalAgreementUpdate,
 )
 from .participant import (
     Participant,

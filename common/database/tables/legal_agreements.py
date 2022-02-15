@@ -20,3 +20,8 @@ class LegalAgreementCreate(LegalAgreementBase):
 
 class LegalAgreementRead(LegalAgreementBase):
     id: int
+
+
+class LegalAgreementUpdate(SQLModel):
+    name: Optional[str]
+    content: Optional[str]

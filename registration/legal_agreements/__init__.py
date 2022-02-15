@@ -1,7 +1,8 @@
 from http import HTTPStatus
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -9,6 +10,7 @@ from common.database import (
     LegalAgreement,
     LegalAgreementCreate,
     LegalAgreementRead,
+    LegalAgreementUpdate,
     with_db,
 )
 
@@ -35,6 +37,36 @@ async def create(agreement: LegalAgreementCreate, db: AsyncSession = Depends(wit
         db.add(la)
 
     return la
+
+
+@router.patch("/{agreement_id}")
+async def update(
+    agreement_id: int,
+    updates: LegalAgreementUpdate,
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Update the details of a legal agreement by its ID.
+    """
+    agreement = await db.get(LegalAgreement, agreement_id)
+    if agreement is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    # Update each field
+    updated_fields = updates.dict(exclude_unset=True)
+    for key, value in updated_fields.items():
+        setattr(agreement, key, value)
+
+    # Ensure the updated model is valid
+    *_, error = validate_model(LegalAgreement, agreement.__dict__)
+    if error:
+        raise error
+
+    # Save the changes
+    db.add(agreement)
+    await db.commit()
+
+    return agreement
 
 
 @router.delete("/{agreement_id}", status_code=HTTPStatus.NO_CONTENT)

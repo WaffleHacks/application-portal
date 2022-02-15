@@ -1,5 +1,8 @@
+from http import HTTPStatus
+
 from fastapi import FastAPI, Request
 from fastapi.responses import UJSONResponse
+from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from . import applications
@@ -17,4 +20,18 @@ async def http_exception_handler(_request: Request, exception: StarletteHTTPExce
         {"success": False, "reason": exception.detail},
         status_code=exception.status_code,
         headers=getattr(exception, "headers", None),
+    )
+
+
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(_request: Request, exception: ValidationError):
+    # Modfiy the errors to show it occurred in the request body
+    errors = exception.errors()
+    for i, error in enumerate(errors):
+        location = list(error["loc"])
+        location.insert(0, "body")
+        errors[i]["loc"] = tuple(location)
+
+    return UJSONResponse(
+        {"detail": errors}, status_code=HTTPStatus.UNPROCESSABLE_ENTITY
     )
