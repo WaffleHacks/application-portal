@@ -7,6 +7,7 @@ from .application import (
     RaceEthnicity,
 )
 from .country import Country
+from .legal_agreements import LegalAgreement
 from .participant import (
     Participant,
     ParticipantBase,
