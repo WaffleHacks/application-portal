@@ -55,7 +55,7 @@ class ApplicationBase(SQLModel):
 
     # TODO: figure out resume stuff
 
-    # TODO: link to legal agreements
+    legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
 
 
 class Application(ApplicationBase, table=True):
