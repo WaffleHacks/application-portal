@@ -16,7 +16,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[LegalAgreementRead])
-async def get_list(db: AsyncSession = Depends(with_db)):
+async def read(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all legal agreements that must be acknowledged prior to submitting the participant's application.
     """
@@ -25,7 +25,7 @@ async def get_list(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=LegalAgreementRead)
+@router.post("/", response_model=LegalAgreementRead, status_code=HTTPStatus.CREATED)
 async def create(agreement: LegalAgreementCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new legal agreement in the database
