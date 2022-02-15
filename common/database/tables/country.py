@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class Country(SQLModel, table=True):
     __tablename__ = "countries"
 
-    id: int = Field(primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
     name: str
 
     applications: List["Application"] = Relationship(back_populates="country")
