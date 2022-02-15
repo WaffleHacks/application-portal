@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import List
 
 from fastapi import APIRouter, Depends
@@ -34,3 +35,16 @@ async def create(agreement: LegalAgreementCreate, db: AsyncSession = Depends(wit
         db.add(la)
 
     return la
+
+
+@router.delete("/{agreement_id}", status_code=HTTPStatus.NO_CONTENT)
+async def delete(agreement_id: int, db: AsyncSession = Depends(with_db)):
+    """
+    Attempt to delete a legal agreement by its ID. This method will not fail if the agreement does not exist.
+    """
+    agreement = await db.get(LegalAgreement, agreement_id)
+
+    # Delete if exists
+    if agreement is not None:
+        await db.delete(agreement)
+        await db.commit()
