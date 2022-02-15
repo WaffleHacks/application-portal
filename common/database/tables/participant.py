@@ -12,13 +12,13 @@ class ParticipantBase(SQLModel):
     last_name: str
     email: EmailStr
 
-    application: "Application" = Relationship(back_populates="participant")
-
 
 class Participant(ParticipantBase, table=True):
     __tablename__ = "participants"
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
+
+    application: "Application" = Relationship(back_populates="participant")
 
 
 class ParticipantCreate(ParticipantBase):

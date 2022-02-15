@@ -9,13 +9,13 @@ if TYPE_CHECKING:
 class SchoolBase(SQLModel):
     name: str
 
-    applications: List["Application"] = Relationship(back_populates="school")
-
 
 class School(SchoolBase, table=True):
     __tablename__ = "schools"
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
+
+    applications: List["Application"] = Relationship(back_populates="school")
 
 
 class SchoolCreate(SchoolBase):
