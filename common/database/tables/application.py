@@ -28,33 +28,69 @@ class RaceEthnicity(Enum):
     MULTIPLE_OTHER = 7  # Multiple ethnicities / Other
 
 
-class Application(SQLModel, table=True):
-    __tablename__ = "applications"
-
-    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+class ApplicationBase(SQLModel):
     participant: "Participant" = Relationship(back_populates="application")
-
+    
     school_id: int = Field(foreign_key="schools.id")
     school: "School" = Relationship(back_populates="applications")
     level_of_study: str
     graduation_year: int
     major: Optional[str]
 
+    hackathons_attended: int
+    portfolio_url: Optional[str]
+    vcs_url: Optional[str]
+    
     gender: Optional[Gender] = Field(sa_column=Column(SQLEnum(Gender)))
     date_of_birth: str
     race_ethnicity: Optional[RaceEthnicity] = Field(
         sa_column=Column(SQLEnum(RaceEthnicity))
     )
+    
+    country_id: int = Field(foreign_key="countries.id")
+    country: "Country" = Relationship(back_populates="applications")
+    shipping_address: Optional[str]  # this should be formatted prior to insertion
 
-    hackathons_attended: int
+    share_information: bool
+    
+    # TODO: figure out resume stuff
+
+    # TODO: link to legal agreements
+
+
+class Application(ApplicationBase, table=True):
+    __tablename__ = "applications"
+
+    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+
+
+class ApplicationCreate(ApplicationBase):
+    pass
+
+
+class ApplicationRead(ApplicationBase):
+    id: int
+
+
+class ApplicationUpdate(SQLModel):
+    participant: Optional[Participant]
+
+    school_id: Optional[int]
+    school: Optional[School]
+    level_of_study: Optional[str]
+    graduation_year: Optional[int]
+    major: Optional[str]
+
+    gender: Optional[Gender]
+    date_of_birth: Optional[str]
+    race_ethnicity: Optional[RaceEthnicity]
+
+    hackathons_attended: Optional[int]
     portfolio_url: Optional[str]
     vcs_url: Optional[str]
 
     shipping_address: Optional[str]  # this should be formatted prior to insertion
-    country_id: int = Field(foreign_key="countries.id")
-    country: "Country" = Relationship(back_populates="applications")
+    country_id: Optional[int]
+    country: Optional[Country]
 
-    share_information: bool
-    # TODO: figure out resume stuff
-
-    # TODO: link to legal agreements
+    share_information: Optional[bool]
