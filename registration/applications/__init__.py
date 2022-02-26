@@ -33,7 +33,7 @@ async def list_applications(
 @router.post("/", response_model=ApplicationRead, status_code=HTTPStatus.CREATED)
 async def create_application(
     info: ApplicationCreate, db: AsyncSession = Depends(with_db)
-) -> ApplicationRead:
+) -> Application:
     """
     Create a new application
     """
@@ -46,7 +46,7 @@ async def create_application(
 @router.get("/{id}", response_model=Application)
 async def read_application(
     id: int, db: AsyncSession = Depends(with_db)
-) -> ApplicationRead:
+) -> Application:
     """
     Returns a single application by id
     """
