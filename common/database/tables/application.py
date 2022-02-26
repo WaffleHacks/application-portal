@@ -30,7 +30,7 @@ class RaceEthnicity(Enum):
 
 class ApplicationBase(SQLModel):
     participant: "Participant" = Relationship(back_populates="application")
-    
+
     school_id: int = Field(foreign_key="schools.id")
     school: "School" = Relationship(back_populates="applications")
     level_of_study: str
@@ -40,19 +40,19 @@ class ApplicationBase(SQLModel):
     hackathons_attended: int
     portfolio_url: Optional[str]
     vcs_url: Optional[str]
-    
+
     gender: Optional[Gender] = Field(sa_column=Column(SQLEnum(Gender)))
     date_of_birth: str
     race_ethnicity: Optional[RaceEthnicity] = Field(
         sa_column=Column(SQLEnum(RaceEthnicity))
     )
-    
+
     country_id: int = Field(foreign_key="countries.id")
     country: "Country" = Relationship(back_populates="applications")
-    shipping_address: Optional[str]  # this should be formatted prior to insertion
+    shipping_address: Optional[str]  # should be formatted prior to insertion
 
     share_information: bool
-    
+
     # TODO: figure out resume stuff
 
     # TODO: link to legal agreements
@@ -61,7 +61,8 @@ class ApplicationBase(SQLModel):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+    participant_id: int = Field(primary_key=True,
+                                foreign_key="participants.id")
 
 
 class ApplicationCreate(ApplicationBase):
@@ -89,7 +90,7 @@ class ApplicationUpdate(SQLModel):
     portfolio_url: Optional[str]
     vcs_url: Optional[str]
 
-    shipping_address: Optional[str]  # this should be formatted prior to insertion
+    shipping_address: Optional[str]  # should be formatted prior to insertion
     country_id: Optional[int]
     country: Optional[Country]
 

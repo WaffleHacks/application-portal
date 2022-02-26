@@ -1,10 +1,10 @@
 from .application import (
-    Application, 
-    ApplicationCreate, 
+    Application,
+    ApplicationCreate,
     ApplicationRead,
-    ApplicationUpdate, 
-    Gender, 
-    RaceEthnicity
+    ApplicationUpdate,
+    Gender,
+    RaceEthnicity,
 )
 from .country import Country
 from .participant import (
