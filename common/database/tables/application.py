@@ -61,8 +61,7 @@ class ApplicationBase(SQLModel):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(primary_key=True,
-                                foreign_key="participants.id")
+    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
 
 
 class ApplicationCreate(ApplicationBase):
