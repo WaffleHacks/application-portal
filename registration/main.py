@@ -1,8 +1,12 @@
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import FastAPI, Request
 from fastapi.responses import UJSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from . import applications
+
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
+
+app.include_router(applications.router, prefix="/applications")
 
 
 @app.exception_handler(StarletteHTTPException)
