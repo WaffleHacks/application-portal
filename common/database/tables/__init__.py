@@ -7,6 +7,13 @@ from .application import (
     RaceEthnicity,
 )
 from .country import Country
+from .legal_agreements import (
+    LegalAgreement,
+    LegalAgreementBase,
+    LegalAgreementCreate,
+    LegalAgreementRead,
+    LegalAgreementUpdate,
+)
 from .participant import (
     Participant,
     ParticipantBase,

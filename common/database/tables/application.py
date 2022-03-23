@@ -55,7 +55,7 @@ class ApplicationBase(SQLModel):
 
     # TODO: figure out resume stuff
 
-    # TODO: link to legal agreements
+    legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
 
 
 class Application(ApplicationBase, table=True):
@@ -94,3 +94,5 @@ class ApplicationUpdate(SQLModel):
     country: Optional[Country]
 
     share_information: Optional[bool]
+
+    legal_agreements_acknowledged: Optional[bool]
