@@ -94,3 +94,5 @@ class ApplicationUpdate(SQLModel):
     country: Optional[Country]
 
     share_information: Optional[bool]
+
+    legal_agreements_acknowledged: Optional[bool]

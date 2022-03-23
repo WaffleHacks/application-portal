@@ -5,8 +5,7 @@ from fastapi.responses import UJSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import applications
-from . import legal_agreements
+from . import applications, legal_agreements
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 
