@@ -1,6 +1,6 @@
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
-from datetime import datetime, timedelta
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum

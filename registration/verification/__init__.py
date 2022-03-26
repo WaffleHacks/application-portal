@@ -1,3 +1,4 @@
+from applications import read_application
 from http import HTTPStatus
 from typing import List
 
@@ -6,13 +7,7 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.database import (
-    Application,
-    ApplicationRead,
-    with_db,
-)
-
-from applications import read_application
+from common.database import Application, ApplicationRead, with_db
 
 router = APIRouter()
 
