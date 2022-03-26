@@ -87,7 +87,7 @@ async def update_application(
         )
     if not application.soft_verify():
         print("Failed soft verification")
-    
+
     db.add(application)
     await db.commit()
 

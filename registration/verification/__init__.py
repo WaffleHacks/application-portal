@@ -46,7 +46,7 @@ async def validate_application(
     *_, error = validate_model(Application, application.__dict__)
     if error:
         raise error
-    
+
     db.add(application)
     await db.commit()
 
