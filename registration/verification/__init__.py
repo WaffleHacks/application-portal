@@ -26,7 +26,7 @@ async def list_verification_queue(
 
 
 @router.get("/{id}", response_model=Application)
-async def read_application(id: int, db: AsyncSession = Depends(with_db)) -> Application:
+async def open_application(id: int, db: AsyncSession = Depends(with_db)) -> Application:
     return await read_application(id, db)
 
 
