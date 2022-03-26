@@ -5,12 +5,13 @@ from fastapi.responses import UJSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import applications, legal_agreements
+from . import applications, legal_agreements, verification
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 
 app.include_router(applications.router, prefix="/applications")
 app.include_router(legal_agreements.router, prefix="/legal-agreements")
+app.include_router(verification.router, prefix="/verification")
 
 
 @app.exception_handler(StarletteHTTPException)

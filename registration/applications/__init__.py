@@ -38,6 +38,13 @@ async def create_application(
     Create a new application
     """
     application = Application.from_orm(info)
+
+    if not application.hard_verify():
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, 
+        detail="Must be over 13 years old")
+    if not application.soft_verify():
+        print("Failed soft verification")
+
     async with db.begin():
         db.add(application)
     return application
@@ -73,6 +80,12 @@ async def update_application(
     if error:
         raise error
 
+    if not application.hard_verify():
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, 
+        detail="Must be over 13 years old")
+    if not application.soft_verify():
+        print("Failed soft verification")
+    
     db.add(application)
     await db.commit()
 

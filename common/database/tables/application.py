@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
+from datetime import datetime, timedelta
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
@@ -53,9 +54,27 @@ class ApplicationBase(SQLModel):
 
     share_information: bool
 
+    verified: bool
+
     # TODO: figure out resume stuff
 
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
+
+    def hard_verify(self):
+        age = datetime.now() - datetime.strptime(self.date_of_birth, "%Y-%m-%d")
+        if age.years < 13:
+            return False
+        else:
+            return True
+
+    def soft_verify(self):
+        age = datetime.now() - datetime.strptime(self.date_of_birth, "%Y-%m-%d")
+        if age.years < 13 or age.years > 21:
+            # TODO: figure out typical student ages, use schools API for db
+            self.verified = False
+        else:
+            self.verified = True
+        return self.verified
 
 
 class Application(ApplicationBase, table=True):
