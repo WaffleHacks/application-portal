@@ -1,7 +1,7 @@
-from applications import read_application
 from http import HTTPStatus
 from typing import List
 
+from applications import read_application
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
