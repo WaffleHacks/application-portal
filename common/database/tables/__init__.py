@@ -20,4 +20,4 @@ from .participant import (
     ParticipantCreate,
     ParticipantRead,
 )
-from .school import School, SchoolBase, SchoolCreate, SchoolRead
+from .school import School, SchoolBase, SchoolCreate, SchoolRead, SchoolUpdate
