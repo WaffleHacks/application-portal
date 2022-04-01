@@ -24,3 +24,7 @@ class SchoolCreate(SchoolBase):
 
 class SchoolRead(SchoolBase):
     id: int
+
+
+class SchoolUpdate(SQLModel):
+    name: Optional[str]
