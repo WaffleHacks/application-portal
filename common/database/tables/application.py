@@ -29,10 +29,7 @@ class RaceEthnicity(Enum):
 
 
 class ApplicationBase(SQLModel):
-    participant: "Participant" = Relationship(back_populates="application")
-
     school_id: int = Field(foreign_key="schools.id")
-    school: "School" = Relationship(back_populates="applications")
     level_of_study: str
     graduation_year: int
     major: Optional[str]
@@ -48,7 +45,6 @@ class ApplicationBase(SQLModel):
     )
 
     country_id: int = Field(foreign_key="countries.id")
-    country: "Country" = Relationship(back_populates="applications")
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
     share_information: bool
@@ -62,6 +58,10 @@ class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
     participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+    participant: "Participant" = Relationship(back_populates="application")
+
+    school: "School" = Relationship(back_populates="applications")
+    country: "Country" = Relationship(back_populates="applications")
 
 
 class ApplicationCreate(ApplicationBase):
