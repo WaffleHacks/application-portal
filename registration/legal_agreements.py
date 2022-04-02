@@ -17,8 +17,8 @@ from common.database import (
 router = APIRouter()
 
 
-@router.get("/", response_model=List[LegalAgreementRead])
-async def read(db: AsyncSession = Depends(with_db)):
+@router.get("/", response_model=List[LegalAgreementRead], name="List legal agreements")
+async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all legal agreements that must be acknowledged prior to submitting the participant's application.
     """
@@ -27,28 +27,33 @@ async def read(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=LegalAgreementRead, status_code=HTTPStatus.CREATED)
-async def create(agreement: LegalAgreementCreate, db: AsyncSession = Depends(with_db)):
+@router.post(
+    "/",
+    response_model=LegalAgreementRead,
+    status_code=HTTPStatus.CREATED,
+    name="Create legal agreement",
+)
+async def create(values: LegalAgreementCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new legal agreement in the database
     """
-    la = LegalAgreement.from_orm(agreement)
+    agreement = LegalAgreement.from_orm(values)
     async with db.begin():
-        db.add(la)
+        db.add(agreement)
 
-    return la
+    return agreement
 
 
-@router.patch("/{agreement_id}")
+@router.patch("/{id}", response_model=LegalAgreementRead, name="Update legal agreement")
 async def update(
-    agreement_id: int,
+    id: int,
     updates: LegalAgreementUpdate,
     db: AsyncSession = Depends(with_db),
 ):
     """
     Update the details of a legal agreement by its ID.
     """
-    agreement = await db.get(LegalAgreement, agreement_id)
+    agreement = await db.get(LegalAgreement, id)
     if agreement is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
@@ -69,12 +74,14 @@ async def update(
     return agreement
 
 
-@router.delete("/{agreement_id}", status_code=HTTPStatus.NO_CONTENT)
-async def delete(agreement_id: int, db: AsyncSession = Depends(with_db)):
+@router.delete(
+    "/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete legal agreement"
+)
+async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Attempt to delete a legal agreement by its ID. This method will not fail if the agreement does not exist.
     """
-    agreement = await db.get(LegalAgreement, agreement_id)
+    agreement = await db.get(LegalAgreement, id)
 
     # Delete if exists
     if agreement is not None:

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -29,10 +30,7 @@ class RaceEthnicity(Enum):
 
 
 class ApplicationBase(SQLModel):
-    participant: "Participant" = Relationship(back_populates="application")
-
     school_id: int = Field(foreign_key="schools.id")
-    school: "School" = Relationship(back_populates="applications")
     level_of_study: str
     graduation_year: int
     major: Optional[str]
@@ -48,7 +46,6 @@ class ApplicationBase(SQLModel):
     )
 
     country_id: int = Field(foreign_key="countries.id")
-    country: "Country" = Relationship(back_populates="applications")
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
     share_information: bool
@@ -61,7 +58,15 @@ class ApplicationBase(SQLModel):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+    participant_id: int = Field(
+        sa_column=Column(
+            Integer, ForeignKey("participants.id", ondelete="CASCADE"), primary_key=True
+        ),
+    )
+    participant: "Participant" = Relationship(back_populates="application")
+
+    school: "School" = Relationship(back_populates="applications")
+    country: "Country" = Relationship(back_populates="applications")
 
 
 class ApplicationCreate(ApplicationBase):
@@ -69,14 +74,11 @@ class ApplicationCreate(ApplicationBase):
 
 
 class ApplicationRead(ApplicationBase):
-    id: int
+    participant_id: int
 
 
 class ApplicationUpdate(SQLModel):
-    participant: Optional[Participant]
-
     school_id: Optional[int]
-    school: Optional[School]
     level_of_study: Optional[str]
     graduation_year: Optional[int]
     major: Optional[str]
@@ -91,7 +93,6 @@ class ApplicationUpdate(SQLModel):
 
     shipping_address: Optional[str]  # should be formatted prior to insertion
     country_id: Optional[int]
-    country: Optional[Country]
 
     share_information: Optional[bool]
 

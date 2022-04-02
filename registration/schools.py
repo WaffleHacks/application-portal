@@ -11,8 +11,8 @@ from common.database import School, SchoolCreate, SchoolRead, SchoolUpdate, with
 router = APIRouter()
 
 
-@router.get("/", response_model=List[SchoolRead])
-async def read(db: AsyncSession = Depends(with_db)):
+@router.get("/", response_model=List[SchoolRead], name="List schools")
+async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
     """
@@ -21,28 +21,30 @@ async def read(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=SchoolRead, status_code=HTTPStatus.CREATED)
-async def create(school_create: SchoolCreate, db: AsyncSession = Depends(with_db)):
+@router.post(
+    "/", response_model=SchoolRead, status_code=HTTPStatus.CREATED, name="Create school"
+)
+async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new school in the database
     """
-    school = School.from_orm(school_create)
+    school = School.from_orm(values)
     async with db.begin():
         db.add(school)
 
     return school
 
 
-@router.patch("/{school_id}")
+@router.patch("/{id}", name="Update school")
 async def update(
-    school_id: int,
+    id: int,
     updates: SchoolUpdate,
     db: AsyncSession = Depends(with_db),
 ):
     """
     Update the details of a school by its ID.
     """
-    school = await db.get(School, school_id)
+    school = await db.get(School, id)
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
@@ -63,12 +65,12 @@ async def update(
     return school
 
 
-@router.delete("/{school_id}", status_code=HTTPStatus.NO_CONTENT)
-async def delete(school_id: int, db: AsyncSession = Depends(with_db)):
+@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete school")
+async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.
     """
-    school = await db.get(School, school_id)
+    school = await db.get(School, id)
 
     # Delete if exists
     if school is not None:

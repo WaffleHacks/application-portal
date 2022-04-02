@@ -6,19 +6,13 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.database import (
-    Application,
-    ApplicationCreate,
-    ApplicationRead,
-    ApplicationUpdate,
-    with_db,
-)
+from common.database import Application, ApplicationRead, ApplicationUpdate, with_db
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ApplicationRead])
-async def list_applications(
+@router.get("/", response_model=List[ApplicationRead], name="List applications")
+async def list(
     db: AsyncSession = Depends(with_db),
 ) -> List[ApplicationRead]:
     """
@@ -30,21 +24,8 @@ async def list_applications(
     return applications
 
 
-@router.post("/", response_model=ApplicationRead, status_code=HTTPStatus.CREATED)
-async def create_application(
-    info: ApplicationCreate, db: AsyncSession = Depends(with_db)
-) -> Application:
-    """
-    Create a new application
-    """
-    application = Application.from_orm(info)
-    async with db.begin():
-        db.add(application)
-    return application
-
-
-@router.get("/{id}", response_model=Application)
-async def read_application(id: int, db: AsyncSession = Depends(with_db)) -> Application:
+@router.get("/{id}", response_model=ApplicationRead, name="Read application")
+async def read(id: int, db: AsyncSession = Depends(with_db)):
     """
     Returns a single application by id
     """
@@ -54,10 +35,8 @@ async def read_application(id: int, db: AsyncSession = Depends(with_db)) -> Appl
     return application
 
 
-@router.put("/{id}", response_model=Application)
-async def update_application(
-    id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
-) -> Application:
+@router.put("/{id}", response_model=ApplicationRead, name="Update application")
+async def update(id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)):
     """
     Updates an application by id
     """
@@ -79,8 +58,8 @@ async def update_application(
     return application
 
 
-@router.delete("/{id}")
-async def delete_application(id: int, db: AsyncSession = Depends(with_db)) -> None:
+@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
+async def delete(id: int, db: AsyncSession = Depends(with_db)) -> None:
     """
     Deletes an application by id
     """
