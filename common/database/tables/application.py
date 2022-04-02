@@ -73,10 +73,7 @@ class ApplicationRead(ApplicationBase):
 
 
 class ApplicationUpdate(SQLModel):
-    participant: Optional[Participant]
-
     school_id: Optional[int]
-    school: Optional[School]
     level_of_study: Optional[str]
     graduation_year: Optional[int]
     major: Optional[str]
@@ -91,7 +88,6 @@ class ApplicationUpdate(SQLModel):
 
     shipping_address: Optional[str]  # should be formatted prior to insertion
     country_id: Optional[int]
-    country: Optional[Country]
 
     share_information: Optional[bool]
 
