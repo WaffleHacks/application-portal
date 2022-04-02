@@ -24,27 +24,27 @@ async def list_applications(
     return applications
 
 
-@router.get("/{application_id}", response_model=ApplicationRead)
+@router.get("/{id}", response_model=ApplicationRead)
 async def read_application(
-    application_id: int, db: AsyncSession = Depends(with_db)
+    id: int, db: AsyncSession = Depends(with_db)
 ) -> ApplicationRead:
     """
     Returns a single application by id
     """
-    application = await db.get(Application, application_id)
+    application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
     return ApplicationRead.from_orm(application)
 
 
-@router.put("/{application_id}", response_model=ApplicationRead)
+@router.put("/{id}", response_model=ApplicationRead)
 async def update_application(
-    application_id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
+    id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
 ) -> ApplicationRead:
     """
     Updates an application by id
     """
-    application = await db.get(Application, application_id)
+    application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
@@ -62,14 +62,12 @@ async def update_application(
     return ApplicationRead.from_orm(application)
 
 
-@router.delete("/{application_id}", status_code=HTTPStatus.NO_CONTENT)
-async def delete_application(
-    application_id: int, db: AsyncSession = Depends(with_db)
-) -> None:
+@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)
+async def delete_application(id: int, db: AsyncSession = Depends(with_db)) -> None:
     """
     Deletes an application by id
     """
-    application = await db.get(Application, application_id)
+    application = await db.get(Application, id)
 
     if application:
         await db.delete(application)
