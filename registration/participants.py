@@ -17,8 +17,8 @@ from common.database import (
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ParticipantRead])
-async def list_participants(db: AsyncSession = Depends(with_db)):
+@router.get("/", response_model=List[ParticipantRead], name="List Participants")
+async def list(db: AsyncSession = Depends(with_db)):
     """
     List all the participants in the database
     """
@@ -28,8 +28,8 @@ async def list_participants(db: AsyncSession = Depends(with_db)):
     return participants
 
 
-@router.get("/{id}", response_model=ParticipantRead)
-async def read_participant(id: int, db: AsyncSession = Depends(with_db)):
+@router.get("/{id}", response_model=ParticipantRead, name="Read participant")
+async def read(id: int, db: AsyncSession = Depends(with_db)):
     """
     Get details about an individual participant
     """
@@ -44,8 +44,10 @@ async def read_participant(id: int, db: AsyncSession = Depends(with_db)):
     "/{id}/application",
     response_model=ApplicationRead,
     status_code=HTTPStatus.CREATED,
+    tags=["Applications"],
+    name="Create application",
 )
-async def create_application(
+async def create(
     id: int, values: ApplicationCreate, db: AsyncSession = Depends(with_db)
 ):
     """
@@ -62,8 +64,8 @@ async def create_application(
     return application
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)
-async def delete_participant(id: int, db: AsyncSession = Depends(with_db)):
+@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete participant")
+async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Delete a participant and all their associated data
     """

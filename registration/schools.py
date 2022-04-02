@@ -11,8 +11,8 @@ from common.database import School, SchoolCreate, SchoolRead, SchoolUpdate, with
 router = APIRouter()
 
 
-@router.get("/", response_model=List[SchoolRead])
-async def read(db: AsyncSession = Depends(with_db)):
+@router.get("/", response_model=List[SchoolRead], name="List schools")
+async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
     """
@@ -21,7 +21,9 @@ async def read(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=SchoolRead, status_code=HTTPStatus.CREATED)
+@router.post(
+    "/", response_model=SchoolRead, status_code=HTTPStatus.CREATED, name="Create school"
+)
 async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new school in the database
@@ -33,7 +35,7 @@ async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     return school
 
 
-@router.patch("/{id}")
+@router.patch("/{id}", name="Update school")
 async def update(
     id: int,
     updates: SchoolUpdate,
@@ -63,7 +65,7 @@ async def update(
     return school
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)
+@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete school")
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.

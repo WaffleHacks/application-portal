@@ -17,8 +17,8 @@ from common.database import (
 router = APIRouter()
 
 
-@router.get("/", response_model=List[LegalAgreementRead])
-async def read(db: AsyncSession = Depends(with_db)):
+@router.get("/", response_model=List[LegalAgreementRead], name="List legal agreements")
+async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all legal agreements that must be acknowledged prior to submitting the participant's application.
     """
@@ -27,7 +27,12 @@ async def read(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", response_model=LegalAgreementRead, status_code=HTTPStatus.CREATED)
+@router.post(
+    "/",
+    response_model=LegalAgreementRead,
+    status_code=HTTPStatus.CREATED,
+    name="Create legal agreement",
+)
 async def create(values: LegalAgreementCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new legal agreement in the database
@@ -39,7 +44,7 @@ async def create(values: LegalAgreementCreate, db: AsyncSession = Depends(with_d
     return agreement
 
 
-@router.patch("/{id}")
+@router.patch("/{id}", response_model=LegalAgreementRead, name="Update legal agreement")
 async def update(
     id: int,
     updates: LegalAgreementUpdate,
@@ -69,7 +74,9 @@ async def update(
     return agreement
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)
+@router.delete(
+    "/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete legal agreement"
+)
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Attempt to delete a legal agreement by its ID. This method will not fail if the agreement does not exist.
