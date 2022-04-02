@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -57,7 +58,11 @@ class ApplicationBase(SQLModel):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(primary_key=True, foreign_key="participants.id")
+    participant_id: int = Field(
+        sa_column=Column(
+            Integer, ForeignKey("participants.id", ondelete="CASCADE"), primary_key=True
+        ),
+    )
     participant: "Participant" = Relationship(back_populates="application")
 
     school: "School" = Relationship(back_populates="applications")
