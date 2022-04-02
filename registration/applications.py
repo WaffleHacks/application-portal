@@ -43,25 +43,27 @@ async def create_application(
     return application
 
 
-@router.get("/{id}", response_model=Application)
-async def read_application(id: int, db: AsyncSession = Depends(with_db)) -> Application:
+@router.get("/{application_id}", response_model=ApplicationRead)
+async def read_application(
+    application_id: int, db: AsyncSession = Depends(with_db)
+) -> ApplicationRead:
     """
     Returns a single application by id
     """
-    application = await db.get(Application, id)
+    application = await db.get(Application, application_id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    return application
+    return ApplicationRead.from_orm(application)
 
 
-@router.put("/{id}", response_model=Application)
+@router.put("/{application_id}", response_model=ApplicationRead)
 async def update_application(
-    id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
-) -> Application:
+    application_id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
+) -> ApplicationRead:
     """
     Updates an application by id
     """
-    application = await db.get(Application, id)
+    application = await db.get(Application, application_id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
@@ -76,15 +78,17 @@ async def update_application(
     db.add(application)
     await db.commit()
 
-    return application
+    return ApplicationRead.from_orm(application)
 
 
-@router.delete("/{id}")
-async def delete_application(id: int, db: AsyncSession = Depends(with_db)) -> None:
+@router.delete("/{application_id}", status_code=HTTPStatus.NO_CONTENT)
+async def delete_application(
+    application_id: int, db: AsyncSession = Depends(with_db)
+) -> None:
     """
     Deletes an application by id
     """
-    application = await db.get(Application, id)
+    application = await db.get(Application, application_id)
 
     if application:
         await db.delete(application)

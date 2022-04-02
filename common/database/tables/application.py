@@ -69,7 +69,7 @@ class ApplicationCreate(ApplicationBase):
 
 
 class ApplicationRead(ApplicationBase):
-    id: int
+    participant_id: int
 
 
 class ApplicationUpdate(SQLModel):
