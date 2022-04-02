@@ -14,10 +14,5 @@ from .legal_agreements import (
     LegalAgreementRead,
     LegalAgreementUpdate,
 )
-from .participant import (
-    Participant,
-    ParticipantBase,
-    ParticipantCreate,
-    ParticipantRead,
-)
+from .participant import Participant, ParticipantBase, ParticipantRead
 from .school import School, SchoolBase, SchoolCreate, SchoolRead, SchoolUpdate
