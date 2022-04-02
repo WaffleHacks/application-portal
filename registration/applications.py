@@ -6,13 +6,7 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.database import (
-    Application,
-    ApplicationCreate,
-    ApplicationRead,
-    ApplicationUpdate,
-    with_db,
-)
+from common.database import Application, ApplicationRead, ApplicationUpdate, with_db
 
 router = APIRouter()
 
@@ -28,19 +22,6 @@ async def list_applications(
     result = await db.execute(statement)
     applications = result.scalars().all()
     return applications
-
-
-@router.post("/", response_model=ApplicationRead, status_code=HTTPStatus.CREATED)
-async def create_application(
-    info: ApplicationCreate, db: AsyncSession = Depends(with_db)
-) -> Application:
-    """
-    Create a new application
-    """
-    application = Application.from_orm(info)
-    async with db.begin():
-        db.add(application)
-    return application
 
 
 @router.get("/{application_id}", response_model=ApplicationRead)

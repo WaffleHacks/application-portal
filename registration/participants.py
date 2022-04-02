@@ -5,7 +5,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.database import Participant, ParticipantRead, with_db
+from common.database import (
+    Application,
+    ApplicationCreate,
+    ApplicationRead,
+    Participant,
+    ParticipantRead,
+    with_db,
+)
 
 router = APIRouter()
 
@@ -24,7 +31,9 @@ async def list_participants(
 
 
 @router.get("/{participant_id}", response_model=ParticipantRead)
-async def read_participant(participant_id: int, db: AsyncSession = Depends(with_db)):
+async def read_participant(
+    participant_id: int, db: AsyncSession = Depends(with_db)
+) -> ParticipantRead:
     """
     Get details about an individual participant
     """
@@ -33,6 +42,28 @@ async def read_participant(participant_id: int, db: AsyncSession = Depends(with_
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return ParticipantRead.from_orm(participant)
+
+
+@router.post(
+    "/{participant_id}/application",
+    response_model=ApplicationRead,
+    status_code=HTTPStatus.CREATED,
+)
+async def create_application(
+    participant_id: int, values: ApplicationCreate, db: AsyncSession = Depends(with_db)
+) -> ApplicationRead:
+    """
+    Create a new application attached to the participant
+    """
+    participant = await db.get(Participant, participant_id)
+    if participant is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    application = Application.from_orm(values, {"participant_id": participant_id})
+    db.add(application)
+    await db.commit()
+
+    return ApplicationRead.from_orm(application)
 
 
 @router.delete("/{participant_id}", status_code=HTTPStatus.NO_CONTENT)
