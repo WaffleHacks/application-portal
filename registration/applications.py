@@ -25,22 +25,20 @@ async def list_applications(
 
 
 @router.get("/{id}", response_model=ApplicationRead)
-async def read_application(
-    id: int, db: AsyncSession = Depends(with_db)
-) -> ApplicationRead:
+async def read_application(id: int, db: AsyncSession = Depends(with_db)):
     """
     Returns a single application by id
     """
     application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    return ApplicationRead.from_orm(application)
+    return application
 
 
 @router.put("/{id}", response_model=ApplicationRead)
 async def update_application(
     id: int, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)
-) -> ApplicationRead:
+):
     """
     Updates an application by id
     """
@@ -59,7 +57,7 @@ async def update_application(
     db.add(application)
     await db.commit()
 
-    return ApplicationRead.from_orm(application)
+    return application
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)

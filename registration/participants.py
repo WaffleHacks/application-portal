@@ -18,9 +18,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[ParticipantRead])
-async def list_participants(
-    db: AsyncSession = Depends(with_db),
-) -> List[ParticipantRead]:
+async def list_participants(db: AsyncSession = Depends(with_db)):
     """
     List all the participants in the database
     """
@@ -31,9 +29,7 @@ async def list_participants(
 
 
 @router.get("/{id}", response_model=ParticipantRead)
-async def read_participant(
-    id: int, db: AsyncSession = Depends(with_db)
-) -> ParticipantRead:
+async def read_participant(id: int, db: AsyncSession = Depends(with_db)):
     """
     Get details about an individual participant
     """
@@ -41,7 +37,7 @@ async def read_participant(
     if participant is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    return ParticipantRead.from_orm(participant)
+    return participant
 
 
 @router.post(
@@ -51,7 +47,7 @@ async def read_participant(
 )
 async def create_application(
     id: int, values: ApplicationCreate, db: AsyncSession = Depends(with_db)
-) -> ApplicationRead:
+):
     """
     Create a new application attached to the participant
     """
@@ -63,7 +59,7 @@ async def create_application(
     db.add(application)
     await db.commit()
 
-    return ApplicationRead.from_orm(application)
+    return application
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT)
