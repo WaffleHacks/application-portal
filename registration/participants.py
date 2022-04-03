@@ -9,10 +9,12 @@ from common.database import (
     Application,
     ApplicationCreate,
     ApplicationRead,
+    ApplicationUpdate,
     Participant,
     ParticipantRead,
     with_db,
 )
+from common.kv import NamespacedClient, with_kv
 
 router = APIRouter()
 
@@ -47,8 +49,11 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     tags=["Applications"],
     name="Create application",
 )
-async def create(
-    id: int, values: ApplicationCreate, db: AsyncSession = Depends(with_db)
+async def create_application(
+    id: int,
+    values: ApplicationCreate,
+    db: AsyncSession = Depends(with_db),
+    kv: NamespacedClient = Depends(with_kv("autosave")),
 ):
     """
     Create a new application attached to the participant
@@ -57,11 +62,58 @@ async def create(
     if participant is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    application = Application.from_orm(values, {"id": id})
+    # Create the application
+    application = Application.from_orm(values, {"participant_id": id})
     db.add(application)
     await db.commit()
 
+    # Delete the auto-save data
+    await kv.delete(str(id))
+
     return application
+
+
+@router.get(
+    "/{id}/application/autosave",
+    response_model=ApplicationUpdate,
+    tags=["Applications"],
+    name="Get an in-progress application",
+)
+async def get_autosave_application(
+    id: int, kv: NamespacedClient = Depends(with_kv("autosave"))
+):
+    """
+    Get the data for an in-progress application
+    """
+    autosave = await kv.get(str(id), is_json=True)
+    if autosave:
+        return autosave
+
+    raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+
+@router.put(
+    "/{id}/application/autosave",
+    status_code=HTTPStatus.NO_CONTENT,
+    tags=["Applications"],
+    name="Save an in-progress application",
+)
+async def autosave_application(
+    id: int,
+    values: ApplicationUpdate,
+    db: AsyncSession = Depends(with_db),
+    kv: NamespacedClient = Depends(with_kv("autosave")),
+):
+    """
+    Save an in-progress application
+    """
+    # Prevent auto-saving if already applied
+    application = await db.get(Application, id)
+    if not application:
+        await kv.set(
+            str(id),
+            values.dict(exclude_unset=True, exclude_none=True, exclude_defaults=True),
+        )
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete participant")
