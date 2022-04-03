@@ -44,9 +44,7 @@ class NamespacedClient(object):
     def __format_key(self, key: str) -> str:
         return f"{self._prefix}:{key}"
 
-    async def get(
-        self, key: str, *, is_json: bool = False
-    ) -> Optional[Union[str, Dict[str, Any]]]:
+    async def get(self, key: str, *, is_json: bool = False) -> Optional[Any]:
         """
         Get a value from Redis
         :param key: the key to read from
