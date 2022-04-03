@@ -101,15 +101,19 @@ async def get_autosave_application(
 async def autosave_application(
     id: int,
     values: ApplicationUpdate,
+    db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
 ):
     """
     Save an in-progress application
     """
-    await kv.set(
-        str(id),
-        values.dict(exclude_unset=True, exclude_none=True, exclude_defaults=True),
-    )
+    # Prevent auto-saving if already applied
+    application = await db.get(Application, id)
+    if not application:
+        await kv.set(
+            str(id),
+            values.dict(exclude_unset=True, exclude_none=True, exclude_defaults=True),
+        )
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete participant")
