@@ -16,6 +16,8 @@ fastapi = "^0.73.0"
 ujson = "^5.1.0"
 uvicorn = {version = "^0.17.4", extras = ["standard"]}
 aioredis = "^2.0.1"
+aiohttp = {version = "^3.8.1", extras = ["speedups"]}
+PyJWT = {version = "^2.3.0", extras = ["crypto"]}
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
