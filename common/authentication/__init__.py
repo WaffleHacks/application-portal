@@ -38,3 +38,10 @@ async def is_authenticated(
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="invalid JWT")
 
     return payload
+
+
+async def with_user_id(token: Dict[str, str] = Depends(is_authenticated)) -> str:
+    """
+    Get the user's id from their JWT
+    """
+    return token["sub"]
