@@ -20,7 +20,7 @@ aiohttp = {version = "^3.8.1", extras = ["speedups"]}
 PyJWT = {version = "^2.3.0", extras = ["crypto"]}
 
 [tool.poetry.dev-dependencies]
-black = "^22.1.0"
+black = "^22.3.0"
 isort = "^5.10.1"
 mypy = "^0.931"
 pre-commit = "^2.17.0"
