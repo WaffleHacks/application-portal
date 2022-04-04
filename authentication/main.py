@@ -1,7 +1,8 @@
 from http import HTTPStatus
 
-from fastapi import Depends, FastAPI, Request
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.responses import UJSONResponse
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -11,7 +12,12 @@ from common.database import Participant, ParticipantBase, with_db
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 
 
-@app.put("/me", status_code=HTTPStatus.NO_CONTENT, name="Update current user profile")
+@app.put(
+    "/me",
+    response_class=Response,
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Update current user profile",
+)
 async def update_profile(
     data: ParticipantBase,
     id: str = Depends(with_user_id),
@@ -20,8 +26,12 @@ async def update_profile(
     """
     Create or update the participant's profile
     """
-    participant = Participant.from_orm(data, update={"id": id})
-    db.add(participant)
+    statement = (
+        insert(Participant)
+        .values(id=id, **data.dict())
+        .on_conflict_do_update(index_elements=["id"], set_=data.dict())
+    )
+    await db.execute(statement)
     await db.commit()
 
 
