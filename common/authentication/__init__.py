@@ -21,8 +21,8 @@ async def is_authenticated(
     """
     token = credentials.credentials
 
-    signing_key = await client.get_signing_key_from_jwt(token)
     try:
+        signing_key = await client.get_signing_key_from_jwt(token)
         payload = jwt.decode(
             token,
             signing_key.key,

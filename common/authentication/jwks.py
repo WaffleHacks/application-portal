@@ -26,7 +26,7 @@ class JWKClient(object):
             self.session = ClientSession()
 
         async with self.session.get(self.uri) as response:
-            return response.json(encoding="utf-8")
+            return await response.json(encoding="utf-8")
 
     async def __get_keys(self) -> List[PyJWK]:
         async with self.lock:
@@ -46,7 +46,7 @@ class JWKClient(object):
 
     async def get_signing_key(self, kid: str) -> PyJWK:
         if time() - self.cache_ttl >= self.last_fetch:
-            await self.__get_keys()
+            self.signing_keys = await self.__get_keys()
 
         for key in self.signing_keys:
             if key.key_id == kid:
