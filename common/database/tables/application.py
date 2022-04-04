@@ -58,7 +58,7 @@ class ApplicationBase(SQLModel):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: int = Field(
+    participant_id: str = Field(
         sa_column=Column(
             Integer, ForeignKey("participants.id", ondelete="CASCADE"), primary_key=True
         ),
@@ -74,7 +74,7 @@ class ApplicationCreate(ApplicationBase):
 
 
 class ApplicationRead(ApplicationBase):
-    participant_id: int
+    participant_id: str
 
 
 class ApplicationUpdate(SQLModel):
