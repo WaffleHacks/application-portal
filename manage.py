@@ -63,6 +63,7 @@ def reset(obj: Config, revision: str):
 
 
 @cli.command()
+@click.option("-a", "--authentication", "app", flag_value="authentication")
 @click.option("-r", "--registration", "app", flag_value="registration")
 @click.option("-c", "--communication", "app", flag_value="communication")
 @click.option("-w", "--workshops", "app", flag_value="workshops")

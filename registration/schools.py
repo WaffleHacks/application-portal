@@ -6,12 +6,18 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from common import Permission, is_authenticated, requires_permission
 from common.database import School, SchoolCreate, SchoolRead, SchoolUpdate, with_db
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[SchoolRead], name="List schools")
+@router.get(
+    "/",
+    response_model=List[SchoolRead],
+    name="List schools",
+    dependencies=[Depends(is_authenticated)],
+)
 async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
@@ -22,7 +28,11 @@ async def list(db: AsyncSession = Depends(with_db)):
 
 
 @router.post(
-    "/", response_model=SchoolRead, status_code=HTTPStatus.CREATED, name="Create school"
+    "/",
+    response_model=SchoolRead,
+    status_code=HTTPStatus.CREATED,
+    name="Create school",
+    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
 )
 async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     """
@@ -35,7 +45,11 @@ async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     return school
 
 
-@router.patch("/{id}", name="Update school")
+@router.patch(
+    "/{id}",
+    name="Update school",
+    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
+)
 async def update(
     id: int,
     updates: SchoolUpdate,
@@ -65,7 +79,12 @@ async def update(
     return school
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete school")
+@router.delete(
+    "/{id}",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Delete school",
+    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
+)
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.

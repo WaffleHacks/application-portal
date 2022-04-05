@@ -1,6 +1,6 @@
 from os import environ
 
-from pydantic import BaseSettings, RedisDsn
+from pydantic import BaseSettings, HttpUrl, RedisDsn
 
 from .types import PostgresDsn
 
@@ -13,6 +13,10 @@ class Settings(BaseSettings):
 
     # The Redis store to connect to
     redis_url: RedisDsn
+
+    # JWT authentication configuration
+    issuer_url: HttpUrl
+    jwks_url: HttpUrl
 
     class Config:
         env_file = ".env"
