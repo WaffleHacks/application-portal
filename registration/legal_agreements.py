@@ -6,6 +6,7 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from common import Permission, is_authenticated, requires_permission
 from common.database import (
     LegalAgreement,
     LegalAgreementCreate,
@@ -17,7 +18,12 @@ from common.database import (
 router = APIRouter()
 
 
-@router.get("/", response_model=List[LegalAgreementRead], name="List legal agreements")
+@router.get(
+    "/",
+    response_model=List[LegalAgreementRead],
+    name="List legal agreements",
+    dependencies=[Depends(is_authenticated)],
+)
 async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all legal agreements that must be acknowledged prior to submitting the participant's application.
@@ -32,6 +38,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     response_model=LegalAgreementRead,
     status_code=HTTPStatus.CREATED,
     name="Create legal agreement",
+    dependencies=[Depends(requires_permission(Permission.LegalAgreementsEdit))],
 )
 async def create(values: LegalAgreementCreate, db: AsyncSession = Depends(with_db)):
     """
@@ -44,7 +51,12 @@ async def create(values: LegalAgreementCreate, db: AsyncSession = Depends(with_d
     return agreement
 
 
-@router.patch("/{id}", response_model=LegalAgreementRead, name="Update legal agreement")
+@router.patch(
+    "/{id}",
+    response_model=LegalAgreementRead,
+    name="Update legal agreement",
+    dependencies=[Depends(requires_permission(Permission.LegalAgreementsEdit))],
+)
 async def update(
     id: int,
     updates: LegalAgreementUpdate,
@@ -75,7 +87,10 @@ async def update(
 
 
 @router.delete(
-    "/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete legal agreement"
+    "/{id}",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Delete legal agreement",
+    dependencies=[Depends(requires_permission(Permission.LegalAgreementsEdit))],
 )
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """

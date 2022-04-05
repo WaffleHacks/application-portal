@@ -6,7 +6,7 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.authentication import with_user_id
+from common import Permission, requires_permission, with_user_id
 from common.database import (
     Application,
     ApplicationCreate,
@@ -19,14 +19,27 @@ from common.kv import NamespacedClient, with_kv
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ApplicationRead], name="List applications")
+@router.get(
+    "/",
+    response_model=List[ApplicationRead],
+    name="List applications",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
+)
 async def list(
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsRead, Permission.ApplicationsReadPublic
+        )
+    ),
     db: AsyncSession = Depends(with_db),
 ) -> List[ApplicationRead]:
     """
     List all applications in db
     """
     statement = select(Application)
+    if Permission.ApplicationsReadPublic.matches(permission):
+        statement = statement.where(Application.share_information)
+
     result = await db.execute(statement)
     applications = result.scalars().all()
     return applications
@@ -37,6 +50,7 @@ async def list(
     response_model=ApplicationRead,
     status_code=HTTPStatus.CREATED,
     name="Create application",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
 async def create_application(
     values: ApplicationCreate,
@@ -61,6 +75,7 @@ async def create_application(
     "/autosave",
     response_model=ApplicationUpdate,
     name="Get an in-progress application",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
 async def get_autosave_application(
     id: str = Depends(with_user_id), kv: NamespacedClient = Depends(with_kv("autosave"))
@@ -79,6 +94,7 @@ async def get_autosave_application(
     "/autosave",
     status_code=HTTPStatus.NO_CONTENT,
     name="Save an in-progress application",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
 async def autosave_application(
     values: ApplicationUpdate,
@@ -99,21 +115,58 @@ async def autosave_application(
 
 
 @router.get("/{id}", response_model=ApplicationRead, name="Read application")
-async def read(id: str, db: AsyncSession = Depends(with_db)):
+async def read(
+    id: str,
+    requester_id: str = Depends(with_user_id),
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsRead,
+            Permission.ApplicationsReadSelf,
+            Permission.ApplicationsReadPublic,
+        )
+    ),
+    db: AsyncSession = Depends(with_db),
+):
     """
     Returns a single application by id
     """
+    if Permission.ApplicationsReadSelf.matches(permission) and id != requester_id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
+
     application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    elif (
+        Permission.ApplicationsReadPublic.matches(permission)
+        and not application.share_information
+    ):
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
     return application
 
 
 @router.put("/{id}", response_model=ApplicationRead, name="Update application")
-async def update(id: str, info: ApplicationUpdate, db: AsyncSession = Depends(with_db)):
+async def update(
+    id: str,
+    info: ApplicationUpdate,
+    requester_id: str = Depends(with_user_id),
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsEdit, Permission.ApplicationsEditSelf
+        )
+    ),
+    db: AsyncSession = Depends(with_db),
+):
     """
-    Updates an application by id
+    Updates the requester's application
     """
+    if Permission.ApplicationsEditSelf.matches(permission) and id != requester_id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
+
     application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
@@ -133,12 +186,25 @@ async def update(id: str, info: ApplicationUpdate, db: AsyncSession = Depends(wi
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
-async def delete(id: str, db: AsyncSession = Depends(with_db)) -> None:
+async def delete(
+    id: str,
+    requester_id: str = Depends(with_user_id),
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsEdit, Permission.ApplicationsEditSelf
+        )
+    ),
+    db: AsyncSession = Depends(with_db),
+) -> None:
     """
     Deletes an application by id
     """
-    application = await db.get(Application, id)
+    if Permission.ApplicationsEditSelf.matches(permission) and id != requester_id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
 
+    application = await db.get(Application, id)
     if application:
         await db.delete(application)
         await db.commit()

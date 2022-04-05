@@ -20,10 +20,18 @@ class Permission(Enum):
     ApplicationsReadPublic = "applications:read:public"
     # View the application for the current user
     ApplicationsReadSelf = "applications:read:self"
+    # Edit all applications in the database
+    ApplicationsEdit = "applications:edit"
+    # Edit the application for the current user
+    ApplicationsEditSelf = "applications:edit:self"
     # Export applications to a CSV
     ApplicationsExport = "applications:export"
     # Change the acceptance status of an application
     ApplicationsStatus = "applications:status"
+    # Manage the legal agreements participants must agree to
+    LegalAgreementsEdit = "legal_agreements:edit"
+    # Manage the known schools in the database
+    SchoolsEdit = "schools:edit"
     # View all drafted and queued communications
     CommunicationsRead = "communications:read"
     # Create, update, and delete communications
@@ -53,20 +61,29 @@ class Permission(Enum):
     # Manage the swag tiers
     WorkshopsSwagManage = "workshops:swag:manage"
 
+    def matches(self, value: str) -> bool:
+        """
+        Check if the permissions are equal
+        :param value: the raw permission
+        """
+        return self.value == value
 
-def requires_permissions(*permissions: Permission) -> Callable[[], None]:
+
+def requires_permission(*permissions: Permission) -> Callable[[], str]:
     """
-    Check that the user has the specified permissions to access the route
+    Check that the user has one of the specified permissions to access the route. Returns the matched permission.
     :param permissions: the permission(s) that are required
     """
-    permission_set = {p.value for p in permissions}
 
-    def validator(token: Dict[str, str] = Depends(is_authenticated)):
+    def validator(token: Dict[str, str] = Depends(is_authenticated)) -> str:
         token_permissions = set(token.get("permissions", []))
 
-        if len(token_permissions & permission_set) != len(permission_set):
-            raise HTTPException(
-                status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
-            )
+        for p in permissions:
+            if p.value in token_permissions:
+                return p.value
+
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
 
     return validator

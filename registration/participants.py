@@ -6,12 +6,18 @@ from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from common import Permission, requires_permission
 from common.database import Participant, ParticipantRead, with_db
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ParticipantRead], name="List Participants")
+@router.get(
+    "/",
+    response_model=List[ParticipantRead],
+    name="List Participants",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
+)
 async def list(db: AsyncSession = Depends(with_db)):
     """
     List all the participants in the database
@@ -22,7 +28,12 @@ async def list(db: AsyncSession = Depends(with_db)):
     return participants
 
 
-@router.get("/{id}", response_model=ParticipantRead, name="Read participant")
+@router.get(
+    "/{id}",
+    response_model=ParticipantRead,
+    name="Read participant",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
+)
 async def read(id: str, db: AsyncSession = Depends(with_db)):
     """
     Get details about an individual participant
@@ -34,7 +45,12 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
     return participant
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete participant")
+@router.delete(
+    "/{id}",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Delete participant",
+    dependencies=[Depends(requires_permission(Permission.ApplicationsEdit))],
+)
 async def remove(id: str, db: AsyncSession = Depends(with_db)):
     """
     Delete a participant and all their associated data
