@@ -5,4 +5,4 @@ def run():
     import uvicorn
 
     print("Running workshops API development server...")
-    uvicorn.run("integrations.main:app")
+    uvicorn.run("integrations.main:app", port=8003)

@@ -1,0 +1,29 @@
+:8000
+
+log {
+    format filter {
+        wrap console
+        fields {
+            request>headers>Authorization replace REDACTED
+        }
+    }
+}
+
+handle_path /authentication/* {
+    reverse_proxy http://host.docker.internal:8001
+}
+handle_path /communication/* {
+    reverse_proxy http://host.docker.internal:8002
+}
+handle_path /integrations/* {
+    reverse_proxy http://host.docker.internal:8003
+}
+handle_path /registration/* {
+    reverse_proxy http://host.docker.internal:8004
+}
+handle_path /statistics/* {
+    reverse_proxy http://host.docker.internal:8005
+}
+handle_path /workshops/* {
+    reverse_proxy http://host.docker.internal:8006
+}

@@ -5,4 +5,4 @@ def run():
     import uvicorn
 
     print("Running communication API development server...")
-    uvicorn.run("authentication.main:app")
+    uvicorn.run("authentication.main:app", port=8001)
