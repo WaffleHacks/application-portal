@@ -32,22 +32,17 @@ repos:
           - sqlalchemy[mypy]>=1.4.31,<1.5.0
           - sqlalchemy2-stubs>=0.0.2-alpha.19,<0.1.0
           - sqlmodel>=0.0.6,<0.1.0
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: 'v8.12.0'
+  - repo: local
     hooks:
       - id: eslint
+        name: eslint
+        entry: node ./frontend/node_modules/eslint/bin/eslint.js
+        args:
+          - --ignore-pattern
+          - '!frontend/.prettierrc.js'
+          - --fix
+        language: system
         files: \.[jt]sx?$
-        types:
-          - file
-        additional_dependencies:
-          - "@typescript-eslint/eslint-plugin@5.18.0"
-          - "@typescript-eslint/parser@5.18.0"
-          - eslint@8.12.0
-          - eslint-config-prettier@8.5.0
-          - eslint-plugin-import@2.25.4
-          - eslint-plugin-prettier@4.0.0
-          - eslint-plugin-react@7.27.1
-          - prettier@2.6.2
 
 default_language_version:
   python: python3.9
