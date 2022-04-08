@@ -5,21 +5,10 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 
-interface NavItem {
+export interface NavItem {
   name: string;
   href: string;
 }
-
-const navigation: NavItem[] = [
-  {
-    name: 'Application',
-    href: '/',
-  },
-  {
-    name: 'Profile',
-    href: '/profile',
-  },
-];
 
 const ProfilePicture = (): JSX.Element => {
   const { isAuthenticated, user, isLoading } = useAuth0();
@@ -30,7 +19,11 @@ const ProfilePicture = (): JSX.Element => {
   else return <UserIcon className="h-8 w-8 rounded-full text-gray-500" />;
 };
 
-const Navigation = (): JSX.Element => {
+interface Props {
+  items: NavItem[];
+}
+
+const Navigation = ({ items }: Props): JSX.Element => {
   const { user, logout } = useAuth0();
 
   return (
@@ -53,7 +46,7 @@ const Navigation = (): JSX.Element => {
                   />
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                  {navigation.map((item) => (
+                  {items.map((item) => (
                     <NavLink
                       key={item.name}
                       to={item.href}
@@ -122,7 +115,7 @@ const Navigation = (): JSX.Element => {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
+              {items.map((item) => (
                 <Disclosure.Button key={item.name} as="div">
                   <NavLink
                     to={item.href}
