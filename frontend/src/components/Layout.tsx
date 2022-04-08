@@ -1,13 +1,15 @@
+import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
 import Navigation from './Navigation';
 
 interface Props {
+  className?: string;
   children: ReactNode;
 }
 
-const Layout = ({ children }: Props): JSX.Element => (
-  <div className="min-h-full">
+const Layout = ({ className, children }: Props): JSX.Element => (
+  <div className={classNames(className, 'min-h-full')}>
     <Navigation />
 
     <div className="py-10">
