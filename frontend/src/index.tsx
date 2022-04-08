@@ -1,6 +1,7 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
@@ -18,7 +19,9 @@ ReactDOM.render(
       audience="https://apply.wafflehacks.tech"
       useRefreshTokens
     >
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root'),
