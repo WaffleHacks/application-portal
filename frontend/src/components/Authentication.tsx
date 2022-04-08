@@ -1,12 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
-import Layout from './components/Layout';
-import AppBase from './Placeholder';
+import Layout from './Layout';
 
-const App = (): JSX.Element => {
+interface Props {
+  children: ReactNode;
+}
+
+const Authentication = ({ children }: Props): JSX.Element => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const [loginTimer, setLoginTimer] = useState<NodeJS.Timeout>();
 
@@ -27,11 +30,9 @@ const App = (): JSX.Element => {
           <RefreshIcon className="w-16 h-16 rounded-full animate-spin" />
         </div>
       </div>
-      <Layout className={loading ? 'hidden' : ''}>
-        <AppBase />
-      </Layout>
+      <Layout className={loading ? 'hidden' : ''}>{children}</Layout>
     </>
   );
 };
 
-export default App;
+export default Authentication;

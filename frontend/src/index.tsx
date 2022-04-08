@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
-import App from './App';
+import Authentication from './components/Authentication';
+import Placeholder from './Placeholder';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID || '';
@@ -20,7 +21,9 @@ ReactDOM.render(
       useRefreshTokens
     >
       <BrowserRouter>
-        <App />
+        <Authentication>
+          <Placeholder />
+        </Authentication>
       </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,
