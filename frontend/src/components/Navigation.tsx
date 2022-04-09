@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 
+const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
+
 export interface NavItem {
   name: string;
   href: string;
@@ -25,6 +27,11 @@ interface Props {
 
 const Navigation = ({ items }: Props): JSX.Element => {
   const { user, logout } = useAuth0();
+
+  const logoutOptions = {
+    client_id: AUTH0_CLIENT_ID,
+    returnTo: window.location.origin,
+  };
 
   return (
     <Disclosure as="nav" className="bg-white border-b border-gray-200">
@@ -90,7 +97,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                       <Menu.Item>
                         <button
                           type="button"
-                          onClick={() => logout()}
+                          onClick={() => logout(logoutOptions)}
                           className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-200"
                         >
                           Log out
@@ -146,7 +153,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
               <div className="mt-3 space-y-1">
                 <button
                   type="button"
-                  onClick={() => logout()}
+                  onClick={() => logout(logoutOptions)}
                   className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                 >
                   Log out

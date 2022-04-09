@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import Authentication from './components/Authentication';
 import Placeholder from './Placeholder';
+import Scope from './scopes';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID || '';
@@ -18,6 +19,7 @@ ReactDOM.render(
       redirectUri={window.location.origin}
       cacheLocation="localstorage"
       audience="https://apply.wafflehacks.tech"
+      scope={Object.values(Scope).join(' ')}
       useRefreshTokens
     >
       <BrowserRouter>
