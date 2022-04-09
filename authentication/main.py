@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import Depends, FastAPI, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import UJSONResponse
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +10,20 @@ from common import with_user_id
 from common.database import Participant, ParticipantBase, with_db
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
+
+
+@app.get("/me", name="Get current user profile", response_model=Participant)
+async def get_profile(
+    id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)
+):
+    """
+    Get the current participant's profile
+    """
+    participant = await db.get(Participant, id)
+    if not participant:
+        raise HTTPException(status_code=404, detail="not found")
+
+    return participant
 
 
 @app.put(
