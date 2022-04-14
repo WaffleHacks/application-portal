@@ -9,9 +9,6 @@ log {
     }
 }
 
-handle_path /authentication/* {
-    reverse_proxy http://host.docker.internal:8001
-}
 handle_path /communication/* {
     reverse_proxy http://host.docker.internal:8002
 }
