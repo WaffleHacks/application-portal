@@ -6,10 +6,12 @@
     "@auth0/auth0-react": "^1.9.0",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
+    "@reduxjs/toolkit": "^1.8.1",
     "classnames": "^2.3.1",
-    "jotai": "^1.6.3",
+    "jose": "^4.6.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-redux": "^7.2.8",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "typescript": "^4.4.2"

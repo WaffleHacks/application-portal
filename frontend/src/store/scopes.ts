@@ -1,4 +1,4 @@
-enum Scope {
+export enum PortalScope {
   // Create a new application for the current user
   ApplicationsCreate = 'applications:create',
   // View all applications in the database
@@ -49,4 +49,7 @@ enum Scope {
   WorkshopsSwagManage = 'workshops:swag:manage',
 }
 
-export default Scope;
+export enum ProfileScope {
+  // Read the user's profile
+  ProfileRead = 'profile:read',
+}
