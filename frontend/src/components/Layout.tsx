@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
-import Navigation from './Navigation';
+import Navigation, { NavItem } from './Navigation';
 
-const navigation = [
+const navigation: NavItem[] = [
   { name: 'Application', href: '/' },
-  { name: 'Profile', href: '/profile' },
+  { name: 'Profile', href: 'https://id.wafflehacks.org', external: true },
 ];
 
 interface Props {

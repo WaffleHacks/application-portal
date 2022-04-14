@@ -5,11 +5,14 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { useGetProfileQuery } from '../store';
+
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 export interface NavItem {
   name: string;
   href: string;
+  external?: boolean;
 }
 
 const ProfilePicture = (): JSX.Element => {
@@ -21,12 +24,52 @@ const ProfilePicture = (): JSX.Element => {
   else return <UserIcon className="h-8 w-8 rounded-full text-gray-500" />;
 };
 
+const linkClassNames = (isActive: boolean, mobile: boolean): string => {
+  if (mobile) {
+    return classNames(
+      isActive
+        ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+        : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+      'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
+    );
+  } else {
+    return classNames(
+      isActive
+        ? 'border-indigo-500 text-gray-900'
+        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+      'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
+    );
+  }
+};
+
+interface LinkProps {
+  item: NavItem;
+  mobile: boolean;
+}
+
+const Link = ({ item, mobile }: LinkProps): JSX.Element => {
+  if (item.external) {
+    return (
+      <a href={item.href} className={linkClassNames(false, mobile)}>
+        {item.name}
+      </a>
+    );
+  } else {
+    return (
+      <NavLink to={item.href} className={({ isActive }) => linkClassNames(isActive, mobile)}>
+        {item.name}
+      </NavLink>
+    );
+  }
+};
+
 interface Props {
   items: NavItem[];
 }
 
 const Navigation = ({ items }: Props): JSX.Element => {
-  const { user, logout } = useAuth0();
+  const { logout } = useAuth0();
+  const { data } = useGetProfileQuery();
 
   const logoutOptions = {
     client_id: AUTH0_CLIENT_ID,
@@ -54,20 +97,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {items.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.href}
-                      className={({ isActive }) =>
-                        classNames(
-                          isActive
-                            ? 'border-indigo-500 text-gray-900'
-                            : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                          'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
-                        )
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
+                    <Link key={item.name} item={item} mobile={false} />
                   ))}
                 </div>
               </div>
@@ -91,7 +121,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         <span className="block px-4 py-2 text-sm text-gray-700 w-full text-left border-b border-gray-300">
-                          {user?.name}
+                          {data?.firstName} {data?.lastName}
                         </span>
                       </Menu.Item>
                       <Menu.Item>
@@ -124,19 +154,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
             <div className="pt-2 pb-3 space-y-1">
               {items.map((item) => (
                 <Disclosure.Button key={item.name} as="div">
-                  <NavLink
-                    to={item.href}
-                    className={({ isActive }) =>
-                      classNames(
-                        isActive
-                          ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-                          : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
-                        'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
-                      )
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
+                  <Link item={item} mobile={true} />
                 </Disclosure.Button>
               ))}
             </div>
@@ -145,9 +163,8 @@ const Navigation = ({ items }: Props): JSX.Element => {
                 <div className="flex-shrink-0">
                   <ProfilePicture />
                 </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user?.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user?.email}</div>
+                <div className="ml-3 text-base font-medium text-gray-800">
+                  {data?.firstName} {data?.lastName}
                 </div>
               </div>
               <div className="mt-3 space-y-1">

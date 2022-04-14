@@ -19,5 +19,5 @@ export const hasPermission = (scope: PortalScope): Selector<boolean> =>
  */
 export const waitingForTokens = createSelector(
   [(state: RootState) => state.authentication],
-  (auth) => auth.portal === undefined && auth.profile === undefined,
+  (auth) => auth.portal === undefined || auth.profile === undefined,
 );
