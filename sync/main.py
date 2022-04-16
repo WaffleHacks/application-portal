@@ -6,6 +6,7 @@ import boto3
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common import SETTINGS
 from common.database import Participant, db_context
 
 from .listener import Listener
@@ -13,8 +14,6 @@ from .models import Action, ActionType
 
 if TYPE_CHECKING:
     from mypy_boto3_sqs.client import SQSClient
-
-QUEUE = "https://sqs.us-west-2.amazonaws.com/173776489129/profiles-application-portal-sync-prod"
 
 
 async def upsert(action: Action, db: AsyncSession):
@@ -61,17 +60,23 @@ async def run():
     client: "SQSClient" = boto3.client("sqs")  # type: ignore
     logger = logging.getLogger("sync")
 
+    if SETTINGS.queue is None:
+        logger.error("a queue must be specified")
+        return
+
     # TODO: perform an initial sync
 
     # Process messages forever
-    listener = Listener(QUEUE, client)
+    listener = Listener(SETTINGS.queue, client)
     logger.info("listening for updates")
     for message in listener:
         try:
             action = Action.load(message.body)
         except ValidationError:
             logger.error("invalid action format", exc_info=True)
-            client.delete_message(QueueUrl=QUEUE, ReceiptHandle=message.receipt_handle)
+            client.delete_message(
+                QueueUrl=SETTINGS.queue, ReceiptHandle=message.receipt_handle
+            )
             continue
 
         logger.info(f"new {action.type} action on {action.id}")
@@ -82,7 +87,9 @@ async def run():
             else:
                 await upsert(action, db)
 
-        client.delete_message(QueueUrl=QUEUE, ReceiptHandle=message.receipt_handle)
+        client.delete_message(
+            QueueUrl=SETTINGS.queue, ReceiptHandle=message.receipt_handle
+        )
         logger.info(f"processing completed for {action.type} on {action.id}")
 
 
