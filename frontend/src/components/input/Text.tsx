@@ -6,11 +6,11 @@ import React from 'react';
 import { BaseProps, generateId } from './common';
 
 const Text = ({ label, ...props }: BaseProps<string>): JSX.Element => {
-  const [field, { error }] = useField(props);
+  const [field, { error, touched }] = useField(props);
   const { className, placeholder, autoComplete, disabled, required } = props;
   const id = generateId('text', label);
 
-  const hasError = error !== undefined;
+  const hasError = touched && error !== undefined;
   const errorId = id + '-error';
 
   return (
