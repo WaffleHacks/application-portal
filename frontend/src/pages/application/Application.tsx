@@ -9,7 +9,18 @@ import Review from './Review';
 import ShippingForm from './ShippingForm';
 
 const Application = (): JSX.Element => (
-  <MultiStepForm initialValues={initialValues} onSubmit={(values: FormFields) => console.log(values)}>
+  <MultiStepForm
+    initialValues={initialValues}
+    onSubmit={(values: FormFields) => console.log(values)}
+    onAutosave={(values) =>
+      new Promise((resolve) =>
+        setTimeout(() => {
+          console.log(values);
+          resolve();
+        }, 1000),
+      )
+    }
+  >
     <Step title="About You" validationSchema={validationSchema.about}>
       <AboutForm />
     </Step>
