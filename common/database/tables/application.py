@@ -13,21 +13,21 @@ if TYPE_CHECKING:
 
 
 class Gender(Enum):
-    MALE = 1
-    FEMALE = 2
-    NON_BINARY = 3
-    OTHER = 4
+    MALE = "Male"
+    FEMALE = "Female"
+    NON_BINARY = "Non-binary"
+    OTHER = "Other"
 
 
 # Names from https://boards.cdn.greenhouse.io/docs/RaceEthnicityDefinitions.pdf
 class RaceEthnicity(Enum):
-    AMERICAN_INDIAN = 1  # American Indian or Alaskan Native
-    ASIAN = 2  # Asian
-    PACIFIC_ISLANDER = 3  # Native Hawaiian or Other Pacific Islander
-    BLACK = 4  # Black or African American
-    HISPANIC = 5  # Hispanic or Latino
-    CAUCASIAN = 6  # White / Caucasian
-    MULTIPLE_OTHER = 7  # Multiple ethnicities / Other
+    AMERICAN_INDIAN = "American Indian / Alaskan Native"
+    ASIAN = "Asian"
+    PACIFIC_ISLANDER = "Native Hawaiian or other pacific islander"
+    BLACK = "Black / African American"
+    HISPANIC = "Hispanic / Latino"
+    CAUCASIAN = "White / Caucasian"
+    MULTIPLE_OTHER = "Multiple ethnicities / Other"
 
 
 class ApplicationBase(SQLModel):
