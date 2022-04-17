@@ -1,25 +1,30 @@
 import { DocumentAddIcon, DocumentTextIcon } from '@heroicons/react/outline';
+import { useField } from 'formik';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import Button from '../Button';
 import { BaseProps, generateId } from './common';
 
-interface Props extends BaseProps<File | undefined> {
+type Props = BaseProps<File | undefined> & {
   description: string;
   accept?: string[];
   maxSize?: number;
-}
+};
 
-const File = ({ label, description, className, value, onChange, required, accept, maxSize }: Props): JSX.Element => {
+const File = ({ label, description, accept, maxSize, ...props }: Props): JSX.Element => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [{ value }, _, { setValue }] = useField(props);
+  const { className, required } = props;
+  const id = generateId('file', label);
+
   const { getRootProps, getInputProps } = useDropzone({
     accept,
     maxSize,
     onDrop: (files: File[]) => {
-      if (files.length > 0) onChange(files[0]);
+      if (files.length > 0) setValue(files[0]);
     },
   });
-  const id = generateId('file', label);
 
   return (
     <div className={className}>
@@ -45,7 +50,7 @@ const File = ({ label, description, className, value, onChange, required, accept
       </div>
       {value && (
         <div className="flex justify-end">
-          <Button className="mt-1" style="secondary" size="xs" onClick={() => onChange(undefined)}>
+          <Button className="mt-1" style="secondary" size="xs" onClick={() => setValue(undefined)}>
             Remove
           </Button>
         </div>

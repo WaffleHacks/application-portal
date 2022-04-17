@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { forwardRef } from 'react';
 
 interface Props {
+  type?: 'submit' | 'button';
   className?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   style?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
@@ -13,11 +14,20 @@ interface Props {
 
 const Button = forwardRef<HTMLButtonElement, Props>(
   (
-    { className, onClick, style = 'primary', size = 'md', rounded = false, disabled = false, children },
+    {
+      type = 'button',
+      className,
+      onClick,
+      style = 'primary',
+      size = 'md',
+      rounded = false,
+      disabled = false,
+      children,
+    },
     ref,
   ): JSX.Element => (
     <button
-      type="button"
+      type={type}
       ref={ref}
       onClick={onClick}
       disabled={disabled}

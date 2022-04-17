@@ -1,9 +1,13 @@
+import { useField } from 'formik';
 import React from 'react';
 
 import { BaseProps, generateId } from './common';
 
-const Checkbox = ({ label, className, value, onChange, required, disabled }: BaseProps<boolean>): JSX.Element => {
+const Checkbox = ({ label, ...props }: BaseProps<string>): JSX.Element => {
+  const [field] = useField(props);
+  const { className, disabled, required } = props;
   const id = generateId('checkbox', label);
+
   return (
     <div className={className}>
       <input
@@ -12,8 +16,7 @@ const Checkbox = ({ label, className, value, onChange, required, disabled }: Bas
         className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
         required={required}
         disabled={disabled}
-        checked={value}
-        onChange={(e) => onChange(e.target.checked)}
+        {...field}
       />
       <label htmlFor={id} className="ml-3 text-sm font-medium text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}

@@ -1,43 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useFormikContext } from 'formik';
+import React from 'react';
 
-import FormCard from '../../components/FormCard';
 import { DateInput, SelectInput } from '../../components/input';
+import SidebarCard from '../../components/SidebarCard';
+import { FormFields } from './form';
 
-export interface About {
-  gender: string;
-  raceEthnicity: string;
-  dateOfBirth: string;
-}
-
-interface Props {
-  value: About;
-  setValue: (value: About) => void;
-}
-
-const debug = <T,>(v: T): T => {
-  console.log(v);
-  return v;
-};
-
-const AboutForm = ({ value, setValue }: Props): JSX.Element => {
-  const [dob, setDob] = useState(value.dateOfBirth);
-
-  // This is an ENORMOUS hack to prevent flatpickr from overwriting the other values
-  useEffect(() => setDob(value.dateOfBirth), [value.dateOfBirth]);
-  useEffect(() => setValue({ ...value, dateOfBirth: dob }), [dob]);
+const AboutForm = (): JSX.Element => {
+  const { getFieldProps } = useFormikContext<FormFields>();
 
   return (
-    <FormCard
+    <SidebarCard
       title="About You"
       description="We just need to get some extra information about you so we can better tailor our hackathon to you."
     >
-      <SelectInput
-        className="col-span-6 sm:col-span-3"
-        label="Gender"
-        value={value.gender}
-        onChange={(v) => setValue(debug({ ...value, gender: v }))}
-        required
-      >
+      <SelectInput className="col-span-6 sm:col-span-3" label="Gender" required {...getFieldProps('gender')}>
         <option>Male</option>
         <option>Female</option>
         <option>Non-binary</option>
@@ -47,9 +23,8 @@ const AboutForm = ({ value, setValue }: Props): JSX.Element => {
       <SelectInput
         className="col-span-6 sm:col-span-3"
         label="Race / Ethnicity"
-        value={value.raceEthnicity}
-        onChange={(v) => setValue(debug({ ...value, raceEthnicity: v }))}
         required
+        {...getFieldProps('raceEthnicity')}
       >
         <option>American Indian / Alaskan Native</option>
         <option>Asian</option>
@@ -63,11 +38,10 @@ const AboutForm = ({ value, setValue }: Props): JSX.Element => {
       <DateInput
         className="col-span-6 sm:col-span-3"
         label="Date of birth"
-        value={value.dateOfBirth}
-        onChange={setDob}
         required
+        {...getFieldProps('dateOfBirth')}
       />
-    </FormCard>
+    </SidebarCard>
   );
 };
 

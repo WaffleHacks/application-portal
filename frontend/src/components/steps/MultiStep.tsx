@@ -5,12 +5,11 @@ import Progress from './Progress';
 import { Props as StepProps } from './Step';
 
 interface Props {
-  initialStep: number;
-  onSubmit?: () => void;
+  initialStep?: number;
   children: ReactElement<StepProps>[];
 }
 
-const MultiStep = ({ initialStep, children, onSubmit }: Props): JSX.Element => {
+const MultiStep = ({ initialStep = 0, children }: Props): JSX.Element => {
   const [step, setStep] = useState(initialStep);
 
   const titles = children.map((c) => c.props.title);
@@ -19,9 +18,7 @@ const MultiStep = ({ initialStep, children, onSubmit }: Props): JSX.Element => {
 
   const nextStep = () => {
     if (canTransition && !canTransition()) return;
-
-    if (step !== children.length - 1) setStep(step + 1);
-    else if (onSubmit !== undefined) onSubmit();
+    else if (step !== children.length - 1) setStep(step + 1);
   };
   const previousStep = () => setStep(step === 0 ? 0 : step - 1);
 
@@ -34,6 +31,7 @@ const MultiStep = ({ initialStep, children, onSubmit }: Props): JSX.Element => {
           Previous
         </Button>
         <Button
+          type={step === children.length - 1 ? 'submit' : 'button'}
           style={step === children.length - 1 ? 'success' : 'primary'}
           onClick={nextStep}
           disabled={canTransition && !canTransition()}

@@ -1,17 +1,11 @@
+import { useField } from 'formik';
 import React from 'react';
 
 import { BaseProps, generateId } from './common';
 
-const Text = ({
-  className,
-  label,
-  value,
-  onChange,
-  placeholder,
-  required,
-  autoComplete,
-  disabled,
-}: BaseProps<string>): JSX.Element => {
+const Text = ({ label, ...props }: BaseProps<string>): JSX.Element => {
+  const [field] = useField(props);
+  const { className, placeholder, autoComplete, disabled, required } = props;
   const id = generateId('text', label);
   return (
     <div className={className}>
@@ -22,12 +16,11 @@ const Text = ({
         type="text"
         id={id}
         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
         autoComplete={autoComplete}
         disabled={disabled}
+        {...field}
       />
     </div>
   );

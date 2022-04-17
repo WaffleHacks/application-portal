@@ -9,7 +9,7 @@ interface Props {
   children: ReactNode;
 }
 
-const FormCard = ({ title, description, className, children, grid = true }: Props): JSX.Element => (
+const SidebarCard = ({ title, description, className, children, grid = true }: Props): JSX.Element => (
   <div className={classNames('bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6', className)}>
     <div className="md:grid md:grid-cols-3 md:gap-6">
       <div className="md:col-span-1">
@@ -17,12 +17,12 @@ const FormCard = ({ title, description, className, children, grid = true }: Prop
         {description && <p className="mt-1 text-sm text-gray-500">{description}</p>}
       </div>
       <div className="mt-5 md:mt-0 md:col-span-2">
-        <form className="space-y-6">
+        <div className="space-y-6">
           <div className={classNames('gap-6', { 'grid grid-cols-6': grid })}>{children}</div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 );
 
-export default FormCard;
+export default SidebarCard;

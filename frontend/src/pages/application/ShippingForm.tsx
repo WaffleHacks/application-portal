@@ -1,47 +1,38 @@
+import { useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 
-import FormCard from '../../components/FormCard';
 import { TextInput } from '../../components/input';
+import SidebarCard from '../../components/SidebarCard';
+import { FormFields } from './form';
 
-export interface ShippingAddress {
-  street: string;
-  apartment?: string;
-  city: string;
-  region: string;
-  postal: string;
-  country: string;
-}
-
-interface Props {
-  value: ShippingAddress;
-  setValue: (value: ShippingAddress) => void;
-}
-
-const ShippingForm = ({ value, setValue }: Props): JSX.Element => {
+const ShippingForm = (): JSX.Element => {
+  const { getFieldProps, setFieldValue, values } = useFormikContext<FormFields>();
   const { ref } = usePlacesWidget<HTMLInputElement>({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     options: {
       fields: ['address_components'],
       types: ['address'],
     },
-    onPlaceSelected: (place) =>
-      setValue({
-        street: `${getAddressComponent(place, 'street_number')} ${getAddressComponent(place, 'route')}`,
-        apartment: value.apartment,
-        city: getAddressComponent(place, 'locality'),
-        region: getAddressComponent(place, 'administrative_area_level_1'),
-        postal: getAddressComponent(place, 'postal_code'),
-        country: getAddressComponent(place, 'country'),
-      }),
+    onPlaceSelected: (place) => {
+      setFieldValue(
+        'street',
+        `${getAddressComponent(place, 'street_number')} ${getAddressComponent(place, 'route')}`,
+        true,
+      );
+      setFieldValue('city', getAddressComponent(place, 'locality'), true);
+      setFieldValue('region', getAddressComponent(place, 'administrative_area_level_1'), true);
+      setFieldValue('postalCode', getAddressComponent(place, 'postal_code'), true);
+      setFieldValue('country', getAddressComponent(place, 'country'), true);
+    },
   });
 
   useEffect(() => {
-    if (ref.current) ref.current.value = value.street;
-  }, [value.street]);
+    if (ref.current) ref.current.value = values.street;
+  }, [values.street]);
 
   return (
-    <FormCard
+    <SidebarCard
       title="Shipping"
       description="We'll use this to send you some swag, in addition to any prizes you win. Please make sure to use an address where you can receive mail."
     >
@@ -58,49 +49,40 @@ const ShippingForm = ({ value, setValue }: Props): JSX.Element => {
         />
       </div>
 
-      <TextInput
-        className="col-span-6 sm:col-span-2"
-        label="Apartment / Suite"
-        value={value.apartment}
-        onChange={(v) => setValue({ ...value, apartment: v })}
-      />
+      <TextInput className="col-span-6 sm:col-span-2" label="Apartment / Suite" {...getFieldProps('apartment')} />
 
       <TextInput
         className="col-span-6 sm:col-span-6 lg:col-span-2"
         label="City"
-        value={value.city}
-        onChange={(v) => setValue({ ...value, city: v })}
         required
         autoComplete="address-level2"
+        {...getFieldProps('city')}
       />
 
       <TextInput
         className="col-span-6 sm:col-span-3 lg:col-span-2"
         label="State / Province"
-        value={value.region}
-        onChange={(v) => setValue({ ...value, region: v })}
         required
         autoComplete="address-level1"
+        {...getFieldProps('region')}
       />
 
       <TextInput
         className="col-span-6 sm:col-span-3 lg:col-span-2"
         label="ZIP / Postal code"
-        value={value.postal}
-        onChange={(v) => setValue({ ...value, postal: v })}
         required
         autoComplete="postal-code"
+        {...getFieldProps('postalCode')}
       />
 
       <TextInput
         className="col-span-6 sm:col-span-3"
         label="Country"
-        value={value.country}
-        onChange={(v) => setValue({ ...value, country: v })}
         autoComplete="country-name"
         required
+        {...getFieldProps('country')}
       />
-    </FormCard>
+    </SidebarCard>
   );
 };
 
