@@ -1,4 +1,5 @@
-import { DocumentAddIcon, DocumentTextIcon } from '@heroicons/react/outline';
+import { DocumentAddIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
 import { useField } from 'formik';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -13,18 +14,32 @@ type Props = BaseProps<File | undefined> & {
 };
 
 const File = ({ label, description, accept, maxSize, ...props }: Props): JSX.Element => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [{ value }, _, { setValue }] = useField(props);
+  const [{ value }, { error }, { setValue, setError }] = useField(props);
   const { className, required } = props;
   const id = generateId('file', label);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept,
     maxSize,
-    onDrop: (files: File[]) => {
-      if (files.length > 0) setValue(files[0]);
+    onDrop: (files: File[], rejections) => {
+      if (files.length > 0) {
+        setValue(files[0]);
+        setError(undefined);
+      } else if (rejections.length > 0) setError(rejections[0].errors[0].message);
     },
   });
+
+  let icon, text;
+  if (error) {
+    icon = <ExclamationCircleIcon className="mx-auto h-12 w-12 text-red-500 stroke-1" />;
+    text = error;
+  } else if (value) {
+    icon = <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />;
+    text = value.name;
+  } else {
+    icon = <DocumentAddIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />;
+    text = 'Upload a file or drag and drop';
+  }
 
   return (
     <div className={className}>
@@ -33,16 +48,15 @@ const File = ({ label, description, accept, maxSize, ...props }: Props): JSX.Ele
       </label>
       <div
         {...getRootProps()}
-        className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+        className={classNames(
+          error !== undefined ? 'border-red-300' : 'border-gray-300',
+          'mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-md',
+        )}
       >
         <div className="space-y-1 text-center">
-          {value ? (
-            <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />
-          ) : (
-            <DocumentAddIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />
-          )}
-          <div className="flex text-sm text-gray-600">
-            <p className="pl-1">{value ? value.name : 'Upload a file or drag and drop'}</p>
+          {icon}
+          <div className={classNames(error !== undefined ? 'text-red-500' : 'text-gray-600', 'flex text-sm')}>
+            <p className="pl-1">{text}</p>
             <input {...getInputProps()} id={id} className="sr-only" required={required} />
           </div>
           <p className="text-xs text-gray-500">{description}</p>
