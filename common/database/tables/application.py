@@ -16,6 +16,7 @@ class Gender(Enum):
     MALE = 1
     FEMALE = 2
     NON_BINARY = 3
+    OTHER = 4
 
 
 # Names from https://boards.cdn.greenhouse.io/docs/RaceEthnicityDefinitions.pdf
