@@ -77,7 +77,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
   };
 
   return (
-    <Disclosure as="nav" className="bg-white border-b border-gray-200">
+    <Disclosure as="nav" className="bg-white shadow-sm">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -4,10 +4,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
+import 'flatpickr/dist/flatpickr.min.css';
 import './index.css';
 
 import Authentication from './components/Authentication';
-import Placeholder from './Placeholder';
+import { Application } from './pages/application';
 import { store } from './store';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
@@ -26,7 +27,7 @@ ReactDOM.render(
       >
         <BrowserRouter>
           <Authentication>
-            <Placeholder />
+            <Application />
           </Authentication>
         </BrowserRouter>
       </Auth0Provider>
