@@ -27,14 +27,14 @@ const EducationForm = (): JSX.Element => {
         max={2030}
         min={1980}
         required
-        {...getFieldProps('graduationYear')}
+        {...getFieldProps('graduation_year')}
       />
 
       <SelectInput
         className="col-span-6 sm:col-span-3"
         label="Level of study"
         required
-        {...getFieldProps('levelOfStudy')}
+        {...getFieldProps('level_of_study')}
       >
         <option defaultChecked>Select an option...</option>
         <option>Elementary / Middle School / Primary School</option>

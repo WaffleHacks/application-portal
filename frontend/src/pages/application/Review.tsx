@@ -3,8 +3,7 @@ import React, { ReactNode } from 'react';
 
 import { CheckboxInput } from '../../components/input';
 import SidebarCard from '../../components/SidebarCard';
-import { useGetProfileQuery } from '../../store';
-import { FormFields } from './form';
+import { ApplicationAutosave, useGetProfileQuery } from '../../store';
 
 interface RowProps {
   name: string;
@@ -30,7 +29,7 @@ const Link = ({ href, children }: LinkProps) => (
 );
 
 const Review = (): JSX.Element => {
-  const { getFieldProps, values } = useFormikContext<FormFields>();
+  const { getFieldProps, values } = useFormikContext<ApplicationAutosave>();
   const { data: user } = useGetProfileQuery();
 
   return (
@@ -39,31 +38,31 @@ const Review = (): JSX.Element => {
         <Row name="Name" value={user?.firstName + ' ' + user?.lastName} />
         <Row name="Email" value={user?.email} />
         <Row name="Gender" value={values.gender} />
-        <Row name="Race / Ethnicity" value={values.raceEthnicity} />
-        <Row name="Date of Birth" value={values.dateOfBirth} />
+        <Row name="Race / Ethnicity" value={values.race_ethnicity} />
+        <Row name="Date of Birth" value={values.date_of_birth} />
       </SidebarCard>
       <SidebarCard title="Education" className="mt-3" grid={false}>
         <Row name="School" value={values.school} />
-        <Row name="Graduation year" value={values.graduationYear} />
-        <Row name="Level of study" value={values.levelOfStudy} />
+        <Row name="Graduation year" value={values.graduation_year} />
+        <Row name="Level of study" value={values.level_of_study} />
         <Row name="Major" value={values.major} />
       </SidebarCard>
       <SidebarCard title="values" className="mt-3" grid={false}>
         <Row
           name="Portfolio"
-          value={values.portfolioUrl && <Link href={values.portfolioUrl}>{values.portfolioUrl}</Link>}
+          value={values.portfolio_url && <Link href={values.portfolio_url}>{values.portfolio_url}</Link>}
         />
-        <Row name="Repositories" value={values.vcsUrl && <Link href={values.vcsUrl}>{values.vcsUrl}</Link>} />
-        <Row name="Attended hackathons" value={values.hackathonsAttended} />
+        <Row name="Repositories" value={values.vcs_url && <Link href={values.vcs_url}>{values.vcs_url}</Link>} />
+        <Row name="Attended hackathons" value={values.hackathons_attended} />
         <Row name="Resume" value={values.resume?.name} />
-        <Row name="Share with sponsors" value={values.shareInfo ? 'yes' : 'no'} />
+        <Row name="Share with sponsors" value={values.share_information ? 'yes' : 'no'} />
       </SidebarCard>
       <SidebarCard title="values" className="mt-3" grid={false}>
         <Row name="Street address" value={values.street} />
         <Row name="Apartment / Suite" value={values.apartment} />
         <Row name="City" value={values.city} />
         <Row name="State / Province" value={values.region} />
-        <Row name="ZIP / Postal code" value={values.postalCode} />
+        <Row name="ZIP / Postal code" value={values.postal_code} />
         <Row name="Country" value={values.country} />
       </SidebarCard>
       <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6 mt-3 flex justify-around">
@@ -75,7 +74,7 @@ const Review = (): JSX.Element => {
             </span>
           }
           required
-          {...getFieldProps('agreedToPrivacy')}
+          {...getFieldProps('agree_to_privacy')}
         />
         <CheckboxInput
           label={
@@ -85,7 +84,7 @@ const Review = (): JSX.Element => {
             </span>
           }
           required
-          {...getFieldProps('agreedToRules')}
+          {...getFieldProps('agree_to_rules')}
         />
       </div>
     </>

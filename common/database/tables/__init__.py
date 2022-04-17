@@ -1,5 +1,6 @@
 from .application import (
     Application,
+    ApplicationAutosave,
     ApplicationCreate,
     ApplicationRead,
     ApplicationUpdate,

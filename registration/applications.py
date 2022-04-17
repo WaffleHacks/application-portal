@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from common import Permission, requires_permission, with_user_id
 from common.database import (
     Application,
+    ApplicationAutosave,
     ApplicationCreate,
     ApplicationRead,
     ApplicationUpdate,
@@ -73,7 +74,7 @@ async def create_application(
 
 @router.get(
     "/autosave",
-    response_model=ApplicationUpdate,
+    response_model=ApplicationAutosave,
     name="Get an in-progress application",
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
@@ -97,7 +98,7 @@ async def get_autosave_application(
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
 async def autosave_application(
-    values: ApplicationUpdate,
+    values: ApplicationAutosave,
     id: str = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
@@ -108,10 +109,7 @@ async def autosave_application(
     # Prevent auto-saving if already applied
     application = await db.get(Application, id)
     if not application:
-        await kv.set(
-            str(id),
-            values.dict(exclude_unset=True, exclude_none=True, exclude_defaults=True),
-        )
+        await kv.set(str(id), values.dict())
 
 
 @router.get("/{id}", response_model=ApplicationRead, name="Read application")

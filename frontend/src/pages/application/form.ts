@@ -1,107 +1,64 @@
 import * as Yup from 'yup';
 
-export interface FormFields {
-  // About
-  gender: string;
-  raceEthnicity: string;
-  dateOfBirth: string;
+import { ApplicationAutosave, Gender, RaceEthnicity } from '../../store';
 
-  // Education
-  school: string;
-  levelOfStudy: string;
-  graduationYear: number;
-  major: string;
-
-  // Shipping
-  street: string;
-  apartment: string;
-  city: string;
-  region: string;
-  postalCode: string;
-  country: string;
-
-  // Experience
-  portfolioUrl: string;
-  vcsUrl: string;
-  hackathonsAttended: number;
-  resume?: File;
-  shareInfo: boolean;
-
-  // Legal
-  agreedToPrivacy: boolean;
-  agreedToRules: boolean;
-}
-
-export const initialValues: FormFields = {
+export const initialValues: ApplicationAutosave = {
   gender: '',
-  raceEthnicity: '',
-  dateOfBirth: '',
+  race_ethnicity: '',
+  date_of_birth: '',
   school: '',
-  levelOfStudy: '',
-  graduationYear: new Date().getFullYear(),
+  level_of_study: '',
+  graduation_year: new Date().getFullYear(),
   major: '',
   street: '',
   apartment: '',
   city: '',
   region: '',
-  postalCode: '',
+  postal_code: '',
   country: '',
-  portfolioUrl: '',
-  vcsUrl: '',
-  hackathonsAttended: 0,
-  shareInfo: true,
-  agreedToPrivacy: false,
-  agreedToRules: false,
+  portfolio_url: '',
+  vcs_url: '',
+  hackathons_attended: 0,
+  share_information: true,
+  agree_to_privacy: false,
+  agree_to_rules: false,
 };
 
 const required = 'This field is required';
 export const validationSchema = {
   about: Yup.object({
-    gender: Yup.string().oneOf(['Male', 'Female', 'Non-binary', 'Other'], required).required(required),
-    raceEthnicity: Yup.string()
-      .oneOf(
-        [
-          'American Indian / Alaskan Native',
-          'Asian',
-          'Native Hawaiian or other pacific islander',
-          'Black / African American',
-          'Hispanic',
-          'White / Caucasian',
-          'Multiple ethnicities / Other',
-        ],
-        required,
-      )
-      .required(required),
-    dateOfBirth: Yup.string()
+    gender: Yup.string().oneOf(Object.values(Gender), required).required(required),
+    race_ethnicity: Yup.string().oneOf(Object.values(RaceEthnicity), required).required(required),
+    date_of_birth: Yup.string()
       .matches(/\d{1,2}-\d{1,2}-\d{4}/, 'Must be a valid date (DD-MM-YYYY)')
       .required(required),
   }),
   education: Yup.object({
     school: Yup.string().required(required),
-    levelOfStudy: Yup.string().required(required),
-    graduationYear: Yup.number()
+    level_of_study: Yup.string().required(required),
+    graduation_year: Yup.number()
       .min(1980, 'Must be greater than 1980')
       .max(2030, 'Must be less than 2030')
       .required(required),
     major: Yup.string().optional(),
   }),
   experience: Yup.object({
-    portfolioUrl: Yup.string().url('Must be a valid URL').optional(),
-    vcsUrl: Yup.string().url('Must be a valid URL').optional(),
-    hackathonsAttended: Yup.number().min(0).max(50).required(required),
+    portfolio_url: Yup.string().url('Must be a valid URL').optional(),
+    vcs_url: Yup.string().url('Must be a valid URL').optional(),
+    hackathons_attended: Yup.number().min(0).max(50).required(required),
     resume: Yup.mixed().optional(),
-    shareInfo: Yup.boolean(),
+    share_information: Yup.boolean(),
   }),
   shipping: Yup.object({
     street: Yup.string().required(required),
     apartment: Yup.string().optional(),
     city: Yup.string().required(required),
     region: Yup.string().required(required),
-    postalCode: Yup.string().required(required),
+    postal_code: Yup.string().required(required),
     country: Yup.string().required(required),
   }),
   review: Yup.object({
-    agreedToPrivacy: Yup.boolean(),
-    agreedToRules: Yup.boolean(),
+    agree_to_privacy: Yup.boolean(),
+    agree_to_rules: Yup.boolean(),
   }),
 };

@@ -4,10 +4,10 @@ import { usePlacesWidget } from 'react-google-autocomplete';
 
 import { TextInput } from '../../components/input';
 import SidebarCard from '../../components/SidebarCard';
-import { FormFields } from './form';
+import { ApplicationAutosave } from '../../store';
 
 const ShippingForm = (): JSX.Element => {
-  const { getFieldProps, setFieldValue, values } = useFormikContext<FormFields>();
+  const { getFieldProps, setFieldValue, values } = useFormikContext<ApplicationAutosave>();
   const { ref } = usePlacesWidget<HTMLInputElement>({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     options: {
@@ -22,7 +22,7 @@ const ShippingForm = (): JSX.Element => {
       );
       setFieldValue('city', getAddressComponent(place, 'locality'), true);
       setFieldValue('region', getAddressComponent(place, 'administrative_area_level_1'), true);
-      setFieldValue('postalCode', getAddressComponent(place, 'postal_code'), true);
+      setFieldValue('postal_code', getAddressComponent(place, 'postal_code'), true);
       setFieldValue('country', getAddressComponent(place, 'country'), true);
     },
   });
@@ -72,7 +72,7 @@ const ShippingForm = (): JSX.Element => {
         label="ZIP / Postal code"
         required
         autoComplete="postal-code"
-        {...getFieldProps('postalCode')}
+        {...getFieldProps('postal_code')}
       />
 
       <TextInput

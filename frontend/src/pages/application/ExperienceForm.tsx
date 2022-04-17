@@ -16,14 +16,14 @@ const ExperienceForm = (): JSX.Element => {
         className="col-span-6 sm:col-span-3"
         label="Portfolio"
         placeholder="https://mywebsite.com"
-        {...getFieldProps('portfolioUrl')}
+        {...getFieldProps('portfolio_url')}
       />
 
       <TextInput
         className="col-span-6 sm:col-span-3"
         label="Repositories (GitHub, GitLab, BitBucket, etc)"
         placeholder="https://github.com/WaffleHacks"
-        {...getFieldProps('vcsUrl')}
+        {...getFieldProps('vcs_url')}
       />
 
       <NumberInput
@@ -32,24 +32,28 @@ const ExperienceForm = (): JSX.Element => {
         max={50}
         min={0}
         required
-        {...getFieldProps('hackathonsAttended')}
+        {...getFieldProps('hackathons_attended')}
       />
 
-      <FileInput
-        className="col-span-6"
-        label="Resume"
-        description="PDF up to 10MB"
-        accept={['.pdf', 'application/pdf']}
-        maxSize={10 * 1024 * 1024 /* 10MB in bytes */}
-        {...getFieldProps('resume')}
-      />
+      <div className="col-span-6">
+        <FileInput
+          label="Resume"
+          description="PDF up to 10MB"
+          accept={['.pdf', 'application/pdf']}
+          maxSize={10 * 1024 * 1024 /* 10MB in bytes */}
+          {...getFieldProps('resume')}
+        />
+        <p className="mt-1 text-xs text-gray-500 text-right">
+          <b>Note</b>: your resume is not auto-saved
+        </p>
+      </div>
 
       <SwitchInput
         className="col-span-6 sm:col-span-4"
         label="Share with sponsors"
         description="Allow us to share your name, portfolio, resume, and education information with our sponsors."
         required
-        {...getFieldProps('shareInfo')}
+        {...getFieldProps('share_information')}
       />
     </SidebarCard>
   );

@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
+from pydantic import BaseModel, validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String
@@ -100,3 +101,29 @@ class ApplicationUpdate(SQLModel):
     share_information: Optional[bool]
 
     legal_agreements_acknowledged: Optional[bool]
+
+
+class ApplicationAutosave(BaseModel):
+    gender: str
+    race_ethnicity: str
+    date_of_birth: str
+
+    school: str
+    level_of_study: str
+    graduation_year: int
+    major: str
+
+    street: str
+    apartment: str
+    city: str
+    region: str
+    postal_code: str
+    country: str
+
+    portfolio_url: str
+    vcs_url: str
+    hackathons_attended: int
+    share_information: bool
+
+    agree_to_privacy: bool
+    agree_to_rules: bool

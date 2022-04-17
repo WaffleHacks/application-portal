@@ -4,27 +4,30 @@ import React, { useEffect, useState } from 'react';
 
 interface Props<Values extends FormikValues> {
   debounce?: number;
-  onSave: (values: Values) => void | Promise<void>;
+  onSave: (values: Values) => unknown | Promise<unknown>;
+  isSaving: boolean;
 }
 
-const AutoSave = <Values,>({ debounce: debounceMs = 250, onSave }: Props<Values>): JSX.Element => {
-  const { values } = useFormikContext<Values>();
-  const [saving, setSaving] = useState(false);
+const AutoSave = <Values,>({ debounce: debounceMs = 250, isSaving, onSave }: Props<Values>): JSX.Element => {
+  const { values, validateForm } = useFormikContext<Values>();
+  const [awaiting, setAwaiting] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setSaving(true);
-      Promise.resolve(onSave(values)).then(() => setSaving(false));
+      setAwaiting(true);
+      validateForm();
+      Promise.resolve(onSave(values)).then(() => setAwaiting(false));
     }, debounceMs);
     return () => clearTimeout(timeout);
   }, [debounceMs, values]);
 
-  const icon = saving ? (
-    <RefreshIcon className="inline h-4 w-4 animate-spin" />
-  ) : (
-    <CheckCircleIcon className="inline h-4 w-4" />
-  );
-  const text = saving ? 'Saving...' : 'Saved';
+  const icon =
+    awaiting || isSaving ? (
+      <RefreshIcon className="inline h-4 w-4 animate-spin" />
+    ) : (
+      <CheckCircleIcon className="inline h-4 w-4" />
+    );
+  const text = awaiting || isSaving ? 'Saving...' : 'Saved';
 
   return (
     <span className="text-sm text-gray-500">

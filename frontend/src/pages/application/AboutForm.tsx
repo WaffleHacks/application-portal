@@ -3,10 +3,10 @@ import React from 'react';
 
 import { DateInput, SelectInput } from '../../components/input';
 import SidebarCard from '../../components/SidebarCard';
-import { FormFields } from './form';
+import { ApplicationAutosave, Gender, RaceEthnicity } from '../../store';
 
 const AboutForm = (): JSX.Element => {
-  const { getFieldProps } = useFormikContext<FormFields>();
+  const { getFieldProps } = useFormikContext<ApplicationAutosave>();
 
   return (
     <SidebarCard
@@ -14,32 +14,27 @@ const AboutForm = (): JSX.Element => {
       description="We just need to get some extra information about you so we can better tailor our hackathon to you."
     >
       <SelectInput className="col-span-6 sm:col-span-3" label="Gender" required {...getFieldProps('gender')}>
-        <option>Male</option>
-        <option>Female</option>
-        <option>Non-binary</option>
-        <option>Other</option>
+        {Object.values(Gender).map((g, i) => (
+          <option key={i}>{g}</option>
+        ))}
       </SelectInput>
 
       <SelectInput
         className="col-span-6 sm:col-span-3"
         label="Race / Ethnicity"
         required
-        {...getFieldProps('raceEthnicity')}
+        {...getFieldProps('race_ethnicity')}
       >
-        <option>American Indian / Alaskan Native</option>
-        <option>Asian</option>
-        <option>Native Hawaiian or other pacific islander</option>
-        <option>Black / African American</option>
-        <option>Hispanic</option>
-        <option>White / Caucasian</option>
-        <option>Multiple ethnicities / Other</option>
+        {Object.values(RaceEthnicity).map((e, i) => (
+          <option key={i}>{e}</option>
+        ))}
       </SelectInput>
 
       <DateInput
         className="col-span-6 sm:col-span-3"
         label="Date of birth"
         required
-        {...getFieldProps('dateOfBirth')}
+        {...getFieldProps('date_of_birth')}
       />
     </SidebarCard>
   );
