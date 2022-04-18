@@ -1,10 +1,12 @@
 import importlib
+import json
 import sys
-from typing import Optional
+from typing import Dict, Optional
 
 import click
 from alembic import command
 from alembic.config import Config
+from algoliasearch.search_client import SearchClient  # type: ignore
 from dotenv import load_dotenv
 
 # Load from environment file
@@ -90,6 +92,29 @@ def run(app: Optional[str]):
     except AttributeError:
         click.echo(f"{app} is misconfigured, could not find 'run' function")
         sys.exit(1)
+
+
+@cli.command(name="seed-algolia")
+@click.option("-i", "--app-id", "app_id", type=str, envvar="ALGOLIA_APP_ID")
+@click.option("-k", "--api-key", "api_key", type=str, envvar="ALGOLIA_API_KEY")
+def seed_algolia(app_id: str, api_key: str):
+    """
+    Seed the Algolia search indexes
+    """
+    client = SearchClient.create(app_id, api_key)
+
+    def id_to_object_id(entry: Dict[str, str]) -> Dict[str, str]:
+        entry["objectID"] = entry["id"]
+        del entry["id"]
+        return entry
+
+    schools = json.load(open("./common/database/migrations/schools.json", "r"))
+    schools_index = client.init_index("schools")
+    schools_index.save_objects(map(id_to_object_id, schools))
+
+    majors = json.load(open("./common/database/migrations/majors.json", "r"))
+    majors_index = client.init_index("majors")
+    majors_index.save_objects(map(id_to_object_id, majors))
 
 
 if __name__ == "__main__":

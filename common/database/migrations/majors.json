@@ -1,0 +1,370 @@
+[
+  {
+    "id": "prm2TdttYW",
+    "name": "Accounting"
+  },
+  {
+    "id": "FV0ey1ANg7",
+    "name": "Aerospace Engineering"
+  },
+  {
+    "id": "ucIaCj-TJB",
+    "name": "Agricultural Engineering"
+  },
+  {
+    "id": "05wffgnA7N",
+    "name": "Applied Mathematics"
+  },
+  {
+    "id": "6LQIXjnIdS",
+    "name": "Architecture"
+  },
+  {
+    "id": "Qsr43CH6Fz",
+    "name": "Biochemistry"
+  },
+  {
+    "id": "44ozGHokX5",
+    "name": "Bioengineering"
+  },
+  {
+    "id": "DEIMvr8un8",
+    "name": "Bioinformatics"
+  },
+  {
+    "id": "Fqo1feO8oO",
+    "name": "Biological Sciences"
+  },
+  {
+    "id": "VG_RaQcrEJ",
+    "name": "Biology"
+  },
+  {
+    "id": "PwHc_TS9yr",
+    "name": "Biomedical Engineering"
+  },
+  {
+    "id": "I761-xY43V",
+    "name": "Biotechnology"
+  },
+  {
+    "id": "ex-Yyplu4R",
+    "name": "Building Construction Management"
+  },
+  {
+    "id": "U8lOCSKm-f",
+    "name": "Business"
+  },
+  {
+    "id": "bGXE7Iol-7",
+    "name": "Business Administration"
+  },
+  {
+    "id": "LEYbcMxo6J",
+    "name": "Business Analytics"
+  },
+  {
+    "id": "-xTadmD7IU",
+    "name": "Chemical Engineering"
+  },
+  {
+    "id": "bwdBSWGTy1",
+    "name": "Chemistry"
+  },
+  {
+    "id": "eFZhcEBNVr",
+    "name": "Civil Engineering"
+  },
+  {
+    "id": "S-FKO_CU6R",
+    "name": "Cognitive Science"
+  },
+  {
+    "id": "GYPslyk46L",
+    "name": "Communications"
+  },
+  {
+    "id": "MEDPPydlXx",
+    "name": "Computational Biology"
+  },
+  {
+    "id": "hk7YjsriSY",
+    "name": "Computational Media"
+  },
+  {
+    "id": "TL_Ae1hdh3",
+    "name": "Computer Engineering"
+  },
+  {
+    "id": "afjEZI223G",
+    "name": "Computer Science"
+  },
+  {
+    "id": "qdn_UFm3Fd",
+    "name": "Computer Information Systems"
+  },
+  {
+    "id": "kHx8DyYgLQ",
+    "name": "Computer Technologies"
+  },
+  {
+    "id": "otoA_GEdJu",
+    "name": "Computing Security"
+  },
+  {
+    "id": "ojlD9AtUEu",
+    "name": "Culinary Arts"
+  },
+  {
+    "id": "XkW863q4uV",
+    "name": "Cyber Operations"
+  },
+  {
+    "id": "0LQanWIb1_",
+    "name": "Data Science"
+  },
+  {
+    "id": "d5zenGNy33",
+    "name": "Design"
+  },
+  {
+    "id": "KRfvJe7f3k",
+    "name": "Economics"
+  },
+  {
+    "id": "X1c5xY8btf",
+    "name": "Electrical Engineering"
+  },
+  {
+    "id": "zDGNOvgMUN",
+    "name": "Engineering"
+  },
+  {
+    "id": "UK8VT5xxdu",
+    "name": "Engineering Management"
+  },
+  {
+    "id": "aAwmAJjqlT",
+    "name": "Engineering Physics"
+  },
+  {
+    "id": "e9_IBVGZ5U",
+    "name": "Engineering Science"
+  },
+  {
+    "id": "-PEMYRudJ1",
+    "name": "English"
+  },
+  {
+    "id": "zzb-XXK_7F",
+    "name": "Film"
+  },
+  {
+    "id": "QX3yJ5BfRb",
+    "name": "Finance"
+  },
+  {
+    "id": "PCgy-WPBfc",
+    "name": "Game Design and Development"
+  },
+  {
+    "id": "Tvuo5xA4SI",
+    "name": "Geophysics"
+  },
+  {
+    "id": "g3fMslgQDB",
+    "name": "Graphic Design"
+  },
+  {
+    "id": "lhlTrgxcvw",
+    "name": "Human Centered Design"
+  },
+  {
+    "id": "K2WpE-WJyG",
+    "name": "Human Computer Interaction"
+  },
+  {
+    "id": "YHSx0-czAl",
+    "name": "Humanities"
+  },
+  {
+    "id": "oa-xC2Ngbr",
+    "name": "Individualized Major"
+  },
+  {
+    "id": "yIOrzy4F1p",
+    "name": "Industrial and Systems Engineering"
+  },
+  {
+    "id": "cmZGgcvfxN",
+    "name": "Industrial and Operations Engineering"
+  },
+  {
+    "id": "4OUdG3jB9R",
+    "name": "Industrial Engineering"
+  },
+  {
+    "id": "wWLUQ6tQop",
+    "name": "Informatics"
+  },
+  {
+    "id": "LAAWBevEKR",
+    "name": "Information Science"
+  },
+  {
+    "id": "69Z_nIIejg",
+    "name": "Information Systems"
+  },
+  {
+    "id": "Ql0J6ZXSZG",
+    "name": "Information Technology"
+  },
+  {
+    "id": "J9ZFSmNtbQ",
+    "name": "Interaction Design"
+  },
+  {
+    "id": "YVTWx5X0WL",
+    "name": "Interactive Multimedia"
+  },
+  {
+    "id": "tG-4VWUBdm",
+    "name": "Interactive Telecommunications Program"
+  },
+  {
+    "id": "7i0DUHvDHL",
+    "name": "International Relations"
+  },
+  {
+    "id": "Aa8kSUxzvz",
+    "name": "Journalism"
+  },
+  {
+    "id": "Jj5vtA2EwU",
+    "name": "Linguistics"
+  },
+  {
+    "id": "RDHA4cuIb5",
+    "name": "Management"
+  },
+  {
+    "id": "4WW6GOSAvz",
+    "name": "Management Information Systems"
+  },
+  {
+    "id": "U4R2y_6zIw",
+    "name": "Marketing"
+  },
+  {
+    "id": "gOsKdwe8WD",
+    "name": "Materials Science"
+  },
+  {
+    "id": "tGpGWOgKfb",
+    "name": "Mathematics"
+  },
+  {
+    "id": "j8ITFvMm2w",
+    "name": "Mechanical Engineering"
+  },
+  {
+    "id": "WJjYfPo2ju",
+    "name": "Mechatronics"
+  },
+  {
+    "id": "qWDHWeby9_",
+    "name": "Mechatronics Engineering"
+  },
+  {
+    "id": "mn6GWX0yFd",
+    "name": "Media Arts and Sciences"
+  },
+  {
+    "id": "Ty2cFwFLjb",
+    "name": "Music Computing"
+  },
+  {
+    "id": "tH8bBwHlIB",
+    "name": "Nanoengineering"
+  },
+  {
+    "id": "TA_sH4pAux",
+    "name": "Network Security"
+  },
+  {
+    "id": "ieUZYcuJNe",
+    "name": "Neurobiology/Cognitive Science"
+  },
+  {
+    "id": "0_OvCZBd78",
+    "name": "Neuroscience"
+  },
+  {
+    "id": "4c9SgYCyFM",
+    "name": "New Media Design"
+  },
+  {
+    "id": "OpfuG3xC0R",
+    "name": "Operations Research Management Science"
+  },
+  {
+    "id": "YO0oCeUTTX",
+    "name": "Organizational"
+  },
+  {
+    "id": "jcO1Squ68i",
+    "name": "Philosophy"
+  },
+  {
+    "id": "n2GL0qN1Uy",
+    "name": "Physics"
+  },
+  {
+    "id": "8WFDhb1Z6k",
+    "name": "Political Science"
+  },
+  {
+    "id": "fukYgskgkq",
+    "name": "Poultry Science"
+  },
+  {
+    "id": "QtUk6mb--K",
+    "name": "Product Design"
+  },
+  {
+    "id": "bFXsVlbxCi",
+    "name": "Psych"
+  },
+  {
+    "id": "GO_bg8Negt",
+    "name": "Psychology"
+  },
+  {
+    "id": "5X3YC7-g-_",
+    "name": "Robotics Engineering"
+  },
+  {
+    "id": "DR1Y2LJdw5",
+    "name": "Robotics"
+  },
+  {
+    "id": "HTgAjVcz2i",
+    "name": "Software Engineering"
+  },
+  {
+    "id": "bGwMgMqt9y",
+    "name": "Statistics"
+  },
+  {
+    "id": "M5EaCwyNh8",
+    "name": "Systems Design Engineering"
+  },
+  {
+    "id": "IopKW532hX",
+    "name": "Technology Management"
+  },
+  {
+    "id": "9cJaLWCpXl",
+    "name": "Theatre and Linguistics"
+  }
+]
