@@ -7,7 +7,6 @@ from .application import (
     Gender,
     RaceEthnicity,
 )
-from .country import Country
 from .legal_agreements import (
     LegalAgreement,
     LegalAgreementBase,

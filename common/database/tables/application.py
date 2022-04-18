@@ -1,14 +1,13 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from .country import Country
     from .participant import Participant
     from .school import School
 
@@ -32,7 +31,7 @@ class RaceEthnicity(Enum):
 
 
 class ApplicationBase(SQLModel):
-    school_id: int = Field(foreign_key="schools.id")
+    school_id: str = Field(foreign_key="schools.id")
     level_of_study: str
     graduation_year: int
     major: Optional[str]
@@ -41,13 +40,13 @@ class ApplicationBase(SQLModel):
     portfolio_url: Optional[str]
     vcs_url: Optional[str]
 
-    gender: Optional[Gender] = Field(sa_column=Column(SQLEnum(Gender)))
+    gender: Gender = Field(sa_column=Column(SQLEnum(Gender), nullable=False))
     date_of_birth: str
-    race_ethnicity: Optional[RaceEthnicity] = Field(
-        sa_column=Column(SQLEnum(RaceEthnicity))
+    race_ethnicity: RaceEthnicity = Field(
+        sa_column=Column(SQLEnum(RaceEthnicity), nullable=False)
     )
 
-    country_id: int = Field(foreign_key="countries.id")
+    country: str
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
     share_information: bool
@@ -70,7 +69,6 @@ class Application(ApplicationBase, table=True):
     participant: "Participant" = Relationship(back_populates="application")
 
     school: "School" = Relationship(back_populates="applications")
-    country: "Country" = Relationship(back_populates="applications")
 
 
 class ApplicationCreate(ApplicationBase):
@@ -82,7 +80,7 @@ class ApplicationRead(ApplicationBase):
 
 
 class ApplicationUpdate(SQLModel):
-    school_id: Optional[int]
+    school_id: Optional[str]
     level_of_study: Optional[str]
     graduation_year: Optional[int]
     major: Optional[str]
@@ -96,7 +94,7 @@ class ApplicationUpdate(SQLModel):
     vcs_url: Optional[str]
 
     shipping_address: Optional[str]  # should be formatted prior to insertion
-    country_id: Optional[int]
+    country: Optional[str]
 
     share_information: Optional[bool]
 
