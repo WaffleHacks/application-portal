@@ -1,0 +1,6 @@
+frontend
+.venv
+.github
+.env
+.mypy_cache
+**/__pycache__
