@@ -15,6 +15,7 @@ type Props<Item extends BaseItem> = BaseProps<string> & {
   indexName: string;
   appId: string;
   apiKey: string;
+  maxHits?: number;
   display?: (item: Item) => string;
 };
 
@@ -24,6 +25,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
   appId,
   apiKey,
   display = (item) => item.objectID,
+  maxHits = 5,
   ...props
 }: Props<Item>): JSX.Element => {
   const [{ value, name }, { error }, { setValue }] = useField(props);
@@ -45,7 +47,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
           indexName,
           query,
           params: {
-            hitsPerPage: 5,
+            hitsPerPage: maxHits,
           },
         },
       ]);

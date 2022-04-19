@@ -28,6 +28,7 @@ const EducationForm = (): JSX.Element => {
         indexName="schools"
         appId={APP_ID}
         apiKey={API_KEY}
+        maxHits={25}
         required
         placeholder="Hacker University"
         display={display}
