@@ -130,7 +130,7 @@
   {
     "name": "Adelphi University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["AU"],
     "id": "ukHumRNlT_"
   },
   {
@@ -202,7 +202,7 @@
   {
     "name": "Albany State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ASU"],
     "id": "WfUqUXXZzN"
   },
   {
@@ -286,13 +286,13 @@
   {
     "name": "American University in Dubai",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["AU"],
     "id": "FdJxGM7maD"
   },
   {
     "name": "American University, Washington, D.C.",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["AU"],
     "id": "SA9dnTPCvb"
   },
   {
@@ -408,7 +408,7 @@
   {
     "name": "Appalachian State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ASU"],
     "id": "m6H2ofnd3S"
   },
   {
@@ -432,13 +432,13 @@
   {
     "name": "Arcadia University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["AU"],
     "id": "kgAD-OECz0"
   },
   {
     "name": "Arizona State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ASU"],
     "id": "UBtJG2aiiE"
   },
   {
@@ -562,7 +562,7 @@
   {
     "name": "Auburn University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["AU"],
     "id": "7lbgS-6lOY"
   },
   {
@@ -660,7 +660,7 @@
   {
     "name": "Ball State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BSU"],
     "id": "9_YcN99nic"
   },
   {
@@ -890,7 +890,7 @@
   {
     "name": "Binghamton University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BU"],
     "id": "7B3KB7z_qX"
   },
   {
@@ -1028,7 +1028,7 @@
   {
     "name": "Boise State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BSU"],
     "id": "BlnaXkSeVY"
   },
   {
@@ -1046,7 +1046,7 @@
   {
     "name": "Boston College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BU"],
     "id": "bhmodD85XU"
   },
   {
@@ -1058,7 +1058,7 @@
   {
     "name": "Boston University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BU"],
     "id": "w_TQHoDjaK"
   },
   {
@@ -1088,7 +1088,7 @@
   {
     "name": "Bowie State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BSU"],
     "id": "5wsKmgXm3I"
   },
   {
@@ -1136,7 +1136,7 @@
   {
     "name": "Brigham Young University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BYU", "The Y"],
     "id": "4lr1Ya83H_"
   },
   {
@@ -1160,7 +1160,7 @@
   {
     "name": "Bronx Community College, CUNY",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BCC"],
     "id": "Y_3AO932-P"
   },
   {
@@ -1202,13 +1202,13 @@
   {
     "name": "Bryn Mawr College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BMC"],
     "id": "M9OoZxZRRQ"
   },
   {
     "name": "Bucknell University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["BU"],
     "id": "aEWENxBOX9"
   },
   {
@@ -1300,157 +1300,157 @@
   {
     "name": "California Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Caltech"],
     "id": "nUR9QJxBZ2"
   },
   {
     "name": "California Polytechnic State University, San Luis Obispo",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal Poly"],
     "id": "hheutUKWkt"
   },
   {
     "name": "California State Polytechnic University, Pomona",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal Poly Pomona"],
     "id": "ogK0S7QV8A"
   },
   {
     "name": "California State University, Bakersfield",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "l9uA6-ZIy0"
   },
   {
     "name": "California State University, Channel Islands",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "B0ZTFe31-V"
   },
   {
     "name": "California State University, Chico",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State", "Chico State"],
     "id": "B58JoA6lIy"
   },
   {
     "name": "California State University, Dominguez Hills",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "vIWncnMr_D"
   },
   {
     "name": "California State University, East Bay",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State", "CSUEB"],
     "id": "7EUsUx2qty"
   },
   {
     "name": "California State University, Fresno",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State", "CSUF", "Fresno State", "FSU"],
     "id": "uglI1v6hmc"
   },
   {
     "name": "California State University, Fullerton",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "SvbfcNRgp-"
   },
   {
     "name": "California State University, Humboldt",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "2rz6Lh7KFm"
   },
   {
     "name": "California State University, Long Beach",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Long Beach State"],
+    "abbreviations": ["Cal State", "CSULB"],
     "id": "kq5bxb6Pn0"
   },
   {
     "name": "California State University, Los Angeles",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State", "CSULA"],
     "id": "4gkA0g2R6d"
   },
   {
     "name": "California State University, Maritime",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "dXxZFshDjx"
   },
   {
     "name": "California State University, Monterey Bay",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "bnN7TARgwr"
   },
   {
     "name": "California State University, Northridge",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "GCQBEMPkg1"
   },
   {
     "name": "California State University, Sacramento",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Sac State", "Sacramento State"],
+    "abbreviations": ["Cal State", "CSUS"],
     "id": "DyaDHZu6QP"
   },
   {
     "name": "California State University, San Bernardino",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "-q5gTkmuXZ"
   },
   {
     "name": "California State University, San Diego",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "kgqFo-4zUo"
   },
   {
     "name": "California State University, San Francisco",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "ItyQGygmVk"
   },
   {
     "name": "California State University, San Jose",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "549RVBwfDI"
   },
   {
     "name": "California State University, San Luis Obispo",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "u_0DsDgzh7"
   },
   {
     "name": "California State University, San Marcos",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State"],
     "id": "JJKsx0Qnwn"
   },
   {
     "name": "California State University, Sonoma",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal State", "SSU"],
     "id": "T9f-yBzVR-"
   },
   {
     "name": "California State University, Stanislaus",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Stanislaus State", "Stan State"],
+    "abbreviations": ["Cal State"],
     "id": "LYJEJoRanM"
   },
   {
     "name": "California University of Pennsylvania",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Cal U", "CUP"],
     "id": "wijF02pCBR"
   },
   {
@@ -1522,7 +1522,7 @@
   {
     "name": "Carnegie Mellon University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CMU"],
     "id": "2bA4sP-Aa-"
   },
   {
@@ -1545,7 +1545,7 @@
   },
   {
     "name": "Case Western Reserve University",
-    "alternatives": [],
+    "alternatives": ["Reserve"],
     "abbreviations": [],
     "id": "sTO4zziJZP"
   },
@@ -1558,7 +1558,7 @@
   {
     "name": "Catholic University of America",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Catholic", "CUA"],
     "id": "cek7ZUKh9-"
   },
   {
@@ -1626,7 +1626,7 @@
   {
     "name": "Central Connecticut State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CCSU"],
     "id": "3D5PO2KzR_"
   },
   {
@@ -1870,7 +1870,7 @@
   {
     "name": "Claremont McKenna College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CMC"],
     "id": "8-T1LPbcbo"
   },
   {
@@ -1912,7 +1912,7 @@
   {
     "name": "Clemson University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CU"],
     "id": "vxmLikvebC"
   },
   {
@@ -2110,7 +2110,7 @@
   {
     "name": "College of Charleston",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["C of C"],
     "id": "OrF9VK3I6L"
   },
   {
@@ -2202,7 +2202,7 @@
   {
     "name": "Columbia University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CU"],
     "id": "vgG2g07Cuo"
   },
   {
@@ -2292,7 +2292,7 @@
   {
     "name": "Connecticut College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Conn"],
     "id": "BhSPzc4y1g"
   },
   {
@@ -2328,7 +2328,7 @@
   {
     "name": "Cornell University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CU"],
     "id": "dFRwIoQ4Gg"
   },
   {
@@ -2424,13 +2424,13 @@
   {
     "name": "Dartmouth College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DC"],
     "id": "Wav7vwBeCG"
   },
   {
     "name": "Davidson College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DC"],
     "id": "daOr5wG5ko"
   },
   {
@@ -2460,7 +2460,7 @@
   {
     "name": "De Anza College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["De Anza"],
     "id": "STaLPH-WCU"
   },
   {
@@ -2564,7 +2564,7 @@
   {
     "name": "Denison University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "WgAhQxeZ-G"
   },
   {
@@ -2576,7 +2576,7 @@
   {
     "name": "DePaul University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DPU"],
     "id": "VvuC9MDUj3"
   },
   {
@@ -2594,7 +2594,7 @@
   {
     "name": "DeSales University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DSU"],
     "id": "yWb52GueIg"
   },
   {
@@ -2742,7 +2742,7 @@
   {
     "name": "Drake University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "azlyT3yR9M"
   },
   {
@@ -2754,7 +2754,7 @@
   {
     "name": "Drexel University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "gHnUz1QiEn"
   },
   {
@@ -2772,7 +2772,7 @@
   {
     "name": "Duke University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "kYoOqQRIOn"
   },
   {
@@ -2784,7 +2784,7 @@
   {
     "name": "Duquesne University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "myZTjWlgXK"
   },
   {
@@ -2872,7 +2872,7 @@
     "id": "JO9e_qOhYa"
   },
   {
-    "name": "EASTERN Center for Arts and Technology",
+    "name": "Eastern Center for Arts and Technology",
     "alternatives": [],
     "abbreviations": [],
     "id": "mNEwLBDIeN"
@@ -2886,7 +2886,7 @@
   {
     "name": "Eastern Michigan University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["EMU"],
     "id": "Ivzr5lxAhf"
   },
   {
@@ -2910,7 +2910,7 @@
   {
     "name": "Eastern Washington University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["EWU"],
     "id": "dEKqof43YP"
   },
   {
@@ -3176,7 +3176,7 @@
   {
     "name": "Fairleigh Dickinson University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FDU"],
     "id": "AvQoMVqwem"
   },
   {
@@ -3214,7 +3214,7 @@
   {
     "name": "Fitchburg State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FSU"],
     "id": "X0lLYjQuLc"
   },
   {
@@ -3222,31 +3222,31 @@
     "alternatives": [
       "Florida A&M University"
     ],
-    "abbreviations": [],
+    "abbreviations": ["FAMU"],
     "id": "t1LxKfL7cx"
   },
   {
     "name": "Florida Atlantic University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FAU"],
     "id": "u6gw2j-u3P"
   },
   {
     "name": "Florida Gulf Coast University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FGCU"],
     "id": "_VAVs5ntcD"
   },
   {
     "name": "Florida Institute Of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Florida Tech"],
     "id": "DD62A6lJeo"
   },
   {
     "name": "Florida International University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FIU"],
     "id": "_p8I-9PLT-"
   },
   {
@@ -3258,7 +3258,7 @@
   {
     "name": "Florida State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FSU"],
     "id": "kdQBJBUh-L"
   },
   {
@@ -3276,7 +3276,7 @@
   {
     "name": "Fordham University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["FU"],
     "id": "xwUOo1qims"
   },
   {
@@ -3556,7 +3556,7 @@
   {
     "name": "George Mason University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GMU"],
     "id": "bpqsmZgmZh"
   },
   {
@@ -3568,19 +3568,19 @@
   {
     "name": "Georgetown University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GU"],
     "id": "0Ii08kq-BZ"
   },
   {
     "name": "Georgia Institute of Technology",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Georgia Tech"],
+    "abbreviations": ["GT"],
     "id": "FuTmJs5fQr"
   },
   {
     "name": "Georgia State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GSU"],
     "id": "aG-0ZTd15v"
   },
   {
@@ -3868,7 +3868,7 @@
   {
     "name": "Grand Valley State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GVSU"],
     "id": "HhtAZRyhOG"
   },
   {
@@ -4043,8 +4043,8 @@
   },
   {
     "name": "Hampton University",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Hampton Institute"],
+    "abbreviations": ["HIU", "HU"],
     "id": "XnQMrzryk-"
   },
   {
@@ -4108,9 +4108,9 @@
     "id": "g_0a8CvoFx"
   },
   {
-    "name": "Harvey Mudd University",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "Harvey Mudd College",
+    "alternatives": ["Harvey Mudd University"],
+    "abbreviations": ["HMC"],
     "id": "9MhyQ37Hxy"
   },
   {
@@ -4128,7 +4128,7 @@
   {
     "name": "Haverford College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["HC"],
     "id": "AML5JnUMIN"
   },
   {
@@ -4356,7 +4356,7 @@
   {
     "name": "Howard University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["HU"],
     "id": "mbqNkr3FsC"
   },
   {
@@ -4454,13 +4454,13 @@
   {
     "name": "Illinois Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["IIT"],
     "id": "Eh6ZiacsFx"
   },
   {
     "name": "Illinois State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ISU"],
     "id": "a1eHgLjwe-"
   },
   {
@@ -4718,7 +4718,7 @@
   {
     "name": "Indiana State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ISU"],
     "id": "oVW3yvuyGV"
   },
   {
@@ -4730,13 +4730,13 @@
   {
     "name": "Indiana University of Pennsylvania",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["IUP"],
     "id": "_hVJZC_qWw"
   },
   {
     "name": "Indiana University-Purdue University Fort Wayne",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["IPFW"],
     "id": "LjzesFEwv5"
   },
   {
@@ -5280,7 +5280,7 @@
   {
     "name": "Iowa State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ISU"],
     "id": "aHNf4-tpPC"
   },
   {
@@ -5310,7 +5310,7 @@
   {
     "name": "Ithaca College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["IC"],
     "id": "gwbuT8J2Rc"
   },
   {
@@ -5413,8 +5413,8 @@
   },
   {
     "name": "James Madison University",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Madison"],
+    "abbreviations": ["JMU"],
     "id": "OpqEtBgyGy"
   },
   {
@@ -5553,14 +5553,14 @@
   },
   {
     "name": "Johns Hopkins University",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Hopkins"],
+    "abbreviations": ["JHU"],
     "id": "0GrJ9iuP4O"
   },
   {
     "name": "Johnson & Wales University",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["Johnson and Wales University"],
+    "abbreviations": ["JWU"],
     "id": "4WR2ek7U2g"
   },
   {
@@ -5664,7 +5664,7 @@
   {
     "name": "Kansas State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["K-State", "KSU"],
     "id": "8eaxQRN34M"
   },
   {
@@ -5744,7 +5744,7 @@
   {
     "name": "Kennesaw State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["KSU"],
     "id": "GxkjG7uDcT"
   },
   {
@@ -5762,13 +5762,13 @@
   {
     "name": "Kent State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["KSU"],
     "id": "rX5c_bePdX"
   },
   {
     "name": "Kent State University at Stark",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["KSU"],
     "id": "NgvEoO9pzO"
   },
   {
@@ -5942,9 +5942,9 @@
     "id": "OSsPzyOWCb"
   },
   {
-    "name": "La Salle University, Philadelphia",
+    "name": "La Salle University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["LSU"],
     "id": "LA5tjaYbDl"
   },
   {
@@ -6018,7 +6018,7 @@
   {
     "name": "Lawrence Technological University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["LTU"],
     "id": "6Zwts485mB"
   },
   {
@@ -6038,7 +6038,7 @@
   {
     "name": "Lehigh University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["LU"],
     "id": "B8Ag3UVTqs"
   },
   {
@@ -6206,7 +6206,7 @@
   {
     "name": "Louisiana State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["LSU"],
     "id": "xpCXc3FTo1"
   },
   {
@@ -6224,7 +6224,7 @@
   {
     "name": "Loyola Marymount University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["LMU"],
     "id": "V64cum7aPp"
   },
   {
@@ -6610,7 +6610,7 @@
   {
     "name": "Marymount University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MU"],
     "id": "mDo00WYb9G"
   },
   {
@@ -6622,7 +6622,7 @@
   {
     "name": "Massachusetts Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MIT"],
     "id": "kP-Xj2LmTg"
   },
   {
@@ -6836,19 +6836,19 @@
   {
     "name": "Miami University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MU"],
     "id": "4b2MZXK0D-"
   },
   {
     "name": "Michigan State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "6XftFr22Lh"
   },
   {
     "name": "Michigan Technological University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MTU"],
     "id": "tehdBWvsXX"
   },
   {
@@ -6860,13 +6860,13 @@
   {
     "name": "Middle Tennessee State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MTSU"],
     "id": "qMxVWzF35q"
   },
   {
     "name": "Middlebury College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Midd"],
     "id": "psN-gaeGs5"
   },
   {
@@ -6980,24 +6980,24 @@
   {
     "name": "Mississippi State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "PJ_YjVH0r7"
   },
   {
     "name": "Mississippi University for Women",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MUW"],
     "id": "vyIF0XIboi"
   },
   {
     "name": "Missouri State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "loruhkVnnf"
   },
   {
     "name": "Missouri University of Science and Technology",
-    "alternatives": [],
+    "alternatives": ["Missouri S&T"],
     "abbreviations": [],
     "id": "1rrQizK8qS"
   },
@@ -7066,7 +7066,7 @@
   {
     "name": "Montana State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "Lbm-C77eNg"
   },
   {
@@ -7078,7 +7078,7 @@
   {
     "name": "Montclair State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "XcW_FZCD2I"
   },
   {
@@ -7154,7 +7154,7 @@
   {
     "name": "Morgan State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MSU"],
     "id": "gAjsGHDjFy"
   },
   {
@@ -7204,7 +7204,7 @@
   {
     "name": "Mount Holyoke College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["MHC", "MoHo"],
     "id": "8y7Hi6-05q"
   },
   {
@@ -7228,7 +7228,7 @@
   {
     "name": "Mt. San Antonio College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Mt. SAC"],
     "id": "aS0QrReAJj"
   },
   {
@@ -7506,7 +7506,7 @@
   {
     "name": "New Jersey Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NJIT"],
     "id": "QGSRiyRkVZ"
   },
   {
@@ -7524,23 +7524,23 @@
   {
     "name": "New York City College of Technology, CUNY",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["City Tech"],
     "id": "6YjmhcjS8c"
   },
   {
     "name": "New York Institute of Technology",
-    "alternatives": [],
-    "abbreviations": [],
+    "alternatives": ["New York Tech"],
+    "abbreviations": ["NYIT"],
     "id": "h5Bdq2ALF9"
   },
   {
     "name": "New York University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NYU"],
     "id": "Ow4sF-ffLC"
   },
   {
-    "name": "New York University Abu Dhabi",
+    "name": "New York University, Abu Dhabi",
     "alternatives": [],
     "abbreviations": [],
     "id": "bJyG2R0JCq"
@@ -7672,7 +7672,7 @@
     "alternatives": [
       "North Carolina A&T State University"
     ],
-    "abbreviations": [],
+    "abbreviations": ["A&T", "NC A&T"],
     "id": "KQ0ey2kCEr"
   },
   {
@@ -7684,13 +7684,13 @@
   {
     "name": "North Carolina State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NCSU"],
     "id": "hkm94zGoP4"
   },
   {
     "name": "North Dakota State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NDSU"],
     "id": "ygVtqUA0MO"
   },
   {
@@ -7726,31 +7726,31 @@
   {
     "name": "Northeastern University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NEU", "NU"],
     "id": "NJmbGMOCUv"
   },
   {
     "name": "Northern Arizona University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NAU"],
     "id": "EqTOPuibr1"
   },
   {
     "name": "Northern Illinois University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NIU"],
     "id": "6u-yynAzrX"
   },
   {
     "name": "Northern Kentucky University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NKU"],
     "id": "zVvCBeJFKD"
   },
   {
     "name": "Northern Michigan University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NMU"],
     "id": "cF6XIMv1pl"
   },
   {
@@ -7762,7 +7762,7 @@
   {
     "name": "Northern Virginia Community College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Nova"],
     "id": "Vzy-pAlI-k"
   },
   {
@@ -7780,7 +7780,7 @@
   {
     "name": "Northwest Missouri State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NWMSU"],
     "id": "oiLfxZMfY1"
   },
   {
@@ -7804,7 +7804,7 @@
   {
     "name": "Northwestern University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NU", "NW"],
     "id": "SW4S9f_9f1"
   },
   {
@@ -7848,7 +7848,7 @@
   {
     "name": "Oakland University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OU"],
     "id": "4V5BhDB0bp"
   },
   {
@@ -7890,7 +7890,7 @@
   {
     "name": "Ohio University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OU"],
     "id": "iXPZQQH5kc"
   },
   {
@@ -7902,13 +7902,13 @@
   {
     "name": "Oklahoma State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OSU", "OK State"],
     "id": "i6wzWwuvxe"
   },
   {
     "name": "Old Dominion University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ODU"],
     "id": "EFIQPWxpHC"
   },
   {
@@ -7944,7 +7944,7 @@
   {
     "name": "Oregon State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OSU"],
     "id": "XAQZcILfRW"
   },
   {
@@ -8100,7 +8100,7 @@
   {
     "name": "Pasadena City College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["PCC"],
     "id": "UIoGdo1tpL"
   },
   {
@@ -8148,7 +8148,7 @@
     "id": "GiNGXlCiWH"
   },
   {
-    "name": "Penn State Erie, The Behrend College",
+    "name": "Penn State Erie, Behrend College",
     "alternatives": [],
     "abbreviations": [],
     "id": "FmBABDn2xS"
@@ -8292,7 +8292,7 @@
   {
     "name": "Pima Community College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["PCC"],
     "id": "Rpk_oJQfZz"
   },
   {
@@ -8360,7 +8360,7 @@
   {
     "name": "Pomona College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["POM"],
     "id": "xX9QBty9Zq"
   },
   {
@@ -8414,7 +8414,7 @@
   {
     "name": "Portland State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["PSU"],
     "id": "ZScdIRLG5_"
   },
   {
@@ -8816,7 +8816,7 @@
   {
     "name": "Rensselaer Polytechnic Institute",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RPI"],
     "id": "ZgumbKO_Te"
   },
   {
@@ -8838,13 +8838,13 @@
   {
     "name": "Rhode Island College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RIC"],
     "id": "wpndmXOmB6"
   },
   {
     "name": "Rhode Island School of Design",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RISD"],
     "id": "g5TS9U-RPR"
   },
   {
@@ -8952,7 +8952,7 @@
   {
     "name": "Rochester Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RIT"],
     "id": "Upk9S46uvq"
   },
   {
@@ -8964,7 +8964,7 @@
   {
     "name": "Roger Williams University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RWU"],
     "id": "hJck0j9eqP"
   },
   {
@@ -8988,7 +8988,7 @@
   {
     "name": "Rose-Hulman Institute of Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RHIT"],
     "id": "YjYbQ2gyTd"
   },
   {
@@ -9078,19 +9078,19 @@
   {
     "name": "Rutgers University, Newark",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RU"],
     "id": "k1bIFFfPB5"
   },
   {
     "name": "Rutgers University, Camden",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RU"],
     "id": "n3bl_iWit1"
   },
   {
-    "name": "Rutgers, The State University of New Jersey",
+    "name": "Rutgers University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["RU"],
     "id": "EQ6WEG3oH4"
   },
   {
@@ -9174,9 +9174,9 @@
     "id": "p37xwMRuAb"
   },
   {
-    "name": "Saint Joseph's University, Philadelphia",
+    "name": "Saint Joseph's University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SJU"],
     "id": "NfzLvB6qw1"
   },
   {
@@ -9238,19 +9238,19 @@
   {
     "name": "San Diego State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SDSU"],
     "id": "rn2dbYvNM9"
   },
   {
     "name": "San Francisco State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SFSU"],
     "id": "iMcvv1wrNA"
   },
   {
     "name": "San Jose State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SJSU"],
     "id": "o7mcFXamFe"
   },
   {
@@ -9292,7 +9292,7 @@
   {
     "name": "Santa Clara University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SCU"],
     "id": "kbHVd_-dZt"
   },
   {
@@ -9358,7 +9358,7 @@
   {
     "name": "Savannah State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SSU"],
     "id": "7kE0tsjezE"
   },
   {
@@ -9722,7 +9722,7 @@
   {
     "name": "Slippery Rock University of Pennsylvania",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SRU"],
     "id": "BCX0J2GSGc"
   },
   {
@@ -9778,13 +9778,13 @@
   {
     "name": "South Carolina State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SCSU"],
     "id": "kDHDwY_Tni"
   },
   {
     "name": "South Dakota School of Mines and Technology",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SDSM&T"],
     "id": "1Arvmgso2b"
   },
   {
@@ -9820,25 +9820,25 @@
   {
     "name": "Southern Connecticut State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SCSU"],
     "id": "hKwUCVxhXL"
   },
   {
     "name": "Southern Illinois University Carbondale",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SIU", "SIUC"],
     "id": "D9I5j3ybpx"
   },
   {
     "name": "Southern Illinois University Edwardsville",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SIUE"],
     "id": "7GaGHAiJdI"
   },
   {
     "name": "Southern Methodist University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SMU"],
     "id": "1j_v77OhFJ"
   },
   {
@@ -9856,7 +9856,7 @@
   {
     "name": "Southern Utah University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SUU"],
     "id": "78YMIsHe-e"
   },
   {
@@ -10060,9 +10060,9 @@
     "id": "RFW54SccKb"
   },
   {
-    "name": "St. John's University, New York",
+    "name": "St. John's University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SJU"],
     "id": "RNxx90ewvj"
   },
   {
@@ -10272,7 +10272,7 @@
   {
     "name": "Susquehanna University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SU"],
     "id": "_KJ6OUGZsE"
   },
   {
@@ -10310,7 +10310,7 @@
   {
     "name": "Swarthmore College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Swat"],
     "id": "K5iQd_WOD4"
   },
   {
@@ -10334,7 +10334,7 @@
   {
     "name": "Syracuse University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["'Cuse", "SU"],
     "id": "BGz0OkqeQZ"
   },
   {
@@ -10410,7 +10410,7 @@
   {
     "name": "Tarleton State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TSU"],
     "id": "7o50CUMQWF"
   },
   {
@@ -10472,7 +10472,7 @@
   {
     "name": "Temple University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TU"],
     "id": "cowCrbJCEM"
   },
   {
@@ -10514,49 +10514,49 @@
   {
     "name": "Tennessee State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TSU"],
     "id": "0MVkeFSoC_"
   },
   {
     "name": "Texas A&M University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["A&M", "TAMU"],
     "id": "t3Os-AdyUm"
   },
   {
     "name": "Texas A&M University, Central Texas",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["A&M, Central Texas"],
     "id": "wzV48CaaSb"
   },
   {
     "name": "Texas A&M University, Corpus Christi",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["A&M, Corpus Christi", "A&M-CC", "TAMUCC"],
     "id": "6dgU0pMobZ"
   },
   {
     "name": "Texas A&M University, Kingsville",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["A&M, Kingsville"],
     "id": "AP-p5_PoZc"
   },
   {
     "name": "Texas Christian University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TCU"],
     "id": "rU8Liw2omn"
   },
   {
     "name": "Texas Southern University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TSU"],
     "id": "r24j7Juqv3"
   },
   {
-    "name": "Texas Southmost College",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, Brownsville",
+    "alternatives": ["Texas Southmost College,", "University of Texas at Brownsville"],
+    "abbreviations": ["UTB", "UTB/TSC", "TSC"],
     "id": "6Whf2GvCnZ"
   },
   {
@@ -10568,7 +10568,7 @@
   {
     "name": "Texas Tech University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TTU"],
     "id": "foowgMBNDB"
   },
   {
@@ -10620,15 +10620,15 @@
     "id": "cgVyijNHAW"
   },
   {
-    "name": "The Bronx High School of Science",
+    "name": "Bronx High School of Science",
     "alternatives": [],
     "abbreviations": [],
     "id": "krSF4mD1D7"
   },
   {
-    "name": "The City College of New York, CUNY",
+    "name": "City College of New York, CUNY",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["CCNY"],
     "id": "Y0qlj1XHB9"
   },
   {
@@ -10640,31 +10640,31 @@
   {
     "name": "The College of New Jersey",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TCNJ"],
     "id": "OxnCB2kcDy"
   },
   {
-    "name": "The College of Saint Rose",
+    "name": "College of Saint Rose",
     "alternatives": [],
     "abbreviations": [],
     "id": "U_AdAb5QM1"
   },
   {
-    "name": "The Curtis Institute of Music",
+    "name": "Curtis Institute of Music",
     "alternatives": [],
     "abbreviations": [],
     "id": "VVDbjLzHRp"
   },
   {
-    "name": "The Federal University of Technology, Akure",
+    "name": "Federal University of Technology, Akure",
     "alternatives": [],
     "abbreviations": [],
     "id": "EHsqtzLT5P"
   },
   {
-    "name": "The George Washington University",
+    "name": "George Washington University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GWU", "GW"],
     "id": "h0UcgV5_r6"
   },
   {
@@ -10686,7 +10686,7 @@
     "id": "KOUzfhjUMM"
   },
   {
-    "name": "The Katholieke Universiteit Leuven",
+    "name": "Katholieke Universiteit Leuven",
     "alternatives": [],
     "abbreviations": [],
     "id": "a9t-UhFZkG"
@@ -10698,27 +10698,27 @@
     "id": "akKy2HBvEG"
   },
   {
-    "name": "The LNM Institute of Information Technology",
+    "name": "LNM Institute of Information Technology",
     "alternatives": [],
     "abbreviations": [],
     "id": "P6iw700Qum"
   },
   {
-    "name": "The Maharaja Sayajirao University of Baroda",
+    "name": "Maharaja Sayajirao University of Baroda",
     "alternatives": [],
     "abbreviations": [],
     "id": "XZ87lpa9Mr"
   },
   {
-    "name": "The Mount Tabor Training College",
+    "name": "Mount Tabor Training College",
     "alternatives": [],
     "abbreviations": [],
     "id": "EYZiet9gz0"
   },
   {
-    "name": "The Ohio State University",
+    "name": "Ohio State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OSU"],
     "id": "uCPT_dvnf1"
   },
   {
@@ -10728,175 +10728,173 @@
     "id": "zgUXlqEWei"
   },
   {
-    "name": "The Oxford College of Engineering",
+    "name": "Oxford College of Engineering",
     "alternatives": [],
     "abbreviations": [],
     "id": "DJ46WzjPLy"
   },
   {
-    "name": "The Pennsylvania State University",
-    "alternatives": [],
-    "abbreviations": [
-      "Penn State"
-    ],
+    "name": "Pennsylvania State University",
+    "alternatives": ["Penn State"],
+    "abbreviations": ["PSU"],
     "id": "4ArS0iGHDk"
   },
   {
-    "name": "The Pennsylvania State University, Abington Campus",
+    "name": "Pennsylvania State University, Abington Campus",
     "alternatives": [],
     "abbreviations": [],
     "id": "8fuj0p4nGN"
   },
   {
-    "name": "The Pennsylvania State University, Berks",
+    "name": "Pennsylvania State University, Berks",
     "alternatives": [],
     "abbreviations": [],
     "id": "vuET3QfQlg"
   },
   {
-    "name": "The Pennsylvania State University, Brandywine",
+    "name": "Pennsylvania State University, Brandywine",
     "alternatives": [],
     "abbreviations": [],
     "id": "M-4dH68kT7"
   },
   {
-    "name": "The Pennsylvania State University, Harrisburg",
+    "name": "Pennsylvania State University, Harrisburg",
     "alternatives": [],
     "abbreviations": [],
     "id": "E3Umd_Z1-p"
   },
   {
-    "name": "The Pennsylvania State University, York Campus",
+    "name": "Pennsylvania State University, York Campus",
     "alternatives": [],
     "abbreviations": [],
     "id": "KlZKDd08lj"
   },
   {
-    "name": "The Roxbury Latin School",
+    "name": "Roxbury Latin School",
     "alternatives": [],
     "abbreviations": [],
     "id": "_uUjZRTQ23"
   },
   {
-    "name": "The Savannah College of Art and Design",
+    "name": "Savannah College of Art and Design",
     "alternatives": [],
     "abbreviations": [],
     "id": "woNV8RDSLo"
   },
   {
-    "name": "The SRM University",
+    "name": "SRM University",
     "alternatives": [],
     "abbreviations": [],
     "id": "SItlRWrKH1"
   },
   {
-    "name": "The Technical University of Denmark",
+    "name": "Technical University of Denmark",
     "alternatives": [],
     "abbreviations": [],
     "id": "ZLqUX03OpA"
   },
   {
-    "name": "The Technische Universit\u00e4t Berlin",
+    "name": "Technische Universit\u00e4t Berlin",
     "alternatives": [
-      "The Technische Universitat Berlin"
+      "Technische Universitat Berlin"
     ],
     "abbreviations": [],
     "id": "HJATYhOeqD"
   },
   {
-    "name": "The Universit\u00e9 de Sherbrooke",
+    "name": "Universit\u00e9 de Sherbrooke",
     "alternatives": [
-      "The Universite de Sherbrooke"
+      "Universite de Sherbrooke"
     ],
     "abbreviations": [],
     "id": "u1WEXX8EdH"
   },
   {
-    "name": "The University of Aberdeen",
+    "name": "University of Aberdeen",
     "alternatives": [],
     "abbreviations": [],
     "id": "OzM-X9aQr_"
   },
   {
-    "name": "The University of Akron",
+    "name": "University of Akron",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UA"],
     "id": "6U7MZcMElN"
   },
   {
-    "name": "The University of Alabama",
+    "name": "University of Alabama",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Bama", "UA"],
     "id": "y9uJbWbFFr"
   },
   {
-    "name": "The University of Alabama at Birmingham",
+    "name": "University of Alabama at Birmingham",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UAB"],
     "id": "uvodag-lXm"
   },
   {
-    "name": "The University of Alberta",
+    "name": "University of Alberta",
     "alternatives": [],
     "abbreviations": [],
     "id": "fXzmps3Pw2"
   },
   {
-    "name": "The University of Applied Sciences Upper Austria",
+    "name": "University of Applied Sciences Upper Austria",
     "alternatives": [],
     "abbreviations": [],
     "id": "MGRuYWS5NG"
   },
   {
-    "name": "The University of Arizona",
+    "name": "University of Arizona",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of A", "UA"],
     "id": "p_2Kvyu0-J"
   },
   {
-    "name": "The University of Arkansas",
+    "name": "University of Arkansas",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of A"],
     "id": "tIXWdVPZOo"
   },
   {
-    "name": "The University of Bath",
+    "name": "University of Bath",
     "alternatives": [],
     "abbreviations": [],
     "id": "SBDa8pYpd0"
   },
   {
-    "name": "The University of Bedfordshire",
+    "name": "University of Bedfordshire",
     "alternatives": [],
     "abbreviations": [],
     "id": "PoVbcAcBIx"
   },
   {
-    "name": "The University of Birmingham",
+    "name": "University of Birmingham",
     "alternatives": [],
     "abbreviations": [],
     "id": "zBD_m3EjQB"
   },
   {
-    "name": "The University of Bolton",
+    "name": "University of Bolton",
     "alternatives": [],
     "abbreviations": [],
     "id": "mI34-b1oLZ"
   },
   {
-    "name": "The University of Bonn",
+    "name": "University of Bonn",
     "alternatives": [],
     "abbreviations": [],
     "id": "kx_kwUOjp7"
   },
   {
-    "name": "The University of Bristol",
+    "name": "University of Bristol",
     "alternatives": [],
     "abbreviations": [],
     "id": "OzLYBRbF6Z"
   },
   {
-    "name": "The University of British Columbia",
+    "name": "University of British Columbia",
     "alternatives": [],
     "abbreviations": [
       "UBC"
@@ -10904,7 +10902,7 @@
     "id": "Hkd_CstNbm"
   },
   {
-    "name": "The University of Calgary",
+    "name": "University of Calgary",
     "alternatives": [],
     "abbreviations": [
       "uCalgary"
@@ -10912,37 +10910,39 @@
     "id": "K64e-GTMcJ"
   },
   {
-    "name": "The University of Calicut",
+    "name": "University of Calicut",
     "alternatives": [],
     "abbreviations": [],
     "id": "m3DHQBlGa9"
   },
   {
-    "name": "The University of California, Berkeley",
+    "name": "University of California, Berkeley",
     "alternatives": [],
     "abbreviations": [
-      "UC Berkeley"
+      "UC Berkeley", "Berkeley"
     ],
     "id": "rrkhR6ge8F"
   },
   {
-    "name": "The University of California, Davis",
+    "name": "University of California, Davis",
     "alternatives": [],
     "abbreviations": [
-      "UC Davis"
+      "UC Davis",
+      "UCD"
     ],
     "id": "9LK5P_jwzg"
   },
   {
-    "name": "The University of California, Irvine",
+    "name": "University of California, Irvine",
     "alternatives": [],
     "abbreviations": [
-      "UC Irvine"
+      "UC Irvine",
+      "UCI"
     ],
     "id": "kASEgaVCaM"
   },
   {
-    "name": "The University of California, Los Angeles",
+    "name": "University of California, Los Angeles",
     "alternatives": [],
     "abbreviations": [
       "UCLA"
@@ -10950,7 +10950,7 @@
     "id": "b5ShC24Cr1"
   },
   {
-    "name": "The University of California, Merced",
+    "name": "University of California, Merced",
     "alternatives": [],
     "abbreviations": [
       "UC Merced"
@@ -10958,15 +10958,16 @@
     "id": "K4DKCV4mqU"
   },
   {
-    "name": "The University of California, Riverside",
+    "name": "University of California, Riverside",
     "alternatives": [],
     "abbreviations": [
-      "UC Riverside"
+      "UC Riverside",
+      "UCR"
     ],
     "id": "MQRdUpcpj0"
   },
   {
-    "name": "The University of California, San Diego",
+    "name": "University of California, San Diego",
     "alternatives": [],
     "abbreviations": [
       "UC San Diego",
@@ -10975,7 +10976,7 @@
     "id": "z3Dtk2TxTI"
   },
   {
-    "name": "The University of California, Santa Barbara",
+    "name": "University of California, Santa Barbara",
     "alternatives": [],
     "abbreviations": [
       "UC Santa Barbara",
@@ -10984,7 +10985,7 @@
     "id": "2Xxpk3ZLKt"
   },
   {
-    "name": "The University of California, Santa Cruz",
+    "name": "University of California, Santa Cruz",
     "alternatives": [],
     "abbreviations": [
       "UC Santa Cruz",
@@ -10993,959 +10994,956 @@
     "id": "EnS-VRO8ZL"
   },
   {
-    "name": "The University of Cambridge",
+    "name": "University of Cambridge",
     "alternatives": [],
     "abbreviations": [],
     "id": "z7-cZlvo44"
   },
   {
-    "name": "The University of Central Florida",
+    "name": "University of Central Florida",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UCF"],
     "id": "82vIPfkXUX"
   },
   {
-    "name": "The University of Chicago",
+    "name": "University of Chicago",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UChicago", "U of C", "UC"],
     "id": "XyPlH4p2-8"
   },
   {
-    "name": "The University of Colorado Boulder",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Colorado, Boulder",
+    "alternatives": ["Colorado"],
+    "abbreviations": ["CU", "UCB"],
     "id": "_5BXgobZxJ"
   },
   {
-    "name": "The University of Colorado Colorado Springs",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Colorado, Colorado Springs",
+    "alternatives": ["Colorado Springs"],
+    "abbreviations": ["CU", "UCCS"],
     "id": "iYExA9WFvJ"
   },
   {
-    "name": "The University of Connecticut",
+    "name": "University of Connecticut",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UConn"],
     "id": "mDfTDgYdKH"
   },
   {
-    "name": "The University of Dallas",
+    "name": "University of Dallas",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UD"],
     "id": "QBqyuzU6GR"
   },
   {
-    "name": "The University of Delaware",
+    "name": "University of Delaware",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UD"],
     "id": "t9uXk0MMAV"
   },
   {
-    "name": "The University of Denver",
+    "name": "University of Denver",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["DU"],
     "id": "ZAY-9B5Fyi"
   },
   {
-    "name": "The University of Derby",
+    "name": "University of Derby",
     "alternatives": [],
     "abbreviations": [],
     "id": "ijq7cvBZqK"
   },
   {
-    "name": "The University of Dundee",
+    "name": "University of Dundee",
     "alternatives": [],
     "abbreviations": [],
     "id": "SpgAnmd0qT"
   },
   {
-    "name": "The University of Edinburgh",
+    "name": "University of Edinburgh",
     "alternatives": [],
     "abbreviations": [],
     "id": "VsMy9NGFBj"
   },
   {
-    "name": "The University of Essex",
+    "name": "University of Essex",
     "alternatives": [],
     "abbreviations": [],
     "id": "HsCeVS4FTa"
   },
   {
-    "name": "The University of Evansville",
+    "name": "University of Evansville",
     "alternatives": [],
     "abbreviations": [],
     "id": "IEwq7dMhpP"
   },
   {
-    "name": "The University of Exeter",
+    "name": "University of Exeter",
     "alternatives": [],
     "abbreviations": [],
     "id": "2O6dg2KFXZ"
   },
   {
-    "name": "The University of Falmouth",
+    "name": "University of Falmouth",
     "alternatives": [],
     "abbreviations": [],
     "id": "Ty5hzJWbKi"
   },
   {
-    "name": "The University of Florida",
+    "name": "University of Florida",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UF"],
     "id": "eBTDOIhOGW"
   },
   {
-    "name": "The University of Gda\u0144sk",
+    "name": "University of Gda\u0144sk",
     "alternatives": [
-      "The University of Gdansk"
+      "University of Gdansk"
     ],
     "abbreviations": [],
     "id": "FY_9_nltIX"
   },
   {
-    "name": "The University of Georgia",
+    "name": "University of Georgia",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UGA"],
     "id": "vjqEme2Nf4"
   },
   {
-    "name": "The University of Glasgow",
+    "name": "University of Glasgow",
     "alternatives": [],
     "abbreviations": [],
     "id": "sONovs4CwR"
   },
   {
-    "name": "The University of Groningen",
+    "name": "University of Groningen",
     "alternatives": [],
     "abbreviations": [],
     "id": "Wtn0sa9CHX"
   },
   {
-    "name": "The University of Guelph",
+    "name": "University of Guelph",
     "alternatives": [],
     "abbreviations": [],
     "id": "K0_IWhRA1B"
   },
   {
-    "name": "The University of Houston",
+    "name": "University of Houston",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UH", "U of H"],
     "id": "Fu5JzYyqio"
   },
   {
-    "name": "The University of Houston, Clear Lake",
+    "name": "University of Houston, Clear Lake",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UH", "U of H", "UHCL"],
     "id": "l1RCUTkhF6"
   },
   {
-    "name": "The University of Houston, Downtown",
+    "name": "University of Houston, Downtown",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UH", "U of H", "UHD"],
     "id": "X0RhfMMTUM"
   },
   {
-    "name": "The University of Huddersfield",
+    "name": "University of Huddersfield",
     "alternatives": [],
     "abbreviations": [],
     "id": "-4XQXkXSnk"
   },
   {
-    "name": "The University of Idaho",
+    "name": "University of Idaho",
     "alternatives": [],
     "abbreviations": [],
     "id": "zbv-A7BXC6"
   },
   {
-    "name": "The University of Illinois at Chicago",
+    "name": "University of Illinois at Chicago",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UIC"],
     "id": "pTvgVTVan-"
   },
   {
-    "name": "The University of Illinois at Urbana-Champaign",
+    "name": "University of Illinois at Urbana-Champaign",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UI", "U of I", "UIUC"],
     "id": "iiA8xYa_xa"
   },
   {
-    "name": "The University of Information Technology and Management in Rzeszow",
+    "name": "University of Information Technology and Management in Rzeszow",
     "alternatives": [],
     "abbreviations": [],
     "id": "CqXe_6Z982"
   },
   {
-    "name": "The University of Iowa",
+    "name": "University of Iowa",
     "alternatives": [],
     "abbreviations": [],
     "id": "KvsILAEUtD"
   },
   {
-    "name": "The University of Kansas",
+    "name": "University of Kansas",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["KU"],
     "id": "h_FB763C2k"
   },
   {
-    "name": "The University of Kent",
+    "name": "University of Kent",
     "alternatives": [],
     "abbreviations": [],
     "id": "rrHsI5s3oc"
   },
   {
-    "name": "The University of Kentucky",
+    "name": "University of Kentucky",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UK"],
     "id": "e9yZ63OGQF"
   },
   {
-    "name": "The University of La Verne",
+    "name": "University of La Verne",
     "alternatives": [],
     "abbreviations": [],
     "id": "f7gj-qLSSa"
   },
   {
-    "name": "The University of Leeds",
+    "name": "University of Leeds",
     "alternatives": [],
     "abbreviations": [],
     "id": "oidiYBYPc9"
   },
   {
-    "name": "The University of Leicester",
+    "name": "University of Leicester",
     "alternatives": [],
     "abbreviations": [],
     "id": "OH33N2wPiC"
   },
   {
-    "name": "The University of Lincoln",
+    "name": "University of Lincoln",
     "alternatives": [],
     "abbreviations": [],
     "id": "7fWr9YnnYq"
   },
   {
-    "name": "The University of Liverpool",
+    "name": "University of Liverpool",
     "alternatives": [],
     "abbreviations": [],
     "id": "nWkZRmQo3k"
   },
   {
-    "name": "The University of Ljubljana",
+    "name": "University of Ljubljana",
     "alternatives": [],
     "abbreviations": [],
     "id": "Hm6PsROCMq"
   },
   {
-    "name": "The University of Louisiana at Lafayette",
+    "name": "University of Louisiana at Lafayette",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UL"],
     "id": "LbclOL8T49"
   },
   {
-    "name": "The University of Louisiana at Monroe",
+    "name": "University of Louisiana at Monroe",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ULM"],
     "id": "CXzQHdM90w"
   },
   {
-    "name": "The University of Louisville",
+    "name": "University of Louisville",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of L"],
     "id": "2LDmmYu_cg"
   },
   {
-    "name": "The University of M\u00e1laga",
+    "name": "University of M\u00e1laga",
     "alternatives": [
-      "The University of Malaga"
+      "University of Malaga"
     ],
     "abbreviations": [],
     "id": "XA5BsPk0ab"
   },
   {
-    "name": "The University of Manchester",
+    "name": "University of Manchester",
     "alternatives": [],
     "abbreviations": [],
     "id": "RGEmTHFg67"
   },
   {
-    "name": "The University of Manitoba",
+    "name": "University of Manitoba",
     "alternatives": [],
     "abbreviations": [],
     "id": "Zeu_G7RwWH"
   },
   {
-    "name": "The University of Maryland, Baltimore County",
+    "name": "University of Maryland, Baltimore County",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UMB", "UMBC"],
     "id": "y9z_y_Fl3e"
   },
   {
-    "name": "The University of Maryland, College Park",
+    "name": "University of Maryland, College Park",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["College Park", "UMD"],
     "id": "EeBbTORhVh"
   },
   {
-    "name": "The University of Massachusetts Amherst",
+    "name": "University of Massachusetts, Amherst",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UMass"],
     "id": "9vd_wa--sN"
   },
   {
-    "name": "The University of Massachusetts Boston",
+    "name": "University of Massachusetts, Boston",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UMass", "UMB"],
     "id": "XHAwa9MH2G"
   },
   {
-    "name": "The University of Massachusetts Dartmouth",
+    "name": "University of Massachusetts, Dartmouth",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UMD"],
     "id": "jU9m5IN5N0"
   },
   {
-    "name": "The University of Massachusetts Lowell",
+    "name": "University of Massachusetts, Lowell",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UML"],
     "id": "1Wf7PkFzfx"
   },
   {
-    "name": "The University of Miami",
+    "name": "University of Miami",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["The U", "U of M"],
     "id": "_XYvGHhqBX"
   },
   {
-    "name": "The University of Michigan",
+    "name": "University of Michigan",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of M", "UMich"],
     "id": "C47VWp-s-X"
   },
   {
-    "name": "The University of Michigan-Dearborn",
+    "name": "University of Michigan, Dearborn",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of M", "UMD", "UMich"],
     "id": "wmA1Hf89CW"
   },
   {
-    "name": "The University of Michigan-Flint",
+    "name": "University of Michigan, Flint",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["U of M", "UMich"],
     "id": "bBlWdm_nwe"
   },
   {
-    "name": "The University of Minnesota",
+    "name": "University of Minnesota",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["The U", "UMD"],
     "id": "dr5OJxcOi4"
   },
   {
-    "name": "The University of Mississippi",
+    "name": "University of Mississippi",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Ole Miss"],
     "id": "o__w38WG1q"
   },
   {
-    "name": "The University of Missouri",
+    "name": "University of Missouri",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Mizzou", "MU"],
     "id": "6ERkfCLA2r"
   },
   {
-    "name": "The University of Missouri-Kansas City",
+    "name": "University of Missouri, Kansas City",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UMKC"],
     "id": "WxniCfmZVv"
   },
   {
-    "name": "The University of Missouri-St. Louis",
+    "name": "University of Missouri, St. Louis",
     "alternatives": [],
     "abbreviations": [],
     "id": "u_T8EgnYS3"
   },
   {
-    "name": "The University of Nebraska-Lincoln",
+    "name": "University of Nebraska-Lincoln",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["NU", "UNL"],
     "id": "U06NWDy3Vs"
   },
   {
-    "name": "The University of New Brunswick",
+    "name": "University of New Brunswick",
     "alternatives": [],
     "abbreviations": [],
     "id": "4e-onE_1kz"
   },
   {
-    "name": "The University of New Hampshire",
+    "name": "University of New Hampshire",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNH"],
     "id": "__lG2mLUVC"
   },
   {
-    "name": "The University of New Haven",
+    "name": "University of New Haven",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNH"],
     "id": "tnA8ERqWin"
   },
   {
-    "name": "The University of North Carolina at Chapel Hill",
+    "name": "University of North Carolina at Chapel Hill",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Carolina", "UNC"],
     "id": "j-DMHLQ1bh"
   },
   {
-    "name": "The University of North Carolina at Charlotte",
+    "name": "University of North Carolina at Charlotte",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNCC"],
     "id": "F65mHjsUEL"
   },
   {
-    "name": "The University of North Carolina at Greensboro",
+    "name": "University of North Carolina at Greensboro",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNCG"],
     "id": "inB9FJ2fZX"
   },
   {
-    "name": "The University of North Texas",
+    "name": "University of North Texas",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNT"],
     "id": "lGq0joUC2b"
   },
   {
-    "name": "The University of Northampton",
+    "name": "University of Northampton",
     "alternatives": [],
     "abbreviations": [],
     "id": "WDqD4UOcRD"
   },
   {
-    "name": "The University of Notre Dame",
+    "name": "University of Notre Dame",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["ND"],
     "id": "GElYm-Ss99"
   },
   {
-    "name": "The University of Nottingham",
+    "name": "University of Nottingham",
     "alternatives": [],
     "abbreviations": [],
     "id": "6rsLrsrF73"
   },
   {
-    "name": "The University of Oklahoma",
+    "name": "University of Oklahoma",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["OU"],
     "id": "SfxO0O4x3p"
   },
   {
-    "name": "The University of Ontario Institute of Technology",
+    "name": "University of Ontario Institute of Technology",
     "alternatives": [],
     "abbreviations": [],
     "id": "0QeQ_BFsnK"
   },
   {
-    "name": "The University of Oregon",
+    "name": "University of Oregon",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UO"],
     "id": "cVyFODcwJr"
   },
   {
-    "name": "The University of Ottawa",
+    "name": "University of Ottawa",
     "alternatives": [],
     "abbreviations": [],
     "id": "Wb7mMStLS6"
   },
   {
-    "name": "The University of Oulu",
+    "name": "University of Oulu",
     "alternatives": [],
     "abbreviations": [],
     "id": "FxY0tqJRgm"
   },
   {
-    "name": "The University of Oxford",
+    "name": "University of Oxford",
     "alternatives": [],
     "abbreviations": [],
     "id": "MhU6ezVLvQ"
   },
   {
-    "name": "The University of Pennsylvania",
+    "name": "University of Pennsylvania",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Penn", "UPenn"],
     "id": "bHAULPoIjR"
   },
   {
-    "name": "The University of Petroleum and Energy Studies",
+    "name": "University of Petroleum and Energy Studies",
     "alternatives": [],
     "abbreviations": [],
     "id": "8WF5Kt1MYy"
   },
   {
-    "name": "The University of Phoenix",
+    "name": "University of Phoenix",
     "alternatives": [],
     "abbreviations": [],
     "id": "BYMjbRNbdw"
   },
   {
-    "name": "The University of Pittsburgh",
+    "name": "University of Pittsburgh",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Pitt"],
     "id": "9T-qOJLAye"
   },
   {
-    "name": "The University of Portland",
+    "name": "University of Portland",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UP"],
     "id": "Aii_OYFuo6"
   },
   {
-    "name": "The University of Portsmouth",
+    "name": "University of Portsmouth",
     "alternatives": [],
     "abbreviations": [],
     "id": "cXzsXBjl2B"
   },
   {
-    "name": "The University of Puerto Rico, Mayag\u00fcez Campus",
+    "name": "University of Puerto Rico, Mayag\u00fcez Campus",
     "alternatives": [
-      "The University of Puerto Rico, Mayaguez Campus"
+      "University of Puerto Rico, Mayaguez Campus"
     ],
     "abbreviations": [],
     "id": "Z2M82iLoJ4"
   },
   {
-    "name": "The University of Puerto Rico, R\u00edo Piedras Campus",
+    "name": "University of Puerto Rico, R\u00edo Piedras Campus",
     "alternatives": [
-      "The University of Puerto Rico, Rio Piedras Campus"
+      "University of Puerto Rico, Rio Piedras Campus"
     ],
     "abbreviations": [],
     "id": "b3p74l5F5j"
   },
   {
-    "name": "The University of Richmond",
+    "name": "University of Richmond",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UR", "U of R"],
     "id": "1uE3CZ6AA5"
   },
   {
-    "name": "The University of Rochester",
+    "name": "University of Rochester",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UR", "U of R"],
     "id": "M3Be4SKL4M"
   },
   {
-    "name": "The University of Salford",
+    "name": "University of Salford",
     "alternatives": [],
     "abbreviations": [],
     "id": "7uHdRBInA8"
   },
   {
-    "name": "The University of San Francisco",
+    "name": "University of San Francisco",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["USF", "USFCA"],
     "id": "wrO9FK5Pq2"
   },
   {
-    "name": "The University of Sharjah",
+    "name": "University of Sharjah",
     "alternatives": [],
     "abbreviations": [],
     "id": "EEiy9nCKBN"
   },
   {
-    "name": "The University of Sheffield",
+    "name": "University of Sheffield",
     "alternatives": [],
     "abbreviations": [],
     "id": "URuaiWJdbb"
   },
   {
-    "name": "The University of Silesia in Katowice",
+    "name": "University of Silesia in Katowice",
     "alternatives": [],
     "abbreviations": [],
     "id": "_hZtm5ZDPa"
   },
   {
-    "name": "The University of South Carolina",
+    "name": "University of South Carolina",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Carolina", "SC", "USC"],
     "id": "ui-KlEAa8f"
   },
   {
-    "name": "The University of South Florida",
+    "name": "University of South Florida",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["USF"],
     "id": "p5m-dG7-Lv"
   },
   {
-    "name": "The University of Southampton",
+    "name": "University of Southampton",
     "alternatives": [],
     "abbreviations": [],
     "id": "LzRfYZnsxn"
   },
   {
-    "name": "The University of Southern California",
+    "name": "University of Southern California",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["SC", "USC"],
     "id": "gRNH9_4RSD"
   },
   {
-    "name": "The University of Southern Denmark",
+    "name": "University of Southern Denmark",
     "alternatives": [],
     "abbreviations": [],
     "id": "fRQyflpsnV"
   },
   {
-    "name": "The University of St Andrews",
+    "name": "University of St Andrews",
     "alternatives": [],
     "abbreviations": [],
     "id": "_W-9Cu8YyU"
   },
   {
-    "name": "The University of St. Gallen",
+    "name": "University of St. Gallen",
     "alternatives": [],
     "abbreviations": [],
     "id": "PQE6npuiUy"
   },
   {
-    "name": "The University of St. Thomas",
+    "name": "University of St. Thomas",
     "alternatives": [],
     "abbreviations": [],
     "id": "scH2jSrFR8"
   },
   {
-    "name": "The University of Stirling",
+    "name": "University of Stirling",
     "alternatives": [],
     "abbreviations": [],
     "id": "NEGyvzvIo0"
   },
   {
-    "name": "The University of Strathclyde",
+    "name": "University of Strathclyde",
     "alternatives": [],
     "abbreviations": [],
     "id": "xdJFEsvSrt"
   },
   {
-    "name": "The University of Stuttgart",
+    "name": "University of Stuttgart",
     "alternatives": [],
     "abbreviations": [],
     "id": "sVYPjheZq6"
   },
   {
-    "name": "The University of Surrey",
+    "name": "University of Surrey",
     "alternatives": [],
     "abbreviations": [],
     "id": "SeL_p7M3OL"
   },
   {
-    "name": "The University of Sussex",
+    "name": "University of Sussex",
     "alternatives": [],
     "abbreviations": [],
     "id": "aHrd1TmVXj"
   },
   {
-    "name": "The University of Tampa",
+    "name": "University of Tampa",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UT"],
     "id": "j19AamV7_v"
   },
   {
-    "name": "The University of Tennessee",
+    "name": "University of Tennessee",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Chatt", "Chattanooga", "UT", "UTC"],
     "id": "P8iJncUEsu"
   },
   {
-    "name": "The University of Texas, Pan American",
+    "name": "University of Texas, Pan American",
     "alternatives": [],
     "abbreviations": [],
     "id": "MHMW6DhiGE"
   },
   {
-    "name": "The University of Texas, Arlington",
+    "name": "University of Texas, Arlington",
     "alternatives": [],
     "abbreviations": [],
     "id": "D_LzfN9U-S"
   },
   {
-    "name": "The University of Texas at Austin",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, Austin",
+    "alternatives": ["University of Texas at Austin"],
+    "abbreviations": ["UTA"],
     "id": "qByTs2N7oN"
   },
   {
-    "name": "The University of Texas at Dallas",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, Dallas",
+    "alternatives": ["University of Texas at Dallas"],
+    "abbreviations": ["UTD"],
     "id": "RyhXane9jJ"
   },
   {
-    "name": "The University of Texas at El Paso",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, El Paso",
+    "alternatives": ["University of Texas at El Paso"],
+    "abbreviations": ["UTEP"],
     "id": "j2TZbQP0iC"
   },
   {
-    "name": "The University of Texas at San Antonio",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, San Antonio",
+    "alternatives": ["University of Texas at San Antonio"],
+    "abbreviations": ["UTSA"],
     "id": "-5Odbs5-RE"
   },
   {
-    "name": "The University of Texas at Tyler",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Texas, Tyler",
+    "alternatives": ["University of Texas at Tyler", "University of Texas Health Science Center, Tyler", "University of Texas Health Science Center at Tyler"],
+    "abbreviations": ["UTHSCT"],
     "id": "My7nDZHJt4"
   },
   {
-    "name": "The University of Texas of the Permian Basin",
+    "name": "University of Texas of the Permian Basin",
     "alternatives": [],
     "abbreviations": [],
     "id": "AFJK8J4nJD"
   },
   {
-    "name": "The University of Texas Rio Grande Valley",
+    "name": "University of Texas, Rio Grande Valley",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UTRGV"],
     "id": "42Tyb7cWKn"
   },
   {
-    "name": "The University of the District of Columbia",
+    "name": "University of the District of Columbia",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UDC"],
     "id": "WBMw2xCcRy"
   },
   {
-    "name": "The University of the District of Columbia",
-    "alternatives": [],
-    "abbreviations": [],
-    "id": "o88dzKjApg"
-  },
-  {
-    "name": "The University of the Pacific",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of the Pacific",
+    "alternatives": ["Pacific"],
+    "abbreviations": ["UOP"],
     "id": "YnZS7SWIV9"
   },
   {
-    "name": "The University of the South, Sewanee",
-    "alternatives": [],
+    "name": "University of the South, Sewanee",
+    "alternatives": ["Sewanee"],
     "abbreviations": [],
     "id": "ePK98m9my6"
   },
   {
-    "name": "The University of Toledo",
+    "name": "University of Toledo",
     "alternatives": [],
     "abbreviations": [],
     "id": "LXeJnaWTUQ"
   },
   {
-    "name": "The University of Toronto",
+    "name": "University of Toronto",
     "alternatives": [],
     "abbreviations": [
-      "uToronto"
+      "uToronto",
+      "UofT"
     ],
     "id": "fnvrzV-M3E"
   },
   {
-    "name": "The University of Toronto, Mississauga",
+    "name": "University of Toronto, Mississauga",
     "alternatives": [],
     "abbreviations": [
-      "uToronto, Mississauga"
+      "uToronto, Mississauga",
+      "UofT, Mississauga"
     ],
     "id": "CVYPXQUVfS"
   },
   {
-    "name": "The University of Toronto, Scarborough",
+    "name": "University of Toronto, Scarborough",
     "alternatives": [],
     "abbreviations": [
-      "uToronto, Scarborought"
+      "uToronto, Scarborough",
+      "UofT, Scarborough"
     ],
     "id": "StyWNkLLmR"
   },
   {
-    "name": "The University of Tulsa",
+    "name": "University of Tulsa",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TU"],
     "id": "-QbrfxwaSX"
   },
   {
-    "name": "The University of Utah",
+    "name": "University of Utah",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["The U", "U of U", "Utah"],
     "id": "zlRLWGkQo1"
   },
   {
-    "name": "The University of Vermont",
+    "name": "University of Vermont",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UVM"],
     "id": "wHGeFDigDo"
   },
   {
-    "name": "The University of Victoria",
+    "name": "University of Victoria",
     "alternatives": [],
     "abbreviations": [],
     "id": "DLccG8daB7"
   },
   {
-    "name": "The University of Virginia",
+    "name": "University of Virginia",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UVA"],
     "id": "1GDSs59Fhw"
   },
   {
-    "name": "The University of Warsaw",
+    "name": "University of Warsaw",
     "alternatives": [],
     "abbreviations": [],
     "id": "3sWBhzyWHo"
   },
   {
-    "name": "The University of Warwick",
+    "name": "University of Warwick",
     "alternatives": [],
     "abbreviations": [],
     "id": "sNFqDzIxjZ"
   },
   {
-    "name": "The University of Washington",
+    "name": "University of Washington",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW", "U Dub"],
     "id": "7xUu-E6btq"
   },
   {
-    "name": "The University of Washington Bothell",
+    "name": "University of Washington, Bothell",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "cwcdfY5lLz"
   },
   {
-    "name": "The University of Waterloo",
+    "name": "University of Waterloo",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["uWaterloo"],
     "id": "RAMT-oQOQZ"
   },
   {
-    "name": "The University of West Georgia",
+    "name": "University of West Georgia",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UWG"],
     "id": "7u5DC1gCTe"
   },
   {
-    "name": "The University of Western Ontario",
+    "name": "University of Western Ontario",
     "alternatives": [],
     "abbreviations": [],
     "id": "QHsM0yp_CU"
   },
   {
-    "name": "The University of Westminster",
+    "name": "University of Westminster",
     "alternatives": [],
     "abbreviations": [],
     "id": "uPyofkADSk"
   },
   {
-    "name": "The University of Windsor",
+    "name": "University of Windsor",
     "alternatives": [],
     "abbreviations": [],
     "id": "O5Y4wc6Fgc"
   },
   {
-    "name": "The University of Wisconsin-Eau Claire",
+    "name": "University of Wisconsin, Eau Claire",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "wqaHIgJlMC"
   },
   {
-    "name": "The University of Wisconsin-Green Bay",
+    "name": "University of Wisconsin, Green Bay",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["GB", "UW", "UWGB"],
     "id": "qrMKvn1Q3y"
   },
   {
-    "name": "The University of Wisconsin-La Crosse",
+    "name": "University of Wisconsin, La Crosse",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "ZGrbL-Y__q"
   },
   {
-    "name": "The University of Wisconsin-Madison",
-    "alternatives": [],
-    "abbreviations": [],
+    "name": "University of Wisconsin, Madison",
+    "alternatives": ["Madison"],
+    "abbreviations": ["UW"],
     "id": "6GhjVcer-c"
   },
   {
-    "name": "The University of Wisconsin-Milwaukee",
+    "name": "University of Wisconsin, Milwaukee",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Milwaukee", "UW", "UWM"],
     "id": "ZR2tIQcltF"
   },
   {
-    "name": "The University of Wisconsin-Oshkosh",
+    "name": "University of Wisconsin, Oshkosh",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "qlncUiiVqD"
   },
   {
-    "name": "The University of Wisconsin-Parkside",
+    "name": "University of Wisconsin, Parkside",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "hnKpdyYuXG"
   },
   {
-    "name": "The University of Wisconsin-Platteville",
+    "name": "University of Wisconsin, Platteville",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "JROjXgV0f4"
   },
   {
-    "name": "The University of Wisconsin-River Falls",
+    "name": "University of Wisconsin, River Falls",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "mmNQ3Bxztj"
   },
   {
-    "name": "The University of Wisconsin-Stevens Point",
+    "name": "University of Wisconsin, Stevens Point",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "Nsx5LJxNFK"
   },
   {
-    "name": "The University of Wisconsin-Stout",
+    "name": "University of Wisconsin, Stout",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "z4DMMvbwD3"
   },
   {
-    "name": "The University of Wisconsin-Superior",
+    "name": "University of Wisconsin, Superior",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "_xqjkdFiiN"
   },
   {
-    "name": "The University of Wisconsin-Whitewater",
+    "name": "University of Wisconsin, Whitewater",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UW"],
     "id": "EQHDcUYIFR"
   },
   {
-    "name": "The University of Wolverhampton",
+    "name": "University of Wolverhampton",
     "alternatives": [],
     "abbreviations": [],
     "id": "U-HmMXcMkt"
   },
   {
-    "name": "The University of Wroc\u0142aw",
+    "name": "University of Wroc\u0142aw",
     "alternatives": [
-      "The University of Wroclaw"
+      "University of Wroclaw"
     ],
     "abbreviations": [],
     "id": "Edw2jKRrxn"
   },
   {
-    "name": "The University of York",
+    "name": "University of York",
     "alternatives": [],
     "abbreviations": [],
     "id": "EkCPejwEMq"
   },
   {
-    "name": "The University of Zagreb",
+    "name": "University of Zagreb",
     "alternatives": [],
     "abbreviations": [],
     "id": "eqKPB6k9CI"
   },
   {
-    "name": "The Workshop School, Philadelphia",
+    "name": "Workshop School, Philadelphia",
     "alternatives": [],
     "abbreviations": [],
     "id": "yFZu1xvihc"
@@ -12029,7 +12027,7 @@
   {
     "name": "Towson University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TU"],
     "id": "ACBVbgPDel"
   },
   {
@@ -12083,7 +12081,7 @@
   {
     "name": "Truman State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TSU"],
     "id": "vatiPJf6E9"
   },
   {
@@ -12101,13 +12099,13 @@
   {
     "name": "Tufts University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TU"],
     "id": "LUDaLlOHNu"
   },
   {
     "name": "Tulane University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["TU"],
     "id": "jctAXaBiRC"
   },
   {
@@ -12499,7 +12497,7 @@
   {
     "name": "University at Buffalo, SUNY",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UB"],
     "id": "39WOPy-_zC"
   },
   {
@@ -12591,13 +12589,13 @@
   {
     "name": "University of Cincinnati",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UC"],
     "id": "3ralLWk44b"
   },
   {
-    "name": "University of Cincinnati Clermont College",
+    "name": "University of Cincinnati, Clermont College",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UC"],
     "id": "rv5zLJw6mc"
   },
   {
@@ -12633,7 +12631,7 @@
   {
     "name": "University of Mary Washington",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Mary Wash", "UMW"],
     "id": "3We5-n05sv"
   },
   {
@@ -12651,7 +12649,7 @@
   {
     "name": "University of North Florida",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UNF"],
     "id": "Bj59yqwPrm"
   },
   {
@@ -12671,7 +12669,7 @@
   {
     "name": "University of Pikeville",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UPIKE"],
     "id": "UhJo3mmQQ6"
   },
   {
@@ -12707,7 +12705,7 @@
   {
     "name": "University of Southern Indiana",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["USI"],
     "id": "nloHMjbth5"
   },
   {
@@ -12731,7 +12729,7 @@
   {
     "name": "University of the People",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UoPeople"],
     "id": "644cxEUY6Z"
   },
   {
@@ -12767,7 +12765,7 @@
   {
     "name": "University of West Florida",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["UWF"],
     "id": "gonKErL8Lt"
   },
   {
@@ -12823,7 +12821,7 @@
   {
     "name": "Utah State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["USU"],
     "id": "smy5zsI3nC"
   },
   {
@@ -12879,7 +12877,7 @@
   {
     "name": "Vanderbilt University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Vandy", "VU"],
     "id": "nIeVTcT9vf"
   },
   {
@@ -13017,7 +13015,7 @@
   {
     "name": "Villanova University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Nova", "VU"],
     "id": "9W7pwT4DS4"
   },
   {
@@ -13035,7 +13033,7 @@
   {
     "name": "Vincennes University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["VU"],
     "id": "oseISGlgah"
   },
   {
@@ -13047,12 +13045,12 @@
   {
     "name": "Virginia Commonwealth University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["VCU"],
     "id": "8r0U3Ly9dy"
   },
   {
-    "name": "Virginia Tech",
-    "alternatives": [],
+    "name": "Virginia Polytechnic Institute and State University",
+    "alternatives": ["Virginia Tech", "VPI", "VT"],
     "abbreviations": [],
     "id": "fAKxRkJCn6"
   },
@@ -13133,7 +13131,7 @@
   {
     "name": "Wake Forest University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WFU"],
     "id": "jja87-cEdF"
   },
   {
@@ -13205,7 +13203,7 @@
   {
     "name": "Washington State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Wazzu", "WSU"],
     "id": "_aw4iiS_ng"
   },
   {
@@ -13217,7 +13215,7 @@
   {
     "name": "Washington University in St. Louis",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Wash U", "WUSTL"],
     "id": "nQozhjWXbq"
   },
   {
@@ -13277,7 +13275,7 @@
   {
     "name": "West Chester University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WCU"],
     "id": "AVh7iieNhc"
   },
   {
@@ -13337,19 +13335,19 @@
   {
     "name": "Western Governors University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WGU"],
     "id": "_jT9q7NMJt"
   },
   {
     "name": "Western Kentucky University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WKU"],
     "id": "TEHBhccuSb"
   },
   {
     "name": "Western Michigan University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WMU"],
     "id": "NQYw4U7j67"
   },
   {
@@ -13373,7 +13371,7 @@
   {
     "name": "Western Washington University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["Western", "WWU"],
     "id": "c50fTQAUCd"
   },
   {
@@ -13415,7 +13413,7 @@
   {
     "name": "Wichita State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WSU"],
     "id": "Z19hSlYLWj"
   },
   {
@@ -13474,7 +13472,7 @@
   },
   {
     "name": "Williams College",
-    "alternatives": [],
+    "alternatives": ["Williams"],
     "abbreviations": [],
     "id": "GWjcPUZzVd"
   },
@@ -13511,7 +13509,7 @@
   {
     "name": "Winthrop University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WU"],
     "id": "KmtMcaXzU8"
   },
   {
@@ -13553,7 +13551,7 @@
   {
     "name": "Worcester Polytechnic Institute",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WPI"],
     "id": "dg-WuI3IKd"
   },
   {
@@ -13571,7 +13569,7 @@
   {
     "name": "Wright State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["WSU"],
     "id": "gXyj0V4AMZ"
   },
   {
@@ -13621,7 +13619,7 @@
   {
     "name": "Xavier University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["XU"],
     "id": "Vf3se-tmCU"
   },
   {
@@ -13639,7 +13637,7 @@
   {
     "name": "Yeshiva University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["YU"],
     "id": "58zGesBpkk"
   },
   {
@@ -13663,7 +13661,7 @@
   {
     "name": "Youngstown State University",
     "alternatives": [],
-    "abbreviations": [],
+    "abbreviations": ["YSU"],
     "id": "zQktc0puDN"
   },
   {
