@@ -1,3 +1,4 @@
+export type { BaseItem } from './AutoCompleteSelect';
 export { default as AutoCompleteSelectInput } from './AutoCompleteSelect';
 export { default as CheckboxInput } from './Checkbox';
 export { default as DateInput } from './Date';

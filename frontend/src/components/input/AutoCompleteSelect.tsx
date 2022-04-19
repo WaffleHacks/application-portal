@@ -1,31 +1,34 @@
 import { Combobox } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/outline';
+import { CheckIcon, ExclamationCircleIcon, SelectorIcon } from '@heroicons/react/outline';
 import algoliasearch from 'algoliasearch/lite';
 import classNames from 'classnames';
+import { useField } from 'formik';
 import React, { useEffect, useMemo, useState } from 'react';
+
+import { BaseProps, generateId } from './common';
 
 export interface BaseItem {
   objectID: string;
 }
 
-interface Props<Item extends BaseItem> {
+type Props<Item extends BaseItem> = BaseProps<string> & {
   indexName: string;
   appId: string;
   apiKey: string;
-  selected?: Item;
-  onSelect?: (item: Item) => void;
   display?: (item: Item) => string;
-}
+};
 
 const AutoCompleteSelect = <Item extends BaseItem>({
+  label,
   indexName,
   appId,
   apiKey,
   display = (item) => item.objectID,
+  ...props
 }: Props<Item>): JSX.Element => {
+  const [{ value, name }, { error }, { setValue }] = useField(props);
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<Item>();
-  const [options, setOptions] = useState<Item[]>([]);
+  const [options, setOptions] = useState<string[]>([]);
 
   const client = useMemo(() => algoliasearch(appId, apiKey), [appId, apiKey]);
 
@@ -47,30 +50,55 @@ const AutoCompleteSelect = <Item extends BaseItem>({
         },
       ]);
       const { hits } = responses.results[0];
-      setOptions(hits);
+      setOptions(hits.map((v) => display(v)));
     }, 250);
 
     return () => clearTimeout(timeout);
   }, [client, query, indexName]);
 
+  useEffect(() => console.log(value), [value]);
+
+  const { className, placeholder, required, disabled } = props;
+  const hasError = error !== undefined;
+  const errorId = generateId('autocomplete-select', label) + '-error';
+
   return (
-    <Combobox as="div" value={selected} onChange={setSelected}>
-      <Combobox.Label className="block text-sm font-medium text-gray-700">Label TODO</Combobox.Label>
-      <div className="relative mt-1">
+    <Combobox as="div" value={value} onChange={(v) => setValue(v, true)} className={className}>
+      <Combobox.Label className="block text-sm font-medium text-gray-700">
+        {label} {required && <span className="text-red-500">*</span>}
+      </Combobox.Label>
+      <div className="relative mt-1 rounded-md shadow-sm">
         <Combobox.Input
-          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+          name={name}
+          className={classNames(
+            hasError
+              ? 'border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500'
+              : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500',
+            'w-full rounded-md border bg-white py-2 pl-3 pr-10 shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm',
+          )}
           onChange={(e) => setQuery(e.target.value)}
-          displayValue={display}
+          displayValue={(v: string) => v}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          autoComplete="off"
+          aria-describedby={errorId}
+          aria-invalid={hasError}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Combobox.Button>
+        {error && (
+          <div className="absolute inset-y-0 right-5 pr-3 flex items-center pointer-events-none">
+            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+          </div>
+        )}
 
         {options.length > 0 && (
           <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {options.map((option) => (
               <Combobox.Option
-                key={option.objectID}
+                key={option}
                 value={option}
                 className={({ active }) =>
                   classNames(
@@ -81,7 +109,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
               >
                 {({ active, selected }) => (
                   <>
-                    <span className={classNames('block truncate', selected && 'font-semibold')}>{display(option)}</span>
+                    <span className={classNames('block truncate', selected && 'font-semibold')}>{option}</span>
 
                     {selected && (
                       <span

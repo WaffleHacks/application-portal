@@ -1,8 +1,18 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 
-import { NumberInput, SelectInput, TextInput } from '../../components/input';
+import { AutoCompleteSelectInput, NumberInput, SelectInput } from '../../components/input';
+import type { BaseItem } from '../../components/input';
 import SidebarCard from '../../components/SidebarCard';
+
+const APP_ID = process.env.REACT_APP_ALGOLIA_APP_ID || '';
+const API_KEY = process.env.REACT_APP_ALGOLIA_API_KEY || '';
+
+interface NamedItem extends BaseItem {
+  name: string;
+}
+
+const display = (item: NamedItem) => item.name;
 
 const EducationForm = (): JSX.Element => {
   const { getFieldProps } = useFormikContext();
@@ -12,12 +22,15 @@ const EducationForm = (): JSX.Element => {
       title="Education"
       description="Tell us about your education. If you're not currently a student, put in the most recent school you attended."
     >
-      {/* TODO: autocomplete school while typing */}
-      <TextInput
+      <AutoCompleteSelectInput
         className="col-span-6 sm:col-span-4"
         label="School"
+        indexName="schools"
+        appId={APP_ID}
+        apiKey={API_KEY}
         required
         placeholder="Hacker University"
+        display={display}
         {...getFieldProps('school')}
       />
 
@@ -45,10 +58,13 @@ const EducationForm = (): JSX.Element => {
         <option>Not currently a student</option>
       </SelectInput>
 
-      {/* TODO: autocomplete major while typing */}
-      <TextInput
+      <AutoCompleteSelectInput
         className="col-span-6 sm:col-span-3"
         label="Major"
+        indexName="majors"
+        appId={APP_ID}
+        apiKey={API_KEY}
+        display={display}
         placeholder="Computer Science"
         {...getFieldProps('major')}
       />
