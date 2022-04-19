@@ -32,6 +32,18 @@ repos:
           - sqlalchemy[mypy]>=1.4.31,<1.5.0
           - sqlalchemy2-stubs>=0.0.2-alpha.19,<0.1.0
           - sqlmodel>=0.0.6,<0.1.0
+          - boto3-stubs-lite[sqs]>=1.21.42,<1.22.0
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: node ./frontend/node_modules/eslint/bin/eslint.js
+        args:
+          - --ignore-pattern
+          - '!frontend/.prettierrc.js'
+          - --fix
+        language: system
+        files: \.[jt]sx?$
 
 default_language_version:
   python: python3.9

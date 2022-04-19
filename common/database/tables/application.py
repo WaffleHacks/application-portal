@@ -1,36 +1,42 @@
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
+from pydantic import BaseModel
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from .country import Country
     from .participant import Participant
-    from .school import School
+    from .school import School, SchoolRead
 
 
 class Gender(Enum):
-    MALE = 1
-    FEMALE = 2
-    NON_BINARY = 3
+    MALE = "Male"
+    FEMALE = "Female"
+    NON_BINARY = "Non-binary"
+    OTHER = "Other"
 
 
 # Names from https://boards.cdn.greenhouse.io/docs/RaceEthnicityDefinitions.pdf
 class RaceEthnicity(Enum):
-    AMERICAN_INDIAN = 1  # American Indian or Alaskan Native
-    ASIAN = 2  # Asian
-    PACIFIC_ISLANDER = 3  # Native Hawaiian or Other Pacific Islander
-    BLACK = 4  # Black or African American
-    HISPANIC = 5  # Hispanic or Latino
-    CAUCASIAN = 6  # White / Caucasian
-    MULTIPLE_OTHER = 7  # Multiple ethnicities / Other
+    AMERICAN_INDIAN = "American Indian / Alaskan Native"
+    ASIAN = "Asian"
+    PACIFIC_ISLANDER = "Native Hawaiian or other pacific islander"
+    BLACK = "Black / African American"
+    HISPANIC = "Hispanic / Latino"
+    CAUCASIAN = "White / Caucasian"
+    MULTIPLE_OTHER = "Multiple ethnicities / Other"
 
 
-class ApplicationBase(SQLModel):
-    school_id: int = Field(foreign_key="schools.id")
+class Status(Enum):
+    PENDING = "pending"
+    REJECTED = "rejected"
+    ACCEPTED = "accepted"
+
+
+class ApplicationProfileBase(SQLModel):
     level_of_study: str
     graduation_year: int
     major: Optional[str]
@@ -39,13 +45,13 @@ class ApplicationBase(SQLModel):
     portfolio_url: Optional[str]
     vcs_url: Optional[str]
 
-    gender: Optional[Gender] = Field(sa_column=Column(SQLEnum(Gender)))
+    gender: Gender = Field(sa_column=Column(SQLEnum(Gender), nullable=False))
     date_of_birth: str
-    race_ethnicity: Optional[RaceEthnicity] = Field(
-        sa_column=Column(SQLEnum(RaceEthnicity))
+    race_ethnicity: RaceEthnicity = Field(
+        sa_column=Column(SQLEnum(RaceEthnicity), nullable=False)
     )
 
-    country_id: int = Field(foreign_key="countries.id")
+    country: str
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
     share_information: bool
@@ -53,6 +59,16 @@ class ApplicationBase(SQLModel):
     # TODO: figure out resume stuff
 
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
+
+
+class ApplicationBase(ApplicationProfileBase):
+    status: Status = Field(
+        sa_column=Column(
+            SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
+        )
+    )
+
+    school_id: str = Field(foreign_key="schools.id")
 
 
 class Application(ApplicationBase, table=True):
@@ -68,19 +84,21 @@ class Application(ApplicationBase, table=True):
     participant: "Participant" = Relationship(back_populates="application")
 
     school: "School" = Relationship(back_populates="applications")
-    country: "Country" = Relationship(back_populates="applications")
 
 
-class ApplicationCreate(ApplicationBase):
-    pass
+class ApplicationCreate(ApplicationProfileBase):
+    school: str
 
 
-class ApplicationRead(ApplicationBase):
+class ApplicationRead(ApplicationProfileBase):
     participant_id: str
+
+    school: "SchoolRead"
+    status: Status
 
 
 class ApplicationUpdate(SQLModel):
-    school_id: Optional[int]
+    school_id: Optional[str]
     level_of_study: Optional[str]
     graduation_year: Optional[int]
     major: Optional[str]
@@ -94,8 +112,34 @@ class ApplicationUpdate(SQLModel):
     vcs_url: Optional[str]
 
     shipping_address: Optional[str]  # should be formatted prior to insertion
-    country_id: Optional[int]
+    country: Optional[str]
 
     share_information: Optional[bool]
 
     legal_agreements_acknowledged: Optional[bool]
+
+
+class ApplicationAutosave(BaseModel):
+    gender: str
+    race_ethnicity: str
+    date_of_birth: str
+
+    school: str
+    level_of_study: str
+    graduation_year: int
+    major: str
+
+    street: str
+    apartment: str
+    city: str
+    region: str
+    postal_code: str
+    country: str
+
+    portfolio_url: str
+    vcs_url: str
+    hackathons_attended: int
+    share_information: bool
+
+    agree_to_privacy: bool
+    agree_to_rules: bool

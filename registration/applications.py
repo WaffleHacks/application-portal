@@ -5,13 +5,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from common import Permission, requires_permission, with_user_id
 from common.database import (
     Application,
+    ApplicationAutosave,
     ApplicationCreate,
     ApplicationRead,
     ApplicationUpdate,
+    School,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -61,19 +64,30 @@ async def create_application(
     """
     Create a new application attached to the currently authenticated participant
     """
-    application = Application.from_orm(values, {"participant_id": id})
+    # Find the school by name
+    statement = select(School).where(School.name == values.school)
+    result = await db.execute(statement)
+    school = result.scalars().first()
+    if school is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
+
+    application = Application.from_orm(
+        values, {"participant_id": id, "school_id": school.id, "status": "pending"}
+    )
     db.add(application)
     await db.commit()
 
     # Delete the auto-save data
     await kv.delete(str(id))
 
-    return application
+    response = application.dict()
+    response["school"] = school.dict()
+    return response
 
 
 @router.get(
     "/autosave",
-    response_model=ApplicationUpdate,
+    response_model=ApplicationAutosave,
     name="Get an in-progress application",
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
@@ -97,7 +111,7 @@ async def get_autosave_application(
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
 )
 async def autosave_application(
-    values: ApplicationUpdate,
+    values: ApplicationAutosave,
     id: str = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
@@ -108,10 +122,7 @@ async def autosave_application(
     # Prevent auto-saving if already applied
     application = await db.get(Application, id)
     if not application:
-        await kv.set(
-            str(id),
-            values.dict(exclude_unset=True, exclude_none=True, exclude_defaults=True),
-        )
+        await kv.set(str(id), values.dict())
 
 
 @router.get("/{id}", response_model=ApplicationRead, name="Read application")
@@ -135,7 +146,9 @@ async def read(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
 
-    application = await db.get(Application, id)
+    application = await db.get(
+        Application, id, options=[selectinload(Application.school)]
+    )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
     elif (

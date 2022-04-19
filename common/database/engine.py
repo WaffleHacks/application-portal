@@ -1,4 +1,5 @@
-from typing import AsyncGenerator
+from contextlib import asynccontextmanager
+from typing import AsyncContextManager, AsyncGenerator, Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
@@ -26,3 +27,10 @@ async def with_db() -> AsyncGenerator[AsyncSession, None]:
             yield session
     finally:
         await session.close()
+
+
+# Required since FastAPI cannot use context managers as dependencies
+# Relevant issue: https://github.com/tiangolo/fastapi/issues/2212
+db_context: Callable[[], AsyncContextManager[AsyncSession]] = asynccontextmanager(
+    with_db
+)

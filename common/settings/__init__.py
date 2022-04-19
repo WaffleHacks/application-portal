@@ -1,4 +1,5 @@
 from os import environ
+from typing import Optional
 
 from pydantic import BaseSettings, HttpUrl, RedisDsn
 
@@ -17,6 +18,9 @@ class Settings(BaseSettings):
     # JWT authentication configuration
     issuer_url: HttpUrl
     jwks_url: HttpUrl
+
+    # The SQS queue for synchronizing the participant info
+    queue: Optional[HttpUrl]
 
     class Config:
         env_file = ".env"
