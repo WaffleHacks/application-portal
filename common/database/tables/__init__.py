@@ -7,13 +7,6 @@ from .application import (
     Gender,
     RaceEthnicity,
 )
-from .legal_agreements import (
-    LegalAgreement,
-    LegalAgreementBase,
-    LegalAgreementCreate,
-    LegalAgreementRead,
-    LegalAgreementUpdate,
-)
 from .participant import Participant, ParticipantBase, ParticipantRead
 from .school import School, SchoolBase, SchoolCreate, SchoolRead, SchoolUpdate
 
