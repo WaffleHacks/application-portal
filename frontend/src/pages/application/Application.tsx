@@ -2,6 +2,7 @@ import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Card from '../../components/Card';
 import { MultiStepForm, Step } from '../../components/steps';
 import {
   ApplicationAutosave,
@@ -35,9 +36,9 @@ const Application = (): JSX.Element => {
 
   if (isLoading)
     return (
-      <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6 mt-3 flex justify-around">
+      <Card className="justify-around">
         <RefreshIcon className="h-8 w-8 animate-spin" />
-      </div>
+      </Card>
     );
 
   return (

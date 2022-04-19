@@ -66,7 +66,7 @@ const Review = (): JSX.Element => {
         <Row name="ZIP / Postal code" value={values.postal_code} />
         <Row name="Country" value={values.country} />
       </SidebarCard>
-      <Card>
+      <Card className="flex justify-around">
         <CheckboxInput
           label={
             <span>
