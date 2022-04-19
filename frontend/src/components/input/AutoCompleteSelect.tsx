@@ -58,8 +58,6 @@ const AutoCompleteSelect = <Item extends BaseItem>({
     return () => clearTimeout(timeout);
   }, [client, query, indexName]);
 
-  useEffect(() => console.log(value), [value]);
-
   const { className, placeholder, required, disabled } = props;
   const hasError = error !== undefined;
   const errorId = generateId('autocomplete-select', label) + '-error';
