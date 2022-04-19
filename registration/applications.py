@@ -72,7 +72,7 @@ async def create_application(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
 
     application = Application.from_orm(
-        values, {"participant_id": id, "school_id": school.id}
+        values, {"participant_id": id, "school_id": school.id, "status": "pending"}
     )
     db.add(application)
     await db.commit()
@@ -80,7 +80,9 @@ async def create_application(
     # Delete the auto-save data
     await kv.delete(str(id))
 
-    return application
+    response = application.dict()
+    response["school"] = school.dict()
+    return response
 
 
 @router.get(
