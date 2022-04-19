@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import logoTitle from '../logo-title.png';
+import logo from '../logo.png';
 import { useGetProfileQuery } from '../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
@@ -87,16 +89,8 @@ const Navigation = ({ items }: Props): JSX.Element => {
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="block lg:hidden h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                    alt="Workflow"
-                  />
-                  <img
-                    className="hidden lg:block h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                    alt="Workflow"
-                  />
+                  <img className="block lg:hidden h-8 w-auto" src={logo} alt="WaffleHacks" />
+                  <img className="hidden lg:block h-8 w-auto" src={logoTitle} alt="WaffleHacks" />
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {shownItems.map((item) => (
