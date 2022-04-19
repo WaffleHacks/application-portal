@@ -16,7 +16,7 @@ const Status = (): JSX.Element => {
     else if (isError) navigate('/new');
   }, [isLoading, isError]);
 
-  if (isLoading)
+  if (isLoading || isError)
     return (
       <Card className="flex justify-around">
         <RefreshIcon className="h-8 w-8 animate-spin" />
