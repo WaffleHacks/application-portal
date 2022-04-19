@@ -30,8 +30,13 @@ class RaceEthnicity(Enum):
     MULTIPLE_OTHER = "Multiple ethnicities / Other"
 
 
-class ApplicationBase(SQLModel):
-    school_id: str = Field(foreign_key="schools.id")
+class Status(Enum):
+    PENDING = "pending"
+    REJECTED = "rejected"
+    ACCEPTED = "accepted"
+
+
+class ApplicationProfileBase(SQLModel):
     level_of_study: str
     graduation_year: int
     major: Optional[str]
@@ -56,6 +61,16 @@ class ApplicationBase(SQLModel):
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
 
 
+class ApplicationBase(ApplicationProfileBase):
+    status: Status = Field(
+        sa_column=Column(
+            SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
+        )
+    )
+
+    school_id: str = Field(foreign_key="schools.id")
+
+
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
@@ -71,8 +86,7 @@ class Application(ApplicationBase, table=True):
     school: "School" = Relationship(back_populates="applications")
 
 
-class ApplicationCreate(ApplicationBase):
-    school_id = ""  # We set a default since we are finding the school by name, not ID
+class ApplicationCreate(ApplicationProfileBase):
     school: str
 
 
