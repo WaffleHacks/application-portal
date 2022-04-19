@@ -13,6 +13,7 @@ export interface NavItem {
   name: string;
   href: string;
   external?: boolean;
+  hidden?: boolean;
 }
 
 const ProfilePicture = (): JSX.Element => {
@@ -76,6 +77,8 @@ const Navigation = ({ items }: Props): JSX.Element => {
     returnTo: window.location.origin,
   };
 
+  const shownItems = items.filter((i) => !i.hidden);
+
   return (
     <Disclosure as="nav" className="bg-white shadow-sm">
       {({ open }) => (
@@ -96,7 +99,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                   />
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                  {items.map((item) => (
+                  {shownItems.map((item) => (
                     <Link key={item.name} item={item} mobile={false} />
                   ))}
                 </div>
@@ -152,7 +155,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-3 space-y-1">
-              {items.map((item) => (
+              {shownItems.map((item) => (
                 <Disclosure.Button key={item.name} as="div">
                   <Link item={item} mobile={true} />
                 </Disclosure.Button>

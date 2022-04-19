@@ -1,5 +1,6 @@
 import { RefreshIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { MultiStepForm, Step } from '../../components/steps';
 import {
@@ -21,9 +22,16 @@ const formatAddress = (street: string, apartment: string, city: string, region: 
   `${street}${apartment.length > 0 ? ', ' + apartment : ''}, ${city}, ${region} ${postal_code}`;
 
 const Application = (): JSX.Element => {
+  const navigate = useNavigate();
   const { data, isLoading } = useGetAutosaveQuery();
   const [setAutosave, { isLoading: isSaving }] = useSetAutosaveMutation();
-  const [createApplication, { isLoading: isCreating }] = useCreateApplicationMutation();
+  const [createApplication, { isLoading: isCreating, isUninitialized, isError }] = useCreateApplicationMutation();
+
+  useEffect(() => {
+    if (!isUninitialized && !isCreating && !isError) {
+      navigate('/');
+    }
+  }, [isCreating]);
 
   if (isLoading)
     return (

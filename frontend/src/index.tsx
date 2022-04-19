@@ -2,7 +2,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import './index.css';
@@ -27,7 +27,9 @@ ReactDOM.render(
       >
         <BrowserRouter>
           <Authentication>
-            <Application />
+            <Routes>
+              <Route path="/new" element={<Application />} />
+            </Routes>
           </Authentication>
         </BrowserRouter>
       </Auth0Provider>
