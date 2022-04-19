@@ -72,7 +72,8 @@ class Application(ApplicationBase, table=True):
 
 
 class ApplicationCreate(ApplicationBase):
-    pass
+    school_id = ""  # We set a default since we are finding the school by name, not ID
+    school: str
 
 
 class ApplicationRead(ApplicationBase):

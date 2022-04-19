@@ -13,6 +13,7 @@ from common.database import (
     ApplicationCreate,
     ApplicationRead,
     ApplicationUpdate,
+    School,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -62,7 +63,16 @@ async def create_application(
     """
     Create a new application attached to the currently authenticated participant
     """
-    application = Application.from_orm(values, {"participant_id": id})
+    # Find the school by name
+    statement = select(School).where(School.name == values.school)
+    result = await db.execute(statement)
+    school = result.scalars().first()
+    if school is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
+
+    application = Application.from_orm(
+        values, {"participant_id": id, "school_id": school.id}
+    )
     db.add(application)
     await db.commit()
 
