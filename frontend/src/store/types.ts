@@ -5,6 +5,12 @@ export interface Profile {
   lastName: string;
 }
 
+export enum Status {
+  Pending = 'pending',
+  Rejected = 'rejected',
+  Accepted = 'accepted',
+}
+
 export enum Gender {
   Male = 'Male',
   Female = 'Female',
@@ -22,10 +28,16 @@ export enum RaceEthnicity {
   MultipleOther = 'Multiple ethnicities / Other',
 }
 
+export interface School {
+  id: string;
+  name: string;
+}
+
 export interface Application {
   participant_id: string;
+  status: Status;
 
-  school: string;
+  school: School;
   level_of_study: string;
   graduation_year: number;
   major?: string;

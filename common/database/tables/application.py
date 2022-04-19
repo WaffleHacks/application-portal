@@ -9,7 +9,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from .participant import Participant
-    from .school import School
+    from .school import School, SchoolRead
 
 
 class Gender(Enum):
@@ -90,8 +90,11 @@ class ApplicationCreate(ApplicationProfileBase):
     school: str
 
 
-class ApplicationRead(ApplicationBase):
+class ApplicationRead(ApplicationProfileBase):
     participant_id: str
+
+    school: "SchoolRead"
+    status: Status
 
 
 class ApplicationUpdate(SQLModel):

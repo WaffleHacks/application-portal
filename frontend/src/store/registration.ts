@@ -12,7 +12,9 @@ enum Tag {
   Application = 'application',
 }
 
-type ApplicationCreate = Omit<Application, 'participant_id'>;
+type ApplicationCreate = Omit<Application, 'participant_id' | 'school' | 'status'> & {
+  school: string;
+};
 
 const api = createApi({
   reducerPath: 'registration',

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from common import Permission, requires_permission, with_user_id
 from common.database import (
@@ -143,7 +144,9 @@ async def read(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
 
-    application = await db.get(Application, id)
+    application = await db.get(
+        Application, id, options=[selectinload(Application.school)]
+    )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
     elif (

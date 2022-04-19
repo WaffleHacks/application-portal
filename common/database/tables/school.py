@@ -23,7 +23,7 @@ class SchoolCreate(SchoolBase):
 
 
 class SchoolRead(SchoolBase):
-    id: int
+    id: str
 
 
 class SchoolUpdate(SQLModel):

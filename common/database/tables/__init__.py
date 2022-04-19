@@ -16,3 +16,6 @@ from .legal_agreements import (
 )
 from .participant import Participant, ParticipantBase, ParticipantRead
 from .school import School, SchoolBase, SchoolCreate, SchoolRead, SchoolUpdate
+
+# Update hydrated references
+ApplicationRead.update_forward_refs(SchoolRead=SchoolRead)
