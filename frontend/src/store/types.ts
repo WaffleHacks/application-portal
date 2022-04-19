@@ -25,7 +25,7 @@ export enum RaceEthnicity {
 export interface Application {
   participant_id: string;
 
-  // TODO: figure out school
+  school: string;
   level_of_study: string;
   graduation_year: number;
   major?: string;
@@ -38,7 +38,7 @@ export interface Application {
   date_of_birth: string;
   race_ethnicity: RaceEthnicity;
 
-  // TODO: figure out country
+  country: string;
   shipping_address: string;
 
   // TODO: figure out resume

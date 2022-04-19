@@ -1,3 +1,4 @@
+import { RefreshIcon } from '@heroicons/react/outline';
 import { Form, Formik, FormikValues } from 'formik';
 import React, { ReactElement, useEffect, useState } from 'react';
 
@@ -22,6 +23,7 @@ const Validator = ({ step, validate }: ValidatorProps): JSX.Element => {
 interface Props<Values extends FormikValues> {
   initialValues: Values;
   onSubmit: (values: Values) => void | Promise<void>;
+  isSubmitting?: boolean;
   onAutosave?: (values: Values) => unknown | Promise<unknown>;
   isSaving: boolean;
   initialStep?: number;
@@ -33,6 +35,7 @@ const MultiStepForm = <Values,>({
   onSubmit,
   onAutosave,
   isSaving,
+  isSubmitting,
   initialStep = 0,
   children,
 }: Props<Values>): JSX.Element => {
@@ -66,9 +69,12 @@ const MultiStepForm = <Values,>({
               type={step === children.length - 1 ? 'submit' : 'button'}
               style={step === children.length - 1 ? 'success' : 'primary'}
               onClick={nextStep}
-              disabled={!formik.isValid || formik.isSubmitting}
+              disabled={!formik.isValid || formik.isSubmitting || isSubmitting}
             >
               {step === children.length - 1 ? 'Submit' : 'Next'}
+              {(formik.isSubmitting || isSubmitting) && (
+                <RefreshIcon className="h-4 w-5 animate-spin" aria-hidden="true" />
+              )}
             </Button>
           </div>
         </Form>
