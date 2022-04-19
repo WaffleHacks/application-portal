@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 
+import Card from '../../components/Card';
 import { CheckboxInput } from '../../components/input';
 import SidebarCard from '../../components/SidebarCard';
 import { ApplicationAutosave, useGetProfileQuery } from '../../store';
@@ -65,7 +66,7 @@ const Review = (): JSX.Element => {
         <Row name="ZIP / Postal code" value={values.postal_code} />
         <Row name="Country" value={values.country} />
       </SidebarCard>
-      <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6 mt-3 flex justify-around">
+      <Card>
         <CheckboxInput
           label={
             <span>
@@ -86,7 +87,7 @@ const Review = (): JSX.Element => {
           required
           {...getFieldProps('agree_to_rules')}
         />
-      </div>
+      </Card>
     </>
   );
 };

@@ -9,6 +9,7 @@ import './index.css';
 
 import Authentication from './components/Authentication';
 import { Application } from './pages/application';
+import NotFound from './pages/NotFound';
 import { store } from './store';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
@@ -29,6 +30,7 @@ ReactDOM.render(
           <Authentication>
             <Routes>
               <Route path="/new" element={<Application />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Authentication>
         </BrowserRouter>
