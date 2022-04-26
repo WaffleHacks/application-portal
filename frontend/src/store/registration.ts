@@ -13,8 +13,16 @@ enum Tag {
 }
 
 type ApplicationCreate = Omit<Application, 'participant_id' | 'school' | 'status'> & {
+  resume: boolean;
   school: string;
 };
+
+interface ApplicationCreateResponse {
+  upload?: {
+    url: string;
+    fields: Record<string, string>;
+  };
+}
 
 const api = createApi({
   reducerPath: 'registration',
@@ -26,7 +34,7 @@ const api = createApi({
       providesTags: (result: Application | undefined) =>
         result ? [{ type: Tag.Application, id: result.participant_id }] : [],
     }),
-    createApplication: builder.mutation<void, ApplicationCreate>({
+    createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({
       query: (body) => ({
         url: '/registration/applications/',
         method: 'POST',

@@ -112,7 +112,14 @@ async def create_application(
         response["upload"] = s3.generate_presigned_post(
             SETTINGS.registration.bucket,
             path,
-            Fields={"Content-Type": "application/pdf"},
+            Conditions=[
+                {"acl": "private"},
+                {"success_action_status": "201"},
+                ["starts-with", "$key", ""],
+                ["content-length-range", 0, 10 * 1024 * 1024],
+                {"content-type": "application/pdf"},
+                {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
+            ],
             ExpiresIn=5 * 60,
         )
 
