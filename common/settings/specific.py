@@ -20,7 +20,8 @@ class IntegrationsSettings(BaseAPI):
 
 
 class RegistrationSettings(BaseAPI):
-    pass
+    # The S3 bucket for storing resumes
+    bucket: str
 
 
 class SyncSettings(BaseModel):
