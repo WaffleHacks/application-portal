@@ -33,6 +33,10 @@ class CreateResponse(BaseModel):
     upload: Optional[S3PreSignedURL]
 
 
+class GetResumeResponse(BaseModel):
+    url: str
+
+
 router = APIRouter()
 
 
@@ -108,10 +112,9 @@ async def create_application(
 
     # Generate a URL to upload the participant's resume
     if application.resume:
-        path = str(uuid4())
         response["upload"] = s3.generate_presigned_post(
             SETTINGS.registration.bucket,
-            path,
+            application.resume,
             Conditions=[
                 {"acl": "private"},
                 {"success_action_status": "201"},
@@ -199,6 +202,49 @@ async def read(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return application
+
+
+@router.get(
+    "/{id}/resume", response_model=GetResumeResponse, name="Get application resume"
+)
+async def read_resume(
+    id: str,
+    requester_id: str = Depends(with_user_id),
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsRead,
+            Permission.ApplicationsReadSelf,
+            Permission.ApplicationsReadPublic,
+        )
+    ),
+    s3: S3Client = Depends(with_s3),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Returns a URL to access an application's resume by id
+    """
+    if Permission.ApplicationsReadSelf.matches(permission) and id != requester_id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
+
+    application = await db.get(Application, id)
+    if application is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    elif (
+        Permission.ApplicationsReadPublic.matches(permission)
+        and not application.share_information
+    ):
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    elif application.resume is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    url = s3.generate_presigned_url(
+        "get_object",
+        Params={"Bucket": SETTINGS.registration.bucket, "Key": application.resume},
+        ExpiresIn=15 * 60,
+    )
+    return {"url": url}
 
 
 @router.put("/{id}", response_model=ApplicationRead, name="Update application")
