@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +10,7 @@ import {
   Gender,
   RaceEthnicity,
   useCreateApplicationMutation,
+  useGetApplicationQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
 } from '../../store';
@@ -24,12 +26,26 @@ const formatAddress = (street: string, apartment: string, city: string, region: 
 
 const Application = (): JSX.Element => {
   const navigate = useNavigate();
-  const [resume, setResume] = useState<File>();
+
+  const { user } = useAuth0();
+  const { isLoading: alreadyAppliedLoading, isSuccess: alreadyApplied } = useGetApplicationQuery(user?.sub || '');
+
+  // Auto-save hooks
   const { data, isLoading } = useGetAutosaveQuery();
   const [setAutosave, { isLoading: isSaving }] = useSetAutosaveMutation();
+
+  // Creation hooks
+  const [resume, setResume] = useState<File>();
   const [createApplication, { isLoading: isCreating, isUninitialized, isError, data: createData }] =
     useCreateApplicationMutation();
 
+  // Prevent the user from submitting another application
+  useEffect(() => {
+    if (alreadyAppliedLoading) return;
+    else if (alreadyApplied) navigate('/');
+  }, [alreadyApplied, alreadyAppliedLoading]);
+
+  // Handle post-submit and resume file upload
   useEffect(() => {
     (async () => {
       if (!isUninitialized && !isCreating && !isError) {
@@ -55,9 +71,9 @@ const Application = (): JSX.Element => {
     })();
   }, [isCreating]);
 
-  if (isLoading)
+  if (isLoading || alreadyAppliedLoading)
     return (
-      <Card className="justify-around">
+      <Card className="flex justify-around">
         <RefreshIcon className="h-8 w-8 animate-spin" />
       </Card>
     );
