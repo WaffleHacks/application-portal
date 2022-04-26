@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from common import Permission, requires_permission, with_user_id
+from common.authentication import with_user_id
 from common.database import (
     Application,
     ApplicationAutosave,
@@ -18,6 +18,7 @@ from common.database import (
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
+from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 
