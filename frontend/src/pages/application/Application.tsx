@@ -1,5 +1,6 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '../../components/Card';
@@ -9,6 +10,7 @@ import {
   Gender,
   RaceEthnicity,
   useCreateApplicationMutation,
+  useGetApplicationQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
 } from '../../store';
@@ -24,19 +26,54 @@ const formatAddress = (street: string, apartment: string, city: string, region: 
 
 const Application = (): JSX.Element => {
   const navigate = useNavigate();
+
+  const { user } = useAuth0();
+  const { isLoading: alreadyAppliedLoading, isSuccess: alreadyApplied } = useGetApplicationQuery(user?.sub || '');
+
+  // Auto-save hooks
   const { data, isLoading } = useGetAutosaveQuery();
   const [setAutosave, { isLoading: isSaving }] = useSetAutosaveMutation();
-  const [createApplication, { isLoading: isCreating, isUninitialized, isError }] = useCreateApplicationMutation();
 
+  // Creation hooks
+  const [resume, setResume] = useState<File>();
+  const [createApplication, { isLoading: isCreating, isUninitialized, isError, data: createData }] =
+    useCreateApplicationMutation();
+
+  // Prevent the user from submitting another application
   useEffect(() => {
-    if (!isUninitialized && !isCreating && !isError) {
-      navigate('/');
-    }
+    if (alreadyAppliedLoading) return;
+    else if (alreadyApplied) navigate('/');
+  }, [alreadyApplied, alreadyAppliedLoading]);
+
+  // Handle post-submit and resume file upload
+  useEffect(() => {
+    (async () => {
+      if (!isUninitialized && !isCreating && !isError) {
+        if (resume && createData?.upload) {
+          const body = new FormData();
+          // Add pre-computed fields
+          for (const key in createData.upload.fields) body.append(key, createData.upload.fields[key]);
+
+          // Add static fields
+          body.append('acl', 'private');
+          body.append('success_action_status', '201');
+          body.append('Content-Type', resume.type);
+          body.append('X-AMZ-Algorithm', 'AWS4-HMAC-SHA256');
+          body.append('file', resume);
+
+          // TODO: handle errors
+          await fetch(createData.upload.url, { method: 'POST', body });
+        }
+
+        // Ensure we properly navigate to the success page
+        setTimeout(() => navigate('/'), 50);
+      }
+    })();
   }, [isCreating]);
 
-  if (isLoading)
+  if (isLoading || alreadyAppliedLoading)
     return (
-      <Card className="justify-around">
+      <Card className="flex justify-around">
         <RefreshIcon className="h-8 w-8 animate-spin" />
       </Card>
     );
@@ -64,9 +101,11 @@ const Application = (): JSX.Element => {
             values.region,
             values.postal_code,
           ),
+          resume: values.resume !== undefined,
           share_information: values.share_information,
           legal_agreements_acknowledged: values.agree_to_privacy && values.agree_to_rules,
         });
+        setResume(values.resume);
       }}
       isSaving={isSaving}
       isSubmitting={isCreating}

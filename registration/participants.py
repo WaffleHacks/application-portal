@@ -6,8 +6,8 @@ from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common import Permission, requires_permission
 from common.database import Participant, ParticipantRead, with_db
+from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 

@@ -59,24 +59,19 @@ async def remove(action: Action, db: AsyncSession):
 async def run():
     client: "SQSClient" = boto3.client("sqs")  # type: ignore
     logger = logging.getLogger("sync")
-
-    if SETTINGS.queue is None:
-        logger.error("a queue must be specified")
-        return
+    queue = SETTINGS.sync.queue
 
     # TODO: perform an initial sync
 
     # Process messages forever
-    listener = Listener(SETTINGS.queue, client)
+    listener = Listener(queue, client)
     logger.info("listening for updates")
     for message in listener:
         try:
             action = Action.load(message.body)
         except ValidationError:
             logger.error("invalid action format", exc_info=True)
-            client.delete_message(
-                QueueUrl=SETTINGS.queue, ReceiptHandle=message.receipt_handle
-            )
+            client.delete_message(QueueUrl=queue, ReceiptHandle=message.receipt_handle)
             continue
 
         logger.info(f"new {action.type} action on {action.id}")
@@ -87,9 +82,7 @@ async def run():
             else:
                 await upsert(action, db)
 
-        client.delete_message(
-            QueueUrl=SETTINGS.queue, ReceiptHandle=message.receipt_handle
-        )
+        client.delete_message(QueueUrl=queue, ReceiptHandle=message.receipt_handle)
         logger.info(f"processing completed for {action.type} on {action.id}")
 
 

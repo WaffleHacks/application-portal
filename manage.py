@@ -1,6 +1,7 @@
 import importlib
 import json
 import sys
+from traceback import format_exc
 from typing import Dict, Optional
 
 import click
@@ -88,9 +89,11 @@ def run(app: Optional[str]):
         run_fn()
     except ModuleNotFoundError:
         click.echo(f"{app} is not implemented yet")
+        click.echo(f"Reason:\n{format_exc()}")
         sys.exit(1)
     except AttributeError:
         click.echo(f"{app} is misconfigured, could not find 'run' function")
+        click.echo(f"Reason:\n{format_exc()}")
         sys.exit(1)
 
 

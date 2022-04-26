@@ -56,8 +56,6 @@ class ApplicationProfileBase(SQLModel):
 
     share_information: bool
 
-    # TODO: figure out resume stuff
-
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
 
 
@@ -67,6 +65,8 @@ class ApplicationBase(ApplicationProfileBase):
             SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
         )
     )
+
+    resume: Optional[str]
 
     school_id: str = Field(foreign_key="schools.id")
 
@@ -89,11 +89,15 @@ class Application(ApplicationBase, table=True):
 class ApplicationCreate(ApplicationProfileBase):
     school: str
 
+    resume: bool
+
 
 class ApplicationRead(ApplicationProfileBase):
     participant_id: str
 
     school: "SchoolRead"
+    resume: Optional[str]
+
     status: Status
 
 
@@ -119,6 +123,10 @@ class ApplicationUpdate(SQLModel):
     legal_agreements_acknowledged: Optional[bool]
 
 
+class ApplicationAutosaveResume(BaseModel):
+    path: str
+
+
 class ApplicationAutosave(BaseModel):
     gender: str
     race_ethnicity: str
@@ -139,6 +147,7 @@ class ApplicationAutosave(BaseModel):
     portfolio_url: str
     vcs_url: str
     hackathons_attended: int
+    resume: Optional[ApplicationAutosaveResume]
     share_information: bool
 
     agree_to_privacy: bool

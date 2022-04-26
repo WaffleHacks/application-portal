@@ -6,8 +6,9 @@ from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common import Permission, is_authenticated, requires_permission
+from common.authentication import is_authenticated
 from common.database import School, SchoolCreate, SchoolRead, SchoolUpdate, with_db
+from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 

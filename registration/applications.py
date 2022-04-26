@@ -1,13 +1,16 @@
 from http import HTTPStatus
-from typing import List
+from typing import Dict, List, Optional
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import validate_model
+from pydantic import BaseModel, validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from common import Permission, requires_permission, with_user_id
+from common import SETTINGS
+from common.authentication import with_user_id
+from common.aws import S3Client, with_s3
 from common.database import (
     Application,
     ApplicationAutosave,
@@ -18,6 +21,21 @@ from common.database import (
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
+from common.permissions import Permission, requires_permission
+
+
+class S3PreSignedURL(BaseModel):
+    url: str
+    fields: Dict[str, str]
+
+
+class CreateResponse(BaseModel):
+    upload: Optional[S3PreSignedURL]
+
+
+class GetResumeResponse(BaseModel):
+    url: str
+
 
 router = APIRouter()
 
@@ -50,7 +68,7 @@ async def list(
 
 @router.post(
     "/",
-    response_model=ApplicationRead,
+    response_model=CreateResponse,
     status_code=HTTPStatus.CREATED,
     name="Create application",
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
@@ -58,6 +76,7 @@ async def list(
 async def create_application(
     values: ApplicationCreate,
     id: str = Depends(with_user_id),
+    s3: S3Client = Depends(with_s3),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
 ):
@@ -71,8 +90,17 @@ async def create_application(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
 
+    # Generate a file name for the user's resume if they attempted to provide one
+    resume = str(uuid4()) if values.resume else None
+
     application = Application.from_orm(
-        values, {"participant_id": id, "school_id": school.id, "status": "pending"}
+        values,
+        {
+            "participant_id": id,
+            "school_id": school.id,
+            "status": "pending",
+            "resume": resume,
+        },
     )
     db.add(application)
     await db.commit()
@@ -80,8 +108,24 @@ async def create_application(
     # Delete the auto-save data
     await kv.delete(str(id))
 
-    response = application.dict()
-    response["school"] = school.dict()
+    response = {}
+
+    # Generate a URL to upload the participant's resume
+    if application.resume:
+        response["upload"] = s3.generate_presigned_post(
+            SETTINGS.registration.bucket,
+            application.resume,
+            Conditions=[
+                {"acl": "private"},
+                {"success_action_status": "201"},
+                ["starts-with", "$key", ""],
+                ["content-length-range", 0, 10 * 1024 * 1024],
+                {"content-type": "application/pdf"},
+                {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
+            ],
+            ExpiresIn=5 * 60,
+        )
+
     return response
 
 
@@ -158,6 +202,49 @@ async def read(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return application
+
+
+@router.get(
+    "/{id}/resume", response_model=GetResumeResponse, name="Get application resume"
+)
+async def read_resume(
+    id: str,
+    requester_id: str = Depends(with_user_id),
+    permission: str = Depends(
+        requires_permission(
+            Permission.ApplicationsRead,
+            Permission.ApplicationsReadSelf,
+            Permission.ApplicationsReadPublic,
+        )
+    ),
+    s3: S3Client = Depends(with_s3),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Returns a URL to access an application's resume by id
+    """
+    if Permission.ApplicationsReadSelf.matches(permission) and id != requester_id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
+        )
+
+    application = await db.get(Application, id)
+    if application is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    elif (
+        Permission.ApplicationsReadPublic.matches(permission)
+        and not application.share_information
+    ):
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    elif application.resume is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    url = s3.generate_presigned_url(
+        "get_object",
+        Params={"Bucket": SETTINGS.registration.bucket, "Key": application.resume},
+        ExpiresIn=15 * 60,
+    )
+    return {"url": url}
 
 
 @router.put("/{id}", response_model=ApplicationRead, name="Update application")

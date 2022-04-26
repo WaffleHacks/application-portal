@@ -2,6 +2,8 @@ import * as Yup from 'yup';
 
 import { ApplicationAutosave, Gender, RaceEthnicity } from '../../store';
 
+type AutosaveResume = File | { path: string };
+
 export const initialValues: ApplicationAutosave = {
   gender: '',
   race_ethnicity: '',
@@ -46,7 +48,13 @@ export const validationSchema = {
     portfolio_url: Yup.string().url('Must be a valid URL').optional(),
     vcs_url: Yup.string().url('Must be a valid URL').optional(),
     hackathons_attended: Yup.number().min(0).max(50).required(required),
-    resume: Yup.mixed().optional(),
+    resume: Yup.mixed()
+      .optional()
+      .test(
+        'file-provided',
+        'Your resume was not auto-saved, please add it again.',
+        (value: AutosaveResume | null | undefined) => value === undefined || value === null || value instanceof File,
+      ),
     share_information: Yup.boolean(),
   }),
   shipping: Yup.object({
