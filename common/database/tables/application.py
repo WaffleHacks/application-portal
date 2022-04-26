@@ -123,6 +123,10 @@ class ApplicationUpdate(SQLModel):
     legal_agreements_acknowledged: Optional[bool]
 
 
+class ApplicationAutosaveResume(BaseModel):
+    path: str
+
+
 class ApplicationAutosave(BaseModel):
     gender: str
     race_ethnicity: str
@@ -143,6 +147,7 @@ class ApplicationAutosave(BaseModel):
     portfolio_url: str
     vcs_url: str
     hackathons_attended: int
+    resume: Optional[ApplicationAutosaveResume]
     share_information: bool
 
     agree_to_privacy: bool
