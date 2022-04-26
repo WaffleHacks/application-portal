@@ -1,13 +1,16 @@
 from http import HTTPStatus
-from typing import List
+from typing import Dict, List, Optional
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import validate_model
+from pydantic import BaseModel, validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from common import SETTINGS
 from common.authentication import with_user_id
+from common.aws import S3Client, with_s3
 from common.database import (
     Application,
     ApplicationAutosave,
@@ -19,6 +22,16 @@ from common.database import (
 )
 from common.kv import NamespacedClient, with_kv
 from common.permissions import Permission, requires_permission
+
+
+class S3PreSignedURL(BaseModel):
+    url: str
+    fields: Dict[str, str]
+
+
+class CreateResponse(BaseModel):
+    upload: Optional[S3PreSignedURL]
+
 
 router = APIRouter()
 
@@ -51,7 +64,7 @@ async def list(
 
 @router.post(
     "/",
-    response_model=ApplicationRead,
+    response_model=CreateResponse,
     status_code=HTTPStatus.CREATED,
     name="Create application",
     dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
@@ -59,6 +72,7 @@ async def list(
 async def create_application(
     values: ApplicationCreate,
     id: str = Depends(with_user_id),
+    s3: S3Client = Depends(with_s3),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
 ):
@@ -72,8 +86,17 @@ async def create_application(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
 
+    # Generate a file name for the user's resume if they attempted to provide one
+    resume = str(uuid4()) if values.resume else None
+
     application = Application.from_orm(
-        values, {"participant_id": id, "school_id": school.id, "status": "pending"}
+        values,
+        {
+            "participant_id": id,
+            "school_id": school.id,
+            "status": "pending",
+            "resume": resume,
+        },
     )
     db.add(application)
     await db.commit()
@@ -81,8 +104,18 @@ async def create_application(
     # Delete the auto-save data
     await kv.delete(str(id))
 
-    response = application.dict()
-    response["school"] = school.dict()
+    response = {}
+
+    # Generate a URL to upload the participant's resume
+    if application.resume:
+        path = str(uuid4())
+        response["upload"] = s3.generate_presigned_post(
+            SETTINGS.registration.bucket,
+            path,
+            Fields={"Content-Type": "application/pdf"},
+            ExpiresIn=5 * 60,
+        )
+
     return response
 
 

@@ -56,8 +56,6 @@ class ApplicationProfileBase(SQLModel):
 
     share_information: bool
 
-    # TODO: figure out resume stuff
-
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
 
 
@@ -67,6 +65,8 @@ class ApplicationBase(ApplicationProfileBase):
             SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
         )
     )
+
+    resume: Optional[str]
 
     school_id: str = Field(foreign_key="schools.id")
 
@@ -89,11 +89,15 @@ class Application(ApplicationBase, table=True):
 class ApplicationCreate(ApplicationProfileBase):
     school: str
 
+    resume: bool
+
 
 class ApplicationRead(ApplicationProfileBase):
     participant_id: str
 
     school: "SchoolRead"
+    resume: Optional[str]
+
     status: Status
 
 

@@ -20,14 +20,16 @@ down_revision = "03e3fe94e1ed"
 branch_labels = None
 depends_on = None
 
-migrations_dir = Path(getcwd(), context.script.dir)
-schools_path = migrations_dir.joinpath("schools.json")
-schools = json.load(open(schools_path, "r"))
-
 # Ad-hoc schools table for bulk import
 schools_table = sql.table(
     "schools", sql.column("id", sa.String), sql.column("name", sa.String)
 )
+
+
+def load_schools():
+    migrations_dir = Path(getcwd(), context.script.dir)
+    schools_path = migrations_dir.joinpath("schools.json")
+    return json.load(open(schools_path, "r"))
 
 
 def upgrade():
@@ -49,11 +51,13 @@ def upgrade():
     )
 
     # Insert stuff
+    schools = load_schools()
     op.bulk_insert(schools_table, [{"id": s["id"], "name": s["name"]} for s in schools])
 
 
 def downgrade():
     # Delete added records
+    schools = load_schools()
     for school in schools:
         op.execute(
             schools_table.delete().where(
