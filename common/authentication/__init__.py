@@ -10,7 +10,7 @@ from ..settings import SETTINGS
 from .jwks import JWKClient
 
 bearer_scheme = HTTPBearer()
-client = JWKClient(SETTINGS.jwks_url)
+client = JWKClient(SETTINGS.api.jwks_url)
 
 
 async def is_authenticated(
@@ -28,7 +28,7 @@ async def is_authenticated(
             signing_key.key,
             algorithms=["RS256"],
             audience="https://apply.wafflehacks.tech",
-            issuer=SETTINGS.issuer_url,
+            issuer=SETTINGS.api.issuer_url,
         )
     except ExpiredSignatureError:
         raise HTTPException(
