@@ -35,7 +35,7 @@ repos:
           - boto3-stubs-lite[s3,sqs]>=1.21.42,<1.22.0
   - repo: local
     hooks:
-      - id: eslint
+      - id: eslint-frontend
         name: eslint
         entry: node ./frontend/node_modules/eslint/bin/eslint.js
         args:
@@ -43,7 +43,14 @@ repos:
           - '!frontend/.prettierrc.js'
           - --fix
         language: system
-        files: \.[jt]sx?$
+        files: ^frontend/.*\.[jt]sx?$
+      - id: eslint-infrastructure
+        name: eslint
+        entry: node ./infrastructure/node_modules/eslint/bin/eslint.js
+        args:
+          - --fix
+        language: system
+        files: ^infrastructure/.*\.ts$
 
 default_language_version:
   python: python3.9
