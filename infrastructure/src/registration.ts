@@ -1,9 +1,9 @@
 import { s3 } from '@pulumi/aws';
 import { Policy } from '@pulumi/aws/iam';
-import { ComponentResource, CustomResourceOptions, Output, ResourceOptions, interpolate } from '@pulumi/pulumi';
+import { ComponentResource, CustomResourceOptions, Input, Output, ResourceOptions, interpolate } from '@pulumi/pulumi';
 
 interface Args {
-  bucket: string;
+  bucket: Input<string>;
 }
 
 class Registration extends ComponentResource {

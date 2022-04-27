@@ -1,10 +1,10 @@
 import { Policy } from '@pulumi/aws/iam';
 import { TopicSubscription } from '@pulumi/aws/sns';
 import { Queue, QueuePolicy } from '@pulumi/aws/sqs';
-import { ComponentResource, ComponentResourceOptions, Output, ResourceOptions } from '@pulumi/pulumi';
+import { ComponentResource, ComponentResourceOptions, Input, Output, ResourceOptions } from '@pulumi/pulumi';
 
 interface Args {
-  topic: string;
+  topic: Input<string>;
 }
 
 class Sync extends ComponentResource {

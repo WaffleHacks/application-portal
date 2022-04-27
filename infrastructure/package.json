@@ -1,6 +1,6 @@
 {
   "name": "@wafflehacks/application-portal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Pulumi component for setting up the application portal",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
