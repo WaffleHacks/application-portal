@@ -4,7 +4,13 @@ import Registration from './registration';
 import Sync from './sync';
 
 interface Args {
+  /**
+   * The name of the bucket to store resumes in
+   */
   resumesBucket: string;
+  /**
+   * The SNS topic to subscribe to for receiveing participant profile updates
+   */
   profilesTopic: string;
 }
 
