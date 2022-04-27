@@ -26,4 +26,4 @@ jobs:
         run: yarn publish
         working-directory: ./infrastructure
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
