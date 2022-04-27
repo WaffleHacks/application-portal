@@ -16,9 +16,15 @@ jobs:
         with:
           node-version: 16
           cache: yarn
-          cache-dependency-path: frontend/yarn.lock
+          cache-dependency-path: |
+            frontend/yarn.lock
+            infrastructure/yarn.lock
+
       - run: yarn install
         working-directory: frontend
+      - run: yarn install --ignore-scripts
+        working-directory: infrastructure
+
       - run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
       - uses: actions/cache@v2
         with:
