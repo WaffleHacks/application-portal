@@ -20,9 +20,11 @@ jobs:
             frontend/yarn.lock
             infrastructure/yarn.lock
 
-      - run: yarn install
+      - name: yarn install (frontend)
+        run: yarn install
         working-directory: frontend
-      - run: yarn install --ignore-scripts
+      - name: yarn install (infrastructure)
+        run: yarn install --ignore-scripts
         working-directory: infrastructure
 
       - run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
