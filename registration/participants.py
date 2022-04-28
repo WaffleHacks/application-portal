@@ -16,7 +16,7 @@ router = APIRouter()
     "/",
     response_model=List[ParticipantRead],
     name="List Participants",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def list(db: AsyncSession = Depends(with_db)):
     """
@@ -32,7 +32,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     "/{id}",
     response_model=ParticipantRead,
     name="Read participant",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def read(id: str, db: AsyncSession = Depends(with_db)):
     """
@@ -49,7 +49,7 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
     "/{id}",
     status_code=HTTPStatus.NO_CONTENT,
     name="Delete participant",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsEdit))],
+    dependencies=[Depends(requires_permission(Permission.Director))],
 )
 async def remove(id: str, db: AsyncSession = Depends(with_db)):
     """

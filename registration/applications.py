@@ -44,13 +44,10 @@ router = APIRouter()
     "/",
     response_model=List[ApplicationRead],
     name="List applications",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsRead))],
 )
 async def list(
     permission: str = Depends(
-        requires_permission(
-            Permission.ApplicationsRead, Permission.ApplicationsReadPublic
-        )
+        requires_permission(Permission.Sponsor, Permission.Organizer)
     ),
     db: AsyncSession = Depends(with_db),
 ) -> List[ApplicationRead]:
@@ -58,7 +55,7 @@ async def list(
     List all applications in db
     """
     statement = select(Application)
-    if Permission.ApplicationsReadPublic.matches(permission):
+    if Permission.Sponsor.matches(permission):
         statement = statement.where(Application.share_information)
 
     result = await db.execute(statement)
@@ -71,7 +68,7 @@ async def list(
     response_model=CreateResponse,
     status_code=HTTPStatus.CREATED,
     name="Create application",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
+    dependencies=[Depends(requires_permission(Permission.Participant))],
 )
 async def create_application(
     values: ApplicationCreate,
@@ -133,7 +130,7 @@ async def create_application(
     "/autosave",
     response_model=ApplicationAutosave,
     name="Get an in-progress application",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
+    dependencies=[Depends(requires_permission(Permission.Participant))],
 )
 async def get_autosave_application(
     id: str = Depends(with_user_id), kv: NamespacedClient = Depends(with_kv("autosave"))
@@ -152,7 +149,7 @@ async def get_autosave_application(
     "/autosave",
     status_code=HTTPStatus.NO_CONTENT,
     name="Save an in-progress application",
-    dependencies=[Depends(requires_permission(Permission.ApplicationsCreate))],
+    dependencies=[Depends(requires_permission(Permission.Participant))],
 )
 async def autosave_application(
     values: ApplicationAutosave,
@@ -175,9 +172,9 @@ async def read(
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(
-            Permission.ApplicationsRead,
-            Permission.ApplicationsReadSelf,
-            Permission.ApplicationsReadPublic,
+            Permission.Participant,
+            Permission.Sponsor,
+            Permission.Organizer,
         )
     ),
     db: AsyncSession = Depends(with_db),
@@ -185,7 +182,7 @@ async def read(
     """
     Returns a single application by id
     """
-    if Permission.ApplicationsReadSelf.matches(permission) and id != requester_id:
+    if Permission.Participant.matches(permission) and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -195,10 +192,7 @@ async def read(
     )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    elif (
-        Permission.ApplicationsReadPublic.matches(permission)
-        and not application.share_information
-    ):
+    elif Permission.Sponsor.matches(permission) and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return application
@@ -212,9 +206,9 @@ async def read_resume(
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(
-            Permission.ApplicationsRead,
-            Permission.ApplicationsReadSelf,
-            Permission.ApplicationsReadPublic,
+            Permission.Participant,
+            Permission.Sponsor,
+            Permission.Organizer,
         )
     ),
     s3: S3Client = Depends(with_s3),
@@ -223,7 +217,7 @@ async def read_resume(
     """
     Returns a URL to access an application's resume by id
     """
-    if Permission.ApplicationsReadSelf.matches(permission) and id != requester_id:
+    if Permission.Participant.matches(permission) and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -231,10 +225,7 @@ async def read_resume(
     application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    elif (
-        Permission.ApplicationsReadPublic.matches(permission)
-        and not application.share_information
-    ):
+    elif Permission.Sponsor.matches(permission) and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
     elif application.resume is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
@@ -253,16 +244,14 @@ async def update(
     info: ApplicationUpdate,
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
-        requires_permission(
-            Permission.ApplicationsEdit, Permission.ApplicationsEditSelf
-        )
+        requires_permission(Permission.Participant, Permission.Director)
     ),
     db: AsyncSession = Depends(with_db),
 ):
     """
     Updates the requester's application
     """
-    if Permission.ApplicationsEditSelf.matches(permission) and id != requester_id:
+    if Permission.Participant.matches(permission) and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -290,16 +279,14 @@ async def delete(
     id: str,
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
-        requires_permission(
-            Permission.ApplicationsEdit, Permission.ApplicationsEditSelf
-        )
+        requires_permission(Permission.Participant, Permission.Director)
     ),
     db: AsyncSession = Depends(with_db),
 ) -> None:
     """
     Deletes an application by id
     """
-    if Permission.ApplicationsEditSelf.matches(permission) and id != requester_id:
+    if Permission.Participant.matches(permission) and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
