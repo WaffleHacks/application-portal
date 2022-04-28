@@ -3,6 +3,7 @@ import { Policy } from '@pulumi/aws/iam';
 import { ComponentResource, CustomResourceOptions, Input, Output, ResourceOptions, interpolate } from '@pulumi/pulumi';
 
 interface Args {
+  domain: Input<string>;
   bucket: Input<string>;
 }
 
@@ -13,7 +14,7 @@ class Registration extends ComponentResource {
     super('wafflehacks:application-portal:Registration', name, { options: opts }, opts);
 
     const defaultResourceOptions: ResourceOptions = { parent: this };
-    const { bucket: bucketName } = args;
+    const { bucket: bucketName, domain } = args;
 
     const bucket = new s3.BucketV2(
       `${name}-bucket`,
@@ -28,6 +29,23 @@ class Registration extends ComponentResource {
       {
         bucket: bucket.id,
         acl: 'private',
+      },
+      defaultResourceOptions,
+    );
+
+    new s3.BucketCorsConfigurationV2(
+      `${name}-bucket-cors`,
+      {
+        bucket: bucket.id,
+        corsRules: [
+          {
+            allowedHeaders: ['*'],
+            allowedMethods: ['GET', 'POST'],
+            allowedOrigins: [domain, 'https://localhost.localdomain:3000'],
+            exposeHeaders: ['x-amz-request-id'],
+            maxAgeSeconds: 3600,
+          },
+        ],
       },
       defaultResourceOptions,
     );

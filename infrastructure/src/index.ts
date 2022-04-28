@@ -5,6 +5,10 @@ import Sync from './sync';
 
 interface Args {
   /**
+   * The domain where the application portal will be hosted
+   */
+  domain: Input<string>;
+  /**
    * The name of the bucket to store resumes in
    */
   resumesBucket: Input<string>;
@@ -21,9 +25,13 @@ class ApplicationPortal extends ComponentResource {
     super('wafflehacks:application-portal:ApplicationPortal', name, { options: opts }, opts);
 
     const defaultResourceOptions: ResourceOptions = { parent: this };
-    const { resumesBucket, profilesTopic } = args;
+    const { domain, resumesBucket, profilesTopic } = args;
 
-    const registration = new Registration(`${name}-registration`, { bucket: resumesBucket }, defaultResourceOptions);
+    const registration = new Registration(
+      `${name}-registration`,
+      { bucket: resumesBucket, domain },
+      defaultResourceOptions,
+    );
     const sync = new Sync(`${name}-sync`, { topic: profilesTopic }, defaultResourceOptions);
 
     this.policies = [registration.policy, sync.policy];
