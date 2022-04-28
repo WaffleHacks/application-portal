@@ -41,7 +41,7 @@ class Registration extends ComponentResource {
           {
             allowedHeaders: ['*'],
             allowedMethods: ['GET', 'POST'],
-            allowedOrigins: [domain, 'https://localhost.localdomain:3000'],
+            allowedOrigins: [interpolate`https://${domain}`, 'https://localhost.localdomain:3000'],
             exposeHeaders: ['x-amz-request-id'],
             maxAgeSeconds: 3600,
           },
