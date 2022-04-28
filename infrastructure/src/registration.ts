@@ -50,6 +50,18 @@ class Registration extends ComponentResource {
       defaultResourceOptions,
     );
 
+    new s3.BucketPublicAccessBlock(
+      `${name}-bucket-public`,
+      {
+        bucket: bucket.id,
+        blockPublicAcls: true,
+        blockPublicPolicy: true,
+        ignorePublicAcls: true,
+        restrictPublicBuckets: true,
+      },
+      defaultResourceOptions,
+    );
+
     const policy = new Policy(
       `${name}-policy`,
       {
