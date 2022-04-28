@@ -24,7 +24,7 @@ ReactDOM.render(
         clientId={AUTH0_CLIENT_ID}
         redirectUri={window.location.origin}
         cacheLocation="localstorage"
-        audience="https://apply.wafflehacks.tech"
+        audience="https://apply.wafflehacks.org"
         useRefreshTokens
       >
         <BrowserRouter>
