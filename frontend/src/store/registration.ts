@@ -12,7 +12,7 @@ enum Tag {
   Application = 'application',
 }
 
-type ApplicationCreate = Omit<Application, 'participant_id' | 'school' | 'status'> & {
+type ApplicationCreate = Omit<Application, 'participant_id' | 'resume' | 'school' | 'status'> & {
   resume: boolean;
   school: string;
 };

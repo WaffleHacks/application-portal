@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import authenticationReducer from './authentication';
+import errorLogger from './errors';
 import profileApi from './profile';
 import registrationApi from './registration';
 
@@ -12,7 +13,7 @@ export const store = configureStore({
     [registrationApi.reducerPath]: registrationApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(profileApi.middleware).concat(registrationApi.middleware),
+    getDefaultMiddleware().concat(profileApi.middleware).concat(registrationApi.middleware).concat(errorLogger),
 });
 
 // Trigger re-fetches upon reconnection and upon regaining focus

@@ -27,7 +27,7 @@ async def is_authenticated(
             token,
             signing_key.key,
             algorithms=["RS256"],
-            audience="https://apply.wafflehacks.tech",
+            audience="https://apply.wafflehacks.org",
             issuer=SETTINGS.api.issuer_url,
         )
     except ExpiredSignatureError:

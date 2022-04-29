@@ -33,7 +33,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     response_model=SchoolRead,
     status_code=HTTPStatus.CREATED,
     name="Create school",
-    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
     """
@@ -49,7 +49,7 @@ async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
 @router.patch(
     "/{id}",
     name="Update school",
-    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def update(
     id: int,
@@ -84,7 +84,7 @@ async def update(
     "/{id}",
     status_code=HTTPStatus.NO_CONTENT,
     name="Delete school",
-    dependencies=[Depends(requires_permission(Permission.SchoolsEdit))],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """

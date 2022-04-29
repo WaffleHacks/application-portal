@@ -28,7 +28,7 @@ const Authentication = ({ children }: Props): JSX.Element => {
       else if (!isAuthenticated) await loginWithRedirect();
 
       // Get tokens for the application portal and profile services
-      getAccessTokenSilently({ audience: 'https://apply.wafflehacks.tech' }).then((token) =>
+      getAccessTokenSilently({ audience: 'https://apply.wafflehacks.org' }).then((token) =>
         dispatch(setPortalToken(token)),
       );
       getAccessTokenSilently({ audience: 'https://id.wafflehacks.org' }).then((token) =>

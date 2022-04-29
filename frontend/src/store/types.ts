@@ -53,7 +53,7 @@ export interface Application {
   country: string;
   shipping_address: string;
 
-  // TODO: figure out resume
+  resume?: string;
   share_information: boolean;
 
   legal_agreements_acknowledged: boolean;

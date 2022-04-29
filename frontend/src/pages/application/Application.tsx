@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '../../components/Card';
@@ -36,7 +37,7 @@ const Application = (): JSX.Element => {
 
   // Creation hooks
   const [resume, setResume] = useState<File>();
-  const [createApplication, { isLoading: isCreating, isUninitialized, isError, data: createData }] =
+  const [createApplication, { isLoading: isCreating, isUninitialized, isError, data: createData, reset }] =
     useCreateApplicationMutation();
 
   // Prevent the user from submitting another application
@@ -61,11 +62,18 @@ const Application = (): JSX.Element => {
           body.append('X-AMZ-Algorithm', 'AWS4-HMAC-SHA256');
           body.append('file', resume);
 
-          // TODO: handle errors
-          await fetch(createData.upload.url, { method: 'POST', body });
+          try {
+            await fetch(createData.upload.url, { method: 'POST', body });
+          } catch (e) {
+            toast.error('Failed to upload your resume. Please try again later');
+            console.error(e);
+            reset();
+            return;
+          }
         }
 
         // Ensure we properly navigate to the success page
+        toast.success('Your application was submitted!');
         setTimeout(() => navigate('/'), 50);
       }
     })();

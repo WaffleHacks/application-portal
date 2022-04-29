@@ -1,6 +1,7 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -24,10 +25,11 @@ ReactDOM.render(
         clientId={AUTH0_CLIENT_ID}
         redirectUri={window.location.origin}
         cacheLocation="localstorage"
-        audience="https://apply.wafflehacks.tech"
+        audience="https://apply.wafflehacks.org"
         useRefreshTokens
       >
         <BrowserRouter>
+          <Toaster position="top-right" toastOptions={{ duration: 2500 }} />
           <Authentication>
             <Routes>
               <Route index element={<Status />} />
