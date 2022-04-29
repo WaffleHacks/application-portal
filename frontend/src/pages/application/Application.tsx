@@ -73,6 +73,7 @@ const Application = (): JSX.Element => {
         }
 
         // Ensure we properly navigate to the success page
+        toast.success('Your application was submitted!');
         setTimeout(() => navigate('/'), 50);
       }
     })();
