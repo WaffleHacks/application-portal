@@ -2,7 +2,7 @@ import { RefreshIcon } from '@heroicons/react/outline';
 import { Form, Formik, FormikValues } from 'formik';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import Button from '../Button';
+import Button from '../../../components/Button';
 import AutoSave from './AutoSave';
 import Progress from './Progress';
 import { Props as StepProps } from './Step';

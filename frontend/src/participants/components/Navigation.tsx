@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import logoTitle from '../logo-title.png';
-import logo from '../logo.png';
-import { useGetProfileQuery } from '../store';
+import logoTitle from '../../logo-title.png';
+import logo from '../../logo.png';
+import { useGetProfileQuery } from '../../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
 

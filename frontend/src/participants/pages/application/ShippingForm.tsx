@@ -2,9 +2,9 @@ import { useFormikContext } from 'formik';
 import React, { useEffect } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 
-import { TextInput } from '../../components/input';
-import SidebarCard from '../../components/SidebarCard';
-import { ApplicationAutosave } from '../../store';
+import { TextInput } from '../../../components/input';
+import SidebarCard from '../../../components/SidebarCard';
+import { ApplicationAutosave } from '../../../store';
 
 const ShippingForm = (): JSX.Element => {
   const { getFieldProps, setFieldValue, values } = useFormikContext<ApplicationAutosave>();

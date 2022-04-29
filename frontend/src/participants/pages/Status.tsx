@@ -3,8 +3,8 @@ import { CheckIcon, RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Card from '../components/Card';
-import { useGetApplicationQuery } from '../store';
+import Card from '../../components/Card';
+import { useGetApplicationQuery } from '../../store';
 
 const Status = (): JSX.Element => {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const Status = (): JSX.Element => {
               </a>
               ,{' '}
               <a
-                href="https://www.facebook.com/waffle.hack/"
+                href="src/participants/pages/Status"
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-400 hover:text-blue-600"

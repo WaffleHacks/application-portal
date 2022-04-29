@@ -1,10 +1,10 @@
 import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 
-import Card from '../../components/Card';
-import { CheckboxInput } from '../../components/input';
-import SidebarCard from '../../components/SidebarCard';
-import { ApplicationAutosave, useGetProfileQuery } from '../../store';
+import Card from '../../../components/Card';
+import { CheckboxInput } from '../../../components/input';
+import SidebarCard from '../../../components/SidebarCard';
+import { ApplicationAutosave, useGetProfileQuery } from '../../../store';
 
 interface RowProps {
   name: string;

@@ -3,15 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import 'flatpickr/dist/flatpickr.min.css';
 import './index.css';
 
-import Authentication from './components/Authentication';
-import { Application } from './pages/application';
-import NotFound from './pages/NotFound';
-import Status from './pages/Status';
+import App from './App';
 import { store } from './store';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
@@ -30,13 +27,7 @@ ReactDOM.render(
       >
         <BrowserRouter>
           <Toaster position="top-right" toastOptions={{ duration: 2500 }} />
-          <Authentication>
-            <Routes>
-              <Route index element={<Status />} />
-              <Route path="/new" element={<Application />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Authentication>
+          <App />
         </BrowserRouter>
       </Auth0Provider>
     </Provider>

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import { ApplicationAutosave, Gender, RaceEthnicity } from '../../store';
+import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
 
 type AutosaveResume = File | { path: string };
 

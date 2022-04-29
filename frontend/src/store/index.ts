@@ -33,6 +33,6 @@ export {
   useSetAutosaveMutation,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
-export { hasPermission, waitingForTokens } from './selectors';
+export { highestPermission, isDirector, waitingForTokens } from './selectors';
 export type { ApplicationAutosave } from './types';
 export { Gender, RaceEthnicity } from './types';
