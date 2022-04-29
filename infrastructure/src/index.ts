@@ -1,5 +1,6 @@
 import { ComponentResource, ComponentResourceOptions, Input, Output, ResourceOptions } from '@pulumi/pulumi';
 
+import Authentication from './authentication';
 import Registration from './registration';
 import Sync from './sync';
 
@@ -26,6 +27,8 @@ class ApplicationPortal extends ComponentResource {
 
     const defaultResourceOptions: ResourceOptions = { parent: this };
     const { domain, resumesBucket, profilesTopic } = args;
+
+    new Authentication(`${name}-authentication`, { domain }, defaultResourceOptions);
 
     const registration = new Registration(
       `${name}-registration`,
