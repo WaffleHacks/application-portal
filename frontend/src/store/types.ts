@@ -40,6 +40,13 @@ export interface School {
   name: string;
 }
 
+export interface ReducedApplication {
+  participant: Participant;
+  status: Status;
+
+  country: string;
+}
+
 export interface Application {
   participant: Participant;
   status: Status;

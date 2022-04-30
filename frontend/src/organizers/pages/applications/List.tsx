@@ -60,6 +60,12 @@ const List = (): JSX.Element => {
                       scope="col"
                       className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
                     >
+                      Country
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
+                    >
                       Status
                     </th>
                     <th
@@ -84,6 +90,7 @@ const List = (): JSX.Element => {
                           {a.participant.first_name} {a.participant.last_name}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.participant.email}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.country}</td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.status}</td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">TODO</td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">

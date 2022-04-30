@@ -92,6 +92,13 @@ class ApplicationCreate(ApplicationProfileBase):
     resume: bool
 
 
+class ApplicationList(SQLModel):
+    participant: "ParticipantRead"
+
+    country: str
+    status: Status
+
+
 class ApplicationRead(ApplicationProfileBase):
     participant: "ParticipantRead"
 

@@ -15,6 +15,7 @@ from common.database import (
     Application,
     ApplicationAutosave,
     ApplicationCreate,
+    ApplicationList,
     ApplicationRead,
     ApplicationUpdate,
     School,
@@ -42,7 +43,7 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=List[ApplicationRead],
+    response_model=List[ApplicationList],
     name="List applications",
 )
 async def list(
@@ -50,7 +51,7 @@ async def list(
         requires_permission(Permission.Sponsor, Permission.Organizer)
     ),
     db: AsyncSession = Depends(with_db),
-) -> List[ApplicationRead]:
+):
     """
     List all applications in db
     """
