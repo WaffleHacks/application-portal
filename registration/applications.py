@@ -55,8 +55,12 @@ async def list(
     """
     List all applications in db
     """
-    statement = select(Application).options(
-        selectinload(Application.participant), selectinload(Application.school)
+    statement = (
+        select(Application)
+        .order_by(Application.created_at.desc())  # type: ignore
+        .options(
+            selectinload(Application.participant), selectinload(Application.school)
+        )
     )
     if Permission.Sponsor.matches(permission):
         statement = statement.where(Application.share_information)
