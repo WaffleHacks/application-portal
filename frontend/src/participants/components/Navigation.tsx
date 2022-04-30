@@ -59,7 +59,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {shownItems.map((item) => (
-                    <Link key={item.name} item={item} classNames={linkClassNames(true)} />
+                    <Link key={item.name} item={item} classNames={linkClassNames(false)} />
                   ))}
                 </div>
               </div>
