@@ -28,13 +28,20 @@ export enum RaceEthnicity {
   MultipleOther = 'Multiple ethnicities / Other',
 }
 
+export interface Participant {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export interface School {
   id: string;
   name: string;
 }
 
 export interface Application {
-  participant_id: string;
+  participant: Participant;
   status: Status;
 
   school: School;

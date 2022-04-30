@@ -29,6 +29,7 @@ export { useGetProfileQuery } from './profile';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,
+  useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
 } from './registration';

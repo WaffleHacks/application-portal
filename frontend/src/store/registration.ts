@@ -12,7 +12,7 @@ enum Tag {
   Application = 'application',
 }
 
-type ApplicationCreate = Omit<Application, 'participant_id' | 'resume' | 'school' | 'status'> & {
+type ApplicationCreate = Omit<Application, 'participant' | 'resume' | 'school' | 'status'> & {
   resume: boolean;
   school: string;
 };
@@ -29,10 +29,17 @@ const api = createApi({
   baseQuery: baseQuery('portal', BASE_URL),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
+    listApplications: builder.query<Application[], void>({
+      query: () => '/registration/applications/',
+      providesTags: (result: Application[] = []) => [
+        Tag.Application,
+        ...result.map((a) => ({ type: Tag.Application, id: a.participant.id })),
+      ],
+    }),
     getApplication: builder.query<Application, string>({
       query: (arg) => `/registration/applications/${arg}`,
       providesTags: (result: Application | undefined) =>
-        result ? [{ type: Tag.Application, id: result.participant_id }] : [],
+        result ? [{ type: Tag.Application, id: result.participant.id }] : [],
     }),
     createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({
       query: (body) => ({
@@ -59,5 +66,10 @@ const api = createApi({
 });
 
 export default api;
-export const { useCreateApplicationMutation, useGetApplicationQuery, useGetAutosaveQuery, useSetAutosaveMutation } =
-  api;
+export const {
+  useCreateApplicationMutation,
+  useGetApplicationQuery,
+  useListApplicationsQuery,
+  useGetAutosaveQuery,
+  useSetAutosaveMutation,
+} = api;
