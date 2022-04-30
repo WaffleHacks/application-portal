@@ -11,4 +11,6 @@ from .participant import Participant, ParticipantBase, ParticipantRead
 from .school import School, SchoolBase, SchoolCreate, SchoolRead, SchoolUpdate
 
 # Update hydrated references
-ApplicationRead.update_forward_refs(SchoolRead=SchoolRead)
+ApplicationRead.update_forward_refs(
+    ParticipantRead=ParticipantRead, SchoolRead=SchoolRead
+)

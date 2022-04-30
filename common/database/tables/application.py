@@ -8,7 +8,7 @@ from sqlalchemy import ForeignKey, String
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from .participant import Participant
+    from .participant import Participant, ParticipantRead
     from .school import School, SchoolRead
 
 
@@ -93,7 +93,7 @@ class ApplicationCreate(ApplicationProfileBase):
 
 
 class ApplicationRead(ApplicationProfileBase):
-    participant_id: str
+    participant: "ParticipantRead"
 
     school: "SchoolRead"
     resume: Optional[str]

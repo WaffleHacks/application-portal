@@ -54,7 +54,9 @@ async def list(
     """
     List all applications in db
     """
-    statement = select(Application)
+    statement = select(Application).options(
+        selectinload(Application.participant), selectinload(Application.school)
+    )
     if Permission.Sponsor.matches(permission):
         statement = statement.where(Application.share_information)
 
@@ -188,7 +190,12 @@ async def read(
         )
 
     application = await db.get(
-        Application, id, options=[selectinload(Application.school)]
+        Application,
+        id,
+        options=[
+            selectinload(Application.participant),
+            selectinload(Application.school),
+        ],
     )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
