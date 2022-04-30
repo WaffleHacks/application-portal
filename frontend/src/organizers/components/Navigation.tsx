@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
 import { Link, NavItem, ProfilePicture } from '../../components/navigation';
-import logoTitle from '../../logo-title.png';
+import logo from '../../logo.png';
 import { useGetProfileQuery } from '../../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
@@ -87,7 +87,8 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
               </Transition.Child>
               <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div className="flex-shrink-0 flex items-center px-4">
-                  <img className="h-8 w-auto" src={logoTitle} alt="WaffleHacks" />
+                  <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
+                  <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
                 </div>
                 <nav className="mt-5 flex-1 px-2 space-y-1">
                   {shownItems.map((item) => (
@@ -130,7 +131,8 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
         <div className="flex-1 flex flex-col min-h-0 bg-gray-800">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <img className="h-8 w-auto" src={logoTitle} alt="WaffleHacks" />
+              <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
+              <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
               {items.map((item) => (

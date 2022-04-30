@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
 import { Link, NavItem, ProfilePicture } from '../../components/navigation';
-import logoTitle from '../../logo-title.png';
 import logo from '../../logo.png';
 import { useGetProfileQuery } from '../../store';
 
@@ -54,8 +53,8 @@ const Navigation = ({ items }: Props): JSX.Element => {
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="flex-shrink-0 flex items-center">
-                  <img className="block lg:hidden h-8 w-auto" src={logo} alt="WaffleHacks" />
-                  <img className="hidden lg:block h-8 w-auto" src={logoTitle} alt="WaffleHacks" />
+                  <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
+                  <span className="ml-3 font-bold text-lg">WaffleHacks</span>
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {shownItems.map((item) => (
