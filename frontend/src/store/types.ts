@@ -45,6 +45,8 @@ export interface ReducedApplication {
   status: Status;
 
   country: string;
+
+  created_at: string;
 }
 
 export interface Application {
@@ -71,6 +73,7 @@ export interface Application {
   share_information: boolean;
 
   legal_agreements_acknowledged: boolean;
+  created_at: string;
 }
 
 export interface ApplicationAutosave {

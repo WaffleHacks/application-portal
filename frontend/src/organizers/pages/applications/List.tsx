@@ -1,8 +1,34 @@
 import { DocumentIcon, RefreshIcon } from '@heroicons/react/outline';
+import { DateTime } from 'luxon';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { useListApplicationsQuery } from '../../../store';
+import { ReducedApplication, useListApplicationsQuery } from '../../../store';
+
+const Row = (application: ReducedApplication): JSX.Element => {
+  const createdAt = DateTime.fromISO(application.created_at);
+  const formattedCreatedAt =
+    createdAt.diffNow().negate().as('days') > 1
+      ? createdAt.toLocaleString(DateTime.DATETIME_SHORT)
+      : createdAt.toRelative();
+
+  return (
+    <tr>
+      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+        {application.participant.first_name} {application.participant.last_name}
+      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.participant.email}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.country}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.status}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedCreatedAt}</td>
+      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+        <Link to={`/applications/${application.participant.id}`} className="text-indigo-600 hover:text-indigo-900">
+          Details
+        </Link>
+      </td>
+    </tr>
+  );
+};
 
 const List = (): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
@@ -82,27 +108,7 @@ const List = (): JSX.Element => {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {(isLoading || data === undefined) && loadingRow}
                   {!isLoading && data !== undefined && data.length === 0 && emptyRow}
-                  {!isLoading &&
-                    data !== undefined &&
-                    data.map((a) => (
-                      <tr key={a.participant.id}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {a.participant.first_name} {a.participant.last_name}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.participant.email}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.country}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{a.status}</td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">TODO</td>
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <Link
-                            to={`/applications/${a.participant.id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Details
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
+                  {!isLoading && data !== undefined && data.map((a) => <Row key={a.participant.id} {...a} />)}
                 </tbody>
               </table>
             </div>

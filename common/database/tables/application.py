@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
@@ -6,6 +7,8 @@ from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String
 from sqlmodel import Field, Relationship, SQLModel
+
+from .types import TimeStamp
 
 if TYPE_CHECKING:
     from .participant import Participant, ParticipantRead
@@ -66,9 +69,10 @@ class ApplicationBase(ApplicationProfileBase):
         )
     )
 
-    resume: Optional[str]
-
     school_id: str = Field(foreign_key="schools.id")
+
+    resume: Optional[str]
+    created_at: datetime = Field(sa_column=Column(TimeStamp(), nullable=False))
 
 
 class Application(ApplicationBase, table=True):
@@ -98,6 +102,8 @@ class ApplicationList(SQLModel):
     country: str
     status: Status
 
+    created_at: datetime
+
 
 class ApplicationRead(ApplicationProfileBase):
     participant: "ParticipantRead"
@@ -106,6 +112,8 @@ class ApplicationRead(ApplicationProfileBase):
     resume: Optional[str]
 
     status: Status
+
+    created_at: datetime
 
 
 class ApplicationUpdate(SQLModel):

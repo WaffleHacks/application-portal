@@ -12,6 +12,7 @@
     "classnames": "^2.3.1",
     "formik": "^2.2.9",
     "jose": "^4.6.1",
+    "luxon": "^2.3.2",
     "nanoid": "^3.3.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/google.maps": "^3.48.5",
+    "@types/luxon": "^2.3.1",
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
