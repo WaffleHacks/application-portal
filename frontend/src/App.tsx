@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect } from 'react';
 
+import Organizers from './organizers';
 import Participants from './participants';
 import {
   PortalScope,
@@ -59,8 +60,7 @@ const App = (): JSX.Element => {
       console.log('Not yet implemented');
       return <></>;
     case PortalScope.Organizer:
-      console.log('Not yet implemented');
-      return <></>;
+      return <Organizers />;
     default:
       throw new Error('Unknown permission level');
   }

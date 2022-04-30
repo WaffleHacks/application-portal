@@ -2,7 +2,8 @@ import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
-import Navigation, { NavItem } from './Navigation';
+import { NavItem } from '../../components/navigation';
+import Navigation from './Navigation';
 
 const navigation: NavItem[] = [
   { name: 'Your Application', href: '/' },
