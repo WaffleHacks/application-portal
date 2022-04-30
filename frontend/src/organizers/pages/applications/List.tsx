@@ -1,9 +1,115 @@
-import { DocumentIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, ChevronUpIcon, DocumentIcon, RefreshIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
+
+enum SortKey {
+  Name,
+  Email,
+  Country,
+  Status,
+  AppliedAt,
+}
+
+enum SortOrder {
+  Ascending,
+  Descending,
+}
+
+const getKey = (app: ReducedApplication, key: SortKey): string => {
+  switch (key) {
+    case SortKey.Name:
+      return `${app.participant.first_name} ${app.participant.last_name}`;
+    case SortKey.Email:
+      return app.participant.email;
+    case SortKey.Country:
+      return app.country;
+    case SortKey.Status:
+      return app.status;
+    case SortKey.AppliedAt:
+      return app.created_at;
+  }
+};
+
+const sort =
+  (by: SortKey, order: SortOrder) =>
+  (a: ReducedApplication, b: ReducedApplication): number => {
+    const keyA = getKey(a, by);
+    const keyB = getKey(b, by);
+
+    if (keyA === keyB) return 0;
+
+    // Different handling for times
+    if (by === SortKey.AppliedAt) {
+      if (keyA > keyB) return order === SortOrder.Descending ? -1 : 1;
+      else return order === SortOrder.Descending ? 1 : -1;
+    } else {
+      if (keyA > keyB) return order === SortOrder.Descending ? 1 : -1;
+      else return order === SortOrder.Descending ? -1 : 1;
+    }
+  };
+
+interface HeaderProps {
+  className?: string;
+  currentKey: SortKey;
+  currentOrder: SortOrder;
+  sortKey: SortKey;
+  name: string;
+  onClick: (key: SortKey) => () => void;
+}
+
+const Header = ({
+  className = 'px-3 py-3.5',
+  currentKey,
+  currentOrder,
+  name,
+  sortKey,
+  onClick,
+}: HeaderProps): JSX.Element => (
+  <th scope="col" className={classNames('text-left text-sm font-semibold text-gray-500', className)}>
+    <button type="button" className="group inline-flex" onClick={onClick(sortKey)}>
+      <span className="font-semibold uppercase">{name}</span>
+      <span
+        className={classNames(
+          currentKey === sortKey
+            ? 'bg-gray-200 text-gray-900 group-hover:bg-gray-300'
+            : 'invisible text-gray-400 group-hover:visible group-focus:visible',
+          'ml-2 flex-none rounded',
+        )}
+      >
+        {currentKey === sortKey && currentOrder === SortOrder.Ascending ? (
+          <ChevronUpIcon className="h-5 w-5" aria-hidden="true" />
+        ) : (
+          <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+        )}
+      </span>
+    </button>
+  </th>
+);
+
+const LoadingRow = (): JSX.Element => (
+  <tr>
+    <td colSpan={5}>
+      <div className="flex justify-around">
+        <RefreshIcon className="h-8 w-8 animate-spin" />
+      </div>
+    </td>
+  </tr>
+);
+
+const EmptyRow = (): JSX.Element => (
+  <tr>
+    <td colSpan={5}>
+      <div className="text-center py-5">
+        <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
+        <h3 className="mt-2 text-sm font-medium text-gray-900">No participants have submitted an application yet.</h3>
+      </div>
+    </td>
+  </tr>
+);
 
 const Row = (application: ReducedApplication): JSX.Element => {
   const createdAt = DateTime.fromISO(application.created_at);
@@ -33,25 +139,18 @@ const Row = (application: ReducedApplication): JSX.Element => {
 const List = (): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
-  const loadingRow = (
-    <tr>
-      <td colSpan={5}>
-        <div className="flex justify-around">
-          <RefreshIcon className="h-8 w-8 animate-spin" />
-        </div>
-      </td>
-    </tr>
-  );
+  const [sortBy, setSortBy] = useState(SortKey.AppliedAt);
+  const [sortOrder, setSortOrder] = useState(SortOrder.Descending);
+  const ordered = (data || []).slice().sort(sort(sortBy, sortOrder));
 
-  const emptyRow = (
-    <tr>
-      <td colSpan={5}>
-        <div className="text-center py-5">
-          <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No participants have submitted an application yet.</h3>
-        </div>
-      </td>
-    </tr>
+  const onClick = useCallback(
+    (key: SortKey) => () => {
+      if (sortBy !== key) setSortOrder(SortOrder.Descending);
+      else setSortOrder(sortOrder === SortOrder.Descending ? SortOrder.Ascending : SortOrder.Descending);
+
+      setSortBy(key);
+    },
+    [sortBy, sortOrder],
   );
 
   return (
@@ -70,45 +169,51 @@ const List = (): JSX.Element => {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th
-                      scope="col"
-                      className="py-3 pl-4 pr-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500 sm:pl-6"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
-                    >
-                      Email
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
-                    >
-                      Country
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
-                    >
-                      Status
-                    </th>
-                    <th
-                      scope="col"
-                      className="py-3 px-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500"
-                    >
-                      Applied At
-                    </th>
+                    <Header
+                      className="py-3.5 pl-4 pr-3 sm:pl-6"
+                      currentKey={sortBy}
+                      currentOrder={sortOrder}
+                      sortKey={SortKey.Name}
+                      name="Name"
+                      onClick={onClick}
+                    />
+                    <Header
+                      currentKey={sortBy}
+                      currentOrder={sortOrder}
+                      name="Email"
+                      sortKey={SortKey.Email}
+                      onClick={onClick}
+                    />
+                    <Header
+                      currentKey={sortBy}
+                      currentOrder={sortOrder}
+                      sortKey={SortKey.Country}
+                      name="Country"
+                      onClick={onClick}
+                    />
+                    <Header
+                      currentKey={sortBy}
+                      currentOrder={sortOrder}
+                      sortKey={SortKey.Status}
+                      name="Status"
+                      onClick={onClick}
+                    />
+                    <Header
+                      currentKey={sortBy}
+                      currentOrder={sortOrder}
+                      sortKey={SortKey.AppliedAt}
+                      name="Applied At"
+                      onClick={onClick}
+                    />
                     <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
                       <span className="sr-only">View</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {(isLoading || data === undefined) && loadingRow}
-                  {!isLoading && data !== undefined && data.length === 0 && emptyRow}
-                  {!isLoading && data !== undefined && data.map((a) => <Row key={a.participant.id} {...a} />)}
+                  {isLoading && <LoadingRow />}
+                  {!isLoading && ordered.length === 0 && <EmptyRow />}
+                  {!isLoading && ordered.map((a) => <Row key={a.participant.id} {...a} />)}
                 </tbody>
               </table>
             </div>
