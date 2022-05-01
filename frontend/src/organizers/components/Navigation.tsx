@@ -135,7 +135,7 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
               <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
             </div>
             <nav className="mt-5 flex-1 px-2 space-y-1">
-              {items.map((item) => (
+              {shownItems.map((item) => (
                 <Link key={item.name} item={item} classNames={linkClassNames}>
                   {(isActive) =>
                     item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />

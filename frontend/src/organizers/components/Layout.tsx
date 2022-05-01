@@ -18,7 +18,7 @@ const Layout = ({ children }: Props): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
   const match = useMatch(window.location.pathname);
-  const titles = navigation.filter((item) => item.href === match?.pathname);
+  const titles = navigation.filter((item) => match?.pathname.startsWith(item.href)).reverse();
   const title = titles.length > 0 ? titles[0].name : 'Not found';
 
   return (
