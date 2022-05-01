@@ -42,13 +42,15 @@
     "eslint-plugin-prettier": "^4.0.0",
     "postcss": "^8.4.12",
     "prettier": "^2.6.2",
+    "source-map-explorer": "^2.5.2",
     "tailwindcss": "^3.0.23"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "browserslist": {
     "production": [
