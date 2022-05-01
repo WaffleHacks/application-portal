@@ -94,7 +94,7 @@ const Header = ({
 const LoadingRow = (): JSX.Element => (
   <tr>
     <td colSpan={5}>
-      <div className="flex justify-around">
+      <div className="flex justify-around py-5">
         <RefreshIcon className="h-8 w-8 animate-spin" />
       </div>
     </td>

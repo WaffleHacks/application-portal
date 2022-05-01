@@ -1,4 +1,4 @@
-import { DocumentTextIcon, HomeIcon, MenuIcon } from '@heroicons/react/outline';
+import { DocumentTextIcon, HomeIcon, LibraryIcon, MenuIcon } from '@heroicons/react/outline';
 import React, { ReactNode, useState } from 'react';
 import { useMatch } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import Navigation from './Navigation';
 const navigation: NavItem[] = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
   { name: 'Applications', href: '/applications', icon: DocumentTextIcon },
+  { name: 'Schools', href: '/schools', icon: LibraryIcon },
 ];
 
 interface Props {

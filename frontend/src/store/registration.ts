@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, ReducedApplication } from './types';
+import type { Application, ApplicationAutosave, ReducedApplication, School } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -10,6 +10,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
  */
 enum Tag {
   Application = 'application',
+  School = 'school',
 }
 
 type ApplicationCreate = Omit<Application, 'created_at' | 'participant' | 'resume' | 'school' | 'status'> & {
@@ -22,6 +23,10 @@ interface ApplicationCreateResponse {
     url: string;
     fields: Record<string, string>;
   };
+}
+
+interface SchoolDetail extends School {
+  applications: ReducedApplication[];
 }
 
 const api = createApi({
@@ -62,6 +67,12 @@ const api = createApi({
         body,
       }),
     }),
+
+    // School endpoints
+    getSchool: builder.query<SchoolDetail, string>({
+      query: (id) => `/registration/schools/${id}`,
+      providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
+    }),
   }),
 });
 
@@ -72,4 +83,5 @@ export const {
   useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useGetSchoolQuery,
 } = api;
