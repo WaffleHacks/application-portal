@@ -12,6 +12,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v3
         with:
@@ -19,10 +21,20 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@wafflehacks'
 
-      - run: yarn
+      - run: yarn --ignore-scripts
         working-directory: ./infrastructure
 
-      - if: ${{ github.ref == 'refs/heads/main' }}
+      - if: github.ref != 'refs/heads/main'
+        run: yarn build
+        working-directory: ./infrastructure
+
+      - if: github.ref == 'refs/heads/main'
+        id: should-publish
+        uses: tj-actions/changed-files@v19
+        with:
+          files: infrastructure
+
+      - if: github.ref == 'refs/heads/main' && steps.should-publish.outputs.any_changed == 'true'
         run: yarn publish
         working-directory: ./infrastructure
         env:
