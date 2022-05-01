@@ -12,7 +12,7 @@ from .types import TimeStamp
 
 if TYPE_CHECKING:
     from .participant import Participant, ParticipantRead
-    from .school import School, SchoolRead
+    from .school import School, SchoolList
 
 
 class Gender(Enum):
@@ -108,7 +108,7 @@ class ApplicationList(SQLModel):
 class ApplicationRead(ApplicationProfileBase):
     participant: "ParticipantRead"
 
-    school: "SchoolRead"
+    school: "SchoolList"
     resume: Optional[str]
 
     status: Status
