@@ -32,8 +32,8 @@ async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
     """
-
-    result = await db.execute(select(School))
+    statement = select(School).order_by(School.name)
+    result = await db.execute(statement)
     return result.scalars().all()
 
 

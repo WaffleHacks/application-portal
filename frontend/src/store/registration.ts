@@ -69,6 +69,10 @@ const api = createApi({
     }),
 
     // School endpoints
+    listSchools: builder.query<School[], void>({
+      query: () => '/registration/schools/',
+      providesTags: (result: School[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
+    }),
     getSchool: builder.query<SchoolDetail, string>({
       query: (id) => `/registration/schools/${id}`,
       providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
@@ -83,5 +87,6 @@ export const {
   useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useListSchoolsQuery,
   useGetSchoolQuery,
 } = api;

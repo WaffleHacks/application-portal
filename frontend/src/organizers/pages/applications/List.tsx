@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon, DocumentIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import React, { useCallback, useState } from 'react';
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
 import StatusBadge from '../../components/StatusBadge';
+import { EmptyRow, LoadingRow, Table } from '../../components/table';
 
 enum SortKey {
   Name,
@@ -91,27 +92,6 @@ const Header = ({
   </th>
 );
 
-const LoadingRow = (): JSX.Element => (
-  <tr>
-    <td colSpan={5}>
-      <div className="flex justify-around py-5">
-        <RefreshIcon className="h-8 w-8 animate-spin" />
-      </div>
-    </td>
-  </tr>
-);
-
-const EmptyRow = (): JSX.Element => (
-  <tr>
-    <td colSpan={5}>
-      <div className="text-center py-5">
-        <DocumentIcon className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-medium text-gray-900">No participants have submitted an application yet.</h3>
-      </div>
-    </td>
-  </tr>
-);
-
 const Row = (application: ReducedApplication): JSX.Element => {
   const createdAt = DateTime.fromISO(application.created_at);
   const formattedCreatedAt =
@@ -165,64 +145,50 @@ const List = (): JSX.Element => {
           </p>
         </div>
       </div>
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <Header
-                      className="py-3.5 pl-4 pr-3 sm:pl-6"
-                      currentKey={sortBy}
-                      currentOrder={sortOrder}
-                      sortKey={SortKey.Name}
-                      name="Name"
-                      onClick={onClick}
-                    />
-                    <Header
-                      currentKey={sortBy}
-                      currentOrder={sortOrder}
-                      name="Email"
-                      sortKey={SortKey.Email}
-                      onClick={onClick}
-                    />
-                    <Header
-                      currentKey={sortBy}
-                      currentOrder={sortOrder}
-                      sortKey={SortKey.Country}
-                      name="Country"
-                      onClick={onClick}
-                    />
-                    <Header
-                      currentKey={sortBy}
-                      currentOrder={sortOrder}
-                      sortKey={SortKey.Status}
-                      name="Status"
-                      onClick={onClick}
-                    />
-                    <Header
-                      currentKey={sortBy}
-                      currentOrder={sortOrder}
-                      sortKey={SortKey.AppliedAt}
-                      name="Applied At"
-                      onClick={onClick}
-                    />
-                    <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-                      <span className="sr-only">View</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {isLoading && <LoadingRow />}
-                  {!isLoading && ordered.length === 0 && <EmptyRow />}
-                  {!isLoading && ordered.map((a) => <Row key={a.participant.id} {...a} />)}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Table>
+        <Table.Head>
+          <Header
+            className="py-3.5 pl-4 pr-3 sm:pl-6"
+            currentKey={sortBy}
+            currentOrder={sortOrder}
+            sortKey={SortKey.Name}
+            name="Name"
+            onClick={onClick}
+          />
+          <Header currentKey={sortBy} currentOrder={sortOrder} name="Email" sortKey={SortKey.Email} onClick={onClick} />
+          <Header
+            currentKey={sortBy}
+            currentOrder={sortOrder}
+            sortKey={SortKey.Country}
+            name="Country"
+            onClick={onClick}
+          />
+          <Header
+            currentKey={sortBy}
+            currentOrder={sortOrder}
+            sortKey={SortKey.Status}
+            name="Status"
+            onClick={onClick}
+          />
+          <Header
+            currentKey={sortBy}
+            currentOrder={sortOrder}
+            sortKey={SortKey.AppliedAt}
+            name="Applied At"
+            onClick={onClick}
+          />
+          <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
+            <span className="sr-only">View</span>
+          </th>
+        </Table.Head>
+        <Table.Body>
+          {isLoading && <LoadingRow />}
+          {!isLoading && ordered.length === 0 && (
+            <EmptyRow message="No participants have submitted an application yet." />
+          )}
+          {!isLoading && ordered.map((a) => <Row key={a.participant.id} {...a} />)}
+        </Table.Body>
+      </Table>
     </>
   );
 };

@@ -32,6 +32,7 @@ export {
   useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useListSchoolsQuery,
   useGetSchoolQuery,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
