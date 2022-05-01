@@ -29,10 +29,13 @@ export { useGetProfileQuery } from './profile';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,
+  useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useListSchoolsQuery,
+  useGetSchoolQuery,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
-export { hasPermission, waitingForTokens } from './selectors';
-export type { ApplicationAutosave } from './types';
+export { highestPermission, isDirector, waitingForTokens } from './selectors';
+export type { ApplicationAutosave, ReducedApplication } from './types';
 export { Gender, RaceEthnicity } from './types';

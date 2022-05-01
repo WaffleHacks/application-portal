@@ -1,9 +1,9 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 
-import { DateInput, SelectInput } from '../../components/input';
-import SidebarCard from '../../components/SidebarCard';
-import { ApplicationAutosave, Gender, RaceEthnicity } from '../../store';
+import { DateInput, SelectInput } from '../../../components/input';
+import SidebarCard from '../../../components/SidebarCard';
+import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
 
 const AboutForm = (): JSX.Element => {
   const { getFieldProps } = useFormikContext<ApplicationAutosave>();

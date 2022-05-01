@@ -28,13 +28,29 @@ export enum RaceEthnicity {
   MultipleOther = 'Multiple ethnicities / Other',
 }
 
+export interface Participant {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export interface School {
   id: string;
   name: string;
 }
 
+export interface ReducedApplication {
+  participant: Participant;
+  status: Status;
+
+  country: string;
+
+  created_at: string;
+}
+
 export interface Application {
-  participant_id: string;
+  participant: Participant;
   status: Status;
 
   school: School;
@@ -57,6 +73,7 @@ export interface Application {
   share_information: boolean;
 
   legal_agreements_acknowledged: boolean;
+  created_at: string;
 }
 
 export interface ApplicationAutosave {

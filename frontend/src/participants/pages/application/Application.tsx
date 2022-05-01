@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-import Card from '../../components/Card';
-import { MultiStepForm, Step } from '../../components/steps';
+import Card from '../../../components/Card';
 import {
   ApplicationAutosave,
   Gender,
@@ -14,7 +13,8 @@ import {
   useGetApplicationQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
-} from '../../store';
+} from '../../../store';
+import { MultiStepForm, Step } from '../../components/steps';
 import AboutForm from './AboutForm';
 import EducationForm from './EducationForm';
 import ExperienceForm from './ExperienceForm';

@@ -3,16 +3,25 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from './index';
 import { PortalScope } from './scopes';
 
-type Selector<S> = (state: RootState) => S;
+const permissionHierarchy = [PortalScope.Organizer, PortalScope.Sponsor, PortalScope.Participant];
 
 /**
- * Check if the current token has the required permission
- * @param scope the permission to check
+ * Get the highest permission of the current user
  */
-export const hasPermission = (scope: PortalScope): Selector<boolean> =>
-  createSelector([(state: RootState) => state.authentication.portal], (portal) =>
-    portal ? portal.permissions.indexOf(scope) !== -1 : false,
-  );
+export const highestPermission = createSelector([(state: RootState) => state.authentication.portal], (portal) => {
+  const permissions = portal?.permissions || [];
+  for (const permission of permissionHierarchy) if (permissions.indexOf(permission) !== -1) return permission;
+
+  return undefined;
+});
+
+/**
+ * Determine if the current user is a director
+ */
+export const isDirector = createSelector(
+  [(state: RootState) => state.authentication.portal],
+  (portal) => (portal?.permissions || []).indexOf(PortalScope.Director) !== -1,
+);
 
 /**
  * Check if we are still waiting for tokens to be retrieved

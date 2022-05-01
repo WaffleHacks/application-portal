@@ -15,6 +15,7 @@ from common.database import (
     Application,
     ApplicationAutosave,
     ApplicationCreate,
+    ApplicationList,
     ApplicationRead,
     ApplicationUpdate,
     School,
@@ -42,7 +43,7 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=List[ApplicationRead],
+    response_model=List[ApplicationList],
     name="List applications",
 )
 async def list(
@@ -50,11 +51,17 @@ async def list(
         requires_permission(Permission.Sponsor, Permission.Organizer)
     ),
     db: AsyncSession = Depends(with_db),
-) -> List[ApplicationRead]:
+):
     """
     List all applications in db
     """
-    statement = select(Application)
+    statement = (
+        select(Application)
+        .order_by(Application.created_at.desc())  # type: ignore
+        .options(
+            selectinload(Application.participant), selectinload(Application.school)
+        )
+    )
     if Permission.Sponsor.matches(permission):
         statement = statement.where(Application.share_information)
 
@@ -188,7 +195,12 @@ async def read(
         )
 
     application = await db.get(
-        Application, id, options=[selectinload(Application.school)]
+        Application,
+        id,
+        options=[
+            selectinload(Application.participant),
+            selectinload(Application.school),
+        ],
     )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")

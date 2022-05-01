@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave } from './types';
+import type { Application, ApplicationAutosave, ReducedApplication, School } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -10,9 +10,10 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
  */
 enum Tag {
   Application = 'application',
+  School = 'school',
 }
 
-type ApplicationCreate = Omit<Application, 'participant_id' | 'resume' | 'school' | 'status'> & {
+type ApplicationCreate = Omit<Application, 'created_at' | 'participant' | 'resume' | 'school' | 'status'> & {
   resume: boolean;
   school: string;
 };
@@ -24,15 +25,26 @@ interface ApplicationCreateResponse {
   };
 }
 
+interface SchoolDetail extends School {
+  applications: ReducedApplication[];
+}
+
 const api = createApi({
   reducerPath: 'registration',
   baseQuery: baseQuery('portal', BASE_URL),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
+    listApplications: builder.query<ReducedApplication[], void>({
+      query: () => '/registration/applications/',
+      providesTags: (result: ReducedApplication[] = []) => [
+        Tag.Application,
+        ...result.map((a) => ({ type: Tag.Application, id: a.participant.id })),
+      ],
+    }),
     getApplication: builder.query<Application, string>({
       query: (arg) => `/registration/applications/${arg}`,
       providesTags: (result: Application | undefined) =>
-        result ? [{ type: Tag.Application, id: result.participant_id }] : [],
+        result ? [{ type: Tag.Application, id: result.participant.id }] : [],
     }),
     createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({
       query: (body) => ({
@@ -55,9 +67,26 @@ const api = createApi({
         body,
       }),
     }),
+
+    // School endpoints
+    listSchools: builder.query<School[], void>({
+      query: () => '/registration/schools/',
+      providesTags: (result: School[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
+    }),
+    getSchool: builder.query<SchoolDetail, string>({
+      query: (id) => `/registration/schools/${id}`,
+      providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
+    }),
   }),
 });
 
 export default api;
-export const { useCreateApplicationMutation, useGetApplicationQuery, useGetAutosaveQuery, useSetAutosaveMutation } =
-  api;
+export const {
+  useCreateApplicationMutation,
+  useGetApplicationQuery,
+  useListApplicationsQuery,
+  useGetAutosaveQuery,
+  useSetAutosaveMutation,
+  useListSchoolsQuery,
+  useGetSchoolQuery,
+} = api;

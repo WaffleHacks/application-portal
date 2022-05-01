@@ -1,70 +1,34 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { MenuIcon, RefreshIcon, UserIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
 
-import logoTitle from '../logo-title.png';
-import logo from '../logo.png';
-import { useGetProfileQuery } from '../store';
+import { Link, NavItem, ProfilePicture } from '../../components/navigation';
+import logo from '../../logo.png';
+import { useGetProfileQuery } from '../../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
-export interface NavItem {
-  name: string;
-  href: string;
-  external?: boolean;
-  hidden?: boolean;
-}
-
-const ProfilePicture = (): JSX.Element => {
-  const { isAuthenticated, user, isLoading } = useAuth0();
-
-  if (isLoading) return <RefreshIcon className="h-8 w-8 rounded-full text-gray-500 animate-spin" />;
-  else if (isAuthenticated && user?.picture)
-    return <img className="h-8 w-8 rounded-full" src={user.picture} alt="profile picture" />;
-  else return <UserIcon className="h-8 w-8 rounded-full text-gray-500" />;
-};
-
-const linkClassNames = (isActive: boolean, mobile: boolean): string => {
-  if (mobile) {
-    return classNames(
-      isActive
-        ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-        : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
-      'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
-    );
-  } else {
-    return classNames(
-      isActive
-        ? 'border-indigo-500 text-gray-900'
-        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-      'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
-    );
-  }
-};
-
-interface LinkProps {
-  item: NavItem;
-  mobile: boolean;
-}
-
-const Link = ({ item, mobile }: LinkProps): JSX.Element => {
-  if (item.external) {
-    return (
-      <a href={item.href} className={linkClassNames(false, mobile)}>
-        {item.name}
-      </a>
-    );
-  } else {
-    return (
-      <NavLink to={item.href} className={({ isActive }) => linkClassNames(isActive, mobile)}>
-        {item.name}
-      </NavLink>
-    );
-  }
-};
+const linkClassNames =
+  (mobile: boolean) =>
+  (isActive: boolean): string => {
+    if (mobile) {
+      return classNames(
+        isActive
+          ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
+          : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+        'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
+      );
+    } else {
+      return classNames(
+        isActive
+          ? 'border-indigo-500 text-gray-900'
+          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+        'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
+      );
+    }
+  };
 
 interface Props {
   items: NavItem[];
@@ -89,12 +53,12 @@ const Navigation = ({ items }: Props): JSX.Element => {
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="flex-shrink-0 flex items-center">
-                  <img className="block lg:hidden h-8 w-auto" src={logo} alt="WaffleHacks" />
-                  <img className="hidden lg:block h-8 w-auto" src={logoTitle} alt="WaffleHacks" />
+                  <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
+                  <span className="ml-3 font-bold text-lg">WaffleHacks</span>
                 </div>
                 <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                   {shownItems.map((item) => (
-                    <Link key={item.name} item={item} mobile={false} />
+                    <Link key={item.name} item={item} classNames={linkClassNames(false)} />
                   ))}
                 </div>
               </div>
@@ -151,7 +115,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
             <div className="pt-2 pb-3 space-y-1">
               {shownItems.map((item) => (
                 <Disclosure.Button key={item.name} as="div">
-                  <Link item={item} mobile={true} />
+                  <Link item={item} classNames={linkClassNames(true)} />
                 </Disclosure.Button>
               ))}
             </div>
