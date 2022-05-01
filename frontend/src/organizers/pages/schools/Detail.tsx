@@ -35,13 +35,16 @@ const Detail = (): JSX.Element => {
                       Name
                     </th>
                     <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold uppercase text-gray-500">
-                      Title
-                    </th>
-                    <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold uppercase text-gray-500">
                       Email
                     </th>
                     <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold uppercase text-gray-500">
-                      Role
+                      Country
+                    </th>
+                    <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold uppercase text-gray-500">
+                      Status
+                    </th>
+                    <th scope="col" className="py-3.5 px-3 text-left text-sm font-semibold uppercase text-gray-500">
+                      Applied At
                     </th>
                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
                       <span className="sr-only">View</span>
