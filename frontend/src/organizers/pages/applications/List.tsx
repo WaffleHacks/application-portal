@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
 import StatusBadge from '../../components/StatusBadge';
-import { EmptyRow, LoadingRow, Table } from '../../components/table';
+import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
 
 enum SortKey {
   Name,
@@ -122,9 +122,14 @@ const Row = (application: ReducedApplication): JSX.Element => {
 const List = (): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
+  const [page, setPage] = useState(0);
+
   const [sortBy, setSortBy] = useState(SortKey.AppliedAt);
   const [sortOrder, setSortOrder] = useState(SortOrder.Descending);
   const ordered = (data || []).slice().sort(sort(sortBy, sortOrder));
+
+  const maxPage = Math.floor(ordered.length / 20);
+  const paginated = ordered.slice(20 * page, 20 + 20 * page);
 
   const onClick = useCallback(
     (key: SortKey) => () => {
@@ -183,12 +188,14 @@ const List = (): JSX.Element => {
         </Table.Head>
         <Table.Body>
           {isLoading && <LoadingRow />}
-          {!isLoading && ordered.length === 0 && (
+          {!isLoading && paginated.length === 0 && (
             <EmptyRow message="No participants have submitted an application yet." />
           )}
-          {!isLoading && ordered.map((a) => <Row key={a.participant.id} {...a} />)}
+          {!isLoading && paginated.map((a) => <Row key={a.participant.id} {...a} />)}
         </Table.Body>
       </Table>
+
+      <Pagination page={page} setPage={setPage} max={maxPage} />
     </>
   );
 };
