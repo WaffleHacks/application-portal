@@ -51,6 +51,17 @@ COPY --chown=app manage.py ./manage.py
 
 
 ###
+#  Communication
+###
+FROM common as communication
+ENV APP communication
+
+COPY --chown=app communication ./communication
+COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+###
 #  Registration
 ###
 FROM common as registration
