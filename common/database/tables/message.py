@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
 
-from sqlalchemy import Column, func
+from sqlalchemy import Column
 from sqlmodel import Field, Relationship, SQLModel
 
 from .types import TimeStamp
@@ -25,10 +25,19 @@ class Message(MessageBase, table=True):
     recipients: List["Recipient"] = Relationship(back_populates="message")
 
     created_at: Optional[datetime] = Field(
-        sa_column=Column(TimeStamp(), nullable=False, server_default=func.now())
+        sa_column=Column(
+            TimeStamp(timezone=True),
+            nullable=False,
+            default=datetime.now,
+        )
     )
     updated_at: Optional[datetime] = Field(
-        sa_column=Column(TimeStamp(), nullable=False, server_default=func.now())
+        sa_column=Column(
+            TimeStamp(timezone=True),
+            nullable=False,
+            default=datetime.now,
+            onupdate=datetime.now,
+        )
     )
 
 
