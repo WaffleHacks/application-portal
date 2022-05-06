@@ -8,7 +8,14 @@ from .application import (
     Gender,
     RaceEthnicity,
 )
-from .message import Message, MessageBase, MessageCreate, MessageRead, MessageUpdate
+from .message import (
+    Message,
+    MessageBase,
+    MessageCreate,
+    MessageList,
+    MessageRead,
+    MessageUpdate,
+)
 from .participant import Participant, ParticipantBase, ParticipantRead
 from .recipient import Group, Recipient, RecipientRead
 from .school import (

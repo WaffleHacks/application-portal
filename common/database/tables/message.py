@@ -24,10 +24,10 @@ class Message(MessageBase, table=True):
 
     recipients: List["Recipient"] = Relationship(back_populates="message")
 
-    created_at: datetime = Field(
+    created_at: Optional[datetime] = Field(
         sa_column=Column(TimeStamp(), nullable=False, server_default=func.now())
     )
-    updated_at: datetime = Field(
+    updated_at: Optional[datetime] = Field(
         sa_column=Column(TimeStamp(), nullable=False, server_default=func.now())
     )
 
@@ -37,6 +37,12 @@ class MessageCreate(SQLModel):
     content: str
 
     recipients: List["Group"]
+
+
+class MessageList(SQLModel):
+    id: int
+    subject: str
+    sent: bool
 
 
 class MessageRead(MessageBase):
