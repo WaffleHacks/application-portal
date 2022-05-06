@@ -4,10 +4,12 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from common.database import (
+    Group,
     Message,
     MessageCreate,
     MessageList,
@@ -94,6 +96,7 @@ async def update(id: int, values: MessageUpdate, db: AsyncSession = Depends(with
     db.add(message)
     await db.commit()
 
+    await db.refresh(message)
     return message
 
 
@@ -108,30 +111,29 @@ async def add_recipient(
     if message is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    recipient = Recipient.from_orm(group, update={"message_id": id})
+    try:
+        recipient = Recipient.from_orm(group, update={"message_id": id})
 
-    db.add(recipient)
-    await db.commit()
+        db.add(recipient)
+        await db.commit()
 
-    return recipient
+        return recipient
+    except IntegrityError:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="recipient already added"
+        )
 
 
 @router.delete(
-    "/{message_id}/recipients/{id}",
+    "/{id}/recipients/{group}",
     name="Delete recipient",
     status_code=HTTPStatus.NO_CONTENT,
 )
-async def delete_recipient(
-    message_id: int, id: int, db: AsyncSession = Depends(with_db)
-):
+async def delete_recipient(id: int, group: Group, db: AsyncSession = Depends(with_db)):
     """
     Delete a recipient from the specified message
     """
-    message = await db.get(Message, message_id)
-    if message is None:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-
-    recipient = await db.get(Recipient, id)
+    recipient = await db.get(Recipient, {"message_id": id, "group": group})
     if recipient is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 

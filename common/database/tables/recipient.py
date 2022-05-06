@@ -19,23 +19,32 @@ class Group(Enum):
     STATUS_PENDING = "Status - Pending"
 
 
-class Recipient(SQLModel, table=True):
+class RecipientBase(SQLModel):
+    group: Group = Field(
+        sa_column=Column(
+            SQLEnum(Group),
+            nullable=False,
+            primary_key=True,
+        )
+    )
+
+
+class Recipient(RecipientBase, table=True):
     __tablename__ = "recipients"
 
-    id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
-
     message_id: int = Field(
-        sa_column=Column(Integer(), ForeignKey("messages.id", ondelete="CASCADE"))
+        sa_column=Column(
+            Integer(),
+            ForeignKey("messages.id", ondelete="CASCADE"),
+            primary_key=True,
+        )
     )
     message: "Message" = Relationship(back_populates="recipients")
 
-    group: Group = Field(sa_column=Column(SQLEnum(Group), nullable=False))
+
+class RecipientCreate(RecipientBase):
+    pass
 
 
-class RecipientCreate(SQLModel):
-    group: Group
-
-
-class RecipientRead(SQLModel):
-    id: int
-    group: Group
+class RecipientRead(RecipientBase):
+    pass
