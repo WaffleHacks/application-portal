@@ -67,5 +67,7 @@ class MessageRead(MessageBase):
 class MessageUpdate(SQLModel):
     sent: Optional[bool]
 
+    recipients: List["Group"]
+
     subject: Optional[str]
     content: Optional[str]

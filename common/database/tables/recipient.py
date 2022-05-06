@@ -32,6 +32,10 @@ class Recipient(SQLModel, table=True):
     group: Group = Field(sa_column=Column(SQLEnum(Group), nullable=False))
 
 
+class RecipientCreate(SQLModel):
+    group: Group
+
+
 class RecipientRead(SQLModel):
     id: int
     group: Group
