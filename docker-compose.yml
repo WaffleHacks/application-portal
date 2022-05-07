@@ -24,7 +24,7 @@ services:
       MAILER_PROVIDERS: debug
       MAILER_PROVIDER_DEBUG_TYPE: debug
       MAILER_PROVIDER_DEBUG_FAILURE_RATE: "0"
-      MAILER_PROVIDER_DEBUG_SHOW_BODY: "no"
+      MAILER_PROVIDER_DEBUG_SHOW_BODY: "yes"
     ports:
       - "9464:8000"  # HTTP
       - "9465:9000"  # gRPC
