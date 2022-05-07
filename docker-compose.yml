@@ -15,6 +15,20 @@ services:
     ports:
       - "9428:6379"
 
+  mailer:
+    image: wafflehacks/mailer:latest
+    environment:
+      MAILER_ADDRESS: 0.0.0.0
+      MAILER_LOG_LEVEL: info
+      MAILER_DEVELOPMENT: "no"
+      MAILER_PROVIDERS: debug
+      MAILER_PROVIDER_DEBUG_TYPE: debug
+      MAILER_PROVIDER_DEBUG_FAILURE_RATE: "0"
+      MAILER_PROVIDER_DEBUG_SHOW_BODY: "yes"
+    ports:
+      - "9464:8000"  # HTTP
+      - "9465:9000"  # gRPC
+
   proxy:
     image: wafflehacks/dev-proxy
     build: ./dev-proxy

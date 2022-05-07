@@ -1,10 +1,12 @@
 from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Set
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, Integer
 from sqlmodel import Field, Relationship, SQLModel
+
+from .application import Status
 
 if TYPE_CHECKING:
     from .message import Message
@@ -17,6 +19,24 @@ class Group(Enum):
     STATUS_ACCEPTED = "Status - Accepted"
     STATUS_DENIED = "Status - Denied"
     STATUS_PENDING = "Status - Pending"
+
+    @staticmethod
+    def completion_states() -> Set["Group"]:
+        return {Group.APPLICATION_COMPLETE, Group.APPLICATION_INCOMPLETE}
+
+    @staticmethod
+    def statuses() -> Set["Group"]:
+        return {Group.STATUS_ACCEPTED, Group.STATUS_DENIED, Group.STATUS_PENDING}
+
+    def to_status(self) -> Optional[Status]:
+        if self == Group.STATUS_ACCEPTED:
+            return Status.ACCEPTED
+        elif self == Group.STATUS_DENIED:
+            return Status.REJECTED
+        elif self == Group.STATUS_PENDING:
+            return Status.PENDING
+        else:
+            return None
 
 
 class RecipientBase(SQLModel):
