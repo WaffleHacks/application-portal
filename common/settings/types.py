@@ -13,3 +13,8 @@ class PostgresDsn(AnyUrl):
             "postgresql://", "postgresql+asyncpg://"
         )
         return super(PostgresDsn, cls).__new__(cls, normalized, **kwargs)
+
+
+class NATSDsn(AnyUrl):
+    allowed_schemes = {"nats"}
+    user_required = False
