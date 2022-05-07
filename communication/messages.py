@@ -1,25 +1,31 @@
 from http import HTTPStatus
-from typing import List
+from typing import List, Set
 
 from fastapi import APIRouter, Depends, HTTPException
+from mailer import AsyncClient, BodyType
 from pydantic import validate_model
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import Select, or_
 
+from common import SETTINGS
 from common.database import (
+    Application,
     Group,
     Message,
     MessageCreate,
     MessageList,
     MessageRead,
     MessageUpdate,
+    Participant,
     Recipient,
     RecipientCreate,
     RecipientRead,
     with_db,
 )
+from common.mail import with_mail
 from common.permissions import Permission, requires_permission
 
 router = APIRouter()
@@ -168,6 +174,43 @@ async def delete_recipient(id: int, group: Group, db: AsyncSession = Depends(wit
     await db.commit()
 
 
+@router.post(
+    "/{id}/send",
+    name="Send message",
+    status_code=HTTPStatus.NO_CONTENT,
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def send(
+    id: int,
+    mailer: AsyncClient = Depends(with_mail),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Send a message to all the recipients
+    """
+    message = await db.get(Message, id, options=[selectinload(Message.recipients)])
+    if message is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    # Retrieve all the recipient emails
+    groups = {r.group for r in message.recipients}
+    result = await db.execute(recipients_query(groups))
+    participants = result.all()
+
+    emails = {}
+    for row in participants:
+        emails[row[2]] = {"first_name": row[0], "last_name": row[1]}
+
+    await mailer.send_template(
+        emails,
+        SETTINGS.communication.sender,
+        message.subject,
+        message.content,
+        body_type=BodyType.HTML,
+        reply_to=SETTINGS.communication.reply_to,
+    )
+
+
 @router.delete(
     "/{id}",
     name="Delete message",
@@ -182,3 +225,37 @@ async def delete(id: int, db: AsyncSession = Depends(with_db)):
     if message:
         await db.delete(message)
         await db.commit()
+
+
+def recipients_query(groups: Set[Group]) -> Select:
+    """
+    Generate the query for recipients when sending emails. Also performs some simple optimizations.
+    :param groups: the recipient groups for the message
+    :returns: a SQL query
+    """
+    fields = [Participant.first_name, Participant.last_name, Participant.email]
+
+    # All application statues and all application completion states can be simplified to everyone
+    if (
+        Group.EVERYONE in groups
+        or groups == Group.completion_states()
+        or groups == Group.statuses()
+    ):
+        return select(*fields)
+
+    status_filter = Application.status.in_(  # type: ignore
+        [g.to_status() for g in groups if g.to_status() is not None]
+    )
+    base = select(*fields).outerjoin(Application, full=True)
+
+    # If filtering for complete, status does not matter
+    if Group.APPLICATION_COMPLETE in groups:
+        return base.where(Application.participant_id != None)
+
+    # Add extra filter for incomplete
+    elif Group.APPLICATION_INCOMPLETE in groups:
+        return base.where(or_(status_filter, Application.participant_id == None))
+
+    # Only filter on status
+    else:
+        return base.where(status_filter)

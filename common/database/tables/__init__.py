@@ -7,6 +7,7 @@ from .application import (
     ApplicationUpdate,
     Gender,
     RaceEthnicity,
+    Status,
 )
 from .message import (
     Message,

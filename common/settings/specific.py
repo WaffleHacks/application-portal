@@ -1,4 +1,6 @@
-from pydantic import BaseModel, HttpUrl
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr, HttpUrl
 
 
 class BaseAPI(BaseModel):
@@ -12,7 +14,12 @@ class BaseAPI(BaseModel):
 
 
 class CommunicationSettings(BaseAPI):
-    pass
+    # The mailer service to connect to
+    mailer: HttpUrl
+
+    # The sender email and optional reply to email
+    sender: EmailStr
+    reply_to: Optional[EmailStr]
 
 
 class IntegrationsSettings(BaseAPI):
