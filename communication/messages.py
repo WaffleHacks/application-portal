@@ -8,7 +8,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.permissions import requires_permission, Permission
 from common.database import (
     Group,
     Message,
@@ -21,6 +20,7 @@ from common.database import (
     RecipientRead,
     with_db,
 )
+from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 
