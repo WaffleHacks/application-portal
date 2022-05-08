@@ -55,5 +55,5 @@ export {
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector, waitingForTokens } from './selectors';
-export type { ApplicationAutosave, ReducedApplication } from './types';
+export type { ApplicationAutosave, ReducedApplication, ReducedMessage } from './types';
 export { Gender, RaceEthnicity } from './types';

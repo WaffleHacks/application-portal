@@ -125,6 +125,9 @@ export interface ReducedMessage {
   id: number;
   sent: boolean;
   subject: string;
+
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Message {

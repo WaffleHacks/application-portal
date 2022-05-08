@@ -53,6 +53,9 @@ class MessageList(SQLModel):
     subject: str
     sent: bool
 
+    created_at: datetime
+    updated_at: datetime
+
 
 class MessageRead(MessageBase):
     id: int
@@ -67,7 +70,7 @@ class MessageRead(MessageBase):
 class MessageUpdate(SQLModel):
     sent: Optional[bool]
 
-    recipients: List["Group"]
+    recipients: Optional[List["Group"]]
 
     subject: Optional[str]
     content: Optional[str]
