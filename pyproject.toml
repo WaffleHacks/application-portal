@@ -24,6 +24,7 @@ algoliasearch = "^2.6.1"
 gunicorn = "^20.1.0"
 wafflehacks-mailer = "^0.2.0"
 celery = {version = "^5.2.6", extras = ["redis"]}
+asgiref = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
