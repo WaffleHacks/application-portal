@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, validate_model
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -23,6 +24,7 @@ from common.database import (
 )
 from common.kv import NamespacedClient, with_kv
 from common.permissions import Permission, requires_permission
+from common.tasks import task
 
 
 class S3PreSignedURL(BaseModel):
@@ -97,20 +99,26 @@ async def create_application(
     # Generate a file name for the user's resume if they attempted to provide one
     resume = str(uuid4()) if values.resume else None
 
-    application = Application.from_orm(
-        values,
-        {
-            "participant_id": id,
-            "school_id": school.id,
-            "status": "pending",
-            "resume": resume,
-        },
-    )
-    db.add(application)
-    await db.commit()
+    try:
+        application = Application.from_orm(
+            values,
+            {
+                "participant_id": id,
+                "school_id": school.id,
+                "status": "pending",
+                "resume": resume,
+            },
+        )
+        db.add(application)
+        await db.commit()
+    except IntegrityError:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="already applied")
 
     # Delete the auto-save data
-    await kv.delete(str(id))
+    await kv.delete(id)
+
+    # Send the application received message
+    task("communication", "on_apply")(id)
 
     response = {}
 

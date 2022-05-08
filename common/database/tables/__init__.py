@@ -17,6 +17,12 @@ from .message import (
     MessageRead,
     MessageUpdate,
 )
+from .message_trigger import (
+    MessageTrigger,
+    MessageTriggerRead,
+    MessageTriggerType,
+    MessageTriggerUpdate,
+)
 from .participant import Participant, ParticipantBase, ParticipantRead
 from .recipient import Group, Recipient, RecipientCreate, RecipientRead
 from .school import (
@@ -35,5 +41,6 @@ ApplicationRead.update_forward_refs(
 )
 MessageCreate.update_forward_refs(Group=Group)
 MessageRead.update_forward_refs(RecipientRead=RecipientRead)
+MessageTriggerRead.update_forward_refs(MessageList=MessageList)
 MessageUpdate.update_forward_refs(Group=Group)
 SchoolRead.update_forward_refs(ApplicationList=ApplicationList)

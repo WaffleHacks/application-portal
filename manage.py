@@ -1,5 +1,6 @@
 import importlib
 import json
+import logging
 import sys
 from traceback import format_exc
 from typing import Dict, Optional
@@ -95,6 +96,18 @@ def run(app: Optional[str]):
         click.echo(f"{app} is misconfigured, could not find 'run' function")
         click.echo(f"Reason:\n{format_exc()}")
         sys.exit(1)
+
+
+@cli.command()
+def celery():
+    """
+    Run the celery worker
+    """
+    from common.tasks import celery
+
+    worker = celery.Worker()
+    worker.setup_defaults(loglevel=logging.INFO)
+    worker.start()
 
 
 @cli.command(name="seed-algolia")

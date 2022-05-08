@@ -11,6 +11,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import Select, or_
 
 from common import SETTINGS
+from common.authentication import with_user_id
 from common.database import (
     Application,
     Group,
@@ -27,6 +28,8 @@ from common.database import (
 )
 from common.mail import with_mail
 from common.permissions import Permission, requires_permission
+
+from .util import send_message
 
 router = APIRouter()
 
@@ -209,6 +212,32 @@ async def send(
         body_type=BodyType.HTML,
         reply_to=SETTINGS.communication.reply_to,
     )
+
+
+@router.post(
+    "/{id}/test",
+    name="Send test message",
+    status_code=HTTPStatus.NO_CONTENT,
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def send_test(
+    id: int,
+    user_id: str = Depends(with_user_id),
+    mailer: AsyncClient = Depends(with_mail),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Test the message by sending it to the requester
+    """
+    message = await db.get(Message, id)
+    if message is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    # Get the current user
+    user = await db.get(Participant, user_id)
+    assert user is not None
+
+    await send_message(user, message, mailer)
 
 
 @router.delete(

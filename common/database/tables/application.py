@@ -72,7 +72,13 @@ class ApplicationBase(ApplicationProfileBase):
     school_id: str = Field(foreign_key="schools.id")
 
     resume: Optional[str]
-    created_at: datetime = Field(sa_column=Column(TimeStamp(), nullable=False))
+    created_at: Optional[datetime] = Field(
+        sa_column=Column(
+            TimeStamp(timezone=True),
+            default=datetime.now,
+            nullable=False,
+        )
+    )
 
 
 class Application(ApplicationBase, table=True):
