@@ -17,19 +17,23 @@ if TYPE_CHECKING:
 logger = get_task_logger(__name__)  # type: Logger
 
 
-@shared_task()
 @syncify
-async def on_apply(id: str):
+async def send_triggered_message(id: str, trigger_type: MessageTriggerType):
+    """
+    Sends a triggered message to the application
+    :param id: the participant's ID
+    :param trigger_type: the type of trigger to send
+    """
     async with db_context() as db:
         # If a trigger for the event is configured, send the email
         trigger = await db.get(
             MessageTrigger,
-            MessageTriggerType.APPLICATION_SUBMITTED,
+            trigger_type,
             options=[selectinload(MessageTrigger.message)],
         )
         assert trigger is not None
         if trigger.message is None:
-            logger.info(f"no automated message configured for submitted applications")
+            logger.info(f"no automated message configured for {trigger_type.name}")
             return
 
         # Get the user's application
@@ -57,3 +61,18 @@ async def on_apply(id: str):
         body_type=BodyType.HTML,
         reply_to=SETTINGS.communication.reply_to,
     )
+
+
+@shared_task()
+def on_apply(id: str):
+    send_triggered_message(id, MessageTriggerType.APPLICATION_SUBMITTED)
+
+
+@shared_task()
+def on_application_accepted(id: str):
+    send_triggered_message(id, MessageTriggerType.APPLICATION_ACCEPTED)
+
+
+@shared_task()
+def on_application_rejected(id: str):
+    send_triggered_message(id, MessageTriggerType.APPLICATION_REJECTED)
