@@ -1,5 +1,6 @@
 import importlib
 import json
+import logging
 import sys
 from traceback import format_exc
 from typing import Dict, Optional
@@ -105,6 +106,7 @@ def celery():
     from common.tasks import celery
 
     worker = celery.Worker()
+    worker.setup_defaults(loglevel=logging.INFO)
     worker.start()
 
 

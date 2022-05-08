@@ -119,7 +119,6 @@ async def create_application(
 
     # Send the application received message
     a = task("communication", "on_apply")(id)
-    print(a.id)
 
     response = {}
 
