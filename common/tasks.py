@@ -1,7 +1,7 @@
+import asyncio
 from functools import wraps
-from typing import Any, Callable
+from typing import Any, Awaitable, Callable
 
-from asgiref.sync import async_to_sync
 from celery import Celery, signature
 
 from common import SETTINGS
@@ -37,7 +37,7 @@ def task(module: str, name: str, **options):
     return inner
 
 
-def syncify(func: Callable[..., Any]):
+def syncify(func: Callable[..., Awaitable[Any]]):
     """
     Convert a coroutine function to a synchronous function
     :param func: the coroutine function
@@ -46,6 +46,7 @@ def syncify(func: Callable[..., Any]):
 
     @wraps(func)
     def wrapped(*args, **kwargs):
-        return async_to_sync(func)(*args, **kwargs)
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(func(*args, **kwargs))
 
     return wrapped
