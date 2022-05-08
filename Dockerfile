@@ -59,6 +59,7 @@ COPY --chown=app communication ./communication
 COPY --chown=app integrations ./integrations
 COPY --chown=app registration ./registration
 COPY --chown=app sync ./sync
+COPY --chown=app workshops ./workshops
 
 COPY --chown=app --chmod=775 docker-entrypoints/celery.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
