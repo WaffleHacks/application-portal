@@ -1,3 +1,4 @@
+from string import Template
 from typing import TYPE_CHECKING
 
 from celery import shared_task
@@ -41,14 +42,18 @@ async def on_apply(id: str):
             logger.warning(f"application '{id}' no longer exists")
             return
 
-    # TODO: template the message
+    template = Template(trigger.message.content)
+    content = template.safe_substitute(
+        first_name=application.participant.first_name,
+        last_name=application.participant.last_name,
+    )
 
     # Send the message
     await mailer.send(
         to_email=application.participant.email,
         from_email=SETTINGS.communication.sender,
         subject=trigger.message.subject,
-        body=trigger.message.content,
+        body=content,
         body_type=BodyType.HTML,
         reply_to=SETTINGS.communication.reply_to,
     )
