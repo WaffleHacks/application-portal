@@ -29,15 +29,6 @@ services:
       - "9464:8000"  # HTTP
       - "9465:9000"  # gRPC
 
-  nats:
-    image: nats:latest
-    command:
-      - --http_port=8222
-      - --jetstream
-    ports:
-      - "9442:4222"
-      - "9482:8222"
-
   proxy:
     image: wafflehacks/dev-proxy
     build: ./dev-proxy
