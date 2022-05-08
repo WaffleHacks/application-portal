@@ -11,7 +11,7 @@ from .specific import (
     SyncSettings,
     WorkshopsSettings,
 )
-from .types import NATSDsn, PostgresDsn
+from .types import PostgresDsn
 
 
 class App(Enum):
@@ -39,9 +39,6 @@ class Settings(BaseModel):
 
     # The Postgres database to connect to
     database_url: PostgresDsn
-
-    # The NATS JetStream server to connect to
-    nats_url: NATSDsn
 
     # The Redis store to connect to
     redis_url: RedisDsn
