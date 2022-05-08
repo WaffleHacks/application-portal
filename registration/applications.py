@@ -110,7 +110,7 @@ async def create_application(
     await db.commit()
 
     # Delete the auto-save data
-    await kv.delete(str(id))
+    await kv.delete(id)
 
     response = {}
 
