@@ -1,12 +1,9 @@
-from string import Template
 from typing import TYPE_CHECKING
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from mailer import BodyType
 from sqlalchemy.orm import selectinload
 
-from common import SETTINGS
 from common.database import (
     Application,
     MessageTrigger,
@@ -16,6 +13,8 @@ from common.database import (
 )
 from common.mail import client as mailer
 from common.tasks import syncify
+
+from .util import send_message
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -50,21 +49,7 @@ async def send_triggered_message(
             logger.warning(f"participant '{id}' no longer exists")
             return
 
-    template = Template(trigger.message.content)
-    content = template.safe_substitute(
-        first_name=participant.first_name,
-        last_name=participant.last_name,
-    )
-
-    # Send the message
-    await mailer.send(
-        to_email=participant.email,
-        from_email=SETTINGS.communication.sender,
-        subject=trigger.message.subject,
-        body=content,
-        body_type=BodyType.HTML,
-        reply_to=SETTINGS.communication.reply_to,
-    )
+    await send_message(participant, trigger.message, mailer)
 
 
 @shared_task()
