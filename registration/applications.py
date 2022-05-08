@@ -24,6 +24,7 @@ from common.database import (
 )
 from common.kv import NamespacedClient, with_kv
 from common.permissions import Permission, requires_permission
+from common.tasks import task
 
 
 class S3PreSignedURL(BaseModel):
@@ -115,6 +116,10 @@ async def create_application(
 
     # Delete the auto-save data
     await kv.delete(id)
+
+    # Send the application received message
+    a = task("communication", "on_apply")(id)
+    print(a.id)
 
     response = {}
 

@@ -3,6 +3,7 @@ from functools import wraps
 from typing import Any, Awaitable, Callable
 
 from celery import Celery, signature
+from celery.result import AsyncResult
 
 from common import SETTINGS
 
@@ -25,14 +26,14 @@ celery.autodiscover_tasks(
 )
 
 
-def task(module: str, name: str, **options):
+def task(module: str, name: str, **options) -> Callable[..., AsyncResult]:
     """
     Call a celery task by name. Supports passing options to `apply_async` via keyword-arguments.
     """
     s = signature(f"{module}.tasks.{name}")
 
-    def inner(*args, **kwargs):
-        s.apply_async(args, kwargs, **options)
+    def inner(*args, **kwargs) -> AsyncResult:
+        return s.apply_async(args, kwargs, **options)
 
     return inner
 

@@ -14,11 +14,17 @@ from common.database import (
     MessageTriggerUpdate,
     with_db,
 )
+from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 
 
-@router.get("/", name="List triggers", response_model=List[MessageTriggerRead])
+@router.get(
+    "/",
+    name="List triggers",
+    response_model=List[MessageTriggerRead],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
 async def list(db: AsyncSession = Depends(with_db)):
     """
     Get all the message triggers used for automated events
@@ -28,7 +34,12 @@ async def list(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.put("/{type}", name="Set trigger", status_code=HTTPStatus.NO_CONTENT)
+@router.put(
+    "/{type}",
+    name="Set trigger",
+    status_code=HTTPStatus.NO_CONTENT,
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
 async def update(
     type: MessageTriggerType,
     values: MessageTriggerUpdate,
