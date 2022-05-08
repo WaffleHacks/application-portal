@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import List, Optional
 
-from pydantic import BaseModel, RedisDsn, root_validator
+from pydantic import BaseModel, RedisDsn, root_validator, validator
 
 from .specific import (
     BaseAPI,
@@ -26,21 +26,9 @@ class App(Enum):
         return self.value + "_inner"
 
 
-def keep(app: App, values: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Keep only the given app's configuration
-    """
-    for a in App:
-        if a != app:
-            del values[a.inner]
-    del values["globals"]
-
-    return values
-
-
 class Settings(BaseModel):
     # The application that is being run
-    app: App
+    apps: List[App]
 
     # The different application specific configurations
     communication_inner: Optional[CommunicationSettings]
@@ -58,15 +46,22 @@ class Settings(BaseModel):
     # The Redis store to connect to
     redis_url: RedisDsn
 
+    @validator("apps", pre=True)
+    def parse_list(cls, value):
+        if isinstance(value, str):
+            return value.split(",")
+        return value
+
     @root_validator
     def section_required(cls, values):
-        app = values.get("app")
-        if app is None:
+        apps = values.get("apps")
+        if apps is None:
             # This will be handled by pydantic
             return values
 
-        if values.get(app.inner) is None:
-            raise ValueError(f"settings for app '{app.value}' are required")
+        for app in apps:
+            if values.get(app.inner) is None:
+                raise ValueError(f"settings for app '{app.value}' are required")
 
         return values
 
@@ -97,13 +92,13 @@ class Settings(BaseModel):
 
     @property
     def api(self) -> BaseAPI:
-        if self.app == App.Communication:
+        if App.Communication in self.apps:
             return self.communication
-        elif self.app == App.Integrations:
+        elif App.Integrations in self.apps:
             return self.integrations
-        elif self.app == App.Registration:
+        elif App.Registration in self.apps:
             return self.registration
-        elif self.app == App.Workshops:
+        elif App.Workshops in self.apps:
             return self.workshops
 
-        raise ValueError(f"app '{self.app}' is not an API")
+        raise ValueError(f"app '{self.apps}' is not an API")
