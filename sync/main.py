@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 import boto3
@@ -8,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common import SETTINGS
 from common.database import Participant, db_context
+from common.tasks import task
 
 from .listener import Listener
 from .models import Action, ActionType
@@ -80,6 +82,22 @@ async def run():
             if action.type == ActionType.Remove:
                 await remove(action, db)
             else:
+                # Dispatch signup and reminder tasks
+                if action.type == ActionType.Insert:
+                    task("communication", "on_sign_up")(action.id)
+
+                    now = datetime.now()
+                    task(
+                        "communication",
+                        "incomplete_after_24h",
+                        eta=now + timedelta(days=1),
+                    )(action.id)
+                    task(
+                        "communication",
+                        "incomplete_after_7d",
+                        eta=now + timedelta(days=7),
+                    )(action.id)
+
                 await upsert(action, db)
 
         client.delete_message(QueueUrl=queue, ReceiptHandle=message.receipt_handle)

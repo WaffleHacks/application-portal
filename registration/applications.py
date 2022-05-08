@@ -118,7 +118,7 @@ async def create_application(
     await kv.delete(id)
 
     # Send the application received message
-    a = task("communication", "on_apply")(id)
+    task("communication", "on_apply")(id)
 
     response = {}
 
