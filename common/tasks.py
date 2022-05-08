@@ -1,9 +1,12 @@
 import asyncio
+import logging
 from functools import wraps
+from logging import Logger
 from typing import Any, Awaitable, Callable
 
 from celery import Celery, signature
 from celery.result import AsyncResult
+from celery.signals import after_setup_task_logger
 
 from common import SETTINGS
 
@@ -24,6 +27,11 @@ celery.config_from_object(
 celery.autodiscover_tasks(
     packages=["communication", "integrations", "registration", "sync", "workshops"]
 )
+
+
+@after_setup_task_logger.connect
+def on_after_setup_task_logger(logger: Logger, **_):
+    logger.setLevel(logging.INFO)
 
 
 def task(module: str, name: str, **options) -> Callable[..., AsyncResult]:

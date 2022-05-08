@@ -30,7 +30,6 @@ async def send_triggered_message(
     """
     Sends a triggered message to the application
     :param id: the participant's ID
-    :param getter: a coroutine to fetch the participant's information
     :param trigger_type: the type of trigger to send
     """
     async with db_context() as db:
