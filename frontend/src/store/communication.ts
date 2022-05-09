@@ -86,7 +86,7 @@ const api = createApi({
     setMessageTrigger: builder.mutation<void, MessageTriggerSet>({
       query: ({ type, ...body }) => ({
         url: `/communication/triggers/${type}`,
-        method: 'POST',
+        method: 'PUT',
         body,
       }),
       invalidatesTags: (result, error, { type }) => [{ type: Tag.Trigger, id: type }],
