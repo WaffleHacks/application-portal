@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import Button from '../Button';
+import { Button } from '../buttons';
 import { BaseProps, generateId } from './common';
 
 type Props = BaseProps<File | undefined> & {

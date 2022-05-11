@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
 interface Props {
@@ -5,10 +6,11 @@ interface Props {
   titleLeft?: ReactNode;
   subtitle?: string;
   children: ReactNode;
+  className?: string;
 }
 
-const Description = ({ title, titleLeft, subtitle, children }: Props): JSX.Element => (
-  <div className="mt-5 bg-white shadow overflow-hidden sm:rounded-lg">
+const Description = ({ title, titleLeft, subtitle, children, className = 'mt-5' }: Props): JSX.Element => (
+  <div className={classNames('bg-white shadow overflow-hidden sm:rounded-lg', className)}>
     <div className="px-4 py-5 sm:px-6">
       <div className="flex justify-between">
         <h3 className="text-lg leading-6 font-medium text-gray-900">{title}</h3>

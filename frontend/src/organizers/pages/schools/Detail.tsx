@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { LinkButton } from '../../../components/buttons';
 import { useGetSchoolQuery } from '../../../store';
 import { Description } from '../../components/description';
 import Loading from '../../components/Loading';
@@ -89,13 +90,10 @@ const Detail = (): JSX.Element => {
       </Description>
 
       <div className="mt-3">
-        <Link
-          to="/schools"
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
+        <LinkButton to="/schools">
           <ArrowLeftIcon className="h-4 w-5 mr-2" />
           Back
-        </Link>
+        </LinkButton>
       </div>
     </>
   );

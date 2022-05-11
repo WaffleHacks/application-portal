@@ -1,9 +1,10 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Badge from '../../../components/Badge';
+import { Button, LinkButton } from '../../../components/buttons';
 import { useGetMessageQuery } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
@@ -17,11 +18,30 @@ const Detail = (): JSX.Element => {
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that message" returnTo="/messages" />;
 
+  const actions = (
+    <span className="relative z-0 inline-flex shadow-sm rounded-md">
+      {/* TODO: actually send stuff */}
+      <Button type="button" style="white" rounded="none" className="relative rounded-l-md border-gray-200">
+        <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+        Send
+      </Button>
+      <LinkButton
+        to={`/messages/${id}/edit`}
+        style="white"
+        rounded="none"
+        className="-ml-px relative rounded-r-md border-gray-200"
+      >
+        Edit
+        <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
+      </LinkButton>
+    </span>
+  );
+
   return (
     <>
       <Description
         title={data.subject}
-        // TODO: add send button w/ confirmation
+        titleLeft={actions}
         subtitle={`Last updated: ${DateTime.fromISO(data.created_at).toLocaleString(DateTime.DATETIME_SHORT)}`}
       >
         <Section>
@@ -44,13 +64,10 @@ const Detail = (): JSX.Element => {
       </Description>
 
       <div className="mt-3">
-        <Link
-          to="/messages"
-          className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
+        <LinkButton to="/messages">
           <ArrowLeftIcon className="h-4 w-5 mr-2" />
           Back
-        </Link>
+        </LinkButton>
       </div>
     </>
   );
