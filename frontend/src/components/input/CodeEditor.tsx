@@ -2,7 +2,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { FieldHookConfig, useField } from 'formik';
 import { nanoid } from 'nanoid';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-html';
@@ -42,11 +42,11 @@ const BaseCodeEditor = ({ disabled, id, onChange = noop, value }: BaseProps): JS
 );
 
 type Props = FieldHookConfig<string> & {
-  label?: string;
-  description?: string;
+  label: string;
+  description?: ReactNode;
 };
 
-const CodeEditor = ({ label, ...props }: Props): JSX.Element => {
+const CodeEditor = ({ label, description, ...props }: Props): JSX.Element => {
   const [{ value }, { error }, { setValue }] = useField(props);
   const { className, disabled = false, required } = props;
 
@@ -54,11 +54,10 @@ const CodeEditor = ({ label, ...props }: Props): JSX.Element => {
 
   return (
     <div className={className}>
-      {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-      )}
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+        {label} {required && <span className="text-red-500">*</span>}
+      </label>
+      {description && <p className="my-1 ml-3 text-sm text-gray-500">{description}</p>}
       <BaseCodeEditor id={id} disabled={disabled} value={value} onChange={(v) => setValue(v, true)} />
       {error && (
         <p className="flex mt-2 text-sm text-red-600">

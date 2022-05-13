@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import { Button } from '../../../components/buttons';
 import { CheckboxGroupInput, CodeEditorInput, TextInput } from '../../../components/input';
+import Link from '../../../components/Link';
 import { Group } from '../../../store';
 import { Description, Section } from '../../components/description';
 
@@ -108,6 +109,20 @@ const Form = ({ onSubmit = noop, isSubmitting, values = initialValues, subtitle 
               <CodeEditorInput
                 className="sm:col-span-2 xl:col-span-3"
                 label="Content"
+                description={
+                  <>
+                    Messages can be customized for each participant using templating. The following details can be
+                    included:
+                    <ul className="list-disc ml-5">
+                      <li>
+                        First Name &rarr; <code>$&#123;first_name&#125;</code>
+                      </li>
+                      <li>
+                        Last Name &rarr; <code>$&#123;last_name&#125;</code>
+                      </li>
+                    </ul>
+                  </>
+                }
                 required
                 {...getFieldProps('content')}
               />
