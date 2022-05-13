@@ -1,10 +1,10 @@
 import { PlusIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
+import Link from '../../../components/Link';
 import {
   ReducedMessage,
   useListMessageTriggersQuery,

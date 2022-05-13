@@ -1,7 +1,7 @@
 import { SearchIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
+import Link from '../../../components/Link';
 import { useListSchoolsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
 

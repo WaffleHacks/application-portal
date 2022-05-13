@@ -1,9 +1,10 @@
 import { ArrowLeftIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { LinkButton } from '../../../components/buttons';
+import Link from '../../../components/Link';
 import { useGetSchoolQuery } from '../../../store';
 import { Description } from '../../components/description';
 import Loading from '../../components/Loading';

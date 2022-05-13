@@ -2,8 +2,8 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
 
+import Link from '../../../components/Link';
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
 import StatusBadge from '../../components/StatusBadge';
 import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
