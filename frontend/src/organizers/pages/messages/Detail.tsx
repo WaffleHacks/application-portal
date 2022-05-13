@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 
 import Badge from '../../../components/Badge';
 import { Button, LinkButton } from '../../../components/buttons';
+import { BaseCodeEditor } from '../../../components/input';
 import { useGetMessageQuery } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
-import Editor from './Editor';
 
 const Detail = (): JSX.Element => {
   const { id } = useParams();
@@ -58,7 +58,7 @@ const Detail = (): JSX.Element => {
         </Section>
         <Section>
           <Item name="Content" wide={true}>
-            <Editor value={data.content} editable={false} />
+            <BaseCodeEditor id="content" value={data.content} disabled={true} />
           </Item>
         </Section>
       </Description>

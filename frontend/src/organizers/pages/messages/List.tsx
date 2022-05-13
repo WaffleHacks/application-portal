@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { LinkButton } from '../../../components/buttons';
 import {
   ReducedMessage,
   useListMessageTriggersQuery,
@@ -153,7 +154,14 @@ const List = (): JSX.Element => {
           </div>
         </div>
 
-        <Table>
+        <div className="mt-2 flex justify-end">
+          <LinkButton size="sm" to="/messages/new">
+            <PlusIcon className="h-4 w-4 mr-2" />
+            New
+          </LinkButton>
+        </div>
+
+        <Table className="mt-2">
           <Table.Head>
             <th
               scope="col"

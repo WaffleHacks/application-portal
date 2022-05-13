@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import Layout from './components/Layout';
 import { ApplicationDetail, ListApplications } from './pages/applications';
-import { MessageDetail, MessagesList } from './pages/messages';
+import { MessageDetail, MessageNew, MessagesList } from './pages/messages';
 import { SchoolDetail, SchoolList } from './pages/schools';
 
 const Organizers = (): JSX.Element => (
@@ -15,6 +15,7 @@ const Organizers = (): JSX.Element => (
       <Route path="/schools" element={<SchoolList />} />
       <Route path="/schools/:id" element={<SchoolDetail />} />
       <Route path="/messages" element={<MessagesList />} />
+      <Route path="/messages/new" element={<MessageNew />} />
       <Route path="/messages/:id" element={<MessageDetail />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
