@@ -22,7 +22,10 @@ class Message(MessageBase, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
 
-    recipients: List["Recipient"] = Relationship(back_populates="message")
+    recipients: List["Recipient"] = Relationship(
+        back_populates="message",
+        sa_relationship_kwargs={"cascade": "all, delete, delete-orphan"},
+    )
 
     created_at: Optional[datetime] = Field(
         sa_column=Column(
