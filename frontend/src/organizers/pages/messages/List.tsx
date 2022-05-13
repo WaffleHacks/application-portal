@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import {
   ReducedMessage,
@@ -23,7 +24,9 @@ const MessageRow = (message: ReducedMessage): JSX.Element => {
   return (
     <tr>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{message.subject}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{message.sent ? 'yes' : 'no'}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+        <Badge color={message.sent ? 'red' : 'yellow'}>{message.sent ? 'Sent' : 'Draft'}</Badge>
+      </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedLastUpdated}</td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
         <Link to={`/messages/${message.id}`} className="text-indigo-600 hover:text-indigo-900">
@@ -170,7 +173,7 @@ const List = (): JSX.Element => {
               Subject
             </th>
             <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 px-3">
-              Sent
+              Status
             </th>
             <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 px-3">
               Last Updated
