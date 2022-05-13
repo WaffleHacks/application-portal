@@ -54,6 +54,6 @@ export {
   useGetSchoolQuery,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
-export { highestPermission, isDirector, waitingForTokens } from './selectors';
+export { highestPermission, isDirector } from './selectors';
 export type { ApplicationAutosave, ReducedApplication, ReducedMessage } from './types';
 export { Gender, Group, RaceEthnicity } from './types';

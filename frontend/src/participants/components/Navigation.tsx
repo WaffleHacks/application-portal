@@ -6,9 +6,13 @@ import React, { Fragment } from 'react';
 
 import { Link, NavItem, ProfilePicture } from '../../components/navigation';
 import logo from '../../logo.png';
-import { useGetProfileQuery } from '../../store';
+import { useSelector } from '../../store';
+import { DesktopProfile, MobileProfile } from './Profiles';
 
-const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
+const logoutOptions = {
+  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+  returnTo: window.location.origin,
+};
 
 const linkClassNames =
   (mobile: boolean) =>
@@ -36,12 +40,7 @@ interface Props {
 
 const Navigation = ({ items }: Props): JSX.Element => {
   const { logout } = useAuth0();
-  const { data } = useGetProfileQuery();
-
-  const logoutOptions = {
-    client_id: AUTH0_CLIENT_ID,
-    returnTo: window.location.origin,
-  };
+  const profileTokenLoading = useSelector((state) => state.authentication.profile === undefined);
 
   const shownItems = items.filter((i) => !i.hidden);
 
@@ -82,7 +81,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         <span className="block px-4 py-2 text-sm text-gray-700 w-full text-left border-b border-gray-300">
-                          {data?.firstName} {data?.lastName}
+                          {profileTokenLoading ? 'Loading...' : <DesktopProfile />}
                         </span>
                       </Menu.Item>
                       <Menu.Item>
@@ -120,23 +119,7 @@ const Navigation = ({ items }: Props): JSX.Element => {
               ))}
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
-              <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <ProfilePicture />
-                </div>
-                <div className="ml-3 text-base font-medium text-gray-800">
-                  {data?.firstName} {data?.lastName}
-                </div>
-              </div>
-              <div className="mt-3 space-y-1">
-                <button
-                  type="button"
-                  onClick={() => logout(logoutOptions)}
-                  className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-                >
-                  Log out
-                </button>
-              </div>
+              {profileTokenLoading ? <span className="ml-3 text-gray-800">Loading...</span> : <MobileProfile />}
             </div>
           </Disclosure.Panel>
         </>

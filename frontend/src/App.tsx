@@ -4,15 +4,7 @@ import React, { useEffect } from 'react';
 
 import Organizers from './organizers';
 import Participants from './participants';
-import {
-  PortalScope,
-  highestPermission,
-  setPortalToken,
-  setProfileToken,
-  useDispatch,
-  useSelector,
-  waitingForTokens,
-} from './store';
+import { PortalScope, highestPermission, setPortalToken, setProfileToken, useDispatch, useSelector } from './store';
 
 // From https://github.com/auth0/auth0-react/blob/88f82318a1dbe1372dd1653aec5bd609ccd8a301/src/utils.tsx#L3-L9
 const CODE_RE = /[?&]code=[^&]+/;
@@ -26,7 +18,7 @@ const App = (): JSX.Element => {
   const { isAuthenticated, isLoading, loginWithRedirect, getAccessTokenSilently } = useAuth0();
   const dispatch = useDispatch();
   const permission = useSelector(highestPermission);
-  const tokensLoading = useSelector(waitingForTokens);
+  const portalTokenLoading = useSelector((state) => state.authentication.portal === undefined);
 
   useEffect(() => {
     (async () => {
@@ -43,7 +35,7 @@ const App = (): JSX.Element => {
     })();
   }, [isLoading, isAuthenticated]);
 
-  if (isLoading || !isAuthenticated || tokensLoading || !permission) {
+  if (isLoading || !isAuthenticated || portalTokenLoading || !permission) {
     return (
       <div className="h-screen flex">
         <div className="m-auto">
