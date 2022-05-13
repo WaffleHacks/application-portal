@@ -1,19 +1,28 @@
-import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import Alert from '../../../components/Alert';
 import Badge from '../../../components/Badge';
 import { Button, LinkButton } from '../../../components/buttons';
 import { BaseCodeEditor } from '../../../components/input';
-import { useGetMessageQuery } from '../../../store';
+import { useDeleteMessageMutation, useGetMessageQuery } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 
 const Detail = (): JSX.Element => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetMessageQuery(id as string);
+
+  const [deleteMessage, { isLoading: isDeleteLoading, isSuccess }] = useDeleteMessageMutation();
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isDeleteLoading && isSuccess) navigate('/messages');
+  }, [isDeleteLoading, isSuccess]);
 
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that message" returnTo="/messages" />;
@@ -39,6 +48,14 @@ const Detail = (): JSX.Element => {
 
   return (
     <>
+      <Alert
+        isOpen={deleteOpen}
+        close={() => setDeleteOpen(false)}
+        onClick={() => deleteMessage(parseInt(id as string))}
+        title="Delete this message?"
+        description="Are you sure you want to delete this message? All of the data will be permanently removed. This will not stop erroneously sent messages from being sent. This action cannot be undone."
+      />
+
       <Description
         title={data.subject}
         titleLeft={actions}
@@ -63,11 +80,16 @@ const Detail = (): JSX.Element => {
         </Section>
       </Description>
 
-      <div className="mt-3">
+      <div className="mt-3 flex justify-between">
         <LinkButton to="/messages">
           <ArrowLeftIcon className="h-4 w-5 mr-2" />
           Back
         </LinkButton>
+
+        <Button type="button" style="danger" onClick={() => setDeleteOpen(true)}>
+          <TrashIcon className="h-4 w-4 mr-2" />
+          Delete
+        </Button>
       </div>
     </>
   );
