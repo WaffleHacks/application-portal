@@ -5,6 +5,9 @@ import { nanoid } from 'nanoid';
 import React from 'react';
 import AceEditor from 'react-ace';
 
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/theme-tomorrow';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
