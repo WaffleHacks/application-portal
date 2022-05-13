@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon, RefreshIcon, TrashIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,7 @@ import Alert from '../../../components/Alert';
 import Badge from '../../../components/Badge';
 import { Button, LinkButton } from '../../../components/buttons';
 import { BaseCodeEditor } from '../../../components/input';
-import { useDeleteMessageMutation, useGetMessageQuery } from '../../../store';
+import { useDeleteMessageMutation, useGetMessageQuery, useSendMessageMutation } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
@@ -20,6 +20,9 @@ const Detail = (): JSX.Element => {
   const [deleteMessage, { isLoading: isDeleteLoading, isSuccess }] = useDeleteMessageMutation();
   const [deleteOpen, setDeleteOpen] = useState(false);
 
+  const [send, { isLoading: isSendLoading }] = useSendMessageMutation();
+  const [sendOpen, setSendOpen] = useState(true);
+
   useEffect(() => {
     if (!isDeleteLoading && isSuccess) navigate('/messages');
   }, [isDeleteLoading, isSuccess]);
@@ -29,9 +32,19 @@ const Detail = (): JSX.Element => {
 
   const actions = (
     <span className="relative z-0 inline-flex shadow-sm rounded-md">
-      {/* TODO: actually send stuff */}
-      <Button type="button" style="white" rounded="none" className="relative rounded-l-md border-gray-200">
-        <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+      <Button
+        type="button"
+        style="white"
+        rounded="none"
+        className="relative rounded-l-md border-gray-200"
+        onClick={() => setSendOpen(true)}
+        disabled={isSendLoading}
+      >
+        {isSendLoading ? (
+          <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+        ) : (
+          <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+        )}
         Send
       </Button>
       <LinkButton
@@ -54,6 +67,14 @@ const Detail = (): JSX.Element => {
         onClick={() => deleteMessage(parseInt(id as string))}
         title="Delete this message?"
         description="Are you sure you want to delete this message? All of the data will be permanently removed. This will not stop erroneously sent messages from being sent. This action cannot be undone."
+      />
+      <Alert
+        isOpen={sendOpen}
+        close={() => setSendOpen(false)}
+        onClick={() => send(parseInt(id as string))}
+        title="Send this message?"
+        description="Are you sure you want to send this message? This action is irreversible and cannot be cancelled."
+        style="warning"
       />
 
       <Description
