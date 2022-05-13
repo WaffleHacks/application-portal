@@ -1,12 +1,18 @@
 import { ArrowLeftIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { LinkButton } from '../../../components/buttons';
 import { useCreateMessageMutation } from '../../../store';
 import Form from './Form';
 
 const New = (): JSX.Element => {
-  const [create, { isLoading }] = useCreateMessageMutation();
+  const navigate = useNavigate();
+  const [create, { isLoading, isSuccess }] = useCreateMessageMutation();
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) navigate('/messages');
+  }, [isLoading, isSuccess]);
 
   return (
     <>
