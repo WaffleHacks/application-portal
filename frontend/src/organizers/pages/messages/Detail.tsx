@@ -21,7 +21,7 @@ const Detail = (): JSX.Element => {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const [send, { isLoading: isSendLoading }] = useSendMessageMutation();
-  const [sendOpen, setSendOpen] = useState(true);
+  const [sendOpen, setSendOpen] = useState(false);
 
   useEffect(() => {
     if (!isDeleteLoading && isSuccess) navigate('/messages');
@@ -72,8 +72,10 @@ const Detail = (): JSX.Element => {
         isOpen={sendOpen}
         close={() => setSendOpen(false)}
         onClick={() => send(parseInt(id as string))}
-        title="Send this message?"
-        description="Are you sure you want to send this message? This action is irreversible and cannot be cancelled."
+        title={`Send this message ${data.sent ? ' again' : ''}?`}
+        description={`Are you sure you want to send this message ${
+          data.sent ? ' again' : ''
+        }? This action is irreversible and cannot be cancelled.`}
         style="warning"
       />
 
