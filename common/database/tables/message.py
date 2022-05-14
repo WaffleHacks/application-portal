@@ -16,6 +16,8 @@ class MessageBase(SQLModel):
     subject: str
     content: str
 
+    # Internal attributes
+    rendered: str
     is_html: bool = Field(default=False, nullable=False)
 
 

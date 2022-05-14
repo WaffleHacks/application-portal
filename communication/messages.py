@@ -65,10 +65,13 @@ async def create(
     """
 
     # Convert the body from MJML to HTML if needed
-    content, is_html = await render_mjml(values.content, mjml)
+    rendered, is_html = await render_mjml(values.content, mjml)
 
     # Create the message
-    message = Message.from_orm(values, update={"content": content, "is_html": is_html})
+    message = Message.from_orm(
+        values,
+        update={"rendered": rendered, "is_html": is_html},
+    )
 
     # Attach the recipients
     recipients = [Recipient(group=g) for g in values.recipients]
@@ -128,12 +131,12 @@ async def update(
 
     # Update the content
     if values.content:
-        content, is_html = await render_mjml(values.content, mjml)
-        message.content = content
+        rendered, is_html = await render_mjml(values.content, mjml)
+        message.rendered = rendered
         message.is_html = is_html
 
     # Update the rest of the fields
-    updated_fields = values.dict(exclude_unset=True, exclude={"content", "recipients"})
+    updated_fields = values.dict(exclude_unset=True, exclude={"recipients"})
     for key, value in updated_fields.items():
         setattr(message, key, value)
 
