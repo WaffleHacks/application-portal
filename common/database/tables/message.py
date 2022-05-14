@@ -16,6 +16,8 @@ class MessageBase(SQLModel):
     subject: str
     content: str
 
+    is_html: bool = Field(default=False, nullable=False)
+
 
 class Message(MessageBase, table=True):
     __tablename__ = "messages"
@@ -69,7 +71,6 @@ class MessageRead(MessageBase):
     updated_at: datetime
 
 
-# TODO: figure out most ergonomic way to handle updating recipients
 class MessageUpdate(SQLModel):
     sent: Optional[bool]
 

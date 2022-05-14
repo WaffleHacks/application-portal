@@ -68,7 +68,7 @@ async def create(
     content, is_html = await render_mjml(values.content, mjml)
 
     # Create the message
-    message = Message.from_orm(values, update={"content": content})
+    message = Message.from_orm(values, update={"content": content, "is_html": is_html})
 
     # Attach the recipients
     recipients = [Recipient(group=g) for g in values.recipients]
@@ -130,6 +130,7 @@ async def update(
     if values.content:
         content, is_html = await render_mjml(values.content, mjml)
         message.content = content
+        message.is_html = is_html
 
     # Update the rest of the fields
     updated_fields = values.dict(exclude_unset=True, exclude={"content", "recipients"})
@@ -226,7 +227,7 @@ async def send(
         SETTINGS.communication.sender,
         message.subject,
         message.content,
-        body_type=BodyType.HTML,
+        body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
         reply_to=SETTINGS.communication.reply_to,
     )
 
