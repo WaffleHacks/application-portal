@@ -1,6 +1,7 @@
 import compression from 'compression';
 import express, { NextFunction, Request, Response } from 'express';
 import { Joi, ValidationError, validate } from 'express-validation';
+import { minify } from 'html-minifier';
 import mjml2html from 'mjml';
 
 import logger, { middleware } from './logging';
@@ -28,7 +29,15 @@ const renderBody = {
 app.post('/render', validate(renderBody), (req, res) => {
   try {
     const result = mjml2html(req.body.mjml, { keepComments: false, ignoreIncludes: true, validationLevel: 'strict' });
-    res.status(200).json({ html: result.html }).end();
+
+    const minified = minify(result.html, {
+      collapseWhitespace: true,
+      minifyCSS: false,
+      caseSensitive: true,
+      removeEmptyAttributes: true,
+    });
+
+    res.status(200).json({ html: minified }).end();
   } catch {
     res.status(400).json({ message: 'invalid mjml' }).end();
   }
