@@ -321,8 +321,8 @@ async def render_mjml(source: str, client: MJMLClient) -> Tuple[str, bool]:
     :param client: the MJML API client
     :returns: rendered MJML or plain text with a boolean denoting if it is HTML
     """
-
-    if not (source.startswith("<mjml>") and source.endswith("</mjml>")):
+    trimmed_source = source.strip()
+    if not (trimmed_source.startswith("<mjml>") and trimmed_source.endswith("</mjml>")):
         return source, False
 
     return await client.render(source), True
