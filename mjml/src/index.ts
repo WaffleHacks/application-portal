@@ -1,7 +1,7 @@
-import * as compression from 'compression';
-import * as express from 'express';
-import { NextFunction, Request, Response } from 'express';
+import compression from 'compression';
+import express, { NextFunction, Request, Response } from 'express';
 import { Joi, ValidationError, validate } from 'express-validation';
+import mjml2html from 'mjml';
 
 import logger, { middleware } from './logging';
 
@@ -26,9 +26,12 @@ const renderBody = {
   }),
 };
 app.post('/render', validate(renderBody), (req, res) => {
-  console.log(req.body.mjml);
-
-  res.status(200).end();
+  try {
+    const result = mjml2html(req.body.mjml, { keepComments: false, ignoreIncludes: true, validationLevel: 'strict' });
+    res.status(200).json({ html: result.html }).end();
+  } catch {
+    res.status(400).json({ message: 'invalid mjml' }).end();
+  }
 });
 
 // Error handling
