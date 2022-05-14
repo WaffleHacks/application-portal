@@ -5,9 +5,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Alert from '../../../components/Alert';
 import Badge from '../../../components/Badge';
-import { Button, LinkButton } from '../../../components/buttons';
+import { Button, ButtonGroup, LinkButton } from '../../../components/buttons';
+import Confirm from '../../../components/Confirm';
 import { BaseCodeEditor } from '../../../components/input';
-import { useDeleteMessageMutation, useGetMessageQuery, useSendMessageMutation } from '../../../store';
+import {
+  useDeleteMessageMutation,
+  useGetMessageQuery,
+  useSendMessageMutation,
+  useSendTestMessageMutation,
+} from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
@@ -23,22 +29,25 @@ const Detail = (): JSX.Element => {
   const [send, { isLoading: isSendLoading }] = useSendMessageMutation();
   const [sendOpen, setSendOpen] = useState(false);
 
+  const [sendTest, { isLoading: isSendTestLoading, isSuccess: isSendTestSuccess }] = useSendTestMessageMutation();
+  const [sendTestSuccessOpen, setSendTestSuccessOpen] = useState(false);
+
   useEffect(() => {
     if (!isDeleteLoading && isSuccess) navigate('/messages');
   }, [isDeleteLoading, isSuccess]);
+
+  useEffect(() => {
+    if (!isSendTestLoading && isSendTestSuccess) setSendTestSuccessOpen(true);
+  }, [isSendTestLoading, isSendTestSuccess]);
 
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that message" returnTo="/messages" />;
 
   const actions = (
-    <span className="relative z-0 inline-flex shadow-sm rounded-md">
-      <Button
-        type="button"
-        style="white"
-        rounded="none"
-        className="relative rounded-l-md border-gray-200"
+    <div className="flex justify-around space-x-2">
+      <ButtonGroup
+        elements={[{ children: 'Send Test', action: () => sendTest(parseInt(id as string)) }]}
         onClick={() => setSendOpen(true)}
-        disabled={isSendLoading}
       >
         {isSendLoading ? (
           <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
@@ -46,29 +55,30 @@ const Detail = (): JSX.Element => {
           <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
         )}
         Send
-      </Button>
-      <LinkButton
-        to={`/messages/${id}/edit`}
-        style="white"
-        rounded="none"
-        className="-ml-px relative rounded-r-md border-gray-200"
-      >
+      </ButtonGroup>
+      <LinkButton to={`/messages/${id}/edit`} style="white">
         Edit
         <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
       </LinkButton>
-    </span>
+    </div>
   );
 
   return (
     <>
       <Alert
+        isOpen={sendTestSuccessOpen}
+        close={() => setSendTestSuccessOpen(false)}
+        title="Test message sent!"
+        description="A test message was successfully sent to your account's email. Please check that everything looks right before you send the message to everyone."
+      />
+      <Confirm
         isOpen={deleteOpen}
         close={() => setDeleteOpen(false)}
         onClick={() => deleteMessage(parseInt(id as string))}
         title="Delete this message?"
         description="Are you sure you want to delete this message? All of the data will be permanently removed. This will not stop erroneously sent messages from being sent. This action cannot be undone."
       />
-      <Alert
+      <Confirm
         isOpen={sendOpen}
         close={() => setSendOpen(false)}
         onClick={() => send(parseInt(id as string))}
