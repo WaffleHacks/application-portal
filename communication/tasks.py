@@ -11,7 +11,7 @@ from common.database import (
     Participant,
     db_context,
 )
-from common.mail import client as mailer
+from common.mail import mailer_client as mailer
 from common.tasks import syncify
 
 from .util import send_message
