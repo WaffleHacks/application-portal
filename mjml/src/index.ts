@@ -2,33 +2,19 @@ import * as compression from 'compression';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { Joi, ValidationError, validate } from 'express-validation';
-import { logger } from 'express-winston';
-import { createLogger, format, transports } from 'winston';
+
+import logger, { middleware } from './logging';
 
 // Get configuration
 const HOST = process.env.HOST || '0.0.0.0';
-const PORT = parseInt(process.env.PORT || '8000');
-
-const winston = createLogger({
-  transports: [new transports.Console()],
-  format: format.combine(
-    format.timestamp(),
-    process.env.NODE_ENV === 'production' ? format.json() : format.combine(format.colorize(), format.simple()),
-  ),
-});
+const PORT = parseInt(process.env.PORT || '8007');
 
 const app = express();
 
 // Register middlewares
 app.use(compression());
 app.use(express.json());
-app.use(
-  logger({
-    winstonInstance: winston,
-    meta: true,
-    expressFormat: true,
-  }),
-);
+app.use(middleware);
 
 // Healthcheck endpoint
 app.get('/health', (req, res) => res.status(204).end());
@@ -50,7 +36,7 @@ app.post('/render', validate(renderBody), (req, res) => {
 app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   if (err instanceof ValidationError) res.status(422).json(err.details).end();
   else {
-    winston.log({
+    logger.log({
       level: 'error',
       message: err.message,
       stack: err.stack,
