@@ -229,7 +229,7 @@ async def send(
         emails,
         SETTINGS.communication.sender,
         message.subject,
-        message.content,
+        message.rendered,
         body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
         reply_to=SETTINGS.communication.reply_to,
     )

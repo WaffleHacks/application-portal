@@ -14,7 +14,7 @@ async def send_message(recipient: Participant, message: Message, mailer: AsyncCl
     :param message: the message to send
     :param mailer: a WaffleHacks mailer instance
     """
-    template = Template(message.content)
+    template = Template(message.rendered)
     content = template.safe_substitute(
         first_name=recipient.first_name,
         last_name=recipient.last_name,
