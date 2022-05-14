@@ -13,6 +13,7 @@ export const middleware = expressLogger({
   winstonInstance: logger,
   meta: true,
   expressFormat: true,
+  headerBlacklist: ['authorization'],
 });
 
 export default logger;

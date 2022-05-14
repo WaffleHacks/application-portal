@@ -46,7 +46,7 @@ app.post('/render', validate(renderBody), (req, res) => {
 // Error handling
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
-  if (err instanceof ValidationError) res.status(422).json(err.details).end();
+  if (err instanceof ValidationError) res.status(422).json({ details: err.details, message: 'invalid request' }).end();
   else {
     logger.log({
       level: 'error',
