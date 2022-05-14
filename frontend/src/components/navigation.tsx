@@ -1,7 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon, UserIcon } from '@heroicons/react/outline';
 import React, { ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+
+import BaseLink from './Link';
 
 interface NavItemIconProps {
   className?: string;
@@ -31,23 +32,14 @@ interface LinkProps {
 }
 
 export const Link = ({ children, classNames, item }: LinkProps): JSX.Element => {
-  if (item.external) {
-    return (
-      <a href={item.href} className={classNames(false)}>
-        {children && children(false)}
-        {item.name}
-      </a>
-    );
-  } else {
-    return (
-      <NavLink to={item.href} className={({ isActive }) => classNames(isActive)}>
-        {({ isActive }) => (
-          <>
-            {children && children(isActive)}
-            {item.name}
-          </>
-        )}
-      </NavLink>
-    );
-  }
+  return (
+    <BaseLink to={item.href} external={item.external} className={({ isActive }) => classNames(isActive)}>
+      {({ isActive }) => (
+        <>
+          {children && children(isActive)}
+          {item.name}
+        </>
+      )}
+    </BaseLink>
+  );
 };

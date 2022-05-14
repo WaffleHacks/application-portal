@@ -107,3 +107,53 @@ export interface ApplicationAutosave {
   agree_to_privacy: boolean;
   agree_to_rules: boolean;
 }
+
+export enum Group {
+  Everyone = 'Everyone',
+  ApplicationComplete = 'Application - Complete',
+  ApplicationIncomplete = 'Application - Incomplete',
+  StatusAccepted = 'Status - Accepted',
+  StatusDenied = 'Status - Denied',
+  StatusPending = 'Status - Pending',
+}
+
+export interface Recipient {
+  group: Group;
+}
+
+export interface ReducedMessage {
+  id: number;
+  sent: boolean;
+  subject: string;
+
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Message {
+  id: number;
+
+  sent: boolean;
+
+  subject: string;
+  content: string;
+
+  recipients: Recipient[];
+
+  created_at: string;
+  updated_at: string;
+}
+
+export enum TriggerType {
+  SignUp = 'Sign Up',
+  ApplicationSubmitted = 'Application - Submitted',
+  ApplicationAccepted = 'Application - Accepted',
+  ApplicationRejected = 'Application - Rejected',
+  IncompleteApplication24H = 'Incomplete Application - 24hr',
+  IncompleteApplication7D = 'Incomplete Application - 7 days',
+}
+
+export interface MessageTrigger {
+  trigger: TriggerType;
+  message: ReducedMessage | null;
+}

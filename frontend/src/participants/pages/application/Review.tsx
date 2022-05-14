@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 
 import Card from '../../../components/Card';
 import { CheckboxInput } from '../../../components/input';
+import Link from '../../../components/Link';
 import SidebarCard from '../../../components/SidebarCard';
 import { ApplicationAutosave, useGetProfileQuery } from '../../../store';
 
@@ -16,17 +17,6 @@ const Row = ({ name, value }: RowProps) => (
     <p className="font-bold">{name}:</p>
     <p className="col-span-2">{value}</p>
   </div>
-);
-
-interface LinkProps {
-  href: string;
-  children: ReactNode;
-}
-
-const Link = ({ href, children }: LinkProps) => (
-  <a className="text-blue-500 hover:text-blue-600" href={href} target="_blank" rel="noreferrer">
-    {children}
-  </a>
 );
 
 const Review = (): JSX.Element => {
@@ -51,9 +41,24 @@ const Review = (): JSX.Element => {
       <SidebarCard title="Shipping" className="mt-3" grid={false}>
         <Row
           name="Portfolio"
-          value={values.portfolio_url && <Link href={values.portfolio_url}>{values.portfolio_url}</Link>}
+          value={
+            values.portfolio_url && (
+              <Link to={values.portfolio_url} external={true}>
+                {values.portfolio_url}
+              </Link>
+            )
+          }
         />
-        <Row name="Repositories" value={values.vcs_url && <Link href={values.vcs_url}>{values.vcs_url}</Link>} />
+        <Row
+          name="Repositories"
+          value={
+            values.vcs_url && (
+              <Link to={values.vcs_url} external={true}>
+                {values.vcs_url}
+              </Link>
+            )
+          }
+        />
         <Row name="Attended hackathons" value={values.hackathons_attended} />
         <Row name="Resume" value={values.resume?.name} />
         <Row name="Share with sponsors" value={values.share_information ? 'yes' : 'no'} />
@@ -70,8 +75,15 @@ const Review = (): JSX.Element => {
         <CheckboxInput
           label={
             <span>
-              I agree to the WaffleHacks <Link href="https://wafflehacks.org/privacy-policy">privacy policy</Link> and{' '}
-              <Link href="https://wafflehacks.org/data-sharing">data sharing policy</Link>.
+              I agree to the WaffleHacks{' '}
+              <Link to="https://wafflehacks.org/privacy-policy" external={true}>
+                privacy policy
+              </Link>{' '}
+              and{' '}
+              <Link to="https://wafflehacks.org/data-sharing" external={true}>
+                data sharing policy
+              </Link>
+              .
             </span>
           }
           required
@@ -80,8 +92,15 @@ const Review = (): JSX.Element => {
         <CheckboxInput
           label={
             <span>
-              I agree to abide by the <Link href="https://wafflehacks.org/rules">rules</Link> and{' '}
-              <Link href="https://wafflehacks.org/code-of-conduct">code of conduct</Link>.
+              I agree to abide by the{' '}
+              <Link to="https://wafflehacks.org/rules" external={true}>
+                rules
+              </Link>{' '}
+              and{' '}
+              <Link to="https://wafflehacks.org/code-of-conduct" external={true}>
+                code of conduct
+              </Link>
+              .
             </span>
           }
           required

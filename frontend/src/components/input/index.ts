@@ -1,6 +1,8 @@
 export type { BaseItem } from './AutoCompleteSelect';
 export { default as AutoCompleteSelectInput } from './AutoCompleteSelect';
 export { default as CheckboxInput } from './Checkbox';
+export { default as CheckboxGroupInput } from './CheckboxGroup';
+export { CodeEditor as CodeEditorInput, BaseCodeEditor } from './CodeEditor';
 export { default as DateInput } from './Date';
 export { default as FileInput } from './File';
 export { default as NumberInput } from './Number';

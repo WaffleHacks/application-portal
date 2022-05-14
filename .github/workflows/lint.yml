@@ -26,6 +26,9 @@ jobs:
       - name: yarn install (infrastructure)
         run: yarn install --ignore-scripts
         working-directory: infrastructure
+      - name: yarn install (mjml)
+        run: yarn install
+        working-directory: mjml
 
       - run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
       - uses: actions/cache@v2

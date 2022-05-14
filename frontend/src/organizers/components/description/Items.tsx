@@ -3,13 +3,14 @@ import React, { ReactNode } from 'react';
 interface ItemProps {
   wide?: boolean;
   name: string;
-  value: ReactNode;
+  value?: ReactNode;
+  children?: ReactNode;
 }
 
-export const Item = ({ name, value, wide = false }: ItemProps): JSX.Element => (
-  <div className={wide ? 'sm:grid-cols-1' : ''}>
+export const Item = ({ name, value, children, wide = false }: ItemProps): JSX.Element => (
+  <div className={wide ? 'sm:col-span-2 xl:col-span-3' : ''}>
     <dt className="text-sm font-medium text-gray-500">{name}</dt>
-    <dd className="mt-1 text-sm text-gray-900">{value}</dd>
+    <dd className="mt-1 text-sm text-gray-900">{children || value}</dd>
   </div>
 );
 

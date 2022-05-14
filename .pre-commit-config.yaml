@@ -33,10 +33,11 @@ repos:
           - sqlalchemy2-stubs>=0.0.2-alpha.19,<0.1.0
           - sqlmodel>=0.0.6,<0.1.0
           - boto3-stubs-lite[s3,sqs]>=1.21.42,<1.22.0
+          - types-ujson>=4.2.1,<4.3.0
   - repo: local
     hooks:
       - id: eslint-frontend
-        name: eslint
+        name: eslint (frontend)
         entry: node ./frontend/node_modules/eslint/bin/eslint.js
         args:
           - --ignore-pattern
@@ -45,12 +46,19 @@ repos:
         language: system
         files: ^frontend/.*\.[jt]sx?$
       - id: eslint-infrastructure
-        name: eslint
+        name: eslint (infrastructure)
         entry: node ./infrastructure/node_modules/eslint/bin/eslint.js
         args:
           - --fix
         language: system
         files: ^infrastructure/.*\.ts$
+      - id: eslint-mjml
+        name: eslint (mjml)
+        entry: node ./mjml/node_modules/eslint/bin/eslint.js
+        args:
+          - --fix
+        language: system
+        files: ^mjml/.*\.ts$
 
 default_language_version:
   python: python3.9

@@ -16,13 +16,20 @@ class MessageBase(SQLModel):
     subject: str
     content: str
 
+    # Internal attributes
+    rendered: str
+    is_html: bool = Field(default=False, nullable=False)
+
 
 class Message(MessageBase, table=True):
     __tablename__ = "messages"
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
 
-    recipients: List["Recipient"] = Relationship(back_populates="message")
+    recipients: List["Recipient"] = Relationship(
+        back_populates="message",
+        sa_relationship_kwargs={"cascade": "all, delete, delete-orphan"},
+    )
 
     created_at: Optional[datetime] = Field(
         sa_column=Column(
@@ -53,6 +60,9 @@ class MessageList(SQLModel):
     subject: str
     sent: bool
 
+    created_at: datetime
+    updated_at: datetime
+
 
 class MessageRead(MessageBase):
     id: int
@@ -63,11 +73,10 @@ class MessageRead(MessageBase):
     updated_at: datetime
 
 
-# TODO: figure out most ergonomic way to handle updating recipients
 class MessageUpdate(SQLModel):
     sent: Optional[bool]
 
-    recipients: List["Group"]
+    recipients: Optional[List["Group"]]
 
     subject: Optional[str]
     content: Optional[str]
