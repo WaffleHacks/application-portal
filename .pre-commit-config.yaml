@@ -33,6 +33,7 @@ repos:
           - sqlalchemy2-stubs>=0.0.2-alpha.19,<0.1.0
           - sqlmodel>=0.0.6,<0.1.0
           - boto3-stubs-lite[s3,sqs]>=1.21.42,<1.22.0
+          - types-ujson>=4.2.1,<4.3.0
   - repo: local
     hooks:
       - id: eslint-frontend

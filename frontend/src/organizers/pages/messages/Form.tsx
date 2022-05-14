@@ -121,6 +121,17 @@ const Form = ({ onSubmit = noop, isSubmitting, values = initialValues, subtitle 
                         Last Name &rarr; <code>$&#123;last_name&#125;</code>
                       </li>
                     </ul>
+                    <br />
+                    While defaulting to plaintext, the message can be optionally rendered using{' '}
+                    <Link to="https://mjml.io/" external={true}>
+                      MJML
+                    </Link>
+                    . This can be written by hand or copy-and-pasted from the{' '}
+                    <Link to="https://mjmlio.github.io/mjml-app/" external={true}>
+                      MJML App
+                    </Link>
+                    . To use MJML, the message must start with <code>&lt;mjml&gt;</code> and end with{' '}
+                    <code>&lt;/mjml&gt;</code>.
                   </>
                 }
                 required

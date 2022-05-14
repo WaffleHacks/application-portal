@@ -17,6 +17,9 @@ class CommunicationSettings(BaseAPI):
     # The mailer service to connect to
     mailer: HttpUrl
 
+    # The MJML API to connect to
+    mjml_api: HttpUrl
+
     # The sender email and optional reply to email
     sender: EmailStr
     reply_to: Optional[EmailStr]

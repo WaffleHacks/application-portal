@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import List, Set
+from typing import List, Set, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException
 from mailer import AsyncClient, BodyType
@@ -26,7 +26,7 @@ from common.database import (
     RecipientRead,
     with_db,
 )
-from common.mail import with_mail
+from common.mail import MJMLClient, with_mail, with_mjml
 from common.permissions import Permission, requires_permission
 
 from .util import send_message
@@ -55,13 +55,20 @@ async def list(db: AsyncSession = Depends(with_db)):
     response_model=MessageRead,
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def create(values: MessageCreate, db: AsyncSession = Depends(with_db)):
+async def create(
+    values: MessageCreate,
+    db: AsyncSession = Depends(with_db),
+    mjml: MJMLClient = Depends(with_mjml),
+):
     """
     Creates a new message, but does not send it
     """
 
+    # Convert the body from MJML to HTML if needed
+    content, is_html = await render_mjml(values.content, mjml)
+
     # Create the message
-    message = Message.from_orm(values)
+    message = Message.from_orm(values, update={"content": content})
 
     # Attach the recipients
     recipients = [Recipient(group=g) for g in values.recipients]
@@ -96,7 +103,12 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     response_model=MessageRead,
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def update(id: int, values: MessageUpdate, db: AsyncSession = Depends(with_db)):
+async def update(
+    id: int,
+    values: MessageUpdate,
+    db: AsyncSession = Depends(with_db),
+    mjml: MJMLClient = Depends(with_mjml),
+):
     """
     Update the contents and recipients of a message.
     """
@@ -114,8 +126,13 @@ async def update(id: int, values: MessageUpdate, db: AsyncSession = Depends(with
         for group in values.recipients:
             db.add(Recipient(group=group, message=message))
 
+    # Update the content
+    if values.content:
+        content, is_html = await render_mjml(values.content, mjml)
+        message.content = content
+
     # Update the rest of the fields
-    updated_fields = values.dict(exclude_unset=True, exclude={"recipients"})
+    updated_fields = values.dict(exclude_unset=True, exclude={"content", "recipients"})
     for key, value in updated_fields.items():
         setattr(message, key, value)
 
@@ -288,3 +305,17 @@ def recipients_query(groups: Set[Group]) -> Select:
     # Only filter on status
     else:
         return base.where(status_filter)
+
+
+async def render_mjml(source: str, client: MJMLClient) -> Tuple[str, bool]:
+    """
+    Call to the MJML API to render the message
+    :param source: content that might be MJML
+    :param client: the MJML API client
+    :returns: rendered MJML or plain text with a boolean denoting if it is HTML
+    """
+
+    if not (source.startswith("<mjml>") and source.endswith("</mjml>")):
+        return source, False
+
+    return await client.render(source), True
