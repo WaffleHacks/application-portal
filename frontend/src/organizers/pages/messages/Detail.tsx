@@ -18,50 +18,58 @@ import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 
-const Detail = (): JSX.Element => {
-  const { id } = useParams();
+interface WithMessageId {
+  id: string;
+}
+
+const DeleteButton = ({ id }: WithMessageId): JSX.Element => {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetMessageQuery(id as string);
 
-  const [deleteMessage, { isLoading: isDeleteLoading, isSuccess }] = useDeleteMessageMutation();
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const [send, { isLoading: isSendLoading }] = useSendMessageMutation();
-  const [sendOpen, setSendOpen] = useState(false);
-
-  const [sendTest, { isLoading: isSendTestLoading, isSuccess: isSendTestSuccess }] = useSendTestMessageMutation();
-  const [sendTestSuccessOpen, setSendTestSuccessOpen] = useState(false);
+  const [deleteMessage, { isLoading, isSuccess }] = useDeleteMessageMutation();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!isDeleteLoading && isSuccess) navigate('/messages');
-  }, [isDeleteLoading, isSuccess]);
+    if (!isLoading && isSuccess) navigate('/messages');
+  }, [isLoading, isSuccess]);
+
+  return (
+    <>
+      <Confirm
+        isOpen={open}
+        close={() => setOpen(false)}
+        onClick={() => deleteMessage(parseInt(id))}
+        title="Delete this message?"
+        description="Are you sure you want to delete this message? All of the data will be permanently removed. This will not stop erroneously sent messages from being sent. This action cannot be undone."
+      />
+
+      <Button type="button" style="danger" onClick={() => setOpen(true)}>
+        <TrashIcon className="h-4 w-4 mr-2" />
+        Delete
+      </Button>
+    </>
+  );
+};
+
+interface SendButtonsProps extends WithMessageId {
+  sent: boolean;
+}
+
+const SendButtons = ({ id, sent }: SendButtonsProps): JSX.Element => {
+  const [send, { isLoading: isSendLoading, isSuccess: isSendSuccess }] = useSendMessageMutation();
+  const [sendTest, { isLoading: isSendTestLoading, isSuccess: isSendTestSuccess }] = useSendTestMessageMutation();
+
+  const [sendConfirmOpen, setSendConfirmOpen] = useState(false);
+  const [sendSuccessOpen, setSendSuccessOpen] = useState(false);
+
+  const [sendTestSuccessOpen, setSendTestSuccessOpen] = useState(false);
 
   useEffect(() => {
     if (!isSendTestLoading && isSendTestSuccess) setSendTestSuccessOpen(true);
   }, [isSendTestLoading, isSendTestSuccess]);
 
-  if (isLoading) return <Loading />;
-  if (data === undefined) return <NotFound message="We couldn't find that message" returnTo="/messages" />;
-
-  const actions = (
-    <div className="flex justify-around space-x-2">
-      <ButtonGroup
-        elements={[{ children: 'Send Test', action: () => sendTest(parseInt(id as string)) }]}
-        onClick={() => setSendOpen(true)}
-      >
-        {isSendLoading ? (
-          <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
-        ) : (
-          <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-        )}
-        Send
-      </ButtonGroup>
-      <LinkButton to={`/messages/${id}/edit`} style="white">
-        Edit
-        <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
-      </LinkButton>
-    </div>
-  );
+  useEffect(() => {
+    if (!isSendLoading && isSendSuccess) setSendSuccessOpen(true);
+  }, [isSendLoading, isSendSuccess]);
 
   return (
     <>
@@ -71,27 +79,60 @@ const Detail = (): JSX.Element => {
         title="Test message sent!"
         description="A test message was successfully sent to your account's email. Please check that everything looks right before you send the message to everyone."
       />
-      <Confirm
-        isOpen={deleteOpen}
-        close={() => setDeleteOpen(false)}
-        onClick={() => deleteMessage(parseInt(id as string))}
-        title="Delete this message?"
-        description="Are you sure you want to delete this message? All of the data will be permanently removed. This will not stop erroneously sent messages from being sent. This action cannot be undone."
+      <Alert
+        isOpen={sendSuccessOpen}
+        close={() => setSendSuccessOpen(false)}
+        title="Messages sent!"
+        description="The message was successfully sent to all the recipients."
       />
+
       <Confirm
-        isOpen={sendOpen}
-        close={() => setSendOpen(false)}
+        isOpen={sendConfirmOpen}
+        close={() => setSendConfirmOpen(false)}
         onClick={() => send(parseInt(id as string))}
-        title={`Send this message ${data.sent ? ' again' : ''}?`}
+        title={`Send this message ${sent ? ' again' : ''}?`}
         description={`Are you sure you want to send this message ${
-          data.sent ? ' again' : ''
+          sent ? ' again' : ''
         }? This action is irreversible and cannot be cancelled.`}
         style="warning"
       />
 
+      <ButtonGroup
+        elements={[{ children: 'Send Test', action: () => sendTest(parseInt(id as string)) }]}
+        onClick={() => setSendConfirmOpen(true)}
+        disabled={isSendLoading}
+      >
+        {isSendLoading ? (
+          <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+        ) : (
+          <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+        )}
+        Send
+      </ButtonGroup>
+    </>
+  );
+};
+
+const Detail = (): JSX.Element => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetMessageQuery(id as string);
+
+  if (isLoading) return <Loading />;
+  if (data === undefined) return <NotFound message="We couldn't find that message" returnTo="/messages" />;
+
+  return (
+    <>
       <Description
         title={data.subject}
-        titleLeft={actions}
+        titleLeft={
+          <div className="flex justify-around space-x-2">
+            <SendButtons sent={data.sent} id={id as string} />
+            <LinkButton to={`/messages/${id}/edit`} style="white">
+              Edit
+              <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
+            </LinkButton>
+          </div>
+        }
         subtitle={`Last updated: ${DateTime.fromISO(data.created_at).toLocaleString(DateTime.DATETIME_SHORT)}`}
       >
         <Section>
@@ -119,10 +160,7 @@ const Detail = (): JSX.Element => {
           Back
         </LinkButton>
 
-        <Button type="button" style="danger" onClick={() => setDeleteOpen(true)}>
-          <TrashIcon className="h-4 w-4 mr-2" />
-          Delete
-        </Button>
+        <DeleteButton id={id as string} />
       </div>
     </>
   );
