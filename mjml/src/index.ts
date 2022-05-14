@@ -57,4 +57,4 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   }
 });
 
-app.listen(PORT, HOST, () => console.log(`Listening on ${HOST}:${PORT}...`));
+app.listen(PORT, HOST, () => logger.info(`Listening on ${HOST}:${PORT}...`));
