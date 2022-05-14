@@ -77,6 +77,31 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 
 ###
+#  MJML API
+###
+FROM node:16-alpine as mjml
+
+ENV HOST 0.0.0.0
+ENV PORT 8000
+
+EXPOSE 8000/tcp
+
+RUN apk add dumb-init
+
+# Switch to a new user
+RUN adduser --disabled-password app
+USER app
+
+WORKDIR /application-portal
+
+COPY --chown=app mjml .
+RUN yarn && yarn build
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["node", "."]
+
+
+###
 #  Registration
 ###
 FROM common as registration
