@@ -67,6 +67,7 @@ const api = createApi({
         url: `/communication/messages/${id}/send`,
         method: 'POST',
       }),
+      invalidatesTags: (result, error, id) => [{ type: Tag.Message, id }],
     }),
     sendTestMessage: builder.mutation<void, number>({
       query: (id) => ({

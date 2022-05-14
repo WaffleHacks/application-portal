@@ -234,6 +234,9 @@ async def send(
         reply_to=SETTINGS.communication.reply_to,
     )
 
+    message.sent = True
+    await db.commit()
+
 
 @router.post(
     "/{id}/test",
