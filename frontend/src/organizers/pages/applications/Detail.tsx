@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ExclamationIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -18,6 +18,8 @@ const Detail = (): JSX.Element => {
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that application" returnTo="/applications" />;
 
+  const age = DateTime.fromFormat(data.date_of_birth, 'dd-MM-yyyy').diffNow('years').negate().years;
+
   return (
     <>
       <Description
@@ -29,7 +31,15 @@ const Detail = (): JSX.Element => {
           <Item name="Email" value={data.participant.email} />
           <Item name="Gender" value={data.gender} />
           <Item name="Race / Ethnicity" value={data.race_ethnicity} />
-          <Item name="Date of Birth" value={data.date_of_birth} />
+          <Item
+            name="Date of Birth"
+            value={
+              <span className="flex">
+                {data.date_of_birth} (<b>{Math.trunc(age)} y/o</b>)
+                {age < 18 && <ExclamationIcon className="ml-1 text-yellow-500 w-5 h-5" aria-hidden="true" />}
+              </span>
+            }
+          />
         </NamedSection>
         <NamedSection name="Education">
           <Item
