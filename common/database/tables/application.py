@@ -173,3 +173,7 @@ class ApplicationAutosave(BaseModel):
 
     agree_to_privacy: bool
     agree_to_rules: bool
+
+    mlh_code_of_conduct: bool
+    mlh_event_logistics_information: bool
+    mlh_communications: bool

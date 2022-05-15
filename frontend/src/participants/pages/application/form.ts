@@ -24,6 +24,9 @@ export const initialValues: ApplicationAutosave = {
   share_information: true,
   agree_to_privacy: false,
   agree_to_rules: false,
+  mlh_code_of_conduct: false,
+  mlh_event_logistics_information: false,
+  mlh_communications: false,
 };
 
 const required = 'This field is required';

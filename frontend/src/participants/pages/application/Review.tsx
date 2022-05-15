@@ -71,41 +71,81 @@ const Review = (): JSX.Element => {
         <Row name="ZIP / Postal code" value={values.postal_code} />
         <Row name="Country" value={values.country} />
       </SidebarCard>
-      <Card className="flex justify-around">
-        <CheckboxInput
-          label={
-            <span>
-              I agree to the WaffleHacks{' '}
-              <Link to="https://wafflehacks.org/privacy-policy" external={true}>
-                privacy policy
-              </Link>{' '}
-              and{' '}
-              <Link to="https://wafflehacks.org/data-sharing" external={true}>
-                data sharing policy
-              </Link>
-              .
-            </span>
-          }
-          required
-          {...getFieldProps('agree_to_privacy')}
-        />
-        <CheckboxInput
-          label={
-            <span>
-              I agree to abide by the{' '}
-              <Link to="https://wafflehacks.org/rules" external={true}>
-                rules
-              </Link>{' '}
-              and{' '}
-              <Link to="https://wafflehacks.org/code-of-conduct" external={true}>
-                code of conduct
-              </Link>
-              .
-            </span>
-          }
-          required
-          {...getFieldProps('agree_to_rules')}
-        />
+      <Card>
+        <div className="mx-5 grid gap-5 md:grid-cols-2">
+          <CheckboxInput
+            label={
+              <span>
+                I have read and agree to the WaffleHacks{' '}
+                <Link to="https://wafflehacks.org/privacy-policy" external={true}>
+                  privacy policy
+                </Link>
+                .
+              </span>
+            }
+            required
+            {...getFieldProps('agree_to_privacy')}
+          />
+          <CheckboxInput
+            label={
+              <span>
+                I have read and agree to abide by the WaffleHacks{' '}
+                <Link to="https://wafflehacks.org/rules" external={true}>
+                  rules
+                </Link>
+                .
+              </span>
+            }
+            required
+            {...getFieldProps('agree_to_rules')}
+          />
+          <CheckboxInput
+            label={
+              <span>
+                I have read and agree to the{' '}
+                <Link to="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" external>
+                  MLH Code of Conduct
+                </Link>
+                .
+              </span>
+            }
+            required
+            {...getFieldProps('mlh_code_of_conduct')}
+          />
+          <CheckboxInput
+            label={
+              <span>
+                I authorize MLH to send me pre- and post-event informational emails, which contain free credit and
+                opportunities from their partners.
+              </span>
+            }
+            required
+            {...getFieldProps('mlh_communications')}
+          />
+          <CheckboxInput
+            label={
+              <span>
+                I authorize you to share my application/registration information with Major League Hacking for event
+                administration, ranking, and MLH administration in-line with the{' '}
+                <Link to="https://mlh.io/privacy" external>
+                  MLH Privacy Policy
+                </Link>
+                . I further agree to the terms of both the{' '}
+                <Link to="https://github.com/MLH/mlh-policies/blob/master/contest-terms.md" external>
+                  MLH Contest Terms and Conditions
+                </Link>{' '}
+                and the{' '}
+                <Link to="https://mlh.io/privacy" external>
+                  MLH Privacy Policy
+                </Link>
+                .
+              </span>
+            }
+            className="md:col-span-2"
+            required
+            {...getFieldProps('mlh_event_logistics_information')}
+          />
+        </div>
       </Card>
     </>
   );

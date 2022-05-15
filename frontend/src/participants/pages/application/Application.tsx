@@ -111,7 +111,13 @@ const Application = (): JSX.Element => {
           ),
           resume: values.resume !== undefined,
           share_information: values.share_information,
-          legal_agreements_acknowledged: values.agree_to_privacy && values.agree_to_rules,
+          legal_agreements_acknowledged: [
+            values.agree_to_privacy,
+            values.agree_to_rules,
+            values.mlh_code_of_conduct,
+            values.mlh_event_logistics_information,
+            values.mlh_communications,
+          ].every((v) => v),
         });
         setResume(values.resume);
       }}

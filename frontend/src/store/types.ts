@@ -106,6 +106,11 @@ export interface ApplicationAutosave {
   // Legal
   agree_to_privacy: boolean;
   agree_to_rules: boolean;
+
+  // MLH stuff
+  mlh_code_of_conduct: boolean;
+  mlh_event_logistics_information: boolean;
+  mlh_communications: boolean;
 }
 
 export enum Group {
