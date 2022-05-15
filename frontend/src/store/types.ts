@@ -69,6 +69,8 @@ export interface Application {
   country: string;
   shipping_address: string;
 
+  phone_number: string;
+
   resume?: string;
   share_information: boolean;
 
@@ -78,6 +80,7 @@ export interface Application {
 
 export interface ApplicationAutosave {
   // About
+  phone_number: string;
   gender: string;
   race_ethnicity: string;
   date_of_birth: string;
@@ -106,6 +109,11 @@ export interface ApplicationAutosave {
   // Legal
   agree_to_privacy: boolean;
   agree_to_rules: boolean;
+
+  // MLH stuff
+  mlh_code_of_conduct: boolean;
+  mlh_event_logistics_information: boolean;
+  mlh_communications: boolean;
 }
 
 export enum Group {

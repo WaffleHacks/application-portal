@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from 'react-phone-number-input';
 import * as Yup from 'yup';
 
 import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
@@ -5,6 +6,7 @@ import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
 type AutosaveResume = File | { path: string };
 
 export const initialValues: ApplicationAutosave = {
+  phone_number: '',
   gender: '',
   race_ethnicity: '',
   date_of_birth: '',
@@ -24,11 +26,21 @@ export const initialValues: ApplicationAutosave = {
   share_information: true,
   agree_to_privacy: false,
   agree_to_rules: false,
+  mlh_code_of_conduct: false,
+  mlh_event_logistics_information: false,
+  mlh_communications: false,
 };
 
 const required = 'This field is required';
 export const validationSchema = {
   about: Yup.object({
+    phone_number: Yup.string()
+      .required(required)
+      .test(
+        'valid-number',
+        'Must provide a valid phone number',
+        (value: string | undefined) => value !== undefined && isValidPhoneNumber(value, 'US'),
+      ),
     gender: Yup.string().oneOf(Object.values(Gender), required).required(required),
     race_ethnicity: Yup.string().oneOf(Object.values(RaceEthnicity), required).required(required),
     date_of_birth: Yup.string()

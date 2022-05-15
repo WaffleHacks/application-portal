@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useField } from 'formik';
 import React from 'react';
 
@@ -9,7 +10,7 @@ const Checkbox = ({ label, ...props }: BaseProps<string>): JSX.Element => {
   const id = generateId('checkbox', label);
 
   return (
-    <div className={className}>
+    <div className={classNames('flex items-center', className)}>
       <input
         id={id}
         type="checkbox"

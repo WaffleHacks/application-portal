@@ -2,7 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String
@@ -39,6 +39,13 @@ class Status(Enum):
     ACCEPTED = "accepted"
 
 
+def require_legal_agreements(v: bool) -> bool:
+    print(v)
+    if v is False:
+        raise ValueError("legal agreements must be accepted to apply")
+    return v
+
+
 class ApplicationProfileBase(SQLModel):
     level_of_study: str
     graduation_year: int
@@ -57,9 +64,14 @@ class ApplicationProfileBase(SQLModel):
     country: str
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
+    phone_number: str
+
     share_information: bool
 
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
+    _legal_agreements_validator = validator(
+        "legal_agreements_acknowledged", allow_reuse=True
+    )(require_legal_agreements)
 
 
 class ApplicationBase(ApplicationProfileBase):
@@ -139,9 +151,14 @@ class ApplicationUpdate(SQLModel):
     shipping_address: Optional[str]  # should be formatted prior to insertion
     country: Optional[str]
 
+    phone_number: Optional[str]
+
     share_information: Optional[bool]
 
     legal_agreements_acknowledged: Optional[bool]
+    _legal_agreements_validator = validator(
+        "legal_agreements_acknowledged", allow_reuse=True
+    )(require_legal_agreements)
 
 
 class ApplicationAutosaveResume(BaseModel):
@@ -149,27 +166,32 @@ class ApplicationAutosaveResume(BaseModel):
 
 
 class ApplicationAutosave(BaseModel):
-    gender: str
-    race_ethnicity: str
-    date_of_birth: str
+    phone_number: str = ""
+    gender: str = ""
+    race_ethnicity: str = ""
+    date_of_birth: str = ""
 
-    school: str
-    level_of_study: str
-    graduation_year: int
-    major: str
+    school: str = ""
+    level_of_study: str = ""
+    graduation_year: int = 2022
+    major: str = ""
 
-    street: str
-    apartment: str
-    city: str
-    region: str
-    postal_code: str
-    country: str
+    street: str = ""
+    apartment: str = ""
+    city: str = ""
+    region: str = ""
+    postal_code: str = ""
+    country: str = ""
 
-    portfolio_url: str
-    vcs_url: str
-    hackathons_attended: int
+    portfolio_url: str = ""
+    vcs_url: str = ""
+    hackathons_attended: int = datetime.now().year
     resume: Optional[ApplicationAutosaveResume]
-    share_information: bool
+    share_information: bool = True
 
-    agree_to_privacy: bool
-    agree_to_rules: bool
+    agree_to_privacy: bool = False
+    agree_to_rules: bool = False
+
+    mlh_code_of_conduct: bool = False
+    mlh_event_logistics_information: bool = False
+    mlh_communications: bool = False
