@@ -59,6 +59,7 @@ const Detail = (): JSX.Element => {
       >
         <NamedSection name="About">
           <Item name="Email" value={data.participant.email} />
+          <Item name="Phone" value={data.phone_number} />
           <Item name="Gender" value={data.gender} />
           <Item name="Race / Ethnicity" value={data.race_ethnicity} />
           <Item
