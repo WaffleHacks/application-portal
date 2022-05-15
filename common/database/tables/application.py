@@ -40,7 +40,6 @@ class Status(Enum):
 
 
 def require_legal_agreements(v: bool) -> bool:
-    print(v)
     if v is False:
         raise ValueError("legal agreements must be accepted to apply")
     return v
