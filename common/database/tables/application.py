@@ -162,31 +162,31 @@ class ApplicationAutosaveResume(BaseModel):
 
 
 class ApplicationAutosave(BaseModel):
-    gender: str
-    race_ethnicity: str
-    date_of_birth: str
+    gender: str = ""
+    race_ethnicity: str = ""
+    date_of_birth: str = ""
 
-    school: str
-    level_of_study: str
-    graduation_year: int
-    major: str
+    school: str = ""
+    level_of_study: str = ""
+    graduation_year: int = 2022
+    major: str = ""
 
-    street: str
-    apartment: str
-    city: str
-    region: str
-    postal_code: str
-    country: str
+    street: str = ""
+    apartment: str = ""
+    city: str = ""
+    region: str = ""
+    postal_code: str = ""
+    country: str = ""
 
-    portfolio_url: str
-    vcs_url: str
-    hackathons_attended: int
+    portfolio_url: str = ""
+    vcs_url: str = ""
+    hackathons_attended: int = datetime.now().year
     resume: Optional[ApplicationAutosaveResume]
-    share_information: bool
+    share_information: bool = True
 
-    agree_to_privacy: bool
-    agree_to_rules: bool
+    agree_to_privacy: bool = False
+    agree_to_rules: bool = False
 
-    mlh_code_of_conduct: bool
-    mlh_event_logistics_information: bool
-    mlh_communications: bool
+    mlh_code_of_conduct: bool = False
+    mlh_event_logistics_information: bool = False
+    mlh_communications: bool = False
