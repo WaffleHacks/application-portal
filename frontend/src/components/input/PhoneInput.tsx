@@ -31,7 +31,7 @@ const PhoneInput = ({ label, ...props }: BaseProps<string>): JSX.Element => {
               'block w-full shadow-sm sm:text-sm rounded-md',
             ),
             id,
-            'aria-described-by': hasError ? errorId : undefined,
+            'aria-describedby': hasError ? errorId : undefined,
             'aria-invalid': hasError,
           }}
           defaultCountry="US"
