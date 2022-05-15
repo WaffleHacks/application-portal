@@ -22,11 +22,3 @@ export const isDirector = createSelector(
   [(state: RootState) => state.authentication.portal],
   (portal) => (portal?.permissions || []).indexOf(PortalScope.Director) !== -1,
 );
-
-/**
- * Check if we are still waiting for tokens to be retrieved
- */
-export const waitingForTokens = createSelector(
-  [(state: RootState) => state.authentication],
-  (auth) => auth.portal === undefined || auth.profile === undefined,
-);

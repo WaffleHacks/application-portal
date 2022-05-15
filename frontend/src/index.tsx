@@ -1,5 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react';
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
@@ -9,6 +9,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import './index.css';
 
 import App from './App';
+import Loading from './Loading';
 import { store } from './store';
 
 const AUTH0_DOMAIN = process.env.REACT_APP_AUTH0_DOMAIN || '';
@@ -27,7 +28,9 @@ ReactDOM.render(
       >
         <BrowserRouter>
           <Toaster position="top-right" toastOptions={{ duration: 2500 }} />
-          <App />
+          <Suspense fallback={<Loading />}>
+            <App />
+          </Suspense>
         </BrowserRouter>
       </Auth0Provider>
     </Provider>

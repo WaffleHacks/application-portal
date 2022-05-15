@@ -6,7 +6,7 @@ import React, { Fragment } from 'react';
 
 import { Link, NavItem, ProfilePicture } from '../../components/navigation';
 import logo from '../../logo.png';
-import { useGetProfileQuery } from '../../store';
+import { useGetProfileQuery, useSelector } from '../../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
@@ -23,13 +23,7 @@ const iconClassNames = (isActive: boolean, mobile: boolean): string =>
     'flex-shrink-0 h-6 w-6',
   );
 
-interface Props {
-  items: NavItem[];
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}
-
-const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
+const Profile = (): JSX.Element => {
   const { logout } = useAuth0();
   const { data } = useGetProfileQuery();
 
@@ -37,6 +31,38 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
     client_id: AUTH0_CLIENT_ID,
     returnTo: window.location.origin,
   };
+
+  return (
+    <div className="flex-shrink-0 block">
+      <div className="flex items-center">
+        <div>
+          <ProfilePicture />
+        </div>
+        <div className="ml-3">
+          <p className="text-base md:text-sm font-medium text-white">
+            {data === undefined ? 'Loading...' : data.firstName + ' ' + data.lastName}
+          </p>
+          <button
+            type="button"
+            onClick={() => logout(logoutOptions)}
+            className="text-sm font-medium text-gray-400 hover:text-white"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface Props {
+  items: NavItem[];
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
+
+const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
+  const profileTokenLoading = useSelector((state) => state.authentication.profile === undefined);
 
   const shownItems = items.filter((i) => !i.hidden);
 
@@ -101,25 +127,7 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
                 </nav>
               </div>
               <div className="flex-shrink-0 flex bg-gray-700 p-4">
-                <div className="flex-shrink-0 block">
-                  <div className="flex items-center">
-                    <div>
-                      <ProfilePicture />
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-base font-medium text-white">
-                        {data?.firstName} {data?.lastName}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => logout(logoutOptions)}
-                        className="text-sm font-medium text-gray-400 hover:text-white"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                {profileTokenLoading ? <span className="text-gray-400">Loading...</span> : <Profile />}
               </div>
             </div>
           </Transition.Child>
@@ -145,25 +153,7 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
             </nav>
           </div>
           <div className="flex-shrink-0 flex bg-gray-700 p-4">
-            <div className="flex-shrink-0 block">
-              <div className="flex items-center">
-                <div>
-                  <ProfilePicture />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-white">
-                    {data?.firstName} {data?.lastName}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => logout(logoutOptions)}
-                    className="text-xs font-medium text-gray-400 hover:text-white"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            </div>
+            {profileTokenLoading ? <span className="text-gray-400">Loading...</span> : <Profile />}
           </div>
         </div>
       </div>
