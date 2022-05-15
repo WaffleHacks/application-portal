@@ -67,7 +67,7 @@ const Detail = (): JSX.Element => {
             value={
               <span className="flex">
                 {data.date_of_birth} (<b>{Math.trunc(age)} y/o</b>)
-                {age < 18 && <ExclamationIcon className="ml-1 text-yellow-500 w-5 h-5" aria-hidden="true" />}
+                {age < 13 && <ExclamationIcon className="ml-1 text-yellow-500 w-5 h-5" aria-hidden="true" />}
               </span>
             }
           />
