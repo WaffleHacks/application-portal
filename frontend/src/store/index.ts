@@ -47,6 +47,7 @@ export { useGetProfileQuery } from './profile';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,
+  useGetApplicationResumeQuery,
   useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,

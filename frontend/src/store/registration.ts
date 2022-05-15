@@ -29,6 +29,10 @@ interface SchoolDetail extends School {
   applications: ReducedApplication[];
 }
 
+interface ApplicationResume {
+  url: string;
+}
+
 const api = createApi({
   reducerPath: 'registration',
   baseQuery: baseQuery('portal', BASE_URL),
@@ -45,6 +49,9 @@ const api = createApi({
       query: (arg) => `/registration/applications/${arg}`,
       providesTags: (result: Application | undefined) =>
         result ? [{ type: Tag.Application, id: result.participant.id }] : [],
+    }),
+    getApplicationResume: builder.query<ApplicationResume, string>({
+      query: (arg) => `/registration/applications/${arg}/resume`,
     }),
     createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({
       query: (body) => ({
@@ -84,6 +91,7 @@ export default api;
 export const {
   useCreateApplicationMutation,
   useGetApplicationQuery,
+  useGetApplicationResumeQuery,
   useListApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
