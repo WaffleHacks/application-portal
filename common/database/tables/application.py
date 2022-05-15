@@ -64,6 +64,8 @@ class ApplicationProfileBase(SQLModel):
     country: str
     shipping_address: Optional[str]  # should be formatted prior to insertion
 
+    phone_number: str
+
     share_information: bool
 
     legal_agreements_acknowledged: bool = Field(default=False, nullable=False)
@@ -149,6 +151,8 @@ class ApplicationUpdate(SQLModel):
     shipping_address: Optional[str]  # should be formatted prior to insertion
     country: Optional[str]
 
+    phone_number: Optional[str]
+
     share_information: Optional[bool]
 
     legal_agreements_acknowledged: Optional[bool]
@@ -162,6 +166,7 @@ class ApplicationAutosaveResume(BaseModel):
 
 
 class ApplicationAutosave(BaseModel):
+    phone_number: str = ""
     gender: str = ""
     race_ethnicity: str = ""
     date_of_birth: str = ""

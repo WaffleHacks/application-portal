@@ -91,6 +91,7 @@ const Application = (): JSX.Element => {
       initialValues={{ ...initialValues, ...data }}
       onSubmit={(values: ApplicationAutosave) => {
         createApplication({
+          phone_number: values.phone_number,
           school: values.school,
           level_of_study: values.level_of_study,
           graduation_year: values.graduation_year,

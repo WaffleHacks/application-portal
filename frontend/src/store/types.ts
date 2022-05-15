@@ -69,6 +69,8 @@ export interface Application {
   country: string;
   shipping_address: string;
 
+  phone_number: string;
+
   resume?: string;
   share_information: boolean;
 
@@ -78,6 +80,7 @@ export interface Application {
 
 export interface ApplicationAutosave {
   // About
+  phone_number: string;
   gender: string;
   race_ethnicity: string;
   date_of_birth: string;
