@@ -15,6 +15,13 @@ const AboutForm = (): JSX.Element => {
     >
       <PhoneInput className="col-span-6 sm:col-span-3" label="Phone number" {...getFieldProps('phone_number')} />
 
+      <DateInput
+        className="col-span-6 sm:col-span-3"
+        label="Date of birth"
+        required
+        {...getFieldProps('date_of_birth')}
+      />
+
       <SelectInput className="col-span-6 sm:col-span-3" label="Gender" required {...getFieldProps('gender')}>
         {Object.values(Gender).map((g, i) => (
           <option key={i}>{g}</option>
@@ -31,13 +38,6 @@ const AboutForm = (): JSX.Element => {
           <option key={i}>{e}</option>
         ))}
       </SelectInput>
-
-      <DateInput
-        className="col-span-6 sm:col-span-3"
-        label="Date of birth"
-        required
-        {...getFieldProps('date_of_birth')}
-      />
     </SidebarCard>
   );
 };
