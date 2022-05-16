@@ -69,6 +69,8 @@ ENTRYPOINT ["./entrypoint.sh"]
 #  Communication
 ###
 FROM common as communication
+EXPOSE 8000/tcp
+
 ENV APP communication
 
 COPY --chown=app communication ./communication
@@ -105,6 +107,8 @@ CMD ["node", "."]
 #  Registration
 ###
 FROM common as registration
+EXPOSE 8000/tcp
+
 ENV APP registration
 
 COPY --chown=app registration ./registration
