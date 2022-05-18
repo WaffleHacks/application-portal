@@ -2,13 +2,21 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import validate_model
+from pydantic import BaseModel, validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from starlette.responses import URL, RedirectResponse
 
 from common import SETTINGS
 from common.authentication import with_user_id
-from common.database import DiscordLink, DiscordLinkRead, DiscordLinkUpdate, with_db
+from common.database import (
+    DiscordLink,
+    DiscordLinkRead,
+    DiscordLinkUpdate,
+    Participant,
+    Status,
+    with_db,
+)
 from common.permissions import Permission, requires_permission
 
 from .oauth import StarletteOAuth2App, with_oauth
@@ -25,15 +33,29 @@ async def link(
     request: Request,
     id: str = Depends(with_user_id),
     client: StarletteOAuth2App = Depends(with_oauth),
+    db: AsyncSession = Depends(with_db),
 ):
     """
-    Initiate the OAuth 2.0 login flow for Discord
+    Initiate the OAuth 2.0 login flow for Discord. Prior to linking their Discord account, the participant must have
+    applied and been accepted.
     """
+
+    # Check the participant has applied and was accepted
+    participant = await db.get(
+        Participant, id, options=[selectinload(Participant.application)]
+    )
+    if participant is None:
+        raise HTTPException(status_code=HTTPStatus.GONE, detail="non-existent user")
+    elif participant.application is None:
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="no application")
+    elif participant.application.status != Status.ACCEPTED:
+        raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="not accepted")
+
     request.session["id"] = id
 
     # Add reverse proxy prefix
     # TODO: figure out a way to make this more robust
-    callback_url = request.url_for("link_callback").replace(
+    callback_url = request.url_for("Complete linking").replace(
         "discord", "integrations/discord"
     )
 
@@ -153,14 +175,17 @@ async def update_profile(
     return discord
 
 
+class CheckResponse(BaseModel):
+    linked: bool
+
+
 # TODO: add authorization for this route
-@router.get("/linked", status_code=HTTPStatus.NO_CONTENT, name="Check linked status")
-async def check_linked(id: str, db: AsyncSession = Depends(with_db)):
+@router.get("/status", response_model=CheckResponse, name="Check linked status")
+async def check_status(id: str, db: AsyncSession = Depends(with_db)):
     """
-    Check if the given participant has a linked Discord account. This endpoint is only intended for use by WaffleBot
-    to check if a participant is allowed to view entire server.
+    Check if the given participant has a linked Discord account and agreed to the server rules. This endpoint is only
+    intended for use by WaffleBot to check if a participant is allowed to view entire server.
     """
 
     discord = await db.get(DiscordLink, id)
-    if discord is None:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not linked")
+    return {"linked": discord is not None and discord.agreed_to_rules}
