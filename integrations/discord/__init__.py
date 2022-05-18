@@ -151,3 +151,16 @@ async def update_profile(
     await db.commit()
 
     return discord
+
+
+# TODO: add authorization for this route
+@router.get("/linked", status_code=HTTPStatus.NO_CONTENT, name="Check linked status")
+async def check_linked(id: str, db: AsyncSession = Depends(with_db)):
+    """
+    Check if the given participant has a linked Discord account. This endpoint is only intended for use by WaffleBot
+    to check if a participant is allowed to view entire server.
+    """
+
+    discord = await db.get(DiscordLink, id)
+    if discord is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not linked")
