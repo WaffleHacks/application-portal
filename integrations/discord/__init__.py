@@ -2,12 +2,13 @@ from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import URL, RedirectResponse
 
 from common import SETTINGS
 from common.authentication import with_user_id
-from common.database import DiscordLink, DiscordLinkRead, with_db
+from common.database import DiscordLink, DiscordLinkRead, DiscordLinkUpdate, with_db
 from common.permissions import Permission, requires_permission
 
 from .oauth import StarletteOAuth2App, with_oauth
@@ -111,5 +112,37 @@ async def profile(id: str = Depends(with_user_id), db: AsyncSession = Depends(wi
     discord = await db.get(DiscordLink, id)
     if discord is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    return discord
+
+
+@router.patch(
+    "/profile",
+    response_model=DiscordLinkRead,
+    dependencies=[Depends(requires_permission(Permission.Participant))],
+)
+async def update_profile(
+    values: DiscordLinkUpdate,
+    id: str = Depends(with_user_id),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Update attributes for a participant's profile
+    """
+
+    discord = await db.get(DiscordLink, id)
+    if discord is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    updated_fields = values.dict(exclude_unset=True)
+    for key, value in updated_fields.items():
+        setattr(discord, key, value)
+
+    *_, error = validate_model(DiscordLink, discord.__dict__)
+    if error:
+        raise error
+
+    db.add(discord)
+    await db.commit()
 
     return discord
