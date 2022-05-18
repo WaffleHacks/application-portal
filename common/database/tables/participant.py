@@ -20,10 +20,12 @@ class Participant(ParticipantBase, table=True):
     id: str = Field(default=None, primary_key=True, nullable=False)
 
     application: Optional["Application"] = Relationship(
-        back_populates="participant", sa_relationship_kwargs={"cascade": "all, delete"}
+        back_populates="participant",
+        sa_relationship_kwargs={"cascade": "all, delete", "uselist": False},
     )
     discord: Optional["DiscordLink"] = Relationship(
-        back_populates="participant", sa_relationship_kwargs={"cascade": "all, delete"}
+        back_populates="participant",
+        sa_relationship_kwargs={"cascade": "all, delete", "uselist": False},
     )
 
 
