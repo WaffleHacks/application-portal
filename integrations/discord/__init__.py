@@ -1,13 +1,13 @@
 from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import URL, RedirectResponse
 
 from common import SETTINGS
 from common.authentication import with_user_id
-from common.database import DiscordLink, with_db
+from common.database import DiscordLink, DiscordLinkRead, with_db
 from common.permissions import Permission, requires_permission
 
 from .oauth import StarletteOAuth2App, with_oauth
@@ -96,3 +96,20 @@ async def unlink(id: str = Depends(with_user_id), db: AsyncSession = Depends(wit
     if discord is not None:
         await db.delete(discord)
         await db.commit()
+
+
+@router.get(
+    "/profile",
+    response_model=DiscordLinkRead,
+    dependencies=[Depends(requires_permission(Permission.Participant))],
+)
+async def profile(id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)):
+    """
+    Get a participant's Discord profile
+    """
+
+    discord = await db.get(DiscordLink, id)
+    if discord is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    return discord
