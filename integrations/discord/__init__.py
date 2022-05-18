@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query, Request
@@ -75,3 +76,19 @@ async def link_callback(
     await db.commit()
 
     return RedirectResponse(SETTINGS.integrations.link_domain)
+
+
+@router.delete(
+    "/link",
+    status_code=HTTPStatus.NO_CONTENT,
+    dependencies=[Depends(requires_permission(Permission.Participant))],
+)
+async def unlink(id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)):
+    """
+    Unlink a participant's Discord account with their profile
+    """
+
+    discord = await db.get(DiscordLink, id)
+    if discord is not None:
+        await db.delete(discord)
+        await db.commit()
