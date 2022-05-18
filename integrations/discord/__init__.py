@@ -19,6 +19,7 @@ router = APIRouter()
 @router.get(
     "/link",
     dependencies=[Depends(requires_permission(Permission.Participant))],
+    name="Initiate linking",
 )
 async def link(
     request: Request,
@@ -43,6 +44,7 @@ async def link(
     "/link/callback",
     status_code=HTTPStatus.TEMPORARY_REDIRECT,
     response_class=RedirectResponse,
+    name="Complete linking",
 )
 async def link_callback(
     request: Request,
@@ -87,6 +89,7 @@ async def link_callback(
     "/link",
     status_code=HTTPStatus.NO_CONTENT,
     dependencies=[Depends(requires_permission(Permission.Participant))],
+    name="Unlink account",
 )
 async def unlink(id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)):
     """
@@ -103,6 +106,7 @@ async def unlink(id: str = Depends(with_user_id), db: AsyncSession = Depends(wit
     "/profile",
     response_model=DiscordLinkRead,
     dependencies=[Depends(requires_permission(Permission.Participant))],
+    name="Get profile",
 )
 async def profile(id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)):
     """
@@ -120,6 +124,7 @@ async def profile(id: str = Depends(with_user_id), db: AsyncSession = Depends(wi
     "/profile",
     response_model=DiscordLinkRead,
     dependencies=[Depends(requires_permission(Permission.Participant))],
+    name="Update profile",
 )
 async def update_profile(
     values: DiscordLinkUpdate,
