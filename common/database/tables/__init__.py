@@ -9,6 +9,7 @@ from .application import (
     RaceEthnicity,
     Status,
 )
+from .discord_link import DiscordLink, DiscordLinkRead, DiscordLinkUpdate
 from .message import (
     Message,
     MessageBase,
