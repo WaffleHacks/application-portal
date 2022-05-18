@@ -44,6 +44,18 @@ def current(obj: Config):
     command.current(obj)
 
 
+@migrations.command()
+@click.option("--no-autogenerate", is_flag=True, help="Create an empty migration")
+@click.argument("message", type=str, metavar="MSG", required=True)
+@click.pass_obj
+def generate(obj: Config, message: str, no_autogenerate: bool):
+    """
+    Generate a new database migration
+    """
+
+    command.revision(obj, message=message, autogenerate=not no_autogenerate)
+
+
 @migrations.command(name="run")
 @click.option("--revision", "-r", type=str, metavar="REVISION", default="head")
 @click.pass_obj
