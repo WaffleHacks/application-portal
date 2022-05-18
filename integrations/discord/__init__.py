@@ -38,7 +38,11 @@ async def link(
     return await client.authorize_redirect(request, callback_url)
 
 
-@router.get("/link/callback")
+@router.get(
+    "/link/callback",
+    status_code=HTTPStatus.TEMPORARY_REDIRECT,
+    response_class=RedirectResponse,
+)
 async def link_callback(
     request: Request,
     code: str = None,
