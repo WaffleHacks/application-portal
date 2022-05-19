@@ -1,7 +1,8 @@
-from authlib.integrations.starlette_client import OAuth, StarletteOAuth2App
 from starlette.config import Config
 
 from common import SETTINGS
+
+from .client import OAuth, OAuth2App
 
 # Register the provider
 config = Config(
@@ -24,7 +25,7 @@ oauth.register(
 )
 
 
-async def with_oauth() -> StarletteOAuth2App:
+async def with_oauth() -> OAuth2App:
     """
     Get a Discord OAuth 2.0 client
     """

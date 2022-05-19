@@ -19,7 +19,7 @@ from common.database import (
 )
 from common.permissions import Permission, requires_permission
 
-from .oauth import StarletteOAuth2App, with_oauth
+from .oauth import OAuth2App, with_oauth
 
 router = APIRouter()
 
@@ -32,7 +32,7 @@ router = APIRouter()
 async def link(
     request: Request,
     id: str = Depends(with_user_id),
-    client: StarletteOAuth2App = Depends(with_oauth),
+    client: OAuth2App = Depends(with_oauth),
     db: AsyncSession = Depends(with_db),
 ):
     """
@@ -72,7 +72,7 @@ async def link_callback(
     request: Request,
     code: str = None,
     error: Optional[str] = Query(None),
-    client: StarletteOAuth2App = Depends(with_oauth),
+    client: OAuth2App = Depends(with_oauth),
     db: AsyncSession = Depends(with_db),
 ):
     """

@@ -26,7 +26,6 @@ wafflehacks-mailer = "^0.2.1"
 celery = {version = "^5.2.6", extras = ["redis"]}
 asgiref = "^3.5.1"
 Authlib = "^1.0.1"
-httpx = {version = "^0.22.0", extras = ["http2"]}
 itsdangerous = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
