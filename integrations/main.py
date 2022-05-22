@@ -1,7 +1,12 @@
+from http import HTTPStatus
+
+from authlib.integrations.base_client.errors import MismatchingStateError
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import UJSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from . import discord
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 app.add_middleware(
@@ -11,6 +16,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Authorization"],
 )
+
+app.include_router(discord.router, prefix="/discord", tags=["Discord"])
 
 
 @app.exception_handler(StarletteHTTPException)

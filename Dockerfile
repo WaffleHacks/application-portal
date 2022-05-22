@@ -79,6 +79,19 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 
 ###
+#  Integrations
+###
+FROM common as integrations
+EXPOSE 8000/tcp
+
+ENV APP integrations
+
+COPY --chown=app integrations ./integrations
+COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+###
 #  MJML API
 ###
 FROM node:16-alpine as mjml
