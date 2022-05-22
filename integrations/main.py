@@ -27,11 +27,3 @@ async def http_exception_handler(_request: Request, exception: StarletteHTTPExce
         status_code=exception.status_code,
         headers=getattr(exception, "headers", None),
     )
-
-
-@app.exception_handler(MismatchingStateError)
-async def mismatching_state_handler(_request: Request, _exc: MismatchingStateError):
-    return UJSONResponse(
-        {"success": False, "reason": "invalid CSRF token"},
-        status_code=HTTPStatus.BAD_REQUEST,
-    )
