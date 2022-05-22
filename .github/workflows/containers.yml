@@ -16,6 +16,7 @@ jobs:
         app:
           - celery
           - communication
+          - integrations
           - mjml
           - registration
           - sync
