@@ -17,7 +17,7 @@ class CanLinkResponse(BaseModel):
     "/can-link",
     response_model=CanLinkResponse,
     dependencies=[Depends(is_internal)],
-    name="Can a Discord account be linked",
+    name="Can link?",
 )
 async def link(id, db: AsyncSession = Depends(with_db)):
     """
