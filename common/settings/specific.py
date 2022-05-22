@@ -26,15 +26,7 @@ class CommunicationSettings(BaseAPI):
 
 
 class IntegrationsSettings(BaseAPI):
-    # The Discord app client ID and secret
-    discord_client_id: str
-    discord_client_secret: str
-
-    # The domain which hosts the linking frontend
-    link_domain: HttpUrl
-
-    # A random string to secure sessions
-    secret_key: str
+    pass
 
 
 class RegistrationSettings(BaseAPI):

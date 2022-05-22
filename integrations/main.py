@@ -5,14 +5,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import UJSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from starlette.middleware.sessions import SessionMiddleware
-
-from common import SETTINGS
 
 from . import discord
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
-app.add_middleware(SessionMiddleware, secret_key=SETTINGS.integrations.secret_key)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
