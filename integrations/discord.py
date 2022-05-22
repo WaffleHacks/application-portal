@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.authentication import with_user_id
+from common.authentication import is_internal
 from common.database import Participant, Status, with_db
 
 router = APIRouter()
@@ -16,9 +16,10 @@ class CanLinkResponse(BaseModel):
 @router.get(
     "/can-link",
     response_model=CanLinkResponse,
+    dependencies=[Depends(is_internal)],
     name="Can a Discord account be linked",
 )
-async def link(id: str = Depends(with_user_id), db: AsyncSession = Depends(with_db)):
+async def link(id, db: AsyncSession = Depends(with_db)):
     """
     Check if the participant can link their Discord account with their application. Prior to linking their Discord
     account, the participant must have applied and been accepted.

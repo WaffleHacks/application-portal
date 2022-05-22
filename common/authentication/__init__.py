@@ -1,8 +1,8 @@
 from http import HTTPStatus
-from typing import Dict
+from typing import Dict, Optional
 
 import jwt
-from fastapi import Depends, HTTPException
+from fastapi import Depends, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt import ExpiredSignatureError, InvalidTokenError
 
@@ -45,3 +45,15 @@ async def with_user_id(token: Dict[str, str] = Depends(is_authenticated)) -> str
     Get the user's id from their JWT
     """
     return token["sub"]
+
+
+async def is_internal(host: Optional[str] = Header(default=None)):
+    """
+    Determine if the request is coming from an internal client
+    """
+    if not host:
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
+
+    [domain, _] = host.split(":")
+    if not domain.endswith("wafflemaker.internal"):
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
