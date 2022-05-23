@@ -54,6 +54,6 @@ async def is_internal(host: Optional[str] = Header(default=None)):
     if not host:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
 
-    [domain, _] = host.split(":")
-    if not domain.endswith("wafflemaker.internal"):
+    parts = host.split(":")
+    if not parts[0].endswith("wafflemaker.internal"):
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
