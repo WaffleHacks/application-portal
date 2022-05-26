@@ -43,6 +43,10 @@ class Settings(BaseModel):
     # The Redis store to connect to
     redis_url: RedisDsn
 
+    # Whether to enable OpenTelemetry observability
+    otel_enable: bool = False
+    otel_debug: bool = False
+
     @validator("apps", pre=True)
     def parse_list(cls, value):
         if isinstance(value, str):
