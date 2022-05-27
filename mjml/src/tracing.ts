@@ -1,5 +1,6 @@
+import { credentials } from '@grpc/grpc-js';
 import { trace } from '@opentelemetry/api';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { ZipkinExporter } from '@opentelemetry/exporter-zipkin';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
@@ -22,7 +23,11 @@ function getExporter(): SpanExporter {
   logger.info('opentelemetry', { enabled: true, exporter: debug ? 'jaeger' : 'otlp' });
 
   if (debug) return new ZipkinExporter();
-  else return new OTLPTraceExporter();
+  else
+    return new OTLPTraceExporter({
+      url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+      credentials: credentials.createSsl(),
+    });
 }
 
 const ignoreIncomingRequestHook: IgnoreIncomingRequestFunction = (request) => {
