@@ -22,7 +22,7 @@ def init(app: Optional[FastAPI] = None, celery: bool = False):
         # Select the exporter
         if SETTINGS.otel_debug:
             print("OpenTelemetry: Jaeger")
-            exporter = JaegerExporter(agent_port=3531)
+            exporter = JaegerExporter(agent_port=9431)
         else:
             print("OpenTelemetry: OTLP")
             exporter = OTLPSpanExporter()

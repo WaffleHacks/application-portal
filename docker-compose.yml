@@ -36,3 +36,12 @@ services:
       - "host.docker.internal:host-gateway"
     ports:
       - "8000:8000"
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.34
+    ports:
+      - "9431:6831/udp"
+      - "9486:16686"
+      - "9411:9411"
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: :9411
