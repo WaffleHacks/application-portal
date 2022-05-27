@@ -5,6 +5,7 @@ import jwt
 from fastapi import Depends, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt import ExpiredSignatureError, InvalidTokenError
+from opentelemetry import trace
 
 from ..settings import SETTINGS
 from .jwks import JWKClient
@@ -37,6 +38,8 @@ async def is_authenticated(
     except InvalidTokenError:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="invalid JWT")
 
+    trace.get_current_span().set_attribute("user.id", payload["sub"])
+
     return payload
 
 
@@ -57,3 +60,6 @@ async def is_internal(host: Optional[str] = Header(default=None)):
     parts = host.split(":")
     if not parts[0].endswith("wafflemaker.internal"):
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
+
+    # TODO: change to requesting service
+    trace.get_current_span().set_attribute("user.id", "internal")
