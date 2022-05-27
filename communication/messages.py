@@ -3,6 +3,7 @@ from typing import List, Set, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException
 from mailer import AsyncClient, BodyType
+from opentelemetry import trace
 from pydantic import validate_model
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -32,6 +33,7 @@ from common.permissions import Permission, requires_permission
 from .util import send_message
 
 router = APIRouter()
+tracer = trace.get_tracer(__name__)
 
 
 @router.get(
@@ -121,28 +123,32 @@ async def update(
 
     # Update the recipients
     if values.recipients:
-        # Remove all old recipients
-        for r in message.recipients:
-            await db.delete(r)
+        with tracer.start_as_current_span("update-recipients"):
+            # Remove all old recipients
+            for r in message.recipients:
+                await db.delete(r)
 
-        # Add new recipients
-        for group in values.recipients:
-            db.add(Recipient(group=group, message=message))
+            # Add new recipients
+            for group in values.recipients:
+                db.add(Recipient(group=group, message=message))
 
     # Update the content
     if values.content:
-        rendered, is_html = await render_mjml(values.content, mjml)
-        message.rendered = rendered
-        message.is_html = is_html
+        with tracer.start_span("update-content"):
+            rendered, is_html = await render_mjml(values.content, mjml)
+            message.rendered = rendered
+            message.is_html = is_html
 
     # Update the rest of the fields
-    updated_fields = values.dict(exclude_unset=True, exclude={"recipients"})
-    for key, value in updated_fields.items():
-        setattr(message, key, value)
+    with tracer.start_as_current_span("update-fields"):
+        updated_fields = values.dict(exclude_unset=True, exclude={"recipients"})
+        for key, value in updated_fields.items():
+            setattr(message, key, value)
 
-    *_, error = validate_model(Message, message.__dict__)
-    if error:
-        raise error
+    with tracer.start_as_current_span("validate"):
+        *_, error = validate_model(Message, message.__dict__)
+        if error:
+            raise error
 
     db.add(message)
     await db.commit()
@@ -221,9 +227,10 @@ async def send(
     result = await db.execute(recipients_query(groups))
     participants = result.all()
 
-    emails = {}
-    for row in participants:
-        emails[row[2]] = {"first_name": row[0], "last_name": row[1]}
+    with tracer.start_as_current_span("build-context"):
+        emails = {}
+        for row in participants:
+            emails[row[2]] = {"first_name": row[0], "last_name": row[1]}
 
     await mailer.send_template(
         emails,
@@ -321,8 +328,11 @@ async def render_mjml(source: str, client: MJMLClient) -> Tuple[str, bool]:
     :param client: the MJML API client
     :returns: rendered MJML or plain text with a boolean denoting if it is HTML
     """
-    trimmed_source = source.strip()
-    if not (trimmed_source.startswith("<mjml>") and trimmed_source.endswith("</mjml>")):
-        return source, False
+    with tracer.start_as_current_span("render"):
+        trimmed_source = source.strip()
+        if not (
+            trimmed_source.startswith("<mjml>") and trimmed_source.endswith("</mjml>")
+        ):
+            return source, False
 
-    return await client.render(source), True
+        return await client.render(source), True

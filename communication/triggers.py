@@ -1,15 +1,12 @@
 from http import HTTPStatus
-from string import Template
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from mailer import BodyType
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common import SETTINGS
 from common.authentication import with_user_id
 from common.database import (
     MessageTrigger,
