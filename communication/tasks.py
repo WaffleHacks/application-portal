@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
+from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
 from common.database import (
@@ -52,53 +53,57 @@ async def send_triggered_message(
     await send_message(participant, trigger.message, mailer)
 
 
+async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
+    span = trace.get_current_span()
+
+    async with db_context() as db:
+        application = await db.get(Application, id)
+        if application is not None:
+            span.set_attribute("complete", True)
+            logger.info(
+                f"participant '{id}' completed application within 24hr, not sending reminder"
+            )
+            return
+
+    span.set_attribute("complete", False)
+    await send_triggered_message(id, trigger_type)
+
+
 @shared_task()
 @syncify
 async def on_sign_up(id: str):
+    trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.SIGN_UP)
 
 
 @shared_task()
 @syncify
 async def incomplete_after_24h(id: str):
-    async with db_context() as db:
-        application = await db.get(Application, id)
-        if application is not None:
-            logger.info(
-                f"participant '{id}' completed application within 24hr, not sending reminder"
-            )
-            return
-
-    await send_triggered_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_24H)
+    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_24H)
 
 
 @shared_task()
 @syncify
 async def incomplete_after_7d(id: str):
-    async with db_context() as db:
-        application = await db.get(Application, id)
-        if application is not None:
-            logger.info(
-                f"participant '{id}' completed application within 1 week, not sending reminder"
-            )
-            return
-
-    await send_triggered_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_7D)
+    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_7D)
 
 
 @shared_task()
 @syncify
 async def on_apply(id: str):
+    trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_SUBMITTED)
 
 
 @shared_task()
 @syncify
 async def on_application_accepted(id: str):
+    trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_ACCEPTED)
 
 
 @shared_task()
 @syncify
 async def on_application_rejected(id: str):
+    trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_REJECTED)

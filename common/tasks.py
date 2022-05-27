@@ -6,9 +6,11 @@ from typing import Any, Awaitable, Callable
 
 from celery import Celery, signature
 from celery.result import AsyncResult
-from celery.signals import after_setup_task_logger
+from celery.signals import after_setup_task_logger, worker_process_init
 
 from common import SETTINGS
+
+from . import tracing
 
 # Configure celery
 celery = Celery(broker=SETTINGS.redis_url, backend=SETTINGS.redis_url)
@@ -32,6 +34,11 @@ celery.autodiscover_tasks(
 @after_setup_task_logger.connect
 def on_after_setup_task_logger(logger: Logger, **_):
     logger.setLevel(logging.INFO)
+
+
+@worker_process_init.connect
+def on_worker_process_init(*_args, **_kwargs):
+    tracing.init(celery=True)
 
 
 def task(module: str, name: str, **options) -> Callable[..., AsyncResult]:

@@ -5,6 +5,7 @@ from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
+from opentelemetry.instrumentation.celery import CeleryInstrumentor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
@@ -16,7 +17,7 @@ from common.database.engine import engine
 from .botocore import FilteredBotocoreInstrumentor
 
 
-def init(app: Optional[FastAPI] = None):
+def init(app: Optional[FastAPI] = None, celery: bool = False):
     if SETTINGS.otel_enable:
         # Select the exporter
         if SETTINGS.otel_debug:
@@ -35,6 +36,8 @@ def init(app: Optional[FastAPI] = None):
 
         # Setup default instrumentation
         AioHttpClientInstrumentor().instrument()
+        if celery:
+            CeleryInstrumentor().instrument()
         FilteredBotocoreInstrumentor().instrument(excluded=["SQS.ReceiveMessage"])
         if app:
             FastAPIInstrumentor.instrument_app(app)
