@@ -15,7 +15,7 @@ from common import SETTINGS
 from common.database.engine import engine
 
 
-def init(app: Optional[FastAPI]):
+def init(app: Optional[FastAPI] = None):
     if SETTINGS.otel_enable:
         # Select the exporter
         if SETTINGS.otel_debug:
