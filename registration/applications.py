@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
+from opentelemetry import trace
 from pydantic import BaseModel, validate_model
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -41,6 +42,7 @@ class GetResumeResponse(BaseModel):
 
 
 router = APIRouter()
+tracer = trace.get_tracer(__name__)
 
 
 @router.get(
@@ -90,11 +92,14 @@ async def create_application(
     Create a new application attached to the currently authenticated participant
     """
     # Find the school by name
-    statement = select(School).where(School.name == values.school)
-    result = await db.execute(statement)
-    school = result.scalars().first()
-    if school is None:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="school not found")
+    with tracer.start_as_current_span("find-school"):
+        statement = select(School).where(School.name == values.school)
+        result = await db.execute(statement)
+        school = result.scalars().first()
+        if school is None:
+            raise HTTPException(
+                status_code=HTTPStatus.NOT_FOUND, detail="school not found"
+            )
 
     # Generate a file name for the user's resume if they attempted to provide one
     resume = str(uuid4()) if values.resume else None
@@ -124,19 +129,20 @@ async def create_application(
 
     # Generate a URL to upload the participant's resume
     if application.resume:
-        response["upload"] = s3.generate_presigned_post(
-            SETTINGS.registration.bucket,
-            application.resume,
-            Conditions=[
-                {"acl": "private"},
-                {"success_action_status": "201"},
-                ["starts-with", "$key", ""],
-                ["content-length-range", 0, 10 * 1024 * 1024],
-                {"content-type": "application/pdf"},
-                {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
-            ],
-            ExpiresIn=5 * 60,
-        )
+        with tracer.start_as_current_span("upload-resume"):
+            response["upload"] = s3.generate_presigned_post(
+                SETTINGS.registration.bucket,
+                application.resume,
+                Conditions=[
+                    {"acl": "private"},
+                    {"success_action_status": "201"},
+                    ["starts-with", "$key", ""],
+                    ["content-length-range", 0, 10 * 1024 * 1024],
+                    {"content-type": "application/pdf"},
+                    {"x-amz-algorithm": "AWS4-HMAC-SHA256"},
+                ],
+                ExpiresIn=5 * 60,
+            )
 
     return response
 
@@ -250,12 +256,13 @@ async def read_resume(
     elif application.resume is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    url = s3.generate_presigned_url(
-        "get_object",
-        Params={"Bucket": SETTINGS.registration.bucket, "Key": application.resume},
-        ExpiresIn=15 * 60,
-    )
-    return {"url": url}
+    with tracer.start_as_current_span("generate-url"):
+        url = s3.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": SETTINGS.registration.bucket, "Key": application.resume},
+            ExpiresIn=15 * 60,
+        )
+        return {"url": url}
 
 
 @router.put("/{id}", response_model=ApplicationRead, name="Update application")
@@ -280,13 +287,15 @@ async def update(
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    updated_fields = info.dict(exclude_unset=True)
-    for key, value in updated_fields.items():
-        setattr(application, key, value)
+    with tracer.start_as_current_span("update"):
+        updated_fields = info.dict(exclude_unset=True)
+        for key, value in updated_fields.items():
+            setattr(application, key, value)
 
-    *_, error = validate_model(Application, application.__dict__)
-    if error:
-        raise error
+    with tracer.start_as_current_span("validate"):
+        *_, error = validate_model(Application, application.__dict__)
+        if error:
+            raise error
 
     db.add(application)
     await db.commit()

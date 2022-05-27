@@ -2,6 +2,7 @@ from http import HTTPStatus
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
+from opentelemetry import trace
 from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -20,6 +21,7 @@ from common.database import (
 from common.permissions import Permission, requires_permission
 
 router = APIRouter()
+tracer = trace.get_tracer(__name__)
 
 
 @router.get(
@@ -96,14 +98,16 @@ async def update(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     # Update each field
-    updated_fields = updates.dict(exclude_unset=True)
-    for key, value in updated_fields.items():
-        setattr(school, key, value)
+    with tracer.start_as_current_span("update"):
+        updated_fields = updates.dict(exclude_unset=True)
+        for key, value in updated_fields.items():
+            setattr(school, key, value)
 
     # Ensure the updated model is valid
-    *_, error = validate_model(School, school.__dict__)
-    if error:
-        raise error
+    with tracer.start_as_current_span("validate"):
+        *_, error = validate_model(School, school.__dict__)
+        if error:
+            raise error
 
     # Save the changes
     db.add(school)
