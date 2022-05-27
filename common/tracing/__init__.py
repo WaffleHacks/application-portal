@@ -5,7 +5,6 @@ from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
-from opentelemetry.instrumentation.botocore import BotocoreInstrumentor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
@@ -13,6 +12,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 from common import SETTINGS
 from common.database.engine import engine
+
+from .botocore import FilteredBotocoreInstrumentor
 
 
 def init(app: Optional[FastAPI] = None):
@@ -34,7 +35,7 @@ def init(app: Optional[FastAPI] = None):
 
         # Setup default instrumentation
         AioHttpClientInstrumentor().instrument()
-        BotocoreInstrumentor().instrument()
+        FilteredBotocoreInstrumentor().instrument(excluded=["SQS.ReceiveMessage"])
         if app:
             FastAPIInstrumentor.instrument_app(app)
         SQLAlchemyInstrumentor().instrument(engine=engine.sync_engine)
