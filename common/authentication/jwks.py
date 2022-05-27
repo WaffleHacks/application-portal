@@ -12,13 +12,13 @@ class JWKClientException(Exception):
 
 
 class JWKClient(object):
-    def __init__(self, uri: str, cache_ttl: int = 5 * 60):
+    def __init__(self, uri: str, cache_ttl: int = 6 * 60 * 60):
         self.uri = uri
         self.session: Optional[ClientSession] = None
 
         self.lock = Lock()
         self.cache_ttl = cache_ttl
-        self.last_fetch = 0
+        self.last_fetch = 0.0
         self.signing_keys: List[PyJWK] = []
 
     async def __fetch_data(self) -> Any:
@@ -47,6 +47,7 @@ class JWKClient(object):
     async def get_signing_key(self, kid: str) -> PyJWK:
         if time() - self.cache_ttl >= self.last_fetch:
             self.signing_keys = await self.__get_keys()
+            self.last_fetch = time()
 
         for key in self.signing_keys:
             if key.key_id == kid:
