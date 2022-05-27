@@ -1,3 +1,10 @@
+import 'dotenv/config';
+
+// Tracing must be initialized before everything else
+// eslint-disable-next-line import/order
+import initTracing, { withSpan } from './tracing';
+initTracing();
+
 import compression from 'compression';
 import express, { NextFunction, Request, Response } from 'express';
 import { Joi, ValidationError, validate } from 'express-validation';
@@ -28,14 +35,18 @@ const renderBody = {
 };
 app.post('/render', validate(renderBody), (req, res) => {
   try {
-    const result = mjml2html(req.body.mjml, { keepComments: false, ignoreIncludes: true, validationLevel: 'strict' });
+    const result = withSpan('render', () =>
+      mjml2html(req.body.mjml, { keepComments: false, ignoreIncludes: true, validationLevel: 'strict' }),
+    );
 
-    const minified = minify(result.html, {
-      collapseWhitespace: true,
-      minifyCSS: false,
-      caseSensitive: true,
-      removeEmptyAttributes: true,
-    });
+    const minified = withSpan('minify', () =>
+      minify(result.html, {
+        collapseWhitespace: true,
+        minifyCSS: false,
+        caseSensitive: true,
+        removeEmptyAttributes: true,
+      }),
+    );
 
     res.status(200).json({ html: minified }).end();
   } catch {
