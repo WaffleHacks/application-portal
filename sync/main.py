@@ -23,6 +23,26 @@ tracing.init()
 tracer = trace.get_tracer(__name__)
 
 
+def dispatch_email_tasks(id: str):
+    """
+    Enqueues tasks for sign up and reminder emails
+    :param id: the user's ID
+    """
+    task("communication", "on_sign_up")(id)
+
+    now = datetime.now()
+    task(
+        "communication",
+        "incomplete_after_24h",
+        eta=now + timedelta(days=1),
+    )(id)
+    task(
+        "communication",
+        "incomplete_after_7d",
+        eta=now + timedelta(days=7),
+    )(id)
+
+
 async def upsert(action: Action, db: AsyncSession):
     """
     Insert or modify a participant based on whether they exist or not
@@ -41,6 +61,8 @@ async def upsert(action: Action, db: AsyncSession):
                 span.set_attribute("action", "create")
                 logger.info(f"creating participant {action.id}")
                 participant = Participant(**profile)
+
+                dispatch_email_tasks(action.id)
             else:
                 span.set_attribute("action", "update")
                 logger.info(f"updating participant {action.id}")
@@ -100,22 +122,6 @@ async def run():
                     if action.type == ActionType.Remove:
                         await remove(action, db)
                     else:
-                        # Dispatch signup and reminder tasks
-                        if action.type == ActionType.Insert:
-                            task("communication", "on_sign_up")(action.id)
-
-                            now = datetime.now()
-                            task(
-                                "communication",
-                                "incomplete_after_24h",
-                                eta=now + timedelta(days=1),
-                            )(action.id)
-                            task(
-                                "communication",
-                                "incomplete_after_7d",
-                                eta=now + timedelta(days=7),
-                            )(action.id)
-
                         await upsert(action, db)
 
             client.delete_message(QueueUrl=queue, ReceiptHandle=message.receipt_handle)
