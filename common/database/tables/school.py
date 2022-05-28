@@ -19,7 +19,8 @@ class School(SchoolBase, table=True):
 
 
 class SchoolCreate(SchoolBase):
-    pass
+    abbreviations: List[str] = []
+    alternatives: List[str] = []
 
 
 class SchoolList(SchoolBase):

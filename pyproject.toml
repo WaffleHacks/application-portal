@@ -35,6 +35,7 @@ opentelemetry-instrumentation-aiohttp-client = "0.30b1"
 opentelemetry-instrumentation-celery = "0.30b1"
 opentelemetry-instrumentation-botocore = "0.30b1"
 protobuf = "3.20.1"
+nanoid = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

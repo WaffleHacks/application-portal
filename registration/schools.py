@@ -1,6 +1,8 @@
 from http import HTTPStatus
 from typing import List
 
+import nanoid
+from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
 from pydantic import validate_model
@@ -8,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from common.algolia import with_schools_index
 from common.authentication import is_authenticated
 from common.database import (
     Application,
@@ -46,11 +49,21 @@ async def list(db: AsyncSession = Depends(with_db)):
     name="Create school",
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
+async def create(
+    values: SchoolCreate,
+    db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
+):
     """
     Create a new school in the database
     """
-    school = School.from_orm(values)
+    with tracer.start_as_current_span("algolia"):
+        id = nanoid.generate(size=8)
+        params = values.dict()
+        params["objectID"] = id
+        index.save_object(params)
+
+    school = School.from_orm(values, update={"id": id})
     async with db.begin():
         db.add(school)
 
