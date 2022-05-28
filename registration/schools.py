@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import List
+from typing import Any, Dict, List
 
 import nanoid
 from algoliasearch.search_index_async import SearchIndexAsync
@@ -102,6 +102,7 @@ async def update(
     id: str,
     updates: SchoolUpdate,
     db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
 ):
     """
     Update the details of a school by its ID.
@@ -110,17 +111,23 @@ async def update(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    # Update each field
-    with tracer.start_as_current_span("update"):
-        updated_fields = updates.dict(exclude_unset=True)
-        for key, value in updated_fields.items():
-            setattr(school, key, value)
+    if updates.name:
+        school.name = updates.name
 
     # Ensure the updated model is valid
     with tracer.start_as_current_span("validate"):
         *_, error = validate_model(School, school.__dict__)
         if error:
             raise error
+
+    # Update the index
+    with tracer.start_as_current_span("update-index"):
+        obj: Dict[str, Any] = {"objectID": school.id, "name": school.name}
+        if updates.abbreviations is not None:
+            obj["abbreviations"] = updates.abbreviations
+        if updates.alternatives is not None:
+            obj["alternatives"] = updates.alternatives
+        index.partial_update_object(obj)
 
     # Save the changes
     db.add(school)

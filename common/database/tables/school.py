@@ -34,3 +34,6 @@ class SchoolRead(SchoolBase):
 
 class SchoolUpdate(SQLModel):
     name: Optional[str]
+
+    abbreviations: Optional[List[str]]
+    alternatives: Optional[List[str]]
