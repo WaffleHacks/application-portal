@@ -135,7 +135,11 @@ async def update(
     name="Delete school",
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def delete(id: str, db: AsyncSession = Depends(with_db)):
+async def delete(
+    id: str,
+    db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
+):
     """
     Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.
     """
@@ -143,5 +147,9 @@ async def delete(id: str, db: AsyncSession = Depends(with_db)):
 
     # Delete if exists
     if school is not None:
+        # Delete from Algolia
+        index.delete_object(id)
+
+        # Delete from the database
         await db.delete(school)
         await db.commit()
