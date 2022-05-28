@@ -55,6 +55,7 @@ async def send_triggered_message(
 
 async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
     span = trace.get_current_span()
+    span.set_attribute("user.id", id)
 
     async with db_context() as db:
         application = await db.get(Application, id)
