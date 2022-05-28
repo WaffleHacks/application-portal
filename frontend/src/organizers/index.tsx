@@ -12,6 +12,7 @@ const MessageNew = React.lazy(() => import('./pages/messages/New'));
 const MessagesList = React.lazy(() => import('./pages/messages/List'));
 const SchoolDetail = React.lazy(() => import('./pages/schools/Detail'));
 const SchoolList = React.lazy(() => import('./pages/schools/List'));
+const NewSchool = React.lazy(() => import('./pages/schools/New'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -21,6 +22,7 @@ const Organizers = (): JSX.Element => (
         <Route path="/applications/:id" element={<ApplicationDetail />} />
 
         <Route path="/schools" element={<SchoolList />} />
+        <Route path="/schools/new" element={<NewSchool />} />
         <Route path="/schools/:id" element={<SchoolDetail />} />
 
         <Route path="/messages" element={<MessagesList />} />

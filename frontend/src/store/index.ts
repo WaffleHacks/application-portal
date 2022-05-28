@@ -53,6 +53,7 @@ export {
   useSetAutosaveMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
+  useCreateSchoolMutation,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';
