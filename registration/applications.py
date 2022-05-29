@@ -351,7 +351,8 @@ async def set_status(
 
         application.status = application.draft_status
 
-        # TODO: send out emails
+        # Send acceptance/rejection emails
+        task("communication", f"on_application_{application.status.value}")(id)
 
     db.add(application)
     await db.commit()
