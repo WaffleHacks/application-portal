@@ -30,17 +30,17 @@ def dispatch_email_tasks(id: str):
     """
     task("communication", "on_sign_up")(id)
 
-    now = datetime.now()
-    task(
-        "communication",
-        "incomplete_after_24h",
-        eta=now + timedelta(days=1),
-    )(id)
-    task(
-        "communication",
-        "incomplete_after_7d",
-        eta=now + timedelta(days=7),
-    )(id)
+    # now = datetime.now()
+    # task(
+    #     "communication",
+    #     "incomplete_after_24h",
+    #     eta=now + timedelta(days=1),
+    # )(id)
+    # task(
+    #     "communication",
+    #     "incomplete_after_7d",
+    #     eta=now + timedelta(days=7),
+    # )(id)
 
 
 async def upsert(action: Action, db: AsyncSession):
