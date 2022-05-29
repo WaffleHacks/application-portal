@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react';
 
 import Link from '../../../components/Link';
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
+import { Status } from '../../../store/types';
 import StatusBadge from '../../components/StatusBadge';
 import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
 
@@ -119,14 +120,21 @@ const Row = (application: ReducedApplication): JSX.Element => {
   );
 };
 
-const List = (): JSX.Element => {
+interface Props {
+  status: Status;
+}
+
+const List = ({ status }: Props): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
   const [page, setPage] = useState(0);
 
   const [sortBy, setSortBy] = useState(SortKey.AppliedAt);
   const [sortOrder, setSortOrder] = useState(SortOrder.Descending);
-  const ordered = (data || []).slice().sort(sort(sortBy, sortOrder));
+  const ordered = (data || [])
+    .filter((a) => a.status === status)
+    .slice()
+    .sort(sort(sortBy, sortOrder));
 
   const maxPage = Math.floor(ordered.length / 20);
   const paginated = ordered.slice(20 * page, 20 + 20 * page);

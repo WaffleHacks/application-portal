@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import NotFound from '../pages/NotFound';
+import { Status } from '../store/types';
 import Layout from './components/Layout';
 
 const ApplicationDetail = React.lazy(() => import('./pages/applications/Detail'));
@@ -18,7 +19,9 @@ const Organizers = (): JSX.Element => (
   <Layout>
     <Suspense fallback={<>Loading...</>}>
       <Routes>
-        <Route path="/applications" element={<ListApplications />} />
+        <Route path="/applications/pending" element={<ListApplications status={Status.Pending} />} />
+        <Route path="/applications/accepted" element={<ListApplications status={Status.Accepted} />} />
+        <Route path="/applications/rejected" element={<ListApplications status={Status.Rejected} />} />
         <Route path="/applications/:id" element={<ApplicationDetail />} />
 
         <Route path="/schools" element={<SchoolList />} />
