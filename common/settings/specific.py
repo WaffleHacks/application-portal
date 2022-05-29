@@ -33,6 +33,10 @@ class RegistrationSettings(BaseAPI):
     # The S3 bucket for storing resumes
     bucket: str
 
+    # The algolia credentials
+    algolia_app_id: str
+    algolia_api_key: str
+
 
 class SyncSettings(BaseModel):
     # The SQS queue for synchronizing the participant info

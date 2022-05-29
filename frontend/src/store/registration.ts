@@ -29,6 +29,11 @@ interface SchoolDetail extends School {
   applications: ReducedApplication[];
 }
 
+interface SchoolCreate extends Omit<School, 'id'> {
+  abbreviations: string[];
+  alternatives: string[];
+}
+
 interface ApplicationResume {
   url: string;
 }
@@ -84,6 +89,14 @@ const api = createApi({
       query: (id) => `/registration/schools/${id}`,
       providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
     }),
+    createSchool: builder.mutation<void, SchoolCreate>({
+      query: (body) => ({
+        url: `/registration/schools/`,
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [Tag.School],
+    }),
   }),
 });
 
@@ -97,4 +110,5 @@ export const {
   useSetAutosaveMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
+  useCreateSchoolMutation,
 } = api;

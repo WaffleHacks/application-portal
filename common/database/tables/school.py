@@ -19,7 +19,8 @@ class School(SchoolBase, table=True):
 
 
 class SchoolCreate(SchoolBase):
-    pass
+    abbreviations: List[str] = []
+    alternatives: List[str] = []
 
 
 class SchoolList(SchoolBase):
@@ -33,3 +34,6 @@ class SchoolRead(SchoolBase):
 
 class SchoolUpdate(SQLModel):
     name: Optional[str]
+
+    abbreviations: Optional[List[str]]
+    alternatives: Optional[List[str]]

@@ -1,6 +1,8 @@
 from http import HTTPStatus
-from typing import List
+from typing import Any, Dict, List
 
+import nanoid
+from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
 from pydantic import validate_model
@@ -8,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from common.algolia import with_schools_index
 from common.authentication import is_authenticated
 from common.database import (
     Application,
@@ -46,11 +49,21 @@ async def list(db: AsyncSession = Depends(with_db)):
     name="Create school",
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def create(values: SchoolCreate, db: AsyncSession = Depends(with_db)):
+async def create(
+    values: SchoolCreate,
+    db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
+):
     """
     Create a new school in the database
     """
-    school = School.from_orm(values)
+    with tracer.start_as_current_span("algolia"):
+        id = nanoid.generate(size=8)
+        params = values.dict()
+        params["objectID"] = id
+        index.save_object(params)
+
+    school = School.from_orm(values, update={"id": id})
     async with db.begin():
         db.add(school)
 
@@ -89,6 +102,7 @@ async def update(
     id: str,
     updates: SchoolUpdate,
     db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
 ):
     """
     Update the details of a school by its ID.
@@ -97,17 +111,23 @@ async def update(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    # Update each field
-    with tracer.start_as_current_span("update"):
-        updated_fields = updates.dict(exclude_unset=True)
-        for key, value in updated_fields.items():
-            setattr(school, key, value)
+    if updates.name:
+        school.name = updates.name
 
     # Ensure the updated model is valid
     with tracer.start_as_current_span("validate"):
         *_, error = validate_model(School, school.__dict__)
         if error:
             raise error
+
+    # Update the index
+    with tracer.start_as_current_span("update-index"):
+        obj: Dict[str, Any] = {"objectID": school.id, "name": school.name}
+        if updates.abbreviations is not None:
+            obj["abbreviations"] = updates.abbreviations
+        if updates.alternatives is not None:
+            obj["alternatives"] = updates.alternatives
+        index.partial_update_object(obj)
 
     # Save the changes
     db.add(school)
@@ -122,7 +142,11 @@ async def update(
     name="Delete school",
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
-async def delete(id: str, db: AsyncSession = Depends(with_db)):
+async def delete(
+    id: str,
+    db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
+):
     """
     Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.
     """
@@ -130,5 +154,9 @@ async def delete(id: str, db: AsyncSession = Depends(with_db)):
 
     # Delete if exists
     if school is not None:
+        # Delete from Algolia
+        index.delete_object(id)
+
+        # Delete from the database
         await db.delete(school)
         await db.commit()

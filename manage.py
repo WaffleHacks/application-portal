@@ -123,8 +123,20 @@ def celery():
 
 
 @cli.command(name="seed-algolia")
-@click.option("-i", "--app-id", "app_id", type=str, envvar="ALGOLIA_APP_ID")
-@click.option("-k", "--api-key", "api_key", type=str, envvar="ALGOLIA_API_KEY")
+@click.option(
+    "-i",
+    "--app-id",
+    "app_id",
+    type=str,
+    envvar="REGISTRATION_ALGOLIA_APP_ID",
+)
+@click.option(
+    "-k",
+    "--api-key",
+    "api_key",
+    type=str,
+    envvar="REGISTRATION_ALGOLIA_API_KEY",
+)
 def seed_algolia(app_id: str, api_key: str):
     """
     Seed the Algolia search indexes
