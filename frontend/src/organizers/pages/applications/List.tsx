@@ -147,7 +147,7 @@ const List = ({ status }: Props): JSX.Element => {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <p className="mt-2 text-sm text-gray-700">
-            All the participants that have applied including their name, email, status, and application date.
+            The name, email, country, and application date of all participants with {status} applications.
           </p>
         </div>
       </div>
