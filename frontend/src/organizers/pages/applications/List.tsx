@@ -182,9 +182,7 @@ const List = ({ status }: Props): JSX.Element => {
         </Table.Head>
         <Table.Body>
           {isLoading && <LoadingRow />}
-          {!isLoading && paginated.length === 0 && (
-            <EmptyRow message="No participants have submitted an application yet." />
-          )}
+          {!isLoading && paginated.length === 0 && <EmptyRow message={`No ${status} applications yet.`} />}
           {!isLoading && paginated.map((a) => <Row key={a.participant.id} {...a} />)}
         </Table.Body>
       </Table>
