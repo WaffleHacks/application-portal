@@ -222,7 +222,13 @@ async def read(
     elif Permission.Sponsor.matches(permission) and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    return application
+    # Only return draft status and notes for organizers
+    response = ApplicationRead.from_orm(application)
+    if not Permission.Organizer.matches(permission):
+        response.draft_status = None
+        response.notes = None
+
+    return response
 
 
 @router.get(

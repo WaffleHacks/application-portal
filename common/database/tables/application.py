@@ -138,6 +138,10 @@ class ApplicationRead(ApplicationProfileBase):
 
     created_at: datetime
 
+    # The following fields are only included if the requester has sufficient privileges
+    draft_status: Optional[Status]
+    notes: Optional[str]
+
 
 class ApplicationUpdate(SQLModel):
     school_id: Optional[str]
