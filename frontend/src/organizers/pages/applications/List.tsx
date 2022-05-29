@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react';
 import Link from '../../../components/Link';
 import { ReducedApplication, useListApplicationsQuery } from '../../../store';
 import { Status } from '../../../store/types';
+import StatusBadge from '../../components/StatusBadge';
 import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
 
 enum SortKey {
@@ -13,6 +14,7 @@ enum SortKey {
   Email,
   Country,
   AppliedAt,
+  DraftStatus,
 }
 
 enum SortOrder {
@@ -30,6 +32,8 @@ const getKey = (app: ReducedApplication, key: SortKey): string => {
       return app.country;
     case SortKey.AppliedAt:
       return app.created_at;
+    case SortKey.DraftStatus:
+      return app.draft_status;
   }
 };
 
@@ -89,8 +93,12 @@ const Header = ({
   </th>
 );
 
-const Row = (application: ReducedApplication): JSX.Element => {
-  const createdAt = DateTime.fromISO(application.created_at);
+interface RowProps extends ReducedApplication {
+  showDraftStatus: boolean;
+}
+
+const Row = (props: RowProps): JSX.Element => {
+  const createdAt = DateTime.fromISO(props.created_at);
   const formattedCreatedAt =
     createdAt.diffNow().negate().as('days') > 1
       ? createdAt.toLocaleString(DateTime.DATETIME_SHORT)
@@ -99,13 +107,18 @@ const Row = (application: ReducedApplication): JSX.Element => {
   return (
     <tr>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-        {application.participant.first_name} {application.participant.last_name}
+        {props.participant.first_name} {props.participant.last_name}
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.participant.email}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.country}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{props.participant.email}</td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{props.country}</td>
+      {props.showDraftStatus && (
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+          <StatusBadge status={props.draft_status} />
+        </td>
+      )}
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedCreatedAt}</td>
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-        <Link to={`/applications/${application.participant.id}`} className="text-indigo-600 hover:text-indigo-900">
+        <Link to={`/applications/${props.participant.id}`} className="text-indigo-600 hover:text-indigo-900">
           Details
         </Link>
       </td>
@@ -115,9 +128,10 @@ const Row = (application: ReducedApplication): JSX.Element => {
 
 interface Props {
   status: Status;
+  showDraftStatus?: boolean;
 }
 
-const List = ({ status }: Props): JSX.Element => {
+const List = ({ status, showDraftStatus = false }: Props): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
   const [page, setPage] = useState(0);
@@ -169,6 +183,15 @@ const List = ({ status }: Props): JSX.Element => {
             name="Country"
             onClick={onClick}
           />
+          {showDraftStatus && (
+            <Header
+              currentKey={sortBy}
+              currentOrder={sortOrder}
+              sortKey={SortKey.DraftStatus}
+              name="Pending Status"
+              onClick={onClick}
+            />
+          )}
           <Header
             currentKey={sortBy}
             currentOrder={sortOrder}
@@ -183,7 +206,7 @@ const List = ({ status }: Props): JSX.Element => {
         <Table.Body>
           {isLoading && <LoadingRow />}
           {!isLoading && paginated.length === 0 && <EmptyRow message={`No ${status} applications yet.`} />}
-          {!isLoading && paginated.map((a) => <Row key={a.participant.id} {...a} />)}
+          {!isLoading && paginated.map((a) => <Row key={a.participant.id} showDraftStatus={showDraftStatus} {...a} />)}
         </Table.Body>
       </Table>
 

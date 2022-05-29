@@ -20,7 +20,7 @@ const Organizers = (): JSX.Element => (
   <Layout>
     <Suspense fallback={<>Loading...</>}>
       <Routes>
-        <Route path="/applications/pending" element={<ListApplications status={Status.Pending} />} />
+        <Route path="/applications/pending" element={<ListApplications status={Status.Pending} showDraftStatus />} />
         <Route path="/applications/accepted" element={<ListApplications status={Status.Accepted} />} />
         <Route path="/applications/rejected" element={<ListApplications status={Status.Rejected} />} />
         <Route path="/applications/incomplete" element={<ListIncompleteApplications />} />
