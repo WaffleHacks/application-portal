@@ -20,6 +20,8 @@ from common.database import (
     ApplicationList,
     ApplicationRead,
     ApplicationUpdate,
+    Participant,
+    ParticipantRead,
     School,
     Status,
     with_db,
@@ -73,6 +75,27 @@ async def list(
     result = await db.execute(statement)
     applications = result.scalars().all()
     return applications
+
+
+@router.get(
+    "/incomplete",
+    response_model=List[ParticipantRead],
+    name="List incomplete applications",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def list_incomplete(db: AsyncSession = Depends(with_db)):
+    """
+    Get a list of all participants who have not completed their application
+    """
+    statement = (
+        select(Participant)
+        .outerjoin(Application, full=True)
+        .where(Application.participant_id == None)
+    )
+
+    result = await db.execute(statement)
+    participants = result.scalars().all()
+    return participants
 
 
 @router.post(
