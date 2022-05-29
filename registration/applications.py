@@ -333,7 +333,7 @@ class SetStatusRequest(BaseModel):
     status: Status
 
 
-@router.patch(
+@router.put(
     "/{id}/status",
     status_code=HTTPStatus.NO_CONTENT,
     name="Set application status",
@@ -365,7 +365,7 @@ async def set_status(
 
     # Set the participant's status
     application.status = values.status
-    task("communication", f"on_application_{application.status.name}")(id)
+    task("communication", f"on_application_{application.status.value}")(id)
 
     db.add(application)
     await db.commit()

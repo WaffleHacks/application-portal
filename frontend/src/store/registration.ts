@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
 import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
+import { Status } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -29,6 +30,11 @@ interface ApplicationCreateResponse {
 type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' | 'resume' | 'school'>> & {
   id: string;
 };
+
+interface ApplicationStatus {
+  id: string;
+  status: Status;
+}
 
 interface SchoolDetail extends School {
   applications: ReducedApplication[];
@@ -86,6 +92,14 @@ const api = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: Tag.Application, id }],
     }),
+    setApplicationStatus: builder.mutation<void, ApplicationStatus>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/applications/${id}/status`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [Tag.Application, { type: Tag.Application, id }],
+    }),
 
     // Application autosave endpoints
     // These do not have caching enabled to prevent constant fetches and re-fetches
@@ -128,6 +142,7 @@ export const {
   useListApplicationsQuery,
   useListIncompleteApplicationsQuery,
   useUpdateApplicationMutation,
+  useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,

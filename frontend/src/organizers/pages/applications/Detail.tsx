@@ -1,21 +1,28 @@
 import { ArrowLeftIcon, ExclamationIcon, ExternalLinkIcon, RefreshIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button, LinkButton } from '../../../components/buttons';
+import { Button } from '../../../components/buttons';
+import Confirm from '../../../components/Confirm';
 import Link from '../../../components/Link';
-import { useGetApplicationQuery, useGetApplicationResumeQuery, useUpdateApplicationMutation } from '../../../store';
+import {
+  Status,
+  useGetApplicationQuery,
+  useGetApplicationResumeQuery,
+  useSetApplicationStatusMutation,
+  useUpdateApplicationMutation,
+} from '../../../store';
 import { Description, ExternalLinkItem, Item, NamedSection } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 import StatusBadge from '../../components/StatusBadge';
 
-interface ResumeLinkProps {
+interface WithId {
   id: string;
 }
 
-const ResumeLink = ({ id }: ResumeLinkProps): JSX.Element => {
+const ResumeLink = ({ id }: WithId): JSX.Element => {
   const [clicked, setClicked] = useState(false);
   const { data, isLoading, isSuccess } = useGetApplicationResumeQuery(id, { skip: !clicked });
 
@@ -41,8 +48,7 @@ const ResumeLink = ({ id }: ResumeLinkProps): JSX.Element => {
   );
 };
 
-interface NotesProps {
-  id: string;
+interface NotesProps extends WithId {
   notes: string;
 }
 
@@ -84,8 +90,56 @@ const Notes = ({ id, notes: initialNotes }: NotesProps): JSX.Element => {
   );
 };
 
+const statusOptions: Status[] = [Status.Accepted, Status.Rejected];
+const SetStatus = ({ id }: WithId): JSX.Element => {
+  const [open, setOpen] = useState(false);
+
+  const [status, setStatus] = useState(Status.Accepted);
+  const [update, { isLoading }] = useSetApplicationStatusMutation();
+
+  return (
+    <>
+      <Confirm
+        isOpen={open}
+        close={() => setOpen(false)}
+        onClick={() => update({ id, status })}
+        title={`Change the status to ${status}?`}
+        description={`Are you sure you want to mark this application as ${status}? Changing the status of this application is irreversible.`}
+        truthy={isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Yes'}
+        style="warning"
+      />
+      <div className="flex justify-around">
+        <fieldset className="mt-2">
+          <legend className="sr-only">Application status</legend>
+          <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+            {statusOptions.map((s) => (
+              <div key={s} className="flex items-center">
+                <input
+                  id={`status-${s}`}
+                  name={`status-${s}`}
+                  type="radio"
+                  checked={status === s}
+                  onChange={() => setStatus(s)}
+                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                />
+                <label htmlFor={`status-${s}`} className="ml-3 block text-sm font-medium text-gray-700">
+                  <StatusBadge status={s} />
+                </label>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        <Button type="button" style="secondary" onClick={() => setOpen(true)}>
+          {isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Save'}
+        </Button>
+      </div>
+    </>
+  );
+};
+
 const Detail = (): JSX.Element => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetApplicationQuery(id as string);
 
   if (isLoading) return <Loading />;
@@ -143,14 +197,19 @@ const Detail = (): JSX.Element => {
           <Item name="Notes" wide>
             <Notes id={id as string} notes={data.notes} />
           </Item>
+          {data.status === Status.Pending && (
+            <Item name="Status">
+              <SetStatus id={id as string} />
+            </Item>
+          )}
         </NamedSection>
       </Description>
 
       <div className="mt-3">
-        <LinkButton to="/applications">
+        <Button type="button" onClick={() => navigate(-1)}>
           <ArrowLeftIcon className="h-4 w-5 mr-2" />
           Back
-        </LinkButton>
+        </Button>
       </div>
     </>
   );

@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import NotFound from '../pages/NotFound';
-import { Status } from '../store/types';
+import { Status } from '../store';
 import Layout from './components/Layout';
 
 const ApplicationDetail = React.lazy(() => import('./pages/applications/Detail'));

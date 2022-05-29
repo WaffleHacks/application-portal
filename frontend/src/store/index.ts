@@ -51,6 +51,7 @@ export {
   useListApplicationsQuery,
   useListIncompleteApplicationsQuery,
   useUpdateApplicationMutation,
+  useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,
@@ -60,4 +61,4 @@ export {
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';
 export type { ApplicationAutosave, ReducedApplication, ReducedMessage } from './types';
-export { Gender, Group, RaceEthnicity } from './types';
+export { Gender, Group, RaceEthnicity, Status } from './types';

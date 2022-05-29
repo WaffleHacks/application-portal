@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, ReactNode, useRef } from 'react';
 
 import { Button } from './buttons';
 
@@ -15,8 +15,8 @@ interface Props {
   title: string;
   description: string;
 
-  truthy?: string;
-  falsy?: string;
+  truthy?: string | ReactNode;
+  falsy?: string | ReactNode;
 
   style?: Style;
 }

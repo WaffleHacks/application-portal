@@ -4,9 +4,7 @@ import { DateTime } from 'luxon';
 import React, { useCallback, useState } from 'react';
 
 import Link from '../../../components/Link';
-import { ReducedApplication, useListApplicationsQuery } from '../../../store';
-import { Status } from '../../../store/types';
-import StatusBadge from '../../components/StatusBadge';
+import { ReducedApplication, Status, useListApplicationsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
 
 enum SortKey {
