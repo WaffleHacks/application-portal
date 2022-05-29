@@ -289,7 +289,7 @@ async def read_resume(
         return {"url": url}
 
 
-@router.patch("/{id}", response_model=ApplicationRead, name="Update application")
+@router.patch("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Update application")
 async def update(
     id: str,
     info: ApplicationUpdate,
@@ -327,8 +327,6 @@ async def update(
 
     db.add(application)
     await db.commit()
-
-    return clean_application_response(application, permission)
 
 
 class SetStatusRequest(BaseModel):

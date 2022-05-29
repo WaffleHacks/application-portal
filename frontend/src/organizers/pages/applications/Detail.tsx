@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { Button, LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
-import { useGetApplicationQuery, useGetApplicationResumeQuery } from '../../../store';
+import { useGetApplicationQuery, useGetApplicationResumeQuery, useUpdateApplicationMutation } from '../../../store';
 import { Description, ExternalLinkItem, Item, NamedSection } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
@@ -38,6 +38,49 @@ const ResumeLink = ({ id }: ResumeLinkProps): JSX.Element => {
         <ExternalLinkIcon className="ml-2 h-4 w-4" aria-hidden="true" />
       )}
     </Button>
+  );
+};
+
+interface NotesProps {
+  id: string;
+  notes: string;
+}
+
+const Notes = ({ id, notes: initialNotes }: NotesProps): JSX.Element => {
+  const [notes, setNotes] = useState(initialNotes);
+  const [update, { isLoading }] = useUpdateApplicationMutation();
+
+  return (
+    <div className="relative">
+      <div className="border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+        <label htmlFor="notes" className="sr-only">
+          Add your comment
+        </label>
+        <textarea
+          rows={3}
+          name="notes"
+          id="notes"
+          className="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm"
+          placeholder="Add any notes for this application..."
+          onChange={(e) => setNotes(e.target.value)}
+          value={notes}
+        />
+
+        {/* Spacer element to match the height of the toolbar */}
+        <div className="py-2" aria-hidden="true">
+          {/* Matches height of button in toolbar (1px border + 36px content height) */}
+          <div className="py-px">
+            <div className="h-9" />
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end">
+        <Button type="button" style="primary" onClick={() => update({ id, notes })}>
+          {isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Save'}
+        </Button>
+      </div>
+    </div>
   );
 };
 
@@ -95,6 +138,11 @@ const Detail = (): JSX.Element => {
         <NamedSection name="Shipping">
           <Item name="Address" value={data.shipping_address || 'N/A'} />
           <Item name="Country" value={data.country} />
+        </NamedSection>
+        <NamedSection name="Organizer Information" description="This section is only visible to organizers">
+          <Item name="Notes" wide>
+            <Notes id={id as string} notes={data.notes} />
+          </Item>
         </NamedSection>
       </Description>
 

@@ -50,6 +50,7 @@ export {
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
   useListIncompleteApplicationsQuery,
+  useUpdateApplicationMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,

@@ -26,6 +26,10 @@ interface ApplicationCreateResponse {
   };
 }
 
+type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' | 'resume' | 'school'>> & {
+  id: string;
+};
+
 interface SchoolDetail extends School {
   applications: ReducedApplication[];
 }
@@ -74,6 +78,14 @@ const api = createApi({
       }),
       invalidatesTags: [Tag.Application],
     }),
+    updateApplication: builder.mutation<void, ApplicationUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/applications/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: Tag.Application, id }],
+    }),
 
     // Application autosave endpoints
     // These do not have caching enabled to prevent constant fetches and re-fetches
@@ -115,6 +127,7 @@ export const {
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
   useListIncompleteApplicationsQuery,
+  useUpdateApplicationMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,
