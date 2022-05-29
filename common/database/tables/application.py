@@ -75,11 +75,6 @@ class ApplicationProfileBase(SQLModel):
 
 class ApplicationBase(ApplicationProfileBase):
     notes: str = Field(default="", nullable=False)
-    draft_status: Status = Field(
-        sa_column=Column(
-            SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
-        )
-    )
     status: Status = Field(
         sa_column=Column(
             SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
@@ -125,7 +120,6 @@ class ApplicationList(SQLModel):
     country: str
 
     status: Status
-    draft_status: Status
 
     created_at: datetime
 
@@ -141,7 +135,6 @@ class ApplicationRead(ApplicationProfileBase):
     created_at: datetime
 
     # The following fields are only included if the requester has sufficient privileges
-    draft_status: Optional[Status]
     notes: Optional[str]
 
 
@@ -170,6 +163,8 @@ class ApplicationUpdate(SQLModel):
     _legal_agreements_validator = validator(
         "legal_agreements_acknowledged", allow_reuse=True
     )(require_legal_agreements)
+
+    notes: Optional[str]
 
 
 class ApplicationAutosaveResume(BaseModel):

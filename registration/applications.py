@@ -245,13 +245,7 @@ async def read(
     elif Permission.Sponsor.matches(permission) and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    # Only return draft status and notes for organizers
-    response = ApplicationRead.from_orm(application)
-    if not Permission.Organizer.matches(permission):
-        response.draft_status = None
-        response.notes = None
-
-    return response
+    return clean_application_response(application, permission)
 
 
 @router.get(
@@ -301,7 +295,7 @@ async def update(
     info: ApplicationUpdate,
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
-        requires_permission(Permission.Participant, Permission.Director)
+        requires_permission(Permission.Participant, Permission.Organizer)
     ),
     db: AsyncSession = Depends(with_db),
 ):
@@ -318,7 +312,11 @@ async def update(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     with tracer.start_as_current_span("update"):
-        updated_fields = info.dict(exclude_unset=True)
+        # Only update notes if organizer
+        if Permission.Organizer.matches(permission) and info.notes is not None:
+            application.notes = info.notes
+
+        updated_fields = info.dict(exclude_unset=True, exclude={"notes"})
         for key, value in updated_fields.items():
             setattr(application, key, value)
 
@@ -330,13 +328,11 @@ async def update(
     db.add(application)
     await db.commit()
 
-    return application
+    return clean_application_response(application, permission)
 
 
 class SetStatusRequest(BaseModel):
-    status: Optional[Status]
-    notes: Optional[str]
-    final: bool = False
+    status: Status
 
 
 @router.patch(
@@ -362,26 +358,16 @@ async def set_status(
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST, detail="status already finalized"
         )
+    # Only allow setting to accepted or rejected
+    elif values.status == Status.PENDING:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="cannot finalize 'pending' status",
+        )
 
-    # Update the fields
-    if values.status:
-        application.draft_status = values.status
-    if values.notes:
-        application.notes = values.notes
-
-    # Finalize stuff if necessary
-    if values.final:
-        # Prevent finalizing pending status
-        if application.draft_status == Status.PENDING:
-            raise HTTPException(
-                status_code=HTTPStatus.BAD_REQUEST,
-                detail="cannot finalize 'pending' status",
-            )
-
-        application.status = application.draft_status
-
-        # Send acceptance/rejection emails
-        task("communication", f"on_application_{application.status.value}")(id)
+    # Set the participant's status
+    application.status = values.status
+    task("communication", f"on_application_{application.status.name}")(id)
 
     db.add(application)
     await db.commit()
@@ -408,3 +394,21 @@ async def delete(
     if application:
         await db.delete(application)
         await db.commit()
+
+
+def clean_application_response(
+    application: Application, permission: str
+) -> ApplicationRead:
+    """
+    Removes organizer-specific information from responses
+    :param application: the raw application
+    :param permission: the requester's permission
+    :return: a response with sensitive information redacted
+    """
+
+    response = ApplicationRead.from_orm(application)
+
+    if not Permission.Organizer.matches(permission):
+        response.notes = None
+
+    return response
