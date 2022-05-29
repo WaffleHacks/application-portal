@@ -265,7 +265,7 @@ async def read_resume(
         return {"url": url}
 
 
-@router.put("/{id}", response_model=ApplicationRead, name="Update application")
+@router.patch("/{id}", response_model=ApplicationRead, name="Update application")
 async def update(
     id: str,
     info: ApplicationUpdate,
