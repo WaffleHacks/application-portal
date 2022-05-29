@@ -74,6 +74,12 @@ class ApplicationProfileBase(SQLModel):
 
 
 class ApplicationBase(ApplicationProfileBase):
+    notes: str = Field(default="", nullable=False)
+    draft_status: Status = Field(
+        sa_column=Column(
+            SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
+        )
+    )
     status: Status = Field(
         sa_column=Column(
             SQLEnum(Status), nullable=False, server_default=Status.PENDING.name

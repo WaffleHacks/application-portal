@@ -21,6 +21,7 @@ from common.database import (
     ApplicationRead,
     ApplicationUpdate,
     School,
+    Status,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -301,6 +302,59 @@ async def update(
     await db.commit()
 
     return application
+
+
+class SetStatusRequest(BaseModel):
+    status: Optional[Status]
+    notes: Optional[str]
+    final: bool = False
+
+
+@router.patch(
+    "/{id}/status",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Set application status",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def set_status(
+    id: str,
+    values: SetStatusRequest,
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Set the status for a participant's application
+    """
+    application = await db.get(Application, id)
+    if application is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    # Only allow setting status once
+    if application.status != Status.PENDING:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="status already finalized"
+        )
+
+    # Update the fields
+    if values.status:
+        application.draft_status = values.status
+    if values.notes:
+        application.notes = values.notes
+
+    # Finalize stuff if necessary
+    if values.final:
+        # Prevent finalizing pending status
+        if application.draft_status == Status.PENDING:
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                detail="cannot finalize 'pending' status",
+            )
+
+        application.status = application.draft_status
+
+        # TODO: send out emails
+
+    db.add(application)
+    await db.commit()
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
