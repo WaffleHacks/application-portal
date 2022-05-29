@@ -49,6 +49,7 @@ export {
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
+  useListIncompleteApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,

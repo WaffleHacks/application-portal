@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, ReducedApplication, School } from './types';
+import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -10,6 +10,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
  */
 enum Tag {
   Application = 'application',
+  Participant = 'participant',
   School = 'school',
 }
 
@@ -51,6 +52,13 @@ const api = createApi({
       providesTags: (result: ReducedApplication[] = []) => [
         Tag.Application,
         ...result.map((a) => ({ type: Tag.Application, id: a.participant.id })),
+      ],
+    }),
+    listIncompleteApplications: builder.query<Participant[], void>({
+      query: () => '/registration/applications/incomplete',
+      providesTags: (result: Participant[] = []) => [
+        Tag.Participant,
+        ...result.map((i) => ({ type: Tag.Participant, id: i.id })),
       ],
     }),
     getApplication: builder.query<Application, string>({
@@ -109,6 +117,7 @@ export const {
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
+  useListIncompleteApplicationsQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
   useListSchoolsQuery,
