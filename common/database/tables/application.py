@@ -123,7 +123,9 @@ class ApplicationList(SQLModel):
     participant: "ParticipantRead"
 
     country: str
+
     status: Status
+    draft_status: Status
 
     created_at: datetime
 
