@@ -42,7 +42,9 @@ export interface School {
 
 export interface ReducedApplication {
   participant: Participant;
+
   status: Status;
+  draft_status: Status;
 
   country: string;
 
@@ -76,6 +78,10 @@ export interface Application {
 
   legal_agreements_acknowledged: boolean;
   created_at: string;
+
+  // Only visible to organizers
+  draft_status: Status;
+  notes: string;
 }
 
 export interface ApplicationAutosave {
