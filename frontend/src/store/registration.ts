@@ -49,6 +49,11 @@ interface ApplicationResume {
   url: string;
 }
 
+interface BulkSetApplicationStatus {
+  status: Status;
+  ids: string[];
+}
+
 const api = createApi({
   reducerPath: 'registration',
   baseQuery: baseQuery('portal', BASE_URL),
@@ -114,6 +119,19 @@ const api = createApi({
       }),
     }),
 
+    // Bulk endpoints
+    bulkSetApplicationStatus: builder.mutation<void, BulkSetApplicationStatus>({
+      query: (body) => ({
+        url: '/registration/bulk/status',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { ids }) => [
+        Tag.Application,
+        ...ids.map((id) => ({ type: Tag.Application, id })),
+      ],
+    }),
+
     // School endpoints
     listSchools: builder.query<School[], void>({
       query: () => '/registration/schools/',
@@ -145,6 +163,7 @@ export const {
   useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useBulkSetApplicationStatusMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,

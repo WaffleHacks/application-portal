@@ -54,6 +54,7 @@ export {
   useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useBulkSetApplicationStatusMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,
