@@ -1,6 +1,21 @@
 import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
+
+interface PaginationParams<Type> extends Props {
+  paginated: Type[];
+}
+
+export const usePagination = <Type,>(items: Type[], size = 20): PaginationParams<Type> => {
+  const [page, setPage] = useState(0);
+
+  const rawMax = Math.floor(items.length / 20);
+  const max = items.length % 20 === 0 ? rawMax - 1 : rawMax;
+
+  const paginated = items.slice(size * page, size + size * page);
+
+  return { paginated, page, setPage, max };
+};
 
 interface NumberProps {
   current?: boolean;

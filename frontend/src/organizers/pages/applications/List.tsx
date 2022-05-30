@@ -1,22 +1,15 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
-import classNames from 'classnames';
 import { DateTime } from 'luxon';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 import Link from '../../../components/Link';
 import { ReducedApplication, Status, useListApplicationsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
+import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from '../../components/table';
 
 enum SortKey {
   Name,
   Email,
   Country,
   AppliedAt,
-}
-
-enum SortOrder {
-  Ascending,
-  Descending,
 }
 
 const getKey = (app: ReducedApplication, key: SortKey): string => {
@@ -33,7 +26,7 @@ const getKey = (app: ReducedApplication, key: SortKey): string => {
 };
 
 const sort =
-  (by: SortKey, order: SortOrder) =>
+  (by: SortKey, order: Order) =>
   (a: ReducedApplication, b: ReducedApplication): number => {
     const keyA = getKey(a, by);
     const keyB = getKey(b, by);
@@ -42,51 +35,13 @@ const sort =
 
     // Different handling for times
     if (by === SortKey.AppliedAt) {
-      if (keyA > keyB) return order === SortOrder.Descending ? -1 : 1;
-      else return order === SortOrder.Descending ? 1 : -1;
+      if (keyA > keyB) return order === Order.Descending ? -1 : 1;
+      else return order === Order.Descending ? 1 : -1;
     } else {
-      if (keyA > keyB) return order === SortOrder.Descending ? 1 : -1;
-      else return order === SortOrder.Descending ? -1 : 1;
+      if (keyA > keyB) return order === Order.Descending ? 1 : -1;
+      else return order === Order.Descending ? -1 : 1;
     }
   };
-
-interface HeaderProps {
-  className?: string;
-  currentKey: SortKey;
-  currentOrder: SortOrder;
-  sortKey: SortKey;
-  name: string;
-  onClick: (key: SortKey) => () => void;
-}
-
-const Header = ({
-  className = 'px-3 py-3.5',
-  currentKey,
-  currentOrder,
-  name,
-  sortKey,
-  onClick,
-}: HeaderProps): JSX.Element => (
-  <th scope="col" className={classNames('text-left text-sm font-semibold text-gray-500', className)}>
-    <button type="button" className="group inline-flex" onClick={onClick(sortKey)}>
-      <span className="font-semibold uppercase">{name}</span>
-      <span
-        className={classNames(
-          currentKey === sortKey
-            ? 'bg-gray-200 text-gray-900 group-hover:bg-gray-300'
-            : 'invisible text-gray-400 group-hover:visible group-focus:visible',
-          'ml-2 flex-none rounded',
-        )}
-      >
-        {currentKey === sortKey && currentOrder === SortOrder.Ascending ? (
-          <ChevronUpIcon className="h-5 w-5" aria-hidden="true" />
-        ) : (
-          <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
-        )}
-      </span>
-    </button>
-  </th>
-);
 
 const Row = (application: ReducedApplication): JSX.Element => {
   const createdAt = DateTime.fromISO(application.created_at);
@@ -97,17 +52,17 @@ const Row = (application: ReducedApplication): JSX.Element => {
 
   return (
     <tr>
-      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+      <Table.Data index>
         {application.participant.first_name} {application.participant.last_name}
-      </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.participant.email}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{application.country}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedCreatedAt}</td>
-      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+      </Table.Data>
+      <Table.Data>{application.participant.email}</Table.Data>
+      <Table.Data>{application.country}</Table.Data>
+      <Table.Data>{formattedCreatedAt}</Table.Data>
+      <Table.Data className="relative text-right sm:pr-6">
         <Link to={`/applications/${application.participant.id}`} className="text-indigo-600 hover:text-indigo-900">
           Details
         </Link>
-      </td>
+      </Table.Data>
     </tr>
   );
 };
@@ -119,27 +74,10 @@ interface Props {
 const List = ({ status }: Props): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
-  const [page, setPage] = useState(0);
+  const filtered = (data || []).filter((a) => a.status === status);
 
-  const [sortBy, setSortBy] = useState(SortKey.AppliedAt);
-  const [sortOrder, setSortOrder] = useState(SortOrder.Descending);
-  const ordered = (data || [])
-    .filter((a) => a.status === status)
-    .slice()
-    .sort(sort(sortBy, sortOrder));
-
-  const maxPage = Math.floor(ordered.length / 20);
-  const paginated = ordered.slice(20 * page, 20 + 20 * page);
-
-  const onClick = useCallback(
-    (key: SortKey) => () => {
-      if (sortBy !== key) setSortOrder(SortOrder.Descending);
-      else setSortOrder(sortOrder === SortOrder.Descending ? SortOrder.Ascending : SortOrder.Descending);
-
-      setSortBy(key);
-    },
-    [sortBy, sortOrder],
-  );
+  const { sorted, ...sortableProps } = useSorting<SortKey, ReducedApplication>(filtered, sort, SortKey.AppliedAt);
+  const { paginated, ...paginationProps } = usePagination(sorted);
 
   return (
     <>
@@ -152,29 +90,18 @@ const List = ({ status }: Props): JSX.Element => {
       </div>
       <Table>
         <Table.Head>
-          <Header
-            className="py-3.5 pl-4 pr-3 sm:pl-6"
-            currentKey={sortBy}
-            currentOrder={sortOrder}
-            sortKey={SortKey.Name}
-            name="Name"
-            onClick={onClick}
-          />
-          <Header currentKey={sortBy} currentOrder={sortOrder} name="Email" sortKey={SortKey.Email} onClick={onClick} />
-          <Header
-            currentKey={sortBy}
-            currentOrder={sortOrder}
-            sortKey={SortKey.Country}
-            name="Country"
-            onClick={onClick}
-          />
-          <Header
-            currentKey={sortBy}
-            currentOrder={sortOrder}
-            sortKey={SortKey.AppliedAt}
-            name="Applied At"
-            onClick={onClick}
-          />
+          <Table.SortableLabel index by={SortKey.Name} {...sortableProps}>
+            Name
+          </Table.SortableLabel>
+          <Table.SortableLabel by={SortKey.Email} {...sortableProps}>
+            Email
+          </Table.SortableLabel>
+          <Table.SortableLabel by={SortKey.Country} {...sortableProps}>
+            Country
+          </Table.SortableLabel>
+          <Table.SortableLabel by={SortKey.AppliedAt} {...sortableProps}>
+            Applied At
+          </Table.SortableLabel>
           <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
             <span className="sr-only">View</span>
           </th>
@@ -186,7 +113,7 @@ const List = ({ status }: Props): JSX.Element => {
         </Table.Body>
       </Table>
 
-      <Pagination page={page} setPage={setPage} max={maxPage} />
+      <Pagination {...paginationProps} />
     </>
   );
 };
