@@ -18,12 +18,8 @@ const IncompleteList = (): JSX.Element => {
       </div>
       <Table>
         <Table.Head>
-          <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 pl-4 pr-3 sm:pl-6">
-            Name
-          </th>
-          <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase px-3 py-3.5">
-            Email
-          </th>
+          <Table.Label index>Name</Table.Label>
+          <Table.Label>Email</Table.Label>
         </Table.Head>
         <Table.Body>
           {isLoading && <LoadingRow />}
@@ -31,10 +27,10 @@ const IncompleteList = (): JSX.Element => {
           {!isLoading &&
             paginated.map((p) => (
               <tr key={p.id}>
-                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                <Table.Data index>
                   {p.first_name} {p.last_name}
-                </td>
-                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{p.email}</td>
+                </Table.Data>
+                <Table.Data>{p.email}</Table.Data>
               </tr>
             ))}
         </Table.Body>

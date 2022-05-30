@@ -176,9 +176,7 @@ const PendingList = (): JSX.Element => {
                 <Table.SortableLabel by={SortKey.AppliedAt} {...sortableProps}>
                   Applied At
                 </Table.SortableLabel>
-                <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-                  <span className="sr-only">View</span>
-                </th>
+                <Table.InvisibleLabel>View</Table.InvisibleLabel>
               </Table.Head>
               <Table.Body>
                 {isLoading && <LoadingRow span={6} />}

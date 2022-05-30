@@ -13,8 +13,8 @@ interface IndexedProps extends Props {
   index?: boolean;
 }
 
-const Head = ({ children, className }: Props): JSX.Element => (
-  <thead className={classNames('bg-gray-50', className)}>
+const Head = ({ children, className = 'bg-gray-50' }: Props): JSX.Element => (
+  <thead className={className}>
     <tr>{children}</tr>
   </thead>
 );
@@ -76,6 +76,12 @@ const SortableLabel = <Key,>({
   </th>
 );
 
+const InvisibleLabel = ({ children, className }: Props) => (
+  <th scope="col" className={classNames('relative py-3 pl-3 pr-4 sm:pr-6', className)}>
+    <span className="sr-only">{children}</span>
+  </th>
+);
+
 const Body = ({ children, className }: Props): JSX.Element => (
   <tbody className={classNames('divide-y divide-gray-200 bg-white', className)}>{children}</tbody>
 );
@@ -106,6 +112,7 @@ const Table = ({ children, className = 'mt-5' }: Props): JSX.Element => (
 
 Table.Head = Head;
 Table.Label = Label;
+Table.InvisibleLabel = InvisibleLabel;
 Table.SortableLabel = SortableLabel;
 Table.Body = Body;
 Table.Data = Data;

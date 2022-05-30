@@ -167,9 +167,7 @@ const List = (): JSX.Element => {
             <Table.Label index>Subject</Table.Label>
             <Table.Label>Status</Table.Label>
             <Table.Label>Last Updated</Table.Label>
-            <Table.Label>
-              <span className="sr-only">View</span>
-            </Table.Label>
+            <Table.InvisibleLabel>View</Table.InvisibleLabel>
           </Table.Head>
           <Table.Body>
             {isMessagesLoading && <LoadingRow />}
@@ -208,9 +206,7 @@ const List = (): JSX.Element => {
           <Table.Head>
             <Table.Label index>Trigger</Table.Label>
             <Table.Label>Message</Table.Label>
-            <Table.Label>
-              <span className="sr-only">Edit</span>
-            </Table.Label>
+            <Table.InvisibleLabel>View</Table.InvisibleLabel>
           </Table.Head>
           <Table.Body>
             {isTriggersLoading && <LoadingRow />}

@@ -63,12 +63,8 @@ const List = (): JSX.Element => {
 
       <Table>
         <Table.Head>
-          <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 pl-4 pr-3 sm:pl-6">
-            Name
-          </th>
-          <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-            <span className="sr-only">View</span>
-          </th>
+          <Table.Label index>Name</Table.Label>
+          <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
         <Table.Body>
           {isLoading && <LoadingRow />}
