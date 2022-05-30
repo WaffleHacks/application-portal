@@ -181,8 +181,8 @@ const PendingList = (): JSX.Element => {
                 </th>
               </Table.Head>
               <Table.Body>
-                {isLoading && <LoadingRow />}
-                {!isLoading && paginated.length === 0 && <EmptyRow message="No pending applications yet." />}
+                {isLoading && <LoadingRow span={6} />}
+                {!isLoading && paginated.length === 0 && <EmptyRow message="No pending applications yet." span={6} />}
                 {!isLoading &&
                   paginated.map((a) => (
                     <Row
