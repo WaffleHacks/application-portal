@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useListIncompleteApplicationsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
 
 const IncompleteList = (): JSX.Element => {
   const { data = [], isLoading } = useListIncompleteApplicationsQuery();
-
-  const [page, setPage] = useState(0);
-  const maxPage = Math.floor(data.length / 20);
-  const paginated = data.slice(20 * page, 20 + 20 * page);
+  const { paginated, ...paginationProps } = usePagination(data);
 
   return (
     <>
@@ -43,7 +40,7 @@ const IncompleteList = (): JSX.Element => {
         </Table.Body>
       </Table>
 
-      <Pagination page={page} setPage={setPage} max={maxPage} />
+      <Pagination {...paginationProps} />
     </>
   );
 };

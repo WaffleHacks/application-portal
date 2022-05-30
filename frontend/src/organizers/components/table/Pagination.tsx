@@ -10,7 +10,7 @@ export const usePagination = <Type,>(items: Type[], size = 20): PaginationParams
   const [page, setPage] = useState(0);
 
   const rawMax = Math.floor(items.length / 20);
-  const max = items.length % 20 === 0 ? rawMax - 1 : rawMax;
+  const max = items.length % 20 === 0 && items.length !== 0 ? rawMax - 1 : rawMax;
 
   const paginated = items.slice(size * page, size + size * page);
 
