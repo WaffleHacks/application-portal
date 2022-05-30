@@ -6,8 +6,9 @@ import { Status } from '../store';
 import Layout from './components/Layout';
 
 const ApplicationDetail = React.lazy(() => import('./pages/applications/Detail'));
-const ListApplications = React.lazy(() => import('./pages/applications/List'));
+const ListApplicationsByStatus = React.lazy(() => import('./pages/applications/StatusList'));
 const ListIncompleteApplications = React.lazy(() => import('./pages/applications/IncompleteList'));
+const ListPendingApplications = React.lazy(() => import('./pages/applications/PendingList'));
 const MessageDetail = React.lazy(() => import('./pages/messages/Detail'));
 const MessageEdit = React.lazy(() => import('./pages/messages/Edit'));
 const MessageNew = React.lazy(() => import('./pages/messages/New'));
@@ -20,9 +21,9 @@ const Organizers = (): JSX.Element => (
   <Layout>
     <Suspense fallback={<>Loading...</>}>
       <Routes>
-        <Route path="/applications/pending" element={<ListApplications status={Status.Pending} />} />
-        <Route path="/applications/accepted" element={<ListApplications status={Status.Accepted} />} />
-        <Route path="/applications/rejected" element={<ListApplications status={Status.Rejected} />} />
+        <Route path="/applications/pending" element={<ListPendingApplications />} />
+        <Route path="/applications/accepted" element={<ListApplicationsByStatus status={Status.Accepted} />} />
+        <Route path="/applications/rejected" element={<ListApplicationsByStatus status={Status.Rejected} />} />
         <Route path="/applications/incomplete" element={<ListIncompleteApplications />} />
         <Route path="/applications/:id" element={<ApplicationDetail />} />
 

@@ -3,45 +3,8 @@ import React from 'react';
 
 import Link from '../../../components/Link';
 import { ReducedApplication, Status, useListApplicationsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from '../../components/table';
-
-enum SortKey {
-  Name,
-  Email,
-  Country,
-  AppliedAt,
-}
-
-const getKey = (app: ReducedApplication, key: SortKey): string => {
-  switch (key) {
-    case SortKey.Name:
-      return `${app.participant.first_name} ${app.participant.last_name}`;
-    case SortKey.Email:
-      return app.participant.email;
-    case SortKey.Country:
-      return app.country;
-    case SortKey.AppliedAt:
-      return app.created_at;
-  }
-};
-
-const sort =
-  (by: SortKey, order: Order) =>
-  (a: ReducedApplication, b: ReducedApplication): number => {
-    const keyA = getKey(a, by);
-    const keyB = getKey(b, by);
-
-    if (keyA === keyB) return 0;
-
-    // Different handling for times
-    if (by === SortKey.AppliedAt) {
-      if (keyA > keyB) return order === Order.Descending ? -1 : 1;
-      else return order === Order.Descending ? 1 : -1;
-    } else {
-      if (keyA > keyB) return order === Order.Descending ? 1 : -1;
-      else return order === Order.Descending ? -1 : 1;
-    }
-  };
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
+import { SortKey, sort } from './list';
 
 const Row = (application: ReducedApplication): JSX.Element => {
   const createdAt = DateTime.fromISO(application.created_at);
@@ -71,7 +34,7 @@ interface Props {
   status: Status;
 }
 
-const List = ({ status }: Props): JSX.Element => {
+const StatusList = ({ status }: Props): JSX.Element => {
   const { data, isLoading } = useListApplicationsQuery();
 
   const filtered = (data || []).filter((a) => a.status === status);
@@ -118,4 +81,4 @@ const List = ({ status }: Props): JSX.Element => {
   );
 };
 
-export default List;
+export default StatusList;
