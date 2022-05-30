@@ -44,6 +44,7 @@ export interface ReducedApplication {
   participant: Participant;
 
   status: Status;
+  flagged: boolean;
 
   country: string;
 

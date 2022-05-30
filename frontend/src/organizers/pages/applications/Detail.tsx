@@ -17,6 +17,7 @@ import { Description, ExternalLinkItem, Item, NamedSection } from '../../compone
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 import StatusBadge from '../../components/StatusBadge';
+import WarningFlag from './WarningFlag';
 
 interface WithId {
   id: string;
@@ -159,15 +160,12 @@ const Detail = (): JSX.Element => {
           <Item name="Phone" value={data.phone_number} />
           <Item name="Gender" value={data.gender} />
           <Item name="Race / Ethnicity" value={data.race_ethnicity} />
-          <Item
-            name="Date of Birth"
-            value={
-              <span className="flex">
-                {data.date_of_birth} (<b>{Math.trunc(age)} y/o</b>)
-                {age < 13 && <ExclamationIcon className="ml-1 text-yellow-500 w-5 h-5" aria-hidden="true" />}
-              </span>
-            }
-          />
+          <Item name="Date of Birth">
+            <span className="flex">
+              {data.date_of_birth} (<b>{Math.trunc(age)} y/o</b>)
+              {age < 13 && <WarningFlag reason="This participant is too young (under 13 y/o)" />}
+            </span>
+          </Item>
         </NamedSection>
         <NamedSection name="Education">
           <Item
@@ -178,7 +176,14 @@ const Detail = (): JSX.Element => {
               </Link>
             }
           />
-          <Item name="Expected Graduation Year" value={data.graduation_year || 'N/A'} />
+          <Item name="Expected Graduation Year">
+            <span className="flex">
+              {data.graduation_year}
+              {data.graduation_year < new Date().getFullYear() - 1 && (
+                <WarningFlag reason="This participant may not be a student or recent grad" />
+              )}
+            </span>
+          </Item>
           <Item name="Level of Study" value={data.level_of_study} />
           <Item name="Major" value={data.major || 'N/A'} />
         </NamedSection>

@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -13,6 +13,7 @@ import {
 } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
 import { SortKey, sort } from './list';
+import WarningFlag from './WarningFlag';
 
 interface RowProps {
   application: ReducedApplication;
@@ -50,7 +51,10 @@ const Row = ({ application, selected, setSelected, disabled }: RowProps): JSX.El
         />
       </Table.Data>
       <Table.Data index className={isSelected ? 'text-indigo-600' : 'text-gray-900'}>
-        {application.participant.first_name} {application.participant.last_name}
+        <span className="flex">
+          {application.participant.first_name} {application.participant.last_name}
+          {application.flagged && <WarningFlag reason="This participant may be ineligible" />}
+        </span>
       </Table.Data>
       <Table.Data>{application.participant.email}</Table.Data>
       <Table.Data>{application.country}</Table.Data>
