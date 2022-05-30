@@ -408,5 +408,6 @@ def clean_application_response(
 
     if not Permission.Organizer.matches(permission):
         response.notes = None
+        response.flagged = None
 
     return response
