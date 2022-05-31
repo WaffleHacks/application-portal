@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 import boto3
@@ -30,17 +29,16 @@ def dispatch_email_tasks(id: str):
     """
     task("communication", "on_sign_up")(id)
 
-    # now = datetime.now()
-    # task(
-    #     "communication",
-    #     "incomplete_after_24h",
-    #     eta=now + timedelta(days=1),
-    # )(id)
-    # task(
-    #     "communication",
-    #     "incomplete_after_7d",
-    #     eta=now + timedelta(days=7),
-    # )(id)
+    task(
+        "communication",
+        "incomplete_after_24h",
+        countdown=24 * 60 * 60,
+    )(id)
+    task(
+        "communication",
+        "incomplete_after_7d",
+        countdown=7 * 24 * 60 * 60,
+    )(id)
 
 
 async def upsert(action: Action, db: AsyncSession):
