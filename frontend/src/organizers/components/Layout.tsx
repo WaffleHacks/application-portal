@@ -1,16 +1,40 @@
-import { DocumentTextIcon, HomeIcon, LibraryIcon, MailOpenIcon, MenuIcon } from '@heroicons/react/outline';
+import {
+  CheckCircleIcon,
+  DotsCircleHorizontalIcon,
+  HomeIcon,
+  LibraryIcon,
+  MailOpenIcon,
+  MenuIcon,
+  QuestionMarkCircleIcon,
+  XCircleIcon,
+} from '@heroicons/react/outline';
 import React, { ReactNode, useState } from 'react';
 import { useMatch } from 'react-router-dom';
 
 import { NavItem } from '../../components/navigation';
-import Navigation from './Navigation';
+import Navigation, { NavSection } from './Navigation';
 
-const navigation: NavItem[] = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Applications', href: '/applications', icon: DocumentTextIcon },
-  { name: 'Schools', href: '/schools', icon: LibraryIcon },
-  { name: 'Messages', href: '/messages', icon: MailOpenIcon },
+const navigation: NavSection[] = [
+  {
+    id: 'general',
+    items: [
+      { name: 'Dashboard', href: '/', icon: HomeIcon },
+      { name: 'Messages', href: '/messages', icon: MailOpenIcon },
+      { name: 'Schools', href: '/schools', icon: LibraryIcon },
+    ],
+  },
+  {
+    id: 'applications',
+    name: 'Applications',
+    items: [
+      { name: 'Pending', href: '/applications/pending', icon: DotsCircleHorizontalIcon },
+      { name: 'Accepted', href: '/applications/accepted', icon: CheckCircleIcon },
+      { name: 'Rejected', href: '/applications/rejected', icon: XCircleIcon },
+      { name: 'Incomplete', href: '/applications/incomplete', icon: QuestionMarkCircleIcon },
+    ],
+  },
 ];
+const paths: NavItem[] = navigation.flatMap((s) => s.items);
 
 interface Props {
   children: ReactNode;
@@ -20,12 +44,12 @@ const Layout = ({ children }: Props): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
   const match = useMatch(window.location.pathname);
-  const titles = navigation.filter((item) => match?.pathname.startsWith(item.href)).reverse();
+  const titles = paths.filter((item) => match?.pathname.startsWith(item.href)).reverse();
   const title = titles.length > 0 ? titles[0].name : 'Not found';
 
   return (
     <div className="min-h-full">
-      <Navigation items={navigation} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Navigation sections={navigation} isOpen={isOpen} setIsOpen={setIsOpen} />
 
       <div className="md:pl-64 flex flex-col flex-1">
         <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">

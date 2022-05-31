@@ -12,7 +12,7 @@ import {
   useSetMessageTriggerMutation,
 } from '../../../store';
 import { MessageTrigger } from '../../../store/types';
-import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
 
 const MessageRow = (message: ReducedMessage): JSX.Element => {
   const lastUpdated = DateTime.fromISO(message.updated_at);
@@ -23,16 +23,16 @@ const MessageRow = (message: ReducedMessage): JSX.Element => {
 
   return (
     <tr>
-      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{message.subject}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+      <Table.Data index>{message.subject}</Table.Data>
+      <Table.Data>
         <Badge color={message.sent ? 'red' : 'yellow'}>{message.sent ? 'Sent' : 'Draft'}</Badge>
-      </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{formattedLastUpdated}</td>
-      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+      </Table.Data>
+      <Table.Data>{formattedLastUpdated}</Table.Data>
+      <Table.Data className="relative text-right sm:pr-6">
         <Link to={`/messages/${message.id}`} className="text-indigo-600 hover:text-indigo-900">
           Details
         </Link>
-      </td>
+      </Table.Data>
     </tr>
   );
 };
@@ -102,12 +102,12 @@ const TriggerRow = (trigger: MessageTrigger): JSX.Element => {
 
   return (
     <tr>
-      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{trigger.trigger}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+      <Table.Data index>{trigger.trigger}</Table.Data>
+      <Table.Data>
         {isEditing && <MessageSelect id={newId} setId={setNewId} />}
         {!isEditing && (trigger.message ? trigger.message.subject : 'N/A')}
-      </td>
-      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+      </Table.Data>
+      <Table.Data className="relative text-right sm:pr-6">
         <button
           type="button"
           onClick={toggleEditing}
@@ -129,18 +129,16 @@ const TriggerRow = (trigger: MessageTrigger): JSX.Element => {
             </button>
           </>
         )}
-      </td>
+      </Table.Data>
     </tr>
   );
 };
 
 const List = (): JSX.Element => {
-  const [page, setPage] = useState(0);
   const { data: messages = [], isLoading: isMessagesLoading } = useListMessagesQuery();
   const { data: triggers = [], isLoading: isTriggersLoading } = useListMessageTriggersQuery();
 
-  const maxPage = Math.floor(messages.length / 20);
-  const paginated = messages.slice(20 * page, 20 + 20 * page);
+  const { paginated, ...paginationProps } = usePagination(messages);
 
   const orderedTriggers = triggers.slice().sort((a, b) => {
     if (a.trigger === b.trigger) return 0;
@@ -166,21 +164,10 @@ const List = (): JSX.Element => {
 
         <Table className="mt-2">
           <Table.Head>
-            <th
-              scope="col"
-              className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 pl-4 pr-3 sm:pl-6"
-            >
-              Subject
-            </th>
-            <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 px-3">
-              Status
-            </th>
-            <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 px-3">
-              Last Updated
-            </th>
-            <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-              <span className="sr-only">View</span>
-            </th>
+            <Table.Label index>Subject</Table.Label>
+            <Table.Label>Status</Table.Label>
+            <Table.Label>Last Updated</Table.Label>
+            <Table.InvisibleLabel>View</Table.InvisibleLabel>
           </Table.Head>
           <Table.Body>
             {isMessagesLoading && <LoadingRow />}
@@ -202,7 +189,7 @@ const List = (): JSX.Element => {
           </Table.Body>
         </Table>
 
-        <Pagination page={page} setPage={setPage} max={maxPage} />
+        <Pagination {...paginationProps} />
       </div>
 
       <div className="mt-12">
@@ -217,18 +204,9 @@ const List = (): JSX.Element => {
 
         <Table>
           <Table.Head>
-            <th
-              scope="col"
-              className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 pl-4 pr-3 sm:pl-6"
-            >
-              Trigger
-            </th>
-            <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 px-3">
-              Message
-            </th>
-            <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-              <span className="sr-only">Edit</span>
-            </th>
+            <Table.Label index>Trigger</Table.Label>
+            <Table.Label>Message</Table.Label>
+            <Table.InvisibleLabel>View</Table.InvisibleLabel>
           </Table.Head>
           <Table.Body>
             {isTriggersLoading && <LoadingRow />}

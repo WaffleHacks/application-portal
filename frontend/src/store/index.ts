@@ -49,13 +49,17 @@ export {
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
+  useListIncompleteApplicationsQuery,
+  useUpdateApplicationMutation,
+  useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useBulkSetApplicationStatusMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';
-export type { ApplicationAutosave, ReducedApplication, ReducedMessage } from './types';
-export { Gender, Group, RaceEthnicity } from './types';
+export type { ApplicationAutosave, ReducedApplication, ReducedMessage, School } from './types';
+export { Gender, Group, RaceEthnicity, Status } from './types';

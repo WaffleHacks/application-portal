@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from pydantic import BaseModel, validator
 from sqlalchemy import Column
@@ -74,6 +74,8 @@ class ApplicationProfileBase(SQLModel):
 
 
 class ApplicationBase(ApplicationProfileBase):
+    notes: str = Field(default="", nullable=False)
+    flagged: bool = Field(default=False, nullable=False)
     status: Status = Field(
         sa_column=Column(
             SQLEnum(Status), nullable=False, server_default=Status.PENDING.name
@@ -90,6 +92,22 @@ class ApplicationBase(ApplicationProfileBase):
             nullable=False,
         )
     )
+
+    @validator("flagged", always=True)
+    def should_flag(cls, value: bool, values: Dict[str, Any]):
+        # Ensure the dependent values are present
+        raw_date_of_birth = values.get("date_of_birth")
+        graduation_year = values.get("graduation_year")
+        if raw_date_of_birth is None or graduation_year is None:
+            return value
+
+        now = datetime.now()
+
+        # Check age
+        date_of_birth = datetime.strptime(raw_date_of_birth, "%d-%m-%Y")
+        age = (now - date_of_birth).days / 365.25
+
+        return age < 13 or graduation_year < now.year - 1
 
 
 class Application(ApplicationBase, table=True):
@@ -117,7 +135,9 @@ class ApplicationList(SQLModel):
     participant: "ParticipantRead"
 
     country: str
+
     status: Status
+    flagged: bool
 
     created_at: datetime
 
@@ -131,6 +151,10 @@ class ApplicationRead(ApplicationProfileBase):
     status: Status
 
     created_at: datetime
+
+    # The following fields are only included if the requester has sufficient privileges
+    notes: Optional[str]
+    flagged: Optional[bool]
 
 
 class ApplicationUpdate(SQLModel):
@@ -158,6 +182,8 @@ class ApplicationUpdate(SQLModel):
     _legal_agreements_validator = validator(
         "legal_agreements_acknowledged", allow_reuse=True
     )(require_legal_agreements)
+
+    notes: Optional[str]
 
 
 class ApplicationAutosaveResume(BaseModel):

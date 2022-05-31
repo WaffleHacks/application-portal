@@ -20,7 +20,10 @@ from common.database import (
     ApplicationList,
     ApplicationRead,
     ApplicationUpdate,
+    Participant,
+    ParticipantRead,
     School,
+    Status,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -72,6 +75,27 @@ async def list(
     result = await db.execute(statement)
     applications = result.scalars().all()
     return applications
+
+
+@router.get(
+    "/incomplete",
+    response_model=List[ParticipantRead],
+    name="List incomplete applications",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def list_incomplete(db: AsyncSession = Depends(with_db)):
+    """
+    Get a list of all participants who have not completed their application
+    """
+    statement = (
+        select(Participant)
+        .outerjoin(Application, full=True)
+        .where(Application.participant_id == None)
+    )
+
+    result = await db.execute(statement)
+    participants = result.scalars().all()
+    return participants
 
 
 @router.post(
@@ -221,7 +245,7 @@ async def read(
     elif Permission.Sponsor.matches(permission) and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    return application
+    return clean_application_response(application, permission)
 
 
 @router.get(
@@ -265,13 +289,13 @@ async def read_resume(
         return {"url": url}
 
 
-@router.put("/{id}", response_model=ApplicationRead, name="Update application")
+@router.patch("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Update application")
 async def update(
     id: str,
     info: ApplicationUpdate,
     requester_id: str = Depends(with_user_id),
     permission: str = Depends(
-        requires_permission(Permission.Participant, Permission.Director)
+        requires_permission(Permission.Participant, Permission.Organizer)
     ),
     db: AsyncSession = Depends(with_db),
 ):
@@ -288,7 +312,11 @@ async def update(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     with tracer.start_as_current_span("update"):
-        updated_fields = info.dict(exclude_unset=True)
+        # Only update notes if organizer
+        if Permission.Organizer.matches(permission) and info.notes is not None:
+            application.notes = info.notes
+
+        updated_fields = info.dict(exclude_unset=True, exclude={"notes"})
         for key, value in updated_fields.items():
             setattr(application, key, value)
 
@@ -300,7 +328,47 @@ async def update(
     db.add(application)
     await db.commit()
 
-    return application
+
+class SetStatusRequest(BaseModel):
+    status: Status
+
+
+@router.put(
+    "/{id}/status",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Set application status",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def set_status(
+    id: str,
+    values: SetStatusRequest,
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Set the status for a participant's application
+    """
+    application = await db.get(Application, id)
+    if application is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    # Only allow setting status once
+    if application.status != Status.PENDING:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="status already finalized"
+        )
+    # Only allow setting to accepted or rejected
+    elif values.status == Status.PENDING:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="cannot finalize 'pending' status",
+        )
+
+    # Set the participant's status
+    application.status = values.status
+    task("communication", f"on_application_{application.status.value}")(id)
+
+    db.add(application)
+    await db.commit()
 
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
@@ -324,3 +392,22 @@ async def delete(
     if application:
         await db.delete(application)
         await db.commit()
+
+
+def clean_application_response(
+    application: Application, permission: str
+) -> ApplicationRead:
+    """
+    Removes organizer-specific information from responses
+    :param application: the raw application
+    :param permission: the requester's permission
+    :return: a response with sensitive information redacted
+    """
+
+    response = ApplicationRead.from_orm(application)
+
+    if not Permission.Organizer.matches(permission):
+        response.notes = None
+        response.flagged = None
+
+    return response

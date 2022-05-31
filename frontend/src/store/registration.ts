@@ -1,7 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, ReducedApplication, School } from './types';
+import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
+import { Status } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -10,10 +11,11 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
  */
 enum Tag {
   Application = 'application',
+  Participant = 'participant',
   School = 'school',
 }
 
-type ApplicationCreate = Omit<Application, 'created_at' | 'participant' | 'resume' | 'school' | 'status'> & {
+type ApplicationCreate = Omit<Application, 'created_at' | 'participant' | 'resume' | 'school' | 'status' | 'notes'> & {
   resume: boolean;
   school: string;
 };
@@ -23,6 +25,15 @@ interface ApplicationCreateResponse {
     url: string;
     fields: Record<string, string>;
   };
+}
+
+type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' | 'resume' | 'school'>> & {
+  id: string;
+};
+
+interface ApplicationStatus {
+  id: string;
+  status: Status;
 }
 
 interface SchoolDetail extends School {
@@ -38,6 +49,11 @@ interface ApplicationResume {
   url: string;
 }
 
+interface BulkSetApplicationStatus {
+  status: Status;
+  ids: string[];
+}
+
 const api = createApi({
   reducerPath: 'registration',
   baseQuery: baseQuery('portal', BASE_URL),
@@ -48,6 +64,13 @@ const api = createApi({
       providesTags: (result: ReducedApplication[] = []) => [
         Tag.Application,
         ...result.map((a) => ({ type: Tag.Application, id: a.participant.id })),
+      ],
+    }),
+    listIncompleteApplications: builder.query<Participant[], void>({
+      query: () => '/registration/applications/incomplete',
+      providesTags: (result: Participant[] = []) => [
+        Tag.Participant,
+        ...result.map((i) => ({ type: Tag.Participant, id: i.id })),
       ],
     }),
     getApplication: builder.query<Application, string>({
@@ -66,6 +89,22 @@ const api = createApi({
       }),
       invalidatesTags: [Tag.Application],
     }),
+    updateApplication: builder.mutation<void, ApplicationUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/applications/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: Tag.Application, id }],
+    }),
+    setApplicationStatus: builder.mutation<void, ApplicationStatus>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/applications/${id}/status`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [Tag.Application, { type: Tag.Application, id }],
+    }),
 
     // Application autosave endpoints
     // These do not have caching enabled to prevent constant fetches and re-fetches
@@ -78,6 +117,19 @@ const api = createApi({
         method: 'PUT',
         body,
       }),
+    }),
+
+    // Bulk endpoints
+    bulkSetApplicationStatus: builder.mutation<void, BulkSetApplicationStatus>({
+      query: (body) => ({
+        url: '/registration/bulk/status',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { ids }) => [
+        Tag.Application,
+        ...ids.map((id) => ({ type: Tag.Application, id })),
+      ],
     }),
 
     // School endpoints
@@ -106,8 +158,12 @@ export const {
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useListApplicationsQuery,
+  useListIncompleteApplicationsQuery,
+  useUpdateApplicationMutation,
+  useSetApplicationStatusMutation,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
+  useBulkSetApplicationStatusMutation,
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,

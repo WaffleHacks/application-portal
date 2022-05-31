@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Badge, { Color } from '../../components/Badge';
-import { Status } from '../../store/types';
+import { Status } from '../../store';
 
 interface Props {
   status: Status;

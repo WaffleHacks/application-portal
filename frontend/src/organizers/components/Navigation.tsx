@@ -10,6 +10,12 @@ import { useGetProfileQuery, useSelector } from '../../store';
 
 const AUTH0_CLIENT_ID = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
+export interface NavSection {
+  id: string;
+  name?: string;
+  items: NavItem[];
+}
+
 const linkClassNames = (isActive: boolean): string =>
   classNames(
     isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
@@ -56,15 +62,13 @@ const Profile = (): JSX.Element => {
 };
 
 interface Props {
-  items: NavItem[];
+  sections: NavSection[];
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }
 
-const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
+const Navigation = ({ sections, isOpen, setIsOpen }: Props): JSX.Element => {
   const profileTokenLoading = useSelector((state) => state.authentication.profile === undefined);
-
-  const shownItems = items.filter((i) => !i.hidden);
 
   return (
     <>
@@ -116,13 +120,18 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
                   <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
                   <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
                 </div>
-                <nav className="mt-5 flex-1 px-2 space-y-1">
-                  {shownItems.map((item) => (
-                    <Link key={item.name} item={item} classNames={linkClassNames}>
-                      {(isActive) =>
-                        item.icon && <item.icon className={iconClassNames(isActive, true)} aria-hidden="true" />
-                      }
-                    </Link>
+                <nav className="mt-5 flex-1 px-2 space-y-5">
+                  {sections.map((section) => (
+                    <div key={section.id}>
+                      {section.name && <h3 className="ml-3 mb-2 text-gray-300 text-lg">{section.name}</h3>}
+                      {section.items.map((item) => (
+                        <Link key={item.name} item={item} classNames={linkClassNames}>
+                          {(isActive) =>
+                            item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />
+                          }
+                        </Link>
+                      ))}
+                    </div>
                   ))}
                 </nav>
               </div>
@@ -142,13 +151,18 @@ const Navigation = ({ items, isOpen, setIsOpen }: Props): JSX.Element => {
               <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
               <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
             </div>
-            <nav className="mt-5 flex-1 px-2 space-y-1">
-              {shownItems.map((item) => (
-                <Link key={item.name} item={item} classNames={linkClassNames}>
-                  {(isActive) =>
-                    item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />
-                  }
-                </Link>
+            <nav className="mt-5 flex-1 px-2 space-y-5">
+              {sections.map((section) => (
+                <div key={section.id}>
+                  {section.name && <h3 className="ml-3 mb-2 text-gray-300 text-lg">{section.name}</h3>}
+                  {section.items.map((item) => (
+                    <Link key={item.name} item={item} classNames={linkClassNames}>
+                      {(isActive) =>
+                        item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />
+                      }
+                    </Link>
+                  ))}
+                </div>
               ))}
             </nav>
           </div>

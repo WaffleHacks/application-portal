@@ -3,18 +3,26 @@ import React, { useState } from 'react';
 
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
-import { useListSchoolsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table } from '../../components/table';
+import { School, useListSchoolsQuery } from '../../../store';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+
+const Row = (school: School): JSX.Element => (
+  <tr>
+    <Table.Data index>{school.name}</Table.Data>
+    <Table.Data className="relative text-right sm:pr-6">
+      <Link to={`/schools/${school.id}`} className="text-indigo-600 hover:text-indigo-900">
+        Details
+      </Link>
+    </Table.Data>
+  </tr>
+);
 
 const List = (): JSX.Element => {
-  const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const { data = [], isLoading } = useListSchoolsQuery();
 
   const filtered = data.filter((s) => s.name.toLowerCase().startsWith(search));
-
-  const maxPage = Math.floor(filtered.length / 20);
-  const paginated = filtered.slice(20 * page, 20 + 20 * page);
+  const { paginated, ...paginationProps } = usePagination(filtered);
 
   return (
     <>
@@ -55,31 +63,17 @@ const List = (): JSX.Element => {
 
       <Table>
         <Table.Head>
-          <th scope="col" className="text-left text-sm font-semibold text-gray-500 uppercase py-3.5 pl-4 pr-3 sm:pl-6">
-            Name
-          </th>
-          <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-6">
-            <span className="sr-only">View</span>
-          </th>
+          <Table.Label index>Name</Table.Label>
+          <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
         <Table.Body>
           {isLoading && <LoadingRow />}
           {!isLoading && paginated.length === 0 && <EmptyRow message="No schools present. Was the database seeded?" />}
-          {!isLoading &&
-            paginated.map((s) => (
-              <tr key={s.id}>
-                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{s.name}</td>
-                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <Link to={`/schools/${s.id}`} className="text-indigo-600 hover:text-indigo-900">
-                    Details
-                  </Link>
-                </td>
-              </tr>
-            ))}
+          {!isLoading && paginated.map((s) => <Row key={s.id} {...s} />)}
         </Table.Body>
       </Table>
 
-      <Pagination page={page} setPage={setPage} max={maxPage} />
+      <Pagination {...paginationProps} />
     </>
   );
 };
