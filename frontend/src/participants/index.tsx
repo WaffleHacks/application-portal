@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { CheckCircleIcon, DocumentTextIcon, RefreshIcon, XCircleIcon } from '@heroicons/react/outline';
 import React, { ReactNode, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { ref } from 'yup';
 
 import Card from '../components/Card';
 import Link from '../components/Link';
@@ -39,7 +40,7 @@ const SingleRoute = ({ children }: SingleRouteProps): JSX.Element => (
 
 const Participants = (): JSX.Element => {
   const { user, isLoading: isUserLoading } = useAuth0();
-  const { data: application, isLoading, isError } = useGetApplicationQuery(user?.sub || '');
+  const { data: application, isLoading, isError, refetch } = useGetApplicationQuery(user?.sub || '');
 
   if (isLoading || isUserLoading) {
     return (
@@ -55,7 +56,7 @@ const Participants = (): JSX.Element => {
   if (isError)
     return (
       <SingleRoute>
-        <Application />
+        <Application refetch={refetch} />
       </SingleRoute>
     );
 

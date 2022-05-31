@@ -1,8 +1,6 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 import Card from '../../../components/Card';
 import {
@@ -10,7 +8,6 @@ import {
   Gender,
   RaceEthnicity,
   useCreateApplicationMutation,
-  useGetApplicationQuery,
   useGetAutosaveQuery,
   useSetAutosaveMutation,
 } from '../../../store';
@@ -25,12 +22,11 @@ import ShippingForm from './ShippingForm';
 const formatAddress = (street: string, apartment: string, city: string, region: string, postal_code: string): string =>
   `${street}${apartment.length > 0 ? ', ' + apartment : ''}, ${city}, ${region} ${postal_code}`;
 
-const Application = (): JSX.Element => {
-  const navigate = useNavigate();
+interface Props {
+  refetch: () => void;
+}
 
-  const { user } = useAuth0();
-  const { isLoading: alreadyAppliedLoading, isSuccess: alreadyApplied } = useGetApplicationQuery(user?.sub || '');
-
+const Application = ({ refetch }: Props): JSX.Element => {
   // Auto-save hooks
   const { data, isLoading } = useGetAutosaveQuery();
   const [setAutosave, { isLoading: isSaving }] = useSetAutosaveMutation();
@@ -39,12 +35,6 @@ const Application = (): JSX.Element => {
   const [resume, setResume] = useState<File>();
   const [createApplication, { isLoading: isCreating, isUninitialized, isError, data: createData, reset }] =
     useCreateApplicationMutation();
-
-  // Prevent the user from submitting another application
-  useEffect(() => {
-    if (alreadyAppliedLoading) return;
-    else if (alreadyApplied) navigate('/');
-  }, [alreadyApplied, alreadyAppliedLoading]);
 
   // Handle post-submit and resume file upload
   useEffect(() => {
@@ -74,12 +64,12 @@ const Application = (): JSX.Element => {
 
         // Ensure we properly navigate to the success page
         toast.success('Your application was submitted!');
-        setTimeout(() => navigate('/'), 50);
+        refetch();
       }
     })();
   }, [isCreating]);
 
-  if (isLoading || alreadyAppliedLoading)
+  if (isLoading)
     return (
       <Card className="flex justify-around">
         <RefreshIcon className="h-8 w-8 animate-spin" />
