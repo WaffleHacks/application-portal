@@ -1,3 +1,4 @@
+import { RefreshIcon } from '@heroicons/react/outline';
 import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 
@@ -26,8 +27,20 @@ const Review = (): JSX.Element => {
   return (
     <>
       <SidebarCard title="About You" grid={false}>
-        <Row name="Name" value={user?.firstName + ' ' + user?.lastName} />
-        <Row name="Email" value={user?.email} />
+        <Row
+          name="Name"
+          value={
+            user ? (
+              user.firstName + ' ' + user.lastName
+            ) : (
+              <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
+            )
+          }
+        />
+        <Row
+          name="Email"
+          value={user ? user.email : <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />}
+        />
         <Row name="Gender" value={values.gender} />
         <Row name="Race / Ethnicity" value={values.race_ethnicity} />
         <Row name="Date of Birth" value={values.date_of_birth} />
