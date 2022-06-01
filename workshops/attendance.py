@@ -1,8 +1,10 @@
 from http import HTTPStatus
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response
+from opentelemetry import trace
 from pydantic import BaseModel
+from sqlalchemy import func, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -13,6 +15,8 @@ from common.database import (
     EventAttendance,
     Feedback,
     FeedbackCreate,
+    Participant,
+    SwagTier,
     require_application_accepted,
     with_db,
 )
@@ -24,11 +28,13 @@ router = APIRouter(
         Depends(require_application_accepted),
     ]
 )
+tracer = trace.get_tracer(__name__)
 
 
 @router.put("/{code}", name="Mark attendance", status_code=HTTPStatus.NO_CONTENT)
 async def mark(
     code: str,
+    tasks: BackgroundTasks,
     user_id: str = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
@@ -42,6 +48,9 @@ async def mark(
 
         db.add(attendance)
         await db.commit()
+
+        # Only update tier when attendance successfully marked
+        tasks.add_task(update_swag_tier, id=user_id, db=db)
     except IntegrityError:
         # Already marked their attendance, all good
         pass
@@ -123,3 +132,35 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
         )
 
     return event
+
+
+async def update_swag_tier(id: str, db: AsyncSession):
+    """
+    Update the participant's swag tier
+    """
+    with tracer.start_as_current_span("update-swag-tier"):
+        # Find the total number of events the participant has attended
+        events_attended_query = (
+            select(func.count())
+            .select_from(EventAttendance)
+            .where(EventAttendance.participant_id == id)
+        )
+
+        # Get the corresponding tier
+        tier_query = (
+            select(SwagTier.id)
+            .where(
+                SwagTier.required_attendance <= events_attended_query.scalar_subquery()
+            )
+            .order_by(SwagTier.required_attendance.desc())  # type: ignore
+            .limit(1)
+        )
+
+        # Update the tier on the participant
+        statement = (
+            update(Participant)
+            .where(Participant.id == id)
+            .values(swag_tier_id=tier_query.scalar_subquery())
+        )
+        await db.execute(statement)
+        await db.commit()
