@@ -32,6 +32,10 @@ class SwagTierList(SQLModel):
     required_attendance: int
 
 
+class SwagTierListWithDescription(SwagTierList):
+    description: str
+
+
 class SwagTierRead(SwagTierBase):
     id: int
 

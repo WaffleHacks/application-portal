@@ -31,6 +31,7 @@ from .swag_tier import (
     SwagTier,
     SwagTierCreate,
     SwagTierList,
+    SwagTierListWithDescription,
     SwagTierRead,
     SwagTierUpdate,
 )

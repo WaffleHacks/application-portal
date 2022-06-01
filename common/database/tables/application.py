@@ -124,6 +124,10 @@ class Application(ApplicationBase, table=True):
 
     school: "School" = Relationship(back_populates="applications")
 
+    @property
+    def accepted(self):
+        return self.status == Status.ACCEPTED
+
 
 class ApplicationCreate(ApplicationProfileBase):
     school: str
