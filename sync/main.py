@@ -29,16 +29,16 @@ def dispatch_email_tasks(id: str):
     """
     task("communication", "on_sign_up")(id)
 
-    task(
-        "communication",
-        "incomplete_after_24h",
-        countdown=24 * 60 * 60,
-    )(id)
-    task(
-        "communication",
-        "incomplete_after_7d",
-        countdown=7 * 24 * 60 * 60,
-    )(id)
+    # task(
+    #     "communication",
+    #     "incomplete_after_24h",
+    #     countdown=24 * 60 * 60,
+    # )(id)
+    # task(
+    #     "communication",
+    #     "incomplete_after_7d",
+    #     countdown=7 * 24 * 60 * 60,
+    # )(id)
 
 
 async def upsert(action: Action, db: AsyncSession):
