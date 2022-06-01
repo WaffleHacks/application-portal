@@ -5,10 +5,12 @@ from pydantic import root_validator
 from sqlalchemy import Column
 from sqlmodel import Field, Relationship, SQLModel
 
+from .event_attendance import EventAttendance
 from .types import TimeStamp
 
 if TYPE_CHECKING:
     from .feedback import Feedback, FeedbackList
+    from .participant import Participant, ParticipantList
 
 
 class EventBase(SQLModel):
@@ -47,6 +49,10 @@ class Event(EventBase, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
 
+    attendees: List["Participant"] = Relationship(
+        back_populates="attended",
+        link_model=EventAttendance,
+    )
     feedback: List["Feedback"] = Relationship(back_populates="event")
 
 
@@ -69,6 +75,7 @@ class EventRead(EventBase):
     id: int
 
     feedback: List["FeedbackList"]
+    attendees: List["ParticipantList"]
 
 
 class EventUpdate(SQLModel):

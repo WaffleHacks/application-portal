@@ -1,10 +1,13 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
+from .event_attendance import EventAttendance
+
 if TYPE_CHECKING:
     from .application import Application
+    from .event import Event
     from .swag_tier import SwagTier, SwagTierList
 
 
@@ -25,6 +28,11 @@ class Participant(ParticipantBase, table=True):
     application: Optional["Application"] = Relationship(
         back_populates="participant",
         sa_relationship_kwargs={"cascade": "all, delete", "uselist": False},
+    )
+
+    attended: List["Event"] = Relationship(
+        back_populates="attendees",
+        link_model=EventAttendance,
     )
 
 

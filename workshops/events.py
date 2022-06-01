@@ -52,7 +52,10 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     workshop = await db.get(
         Event,
         id,
-        options=[selectinload(Event.feedback).selectinload(Feedback.participant)],
+        options=[
+            selectinload(Event.feedback).selectinload(Feedback.participant),
+            selectinload(Event.attendees),
+        ],
     )
     if workshop is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
