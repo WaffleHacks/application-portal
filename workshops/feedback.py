@@ -16,7 +16,12 @@ from common.database import (
 )
 from common.permissions import Permission, requires_permission
 
-router = APIRouter()
+router = APIRouter(
+    dependencies=[
+        Depends(requires_permission(Permission.Participant)),
+        Depends(require_application_accepted),
+    ]
+)
 
 
 class StatusResponse(BaseModel):
@@ -24,13 +29,7 @@ class StatusResponse(BaseModel):
 
 
 @router.get(
-    "/{event_id}",
-    name="Check feedback submitted",
-    response_model=StatusResponse,
-    dependencies=[
-        Depends(requires_permission(Permission.Participant)),
-        Depends(require_application_accepted),
-    ],
+    "/{event_id}", name="Check feedback submitted", response_model=StatusResponse
 )
 async def status(
     event_id: int,
@@ -56,10 +55,6 @@ async def status(
     name="Submit feedback",
     status_code=HTTPStatus.CREATED,
     response_class=Response,
-    dependencies=[
-        Depends(requires_permission(Permission.Participant)),
-        Depends(require_application_accepted),
-    ],
 )
 async def submit(
     event_id: int,
