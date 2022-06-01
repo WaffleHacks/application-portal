@@ -6,7 +6,7 @@ from fastapi.responses import UJSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import events, swag
+from . import events, feedback, swag
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 app.add_middleware(
@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 app.include_router(events.router, prefix="/events", tags=["Events"])
+app.include_router(feedback.router, prefix="/feedback", tags=["Feedback"])
 app.include_router(swag.router, prefix="/swag", tags=["Swag"])
 
 

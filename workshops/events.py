@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from common.database import (
     Event,
@@ -13,6 +14,7 @@ from common.database import (
     EventList,
     EventRead,
     EventUpdate,
+    Feedback,
     with_db,
 )
 from common.permissions import Permission, requires_permission
@@ -47,14 +49,18 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     """
     Get all the details about a workshop
     """
-    workshop = await db.get(Event, id)
+    workshop = await db.get(
+        Event,
+        id,
+        options=[selectinload(Event.feedback).selectinload(Feedback.participant)],
+    )
     if workshop is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return workshop
 
 
-@router.patch("/{id}", name="Update workshop", response_model=EventRead)
+@router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)
 async def update(id: int, params: EventUpdate, db: AsyncSession = Depends(with_db)):
     """
     Update the details of a workshop
@@ -73,8 +79,6 @@ async def update(id: int, params: EventUpdate, db: AsyncSession = Depends(with_d
 
     db.add(workshop)
     await db.commit()
-
-    return workshop
 
 
 @router.delete("/{id}", name="Delete workshop", status_code=HTTPStatus.NO_CONTENT)

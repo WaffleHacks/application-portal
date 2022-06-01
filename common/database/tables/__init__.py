@@ -10,6 +10,7 @@ from .application import (
     Status,
 )
 from .event import Event, EventCreate, EventList, EventRead, EventUpdate
+from .feedback import Feedback, FeedbackCreate, FeedbackList, FeedbackRead
 from .message import (
     Message,
     MessageBase,
@@ -41,6 +42,9 @@ ApplicationList.update_forward_refs(ParticipantList=ParticipantList)
 ApplicationRead.update_forward_refs(
     ParticipantList=ParticipantList, SchoolList=SchoolList
 )
+EventRead.update_forward_refs(FeedbackList=FeedbackList)
+FeedbackList.update_forward_refs(ParticipantList=ParticipantList)
+FeedbackRead.update_forward_refs(ParticipantList=ParticipantList)
 MessageCreate.update_forward_refs(Group=Group)
 MessageRead.update_forward_refs(RecipientRead=RecipientRead)
 MessageTriggerRead.update_forward_refs(MessageList=MessageList)

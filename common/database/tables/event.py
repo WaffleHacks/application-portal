@@ -1,11 +1,14 @@
 from datetime import datetime
-from typing import Dict, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 from pydantic import root_validator
 from sqlalchemy import Column
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from .types import TimeStamp
+
+if TYPE_CHECKING:
+    from .feedback import Feedback, FeedbackList
 
 
 class EventBase(SQLModel):
@@ -44,6 +47,8 @@ class Event(EventBase, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True, nullable=False)
 
+    feedback: List["Feedback"] = Relationship(back_populates="event")
+
 
 class EventCreate(SQLModel):
     name: str
@@ -62,6 +67,8 @@ class EventList(SQLModel):
 
 class EventRead(EventBase):
     id: int
+
+    feedback: List["FeedbackList"]
 
 
 class EventUpdate(SQLModel):
