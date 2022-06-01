@@ -9,6 +9,7 @@ from .application import (
     RaceEthnicity,
     Status,
 )
+from .event import Event, EventCreate, EventList, EventRead, EventUpdate
 from .message import (
     Message,
     MessageBase,
@@ -25,14 +26,7 @@ from .message_trigger import (
 )
 from .participant import Participant, ParticipantBase, ParticipantRead
 from .recipient import Group, Recipient, RecipientCreate, RecipientRead
-from .school import (
-    School,
-    SchoolBase,
-    SchoolCreate,
-    SchoolList,
-    SchoolRead,
-    SchoolUpdate,
-)
+from .school import School, SchoolCreate, SchoolList, SchoolRead, SchoolUpdate
 
 # Update hydrated references
 ApplicationList.update_forward_refs(ParticipantRead=ParticipantRead)
