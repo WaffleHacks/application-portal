@@ -6,6 +6,8 @@ from fastapi.responses import UJSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from common import tracing
+
 from . import attendance, events, swag
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
@@ -16,6 +18,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Authorization"],
 )
+
+tracing.init(app)
 
 app.include_router(attendance.router, prefix="/attendance", tags=["Attendance"])
 app.include_router(events.router, prefix="/events", tags=["Events"])
