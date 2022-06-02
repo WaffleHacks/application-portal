@@ -182,6 +182,8 @@ export interface ReducedFeedback {
 export interface Feedback extends ReducedFeedback {
   comments: string;
   again: boolean;
+
+  event: ReducedEvent;
 }
 
 export interface ReducedEvent {

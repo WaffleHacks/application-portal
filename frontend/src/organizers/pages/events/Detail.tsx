@@ -61,7 +61,11 @@ const ParticipantRow = (participant: Participant): JSX.Element => (
   </tr>
 );
 
-const FeedbackRow = (feedback: ReducedFeedback): JSX.Element => (
+interface FeedbackProps extends ReducedFeedback {
+  eventId: string;
+}
+
+const FeedbackRow = (feedback: FeedbackProps): JSX.Element => (
   <tr>
     <Table.Data index>
       <Link to={`/applications/${feedback.participant.id}`}>
@@ -72,7 +76,7 @@ const FeedbackRow = (feedback: ReducedFeedback): JSX.Element => (
     <Table.Data>{feedback.content}/10</Table.Data>
     <Table.Data>{feedback.interest}/10</Table.Data>
     <Table.Data>
-      <Link to={`/events//feedback/${feedback.participant.id}`}>Details</Link>
+      <Link to={`/events/${feedback.eventId}/feedback/${feedback.participant.id}`}>Details</Link>
     </Table.Data>
   </tr>
 );
@@ -158,7 +162,7 @@ const Detail = (): JSX.Element => {
           <Table.Body>
             {paginatedFeedback.length === 0 && <EmptyRow message="No feedback yet" />}
             {paginatedFeedback.map((f) => (
-              <FeedbackRow key={f.participant.id} {...f} />
+              <FeedbackRow key={f.participant.id} eventId={id as string} {...f} />
             ))}
           </Table.Body>
         </InlineTable>
