@@ -1,4 +1,5 @@
 import {
+  CalendarIcon,
   CheckCircleIcon,
   DotsCircleHorizontalIcon,
   HomeIcon,
@@ -20,6 +21,7 @@ const navigation: NavSection[] = [
     items: [
       { name: 'Dashboard', href: '/', icon: HomeIcon },
       { name: 'Messages', href: '/messages', icon: MailOpenIcon },
+      { name: 'Events', href: '/events', icon: CalendarIcon },
       { name: 'Schools', href: '/schools', icon: LibraryIcon },
     ],
   },

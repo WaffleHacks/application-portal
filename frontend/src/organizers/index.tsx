@@ -9,6 +9,7 @@ const ApplicationDetail = React.lazy(() => import('./pages/applications/Detail')
 const ListApplicationsByStatus = React.lazy(() => import('./pages/applications/StatusList'));
 const ListIncompleteApplications = React.lazy(() => import('./pages/applications/IncompleteList'));
 const ListPendingApplications = React.lazy(() => import('./pages/applications/PendingList'));
+const ListEvents = React.lazy(() => import('./pages/events/List'));
 const MessageDetail = React.lazy(() => import('./pages/messages/Detail'));
 const MessageEdit = React.lazy(() => import('./pages/messages/Edit'));
 const MessageNew = React.lazy(() => import('./pages/messages/New'));
@@ -26,6 +27,8 @@ const Organizers = (): JSX.Element => (
         <Route path="/applications/rejected" element={<ListApplicationsByStatus status={Status.Rejected} />} />
         <Route path="/applications/incomplete" element={<ListIncompleteApplications />} />
         <Route path="/applications/:id" element={<ApplicationDetail />} />
+
+        <Route path="/events" element={<ListEvents />} />
 
         <Route path="/schools" element={<SchoolList />} />
         <Route path="/schools/new" element={<NewSchool />} />
