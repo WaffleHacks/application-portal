@@ -31,7 +31,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post("/", name="Create workshop", response_model=EventRead)
+@router.post("/", name="Create workshop", response_model=EventList)
 async def create(params: EventCreate, db: AsyncSession = Depends(with_db)):
     """
     Create a new workshop

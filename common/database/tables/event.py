@@ -37,8 +37,10 @@ class EventBase(SQLModel):
 
     @root_validator()
     def range_is_positive(cls, values: Dict[str, datetime]):
-        start, end = values["valid_from"], values["valid_until"]
-        if end < start:
+        start, end = values.get("valid_from"), values.get("valid_until")
+        if start is None or end is None:
+            return values
+        elif end < start:
             raise ValueError("validity range cannot be negative")
 
         return values
