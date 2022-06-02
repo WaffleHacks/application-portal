@@ -1,6 +1,8 @@
+from datetime import datetime
 from http import HTTPStatus
 from typing import Optional
 
+import pytz
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response
 from opentelemetry import trace
 from pydantic import BaseModel
@@ -130,6 +132,11 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
             status_code=HTTPStatus.BAD_REQUEST,
             detail="invalid attendance code",
         )
+
+    # Check that the code is still valid
+    now = datetime.now(tz=pytz.utc)
+    if now < event.valid_from or now > event.valid_until:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     return event
 

@@ -36,6 +36,7 @@ opentelemetry-instrumentation-celery = "0.30b1"
 opentelemetry-instrumentation-botocore = "0.30b1"
 protobuf = "3.20.1"
 nanoid = "^2.0.0"
+pytz = "^2022.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
@@ -46,6 +47,7 @@ sqlalchemy2-stubs = "^0.0.2-alpha.19"
 ipython = "^8.2.0"
 boto3-stubs-lite = {version = "^1.21.42", extras = ["s3", "sqs"]}
 types-ujson = "^4.2.1"
+types-pytz = "^2021.3.8"
 
 [tool.isort]
 profile = "black"
