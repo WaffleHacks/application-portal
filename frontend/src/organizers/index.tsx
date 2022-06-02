@@ -10,6 +10,7 @@ const ListApplicationsByStatus = React.lazy(() => import('./pages/applications/S
 const ListIncompleteApplications = React.lazy(() => import('./pages/applications/IncompleteList'));
 const ListPendingApplications = React.lazy(() => import('./pages/applications/PendingList'));
 const EventDetail = React.lazy(() => import('./pages/events/Detail'));
+const EventEdit = React.lazy(() => import('./pages/events/Edit'));
 const ListEvents = React.lazy(() => import('./pages/events/List'));
 const EventNew = React.lazy(() => import('./pages/events/New'));
 const MessageDetail = React.lazy(() => import('./pages/messages/Detail'));
@@ -31,8 +32,9 @@ const Organizers = (): JSX.Element => (
         <Route path="/applications/:id" element={<ApplicationDetail />} />
 
         <Route path="/events" element={<ListEvents />} />
-        <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/events/new" element={<EventNew />} />
+        <Route path="/events/:id" element={<EventDetail />} />
+        <Route path="/events/:id/edit" element={<EventEdit />} />
 
         <Route path="/schools" element={<SchoolList />} />
         <Route path="/schools/new" element={<NewSchool />} />
