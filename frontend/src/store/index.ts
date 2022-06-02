@@ -72,6 +72,7 @@ export {
   useSubmitFeedbackMutation,
   useListEventsQuery,
   useGetEventQuery,
+  useGetDetailedEventFeedbackQuery,
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,

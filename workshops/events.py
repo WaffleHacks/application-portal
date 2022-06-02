@@ -15,6 +15,8 @@ from common.database import (
     EventRead,
     EventUpdate,
     Feedback,
+    FeedbackRead,
+    Participant,
     with_db,
 )
 from common.permissions import Permission, requires_permission
@@ -61,6 +63,32 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return workshop
+
+
+@router.get(
+    "/{event_id}/feedback/{user_id}",
+    name="Read detailed workshop feedback",
+    response_model=FeedbackRead,
+)
+async def read_feedback(
+    event_id: int, user_id: str, db: AsyncSession = Depends(with_db)
+):
+    """
+    Get the detailed feedback for a given participant
+    """
+    workshop = await db.get(
+        Event,
+        event_id,
+        options=[selectinload(Event.feedback).selectinload(Feedback.participant)],
+    )
+    if workshop is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    for f in workshop.feedback:
+        if f.participant_id == user_id:
+            return f
+
+    raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
 
 @router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)
