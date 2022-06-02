@@ -49,7 +49,7 @@ EventRead.update_forward_refs(
     ParticipantList=ParticipantList,
 )
 FeedbackList.update_forward_refs(ParticipantList=ParticipantList)
-FeedbackRead.update_forward_refs(ParticipantList=ParticipantList)
+FeedbackRead.update_forward_refs(EventList=EventList, ParticipantList=ParticipantList)
 MessageCreate.update_forward_refs(Group=Group)
 MessageRead.update_forward_refs(RecipientRead=RecipientRead)
 MessageTriggerRead.update_forward_refs(MessageList=MessageList)

@@ -86,6 +86,7 @@ async def read_feedback(
 
     for f in workshop.feedback:
         if f.participant_id == user_id:
+            f.event = f.event  # I have no idea why this is needed
             return f
 
     raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")

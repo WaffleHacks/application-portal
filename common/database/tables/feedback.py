@@ -5,7 +5,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from .event import Event
+    from .event import Event, EventList
     from .participant import Participant, ParticipantList
 
 
@@ -62,3 +62,4 @@ class FeedbackList(SQLModel):
 
 class FeedbackRead(FeedbackBase):
     participant: "ParticipantList"
+    event: "EventList"
