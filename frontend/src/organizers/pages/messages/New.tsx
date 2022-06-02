@@ -16,7 +16,12 @@ const New = (): JSX.Element => {
 
   return (
     <>
-      <Form onSubmit={create} isSubmitting={isLoading} subtitle="Creates a new message to send to recipients." />
+      <Form
+        onSubmit={create}
+        isSubmitting={isLoading}
+        title="New Message"
+        subtitle="Creates a new message to send to recipients."
+      />
 
       <div className="mt-3">
         <LinkButton to="/messages">

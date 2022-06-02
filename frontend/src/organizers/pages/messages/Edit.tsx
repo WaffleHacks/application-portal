@@ -29,6 +29,7 @@ const Edit = (): JSX.Element => {
         onSubmit={(v) => edit({ ...v, id: parseInt(id as string) })}
         isSubmitting={isLoading}
         values={{ ...data, recipients: data.recipients.map((r) => r.group) }}
+        title="Edit Message"
         subtitle="Change details about the message."
       />
 
