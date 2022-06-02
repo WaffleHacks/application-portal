@@ -50,9 +50,7 @@ const DeleteButton = ({ id }: WithMessageId): JSX.Element => {
 const ParticipantRow = (participant: Participant): JSX.Element => (
   <tr>
     <Table.Data index>
-      <Link to={`/applications/${participant.id}`}>
-        {participant.first_name} {participant.last_name}
-      </Link>
+      {participant.first_name} {participant.last_name}
     </Table.Data>
     <Table.Data>{participant.email}</Table.Data>
     <Table.Data>
