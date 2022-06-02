@@ -170,3 +170,43 @@ export interface MessageTrigger {
   trigger: TriggerType;
   message: ReducedMessage | null;
 }
+
+export interface ReducedFeedback {
+  participant: Participant;
+
+  presentation: number;
+  content: number;
+  interest: number;
+}
+
+export interface Feedback extends ReducedFeedback {
+  comments: string;
+  again: boolean;
+}
+
+export interface ReducedEvent {
+  id: number;
+  name: string;
+
+  code: string;
+  enabled: boolean;
+}
+
+export interface Event extends ReducedEvent {
+  valid_from: string;
+  valid_until: string;
+
+  feedback: ReducedFeedback[];
+  attendees: Participant[];
+}
+
+export interface ReducedSwagTier {
+  id: number;
+  name: string;
+  required_attendance: number;
+}
+
+export interface SwagTier extends ReducedSwagTier {
+  description: string;
+  participants: Participant[];
+}
