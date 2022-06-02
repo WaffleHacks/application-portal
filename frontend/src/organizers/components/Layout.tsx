@@ -7,8 +7,10 @@ import {
   MailOpenIcon,
   MenuIcon,
   QuestionMarkCircleIcon,
+  UserGroupIcon,
   XCircleIcon,
 } from '@heroicons/react/outline';
+import { ChartBarIcon } from '@heroicons/react/solid';
 import React, { ReactNode, useState } from 'react';
 import { useMatch } from 'react-router-dom';
 
@@ -21,7 +23,6 @@ const navigation: NavSection[] = [
     items: [
       { name: 'Dashboard', href: '/', icon: HomeIcon },
       { name: 'Messages', href: '/messages', icon: MailOpenIcon },
-      { name: 'Events', href: '/events', icon: CalendarIcon },
       { name: 'Schools', href: '/schools', icon: LibraryIcon },
     ],
   },
@@ -33,6 +34,15 @@ const navigation: NavSection[] = [
       { name: 'Accepted', href: '/applications/accepted', icon: CheckCircleIcon },
       { name: 'Rejected', href: '/applications/rejected', icon: XCircleIcon },
       { name: 'Incomplete', href: '/applications/incomplete', icon: QuestionMarkCircleIcon },
+    ],
+  },
+  {
+    id: 'swag',
+    name: 'Swag',
+    items: [
+      { name: 'Events', href: '/events', icon: CalendarIcon },
+      { name: 'Tiers', href: '/tiers', icon: ChartBarIcon },
+      { name: 'Progress', href: '/progress', icon: UserGroupIcon },
     ],
   },
 ];
