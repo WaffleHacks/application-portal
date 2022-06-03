@@ -41,8 +41,8 @@ const navigation: NavSection[] = [
     name: 'Swag',
     items: [
       { name: 'Events', href: '/events', icon: CalendarIcon },
-      { name: 'Tiers', href: '/tiers', icon: ChartBarIcon },
-      { name: 'Progress', href: '/progress', icon: UserGroupIcon },
+      { name: 'Tiers', href: '/swag/tiers', icon: ChartBarIcon },
+      { name: 'Progress', href: '/swag/progress', icon: UserGroupIcon },
     ],
   },
 ];
