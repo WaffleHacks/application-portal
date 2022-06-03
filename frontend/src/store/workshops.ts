@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import { Event, Feedback, Participant, ParticipantWithSwag, ReducedEvent, ReducedSwagTier, SwagTier } from './types';
+import { Event, Feedback, ParticipantWithSwag, ReducedEvent, ReducedSwagTier, SwagTier } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -15,7 +15,7 @@ enum Tag {
   SwagTier = 'swag-tier',
 }
 
-interface FeedbackSubmit extends Omit<Feedback, 'participant'> {
+interface FeedbackSubmit extends Omit<Feedback, 'participant' | 'event'> {
   code: string;
 }
 

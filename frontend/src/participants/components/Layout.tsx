@@ -8,6 +8,7 @@ const navigation: NavItem[] = [
   { name: 'Your Application', href: '/', exact: true },
   { name: 'Swag Progress', href: '/swag', acceptedOnly: true },
   { name: 'Profile', href: 'https://id.wafflehacks.org', external: true },
+  { name: 'Workshop Attendance', href: '/workshop/', acceptedOnly: true, hidden: true },
 ];
 
 interface Props {

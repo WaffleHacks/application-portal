@@ -22,7 +22,7 @@ export const store = configureStore({
       .concat(profileApi.middleware)
       .concat(registrationApi.middleware)
       .concat(workshopsApi.middleware)
-      .concat(errorLogger),
+      .concat(errorLogger(['markAttendance'])),
 });
 
 // Trigger re-fetches upon reconnection and upon regaining focus

@@ -10,6 +10,7 @@ import { Status, useGetApplicationQuery } from '../store';
 import Layout from './components/Layout';
 
 const Application = React.lazy(() => import('./pages/application/Application'));
+const Attendance = React.lazy(() => import('./pages/attendance/Attendance'));
 const SwagProgress = React.lazy(() => import('./pages/swag-progress/SwagProgress'));
 const StatusDescription = React.lazy(() => import('./pages/StatusDescription'));
 
@@ -97,7 +98,6 @@ const Participants = (): JSX.Element => {
         </SingleRoute>
       );
     case Status.Accepted:
-      // TODO: add other participant-facing pages
       const description = (
         <StatusDescription icon={CheckCircleIcon} color="green" title="Congratulations, you're in!">
           We look forward to seeing what project you build.
@@ -114,6 +114,7 @@ const Participants = (): JSX.Element => {
         <Base accepted={true}>
           <Route index element={description} />
           <Route path="/swag" element={<SwagProgress />} />
+          <Route path="/workshop/:code" element={<Attendance />} />
         </Base>
       );
     default:
