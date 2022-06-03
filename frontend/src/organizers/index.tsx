@@ -21,6 +21,7 @@ const MessagesList = React.lazy(() => import('./pages/messages/List'));
 const SchoolDetail = React.lazy(() => import('./pages/schools/Detail'));
 const SchoolList = React.lazy(() => import('./pages/schools/List'));
 const NewSchool = React.lazy(() => import('./pages/schools/New'));
+const SwagTierDetail = React.lazy(() => import('./pages/swag/tiers/Detail'));
 const ListSwagTiers = React.lazy(() => import('./pages/swag/tiers/List'));
 
 const Organizers = (): JSX.Element => (
@@ -44,6 +45,7 @@ const Organizers = (): JSX.Element => (
         <Route path="/schools/:id" element={<SchoolDetail />} />
 
         <Route path="/swag/tiers" element={<ListSwagTiers />} />
+        <Route path="/swag/tiers/:id" element={<SwagTierDetail />} />
 
         <Route path="/messages" element={<MessagesList />} />
         <Route path="/messages/new" element={<MessageNew />} />
