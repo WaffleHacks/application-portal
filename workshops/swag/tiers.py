@@ -25,7 +25,9 @@ async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all the swag tiers
     """
-    result = await db.execute(select(SwagTier))
+    result = await db.execute(
+        select(SwagTier).order_by(SwagTier.required_attendance.desc())  # type: ignore
+    )
     return result.scalars().all()
 
 
