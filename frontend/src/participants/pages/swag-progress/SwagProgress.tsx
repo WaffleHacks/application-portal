@@ -41,7 +41,7 @@ const SwagProgress = (): JSX.Element => {
         </p>
       </Card>
       <Card className="lg:col-span-2">
-        <h3 className="text-xl font-bold">{current.name}</h3>
+        <h1 className="text-3xl font-bold">{current.name}</h1>
         <RenderMarkdown content={current.description} />
       </Card>
     </div>
