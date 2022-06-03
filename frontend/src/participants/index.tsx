@@ -2,7 +2,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { CheckCircleIcon, DocumentTextIcon, RefreshIcon, XCircleIcon } from '@heroicons/react/outline';
 import React, { ReactNode, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ref } from 'yup';
 
 import Card from '../components/Card';
 import Link from '../components/Link';
@@ -11,14 +10,16 @@ import { Status, useGetApplicationQuery } from '../store';
 import Layout from './components/Layout';
 
 const Application = React.lazy(() => import('./pages/application/Application'));
+const SwagProgress = React.lazy(() => import('./pages/swag-progress/SwagProgress'));
 const StatusDescription = React.lazy(() => import('./pages/StatusDescription'));
 
 interface BaseProps {
   children: ReactNode;
+  accepted: boolean;
 }
 
-const Base = ({ children }: BaseProps): JSX.Element => (
-  <Layout>
+const Base = ({ children, accepted }: BaseProps): JSX.Element => (
+  <Layout accepted={accepted}>
     <Suspense fallback={<>Loading...</>}>
       <Routes>
         {children}
@@ -28,12 +29,8 @@ const Base = ({ children }: BaseProps): JSX.Element => (
   </Layout>
 );
 
-interface SingleRouteProps {
-  children: ReactNode;
-}
-
-const SingleRoute = ({ children }: SingleRouteProps): JSX.Element => (
-  <Base>
+const SingleRoute = ({ children, accepted }: BaseProps): JSX.Element => (
+  <Base accepted={accepted}>
     <Route index element={children} />
   </Base>
 );
@@ -44,7 +41,7 @@ const Participants = (): JSX.Element => {
 
   if (isLoading || isUserLoading) {
     return (
-      <Layout>
+      <Layout accepted={false}>
         <Card className="flex justify-around">
           <RefreshIcon className="h-8 w-8 animate-spin" />
         </Card>
@@ -55,7 +52,7 @@ const Participants = (): JSX.Element => {
   // No application submitted
   if (isError)
     return (
-      <SingleRoute>
+      <SingleRoute accepted={false}>
         <Application refetch={refetch} />
       </SingleRoute>
     );
@@ -64,7 +61,7 @@ const Participants = (): JSX.Element => {
   switch (application?.status) {
     case Status.Pending:
       return (
-        <SingleRoute>
+        <SingleRoute accepted={false}>
           <StatusDescription icon={DocumentTextIcon} color="yellow" title="Submitted!">
             We&apos;ve received your application, and you&apos;ll receive an update in the coming weeks. In the
             meantime, why not follow us on{' '}
@@ -85,7 +82,7 @@ const Participants = (): JSX.Element => {
       );
     case Status.Rejected:
       return (
-        <SingleRoute>
+        <SingleRoute accepted={false}>
           <StatusDescription icon={XCircleIcon} color="red" title="Your application was rejected">
             It is with our sincerest regret to inform you that our admissions committee has chosen to not accept your
             application. We invite you to apply again next year.
@@ -114,8 +111,9 @@ const Participants = (): JSX.Element => {
         </StatusDescription>
       );
       return (
-        <Base>
+        <Base accepted={true}>
           <Route index element={description} />
+          <Route path="/swag" element={<SwagProgress />} />
         </Base>
       );
     default:

@@ -36,8 +36,8 @@ type SwagTierUpdate = Omit<SwagTier, 'participants'>;
 
 interface SwagProgress {
   attended: number;
-  current_tier: number;
-  tiers: Omit<SwagTier, 'participants'>;
+  current_tier: number | null;
+  tiers: Omit<SwagTier, 'participants'>[];
 }
 
 interface DetailedFeedbackRequest {
