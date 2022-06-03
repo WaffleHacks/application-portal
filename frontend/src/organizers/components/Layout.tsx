@@ -12,16 +12,15 @@ import {
 } from '@heroicons/react/outline';
 import { ChartBarIcon } from '@heroicons/react/solid';
 import React, { ReactNode, useState } from 'react';
-import { useMatch } from 'react-router-dom';
 
-import { NavItem } from '../../components/navigation';
+import { NavItem, usePageTitle } from '../../components/navigation';
 import Navigation, { NavSection } from './Navigation';
 
 const navigation: NavSection[] = [
   {
     id: 'general',
     items: [
-      { name: 'Dashboard', href: '/', icon: HomeIcon },
+      { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
       { name: 'Messages', href: '/messages', icon: MailOpenIcon },
       { name: 'Schools', href: '/schools', icon: LibraryIcon },
     ],
@@ -54,10 +53,7 @@ interface Props {
 
 const Layout = ({ children }: Props): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const match = useMatch(window.location.pathname);
-  const titles = paths.filter((item) => match?.pathname.startsWith(item.href)).reverse();
-  const title = titles.length > 0 ? titles[0].name : 'Not found';
+  const title = usePageTitle(paths);
 
   return (
     <div className="min-h-full">
