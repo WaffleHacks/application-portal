@@ -6,6 +6,7 @@ export { CodeEditor as CodeEditorInput, BaseCodeEditor } from './CodeEditor';
 export { default as DateInput } from './Date';
 export { default as DateTimeInput } from './DateTime';
 export { default as FileInput } from './File';
+export { default as MarkdownInput } from './Markdown';
 export { default as NumberInput } from './Number';
 export { default as PhoneInput } from './PhoneInput';
 export { default as TextInput } from './Text';

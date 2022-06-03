@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button, LinkButton } from '../../../../components/buttons';
 import Confirm from '../../../../components/Confirm';
 import Link from '../../../../components/Link';
+import RenderMarkdown from '../../../../components/RenderMarkdown';
 import { useDeleteSwagTierMutation, useGetSwagTierQuery } from '../../../../store';
 import { Participant } from '../../../../store/types';
 import { Description, Item, Section } from '../../../components/description';
@@ -79,7 +80,7 @@ const Detail = (): JSX.Element => {
         <Section>
           <Item name="Required workshops">{data.required_attendance}</Item>
           <Item name="Description" wide>
-            {data.description}
+            <RenderMarkdown content={data.description} />
           </Item>
         </Section>
       </Description>
