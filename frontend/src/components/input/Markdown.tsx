@@ -6,6 +6,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import Link from '../Link';
 import RenderMarkdown from '../RenderMarkdown';
 import { BaseProps, generateId } from './common';
 
@@ -83,8 +84,14 @@ const Markdown = ({ label, ...props }: BaseProps<string>): JSX.Element => {
       </Tab.Group>
       <div className="mt-2 mx-3 flex justify-between text-sm">
         <p className="text-gray-500">
-          You can use GitHub-flavored markdown here to format the text. Please only use headings if absolutely
-          necessary.
+          You can use{' '}
+          <Link
+            to="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
+            external
+          >
+            GitHub-flavored markdown
+          </Link>{' '}
+          here to format the text. Please only use headings if absolutely necessary.
         </p>
         {error && (
           <p className="text-red-600" id={errorId}>
