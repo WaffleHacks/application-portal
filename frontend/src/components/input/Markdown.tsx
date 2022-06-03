@@ -2,15 +2,17 @@ import { Tab } from '@headlessui/react';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import { useField } from 'formik';
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import React, { ReactNode } from 'react';
 
 import Link from '../Link';
 import RenderMarkdown from '../RenderMarkdown';
 import { BaseProps, generateId } from './common';
 
-const Markdown = ({ label, ...props }: BaseProps<string>): JSX.Element => {
+type Props = BaseProps<string> & {
+  description?: ReactNode;
+};
+
+const Markdown = ({ label, description, ...props }: Props): JSX.Element => {
   const [field, { error }] = useField(props);
   const { className, placeholder, autoComplete, disabled, required } = props;
   const { value } = field;
@@ -82,8 +84,8 @@ const Markdown = ({ label, ...props }: BaseProps<string>): JSX.Element => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-      <div className="mt-2 mx-3 flex justify-between text-sm">
-        <p className="text-gray-500">
+      <div className="mt-2 mx-3 text-sm grid grid-cols-1 lg:grid-cols-3">
+        <p className="text-gray-500 lg:col-span-2">
           You can use{' '}
           <Link
             to="https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
@@ -91,10 +93,10 @@ const Markdown = ({ label, ...props }: BaseProps<string>): JSX.Element => {
           >
             GitHub-flavored markdown
           </Link>{' '}
-          here to format the text. Please only use headings if absolutely necessary.
+          here to format the text. {description}
         </p>
         {error && (
-          <p className="text-red-600" id={errorId}>
+          <p className="text-right text-red-600" id={errorId}>
             {error}
           </p>
         )}

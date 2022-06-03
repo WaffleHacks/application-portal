@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import { Button, LinkButton } from '../../../../components/buttons';
 import { MarkdownInput, NumberInput, TextInput } from '../../../../components/input';
+import Link from '../../../../components/Link';
 import { SwagTier } from '../../../../store/types';
 import { Description, Section } from '../../../components/description';
 
@@ -62,6 +63,14 @@ const Form = ({ returnTo, values = initialValues, onSubmit, isSubmitting, title,
               label="Description"
               required
               autoComplete="off"
+              description={
+                <>
+                  <Link to="https://gist.github.com/akrantz01/4e3dbd82b7ddf661319e8f39ed80fa37" external>
+                    This gist
+                  </Link>{' '}
+                  shows how the different markdown elements will look when displayed on the swag tiers page.
+                </>
+              }
               {...getFieldProps('description')}
             />
           </Section>
