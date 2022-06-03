@@ -5,10 +5,14 @@ from pydantic import BaseModel
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from common.database import (
+    Application,
     EventAttendance,
     Participant,
+    ParticipantRead,
+    Status,
     SwagTier,
     SwagTierListWithDescription,
     require_application_accepted,
@@ -64,3 +68,24 @@ async def progress(
         "current_tier": participant.swag_tier_id,
         "tiers": swag_tiers,
     }
+
+
+@router.get(
+    "/participants",
+    name="Get progress of all participants",
+    response_model=List[ParticipantRead],
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def participant_progresses(db: AsyncSession = Depends(with_db)):
+    """
+    Get the tiers of all accepted participants
+    """
+    result = await db.execute(
+        select(Participant)
+        .outerjoin(SwagTier)
+        .join(Application)
+        .where(Application.status == Status.ACCEPTED)
+        .order_by(SwagTier.required_attendance, Participant.first_name)  # type: ignore
+        .options(selectinload(Participant.swag_tier))
+    )
+    return result.scalars().all()

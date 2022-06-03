@@ -35,6 +35,10 @@ export interface Participant {
   email: string;
 }
 
+export interface ParticipantWithSwag extends Participant {
+  swag_tier?: SwagTier;
+}
+
 export interface School {
   id: string;
   name: string;

@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import { Event, Feedback, ReducedEvent, ReducedSwagTier, SwagTier } from './types';
+import { Event, Feedback, Participant, ParticipantWithSwag, ReducedEvent, ReducedSwagTier, SwagTier } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -113,6 +113,10 @@ const api = createApi({
       query: () => '/workshops/swag/progress',
       providesTags: [Tag.SwagProgress],
     }),
+    getAllParticipantSwagProgress: builder.query<ParticipantWithSwag[], void>({
+      query: () => '/workshops/swag/participants',
+      providesTags: [Tag.SwagProgress],
+    }),
 
     // Swag tiers endpoints
     listSwagTiers: builder.query<ReducedSwagTier[], void>({
@@ -164,6 +168,7 @@ export const {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetSwagProgressQuery,
+  useGetAllParticipantSwagProgressQuery,
   useListSwagTiersQuery,
   useGetSwagTierQuery,
   useCreateSwagTierMutation,

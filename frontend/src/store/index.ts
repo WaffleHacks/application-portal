@@ -77,6 +77,7 @@ export {
   useUpdateEventMutation,
   useDeleteEventMutation,
   useGetSwagProgressQuery,
+  useGetAllParticipantSwagProgressQuery,
   useListSwagTiersQuery,
   useGetSwagTierQuery,
   useCreateSwagTierMutation,
