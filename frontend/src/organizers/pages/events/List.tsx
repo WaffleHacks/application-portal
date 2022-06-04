@@ -11,7 +11,7 @@ import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../co
 
 const Row = (event: ReducedEvent) => {
   const onClick = async () => {
-    await navigator.clipboard.writeText(`${window.origin}/attendance/${event.code}`);
+    await navigator.clipboard.writeText(`${window.origin}/workshop/${event.code}`);
     toast.success('Attendance URL copied to clipboard!');
   };
 
@@ -70,7 +70,7 @@ const List = (): JSX.Element => {
               callToAction={
                 <LinkButton to="/events/new">
                   <PlusIcon className="-ml-1 mr-2 h-5 w-5" />
-                  New message
+                  New event
                 </LinkButton>
               }
             />

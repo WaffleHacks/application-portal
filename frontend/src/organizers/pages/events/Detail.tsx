@@ -97,7 +97,7 @@ const Detail = (): JSX.Element => {
   if (data === undefined) return <NotFound message="We couldn't find that event" returnTo="/events" />;
 
   const onCopy = async () => {
-    await navigator.clipboard.writeText(`${window.origin}/attendance/${data.code}`);
+    await navigator.clipboard.writeText(`${window.origin}/workshop/${data.code}`);
     toast.success('Attendance URL copied to clipboard!');
   };
 
