@@ -4,8 +4,30 @@ import React from 'react';
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
 import { SchoolList, useListSchoolsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from '../../components/table';
 import Search from './Search';
+
+enum SortKey {
+  Name,
+  Applications,
+}
+
+const compare = <T,>(a: T, b: T, order: Order): number => {
+  if (a === b) return 0;
+  else if (a > b) return order === Order.Descending ? -1 : 1;
+  else return order === Order.Descending ? 1 : -1;
+};
+
+const sort =
+  (by: SortKey, order: Order) =>
+  (a: SchoolList, b: SchoolList): number => {
+    switch (by) {
+      case SortKey.Name:
+        return compare(a.name, b.name, order) * -1;
+      case SortKey.Applications:
+        return compare(a.count, b.count, order);
+    }
+  };
 
 const Row = (school: SchoolList): JSX.Element => (
   <tr>
@@ -21,7 +43,8 @@ const Row = (school: SchoolList): JSX.Element => (
 
 const List = (): JSX.Element => {
   const { data = [], isLoading } = useListSchoolsQuery();
-  const { paginated, ...paginationProps } = usePagination(data);
+  const { sorted, ...sortableProps } = useSorting<SortKey, SchoolList>(data, sort, SortKey.Applications);
+  const { paginated, ...paginationProps } = usePagination(sorted);
 
   return (
     <>
@@ -44,8 +67,12 @@ const List = (): JSX.Element => {
 
       <Table>
         <Table.Head>
-          <Table.Label index>Name</Table.Label>
-          <Table.Label>Applications</Table.Label>
+          <Table.SortableLabel index by={SortKey.Name} {...sortableProps}>
+            Name
+          </Table.SortableLabel>
+          <Table.SortableLabel by={SortKey.Applications} {...sortableProps}>
+            Applications
+          </Table.SortableLabel>
           <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
         <Table.Body>
