@@ -1,10 +1,11 @@
-import { PlusIcon, SearchIcon } from '@heroicons/react/outline';
-import React, { useState } from 'react';
+import { PlusIcon } from '@heroicons/react/outline';
+import React from 'react';
 
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
 import { SchoolList, useListSchoolsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import Search from './Search';
 
 const Row = (school: SchoolList): JSX.Element => (
   <tr>
@@ -19,11 +20,8 @@ const Row = (school: SchoolList): JSX.Element => (
 );
 
 const List = (): JSX.Element => {
-  const [search, setSearch] = useState('');
   const { data = [], isLoading } = useListSchoolsQuery();
-
-  const filtered = data.filter((s) => s.name.toLowerCase().startsWith(search));
-  const { paginated, ...paginationProps } = usePagination(filtered);
+  const { paginated, ...paginationProps } = usePagination(data);
 
   return (
     <>
@@ -34,25 +32,7 @@ const List = (): JSX.Element => {
       </div>
 
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2">
-        {/* TODO: implement search using Algolia */}
-        <div className="max-w-md">
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700">
-            Search
-          </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-            </div>
-            <input
-              type="text"
-              name="search"
-              id="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
+        <Search />
 
         <div className="mt-5 max-h-10 flex justify-end">
           <LinkButton size="sm" to="/schools/new">
