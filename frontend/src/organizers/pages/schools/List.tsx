@@ -1,14 +1,38 @@
-import { PlusIcon, SearchIcon } from '@heroicons/react/outline';
-import React, { useState } from 'react';
+import { PlusIcon } from '@heroicons/react/outline';
+import React from 'react';
 
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
-import { School, useListSchoolsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import { SchoolList, useListSchoolsQuery } from '../../../store';
+import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from '../../components/table';
+import Search from './Search';
 
-const Row = (school: School): JSX.Element => (
+enum SortKey {
+  Name,
+  Applications,
+}
+
+const compare = <T,>(a: T, b: T, order: Order): number => {
+  if (a === b) return 0;
+  else if (a > b) return order === Order.Descending ? -1 : 1;
+  else return order === Order.Descending ? 1 : -1;
+};
+
+const sort =
+  (by: SortKey, order: Order) =>
+  (a: SchoolList, b: SchoolList): number => {
+    switch (by) {
+      case SortKey.Name:
+        return compare(a.name, b.name, order) * -1;
+      case SortKey.Applications:
+        return compare(a.count, b.count, order);
+    }
+  };
+
+const Row = (school: SchoolList): JSX.Element => (
   <tr>
     <Table.Data index>{school.name}</Table.Data>
+    <Table.Data>{school.count}</Table.Data>
     <Table.Data className="relative text-right sm:pr-6">
       <Link to={`/schools/${school.id}`} className="text-indigo-600 hover:text-indigo-900">
         Details
@@ -18,11 +42,9 @@ const Row = (school: School): JSX.Element => (
 );
 
 const List = (): JSX.Element => {
-  const [search, setSearch] = useState('');
   const { data = [], isLoading } = useListSchoolsQuery();
-
-  const filtered = data.filter((s) => s.name.toLowerCase().startsWith(search));
-  const { paginated, ...paginationProps } = usePagination(filtered);
+  const { sorted, ...sortableProps } = useSorting<SortKey, SchoolList>(data, sort, SortKey.Applications);
+  const { paginated, ...paginationProps } = usePagination(sorted);
 
   return (
     <>
@@ -33,25 +55,7 @@ const List = (): JSX.Element => {
       </div>
 
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2">
-        {/* TODO: implement search using Algolia */}
-        <div className="max-w-md">
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700">
-            Search
-          </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-            </div>
-            <input
-              type="text"
-              name="search"
-              id="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
+        <Search />
 
         <div className="mt-5 max-h-10 flex justify-end">
           <LinkButton size="sm" to="/schools/new">
@@ -63,7 +67,12 @@ const List = (): JSX.Element => {
 
       <Table>
         <Table.Head>
-          <Table.Label index>Name</Table.Label>
+          <Table.SortableLabel index by={SortKey.Name} {...sortableProps}>
+            Name
+          </Table.SortableLabel>
+          <Table.SortableLabel by={SortKey.Applications} {...sortableProps}>
+            Applications
+          </Table.SortableLabel>
           <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
         <Table.Body>
