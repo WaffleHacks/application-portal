@@ -16,9 +16,11 @@ from common.database import (
     Status,
     SwagTier,
     SwagTierListWithDescription,
+    with_db,
+)
+from common.database.dependencies import (
     require_application_accepted,
     with_current_participant,
-    with_db,
 )
 from common.permissions import Permission, requires_permission
 

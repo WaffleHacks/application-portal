@@ -19,9 +19,9 @@ from common.database import (
     FeedbackCreate,
     Participant,
     SwagTier,
-    require_application_accepted,
     with_db,
 )
+from common.database.dependencies import require_application_accepted
 from common.permissions import Permission, requires_permission
 
 router = APIRouter(
