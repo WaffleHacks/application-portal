@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
+from pydantic import validator
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -11,6 +12,12 @@ class SwagTierBase(SQLModel):
     description: str
 
     required_attendance: int
+
+    @validator("required_attendance")
+    def non_negative(cls, value: int) -> int:
+        if value < 0:
+            raise ValueError("must be positive")
+        return value
 
 
 class SwagTier(SwagTierBase, table=True):

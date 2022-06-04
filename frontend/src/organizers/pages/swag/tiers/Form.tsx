@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
   name: Yup.string().required('This field is required'),
   description: Yup.string().required('This field is required'),
   required_attendance: Yup.number()
-    .min(1, 'Must be at least 1')
+    .min(0, 'Must be positive')
     .max(50, 'Must be less than 50')
     .required('This field is required'),
 });
@@ -52,7 +52,7 @@ const Form = ({ returnTo, values = initialValues, onSubmit, isSubmitting, title,
             <TextInput label="Name" required autoComplete="off" {...getFieldProps('name')} />
             <NumberInput
               label="Required workshops"
-              min={1}
+              min={0}
               max={50}
               required
               {...getFieldProps('required_attendance')}
