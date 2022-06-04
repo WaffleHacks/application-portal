@@ -20,6 +20,7 @@ jobs:
           - mjml
           - registration
           - sync
+          - workshops
     steps:
       - uses: actions/checkout@v2
 

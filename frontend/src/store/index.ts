@@ -6,6 +6,7 @@ import communicationApi from './communication';
 import errorLogger from './errors';
 import profileApi from './profile';
 import registrationApi from './registration';
+import workshopsApi from './workshops';
 
 export const store = configureStore({
   reducer: {
@@ -13,13 +14,15 @@ export const store = configureStore({
     [communicationApi.reducerPath]: communicationApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
     [registrationApi.reducerPath]: registrationApi.reducer,
+    [workshopsApi.reducerPath]: workshopsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(communicationApi.middleware)
       .concat(profileApi.middleware)
       .concat(registrationApi.middleware)
-      .concat(errorLogger),
+      .concat(workshopsApi.middleware)
+      .concat(errorLogger(['markAttendance'])),
 });
 
 // Trigger re-fetches upon reconnection and upon regaining focus
@@ -61,5 +64,35 @@ export {
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';
-export type { ApplicationAutosave, ReducedApplication, ReducedMessage, School } from './types';
+export type {
+  ApplicationAutosave,
+  ReducedApplication,
+  ReducedMessage,
+  School,
+  ParticipantWithSwag,
+  ReducedSwagTier,
+  SwagTier,
+  Participant,
+  ReducedEvent,
+  ReducedFeedback,
+  MessageTrigger,
+} from './types';
 export { Gender, Group, RaceEthnicity, Status } from './types';
+export {
+  useMarkAttendanceMutation,
+  useGetFeedbackStatusQuery,
+  useSubmitFeedbackMutation,
+  useListEventsQuery,
+  useGetEventQuery,
+  useGetDetailedEventFeedbackQuery,
+  useCreateEventMutation,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
+  useGetSwagProgressQuery,
+  useGetAllParticipantSwagProgressQuery,
+  useListSwagTiersQuery,
+  useGetSwagTierQuery,
+  useCreateSwagTierMutation,
+  useUpdateSwagTierMutation,
+  useDeleteSwagTierMutation,
+} from './workshops';

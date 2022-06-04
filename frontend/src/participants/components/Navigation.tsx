@@ -4,7 +4,7 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
-import { Link, NavItem, ProfilePicture } from '../../components/navigation';
+import { NavItem as BaseNavItem, Link, ProfilePicture } from '../../components/navigation';
 import logo from '../../logo.png';
 import { useSelector } from '../../store';
 import { DesktopProfile, MobileProfile } from './Profiles';
@@ -34,15 +34,20 @@ const linkClassNames =
     }
   };
 
-interface Props {
-  items: NavItem[];
+export interface NavItem extends BaseNavItem {
+  acceptedOnly?: boolean;
 }
 
-const Navigation = ({ items }: Props): JSX.Element => {
+interface Props {
+  items: NavItem[];
+  accepted: boolean;
+}
+
+const Navigation = ({ items, accepted }: Props): JSX.Element => {
   const { logout } = useAuth0();
   const profileTokenLoading = useSelector((state) => state.authentication.profile === undefined);
 
-  const shownItems = items.filter((i) => !i.hidden);
+  const shownItems = items.filter((i) => !i.hidden && (!i.acceptedOnly || accepted));
 
   return (
     <Disclosure as="nav" className="bg-white shadow-sm">

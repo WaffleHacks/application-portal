@@ -56,18 +56,19 @@ interface Props {
   onSubmit?: (values: Values) => void;
   isSubmitting?: boolean;
   values?: Values;
+  title: string;
   subtitle?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-const Form = ({ onSubmit = noop, isSubmitting, values = initialValues, subtitle }: Props): JSX.Element => {
+const Form = ({ title, onSubmit = noop, isSubmitting, values = initialValues, subtitle }: Props): JSX.Element => {
   return (
     <Formik initialValues={values} onSubmit={onSubmit} validationSchema={validationSchema} validateOnChange={true}>
       {({ getFieldProps, isValid, isSubmitting: isFormikSubmitting }) => (
         <FormikForm>
-          <Description title="New Message" subtitle={subtitle}>
+          <Description title={title} subtitle={subtitle}>
             <Section>
               <TextInput label="Subject" required autoComplete="off" {...getFieldProps('subject')} />
 

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
@@ -11,7 +11,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from .types import TimeStamp
 
 if TYPE_CHECKING:
-    from .participant import Participant, ParticipantRead
+    from .participant import Participant, ParticipantList
     from .school import School, SchoolList
 
 
@@ -124,6 +124,10 @@ class Application(ApplicationBase, table=True):
 
     school: "School" = Relationship(back_populates="applications")
 
+    @property
+    def accepted(self):
+        return self.status == Status.ACCEPTED
+
 
 class ApplicationCreate(ApplicationProfileBase):
     school: str
@@ -132,7 +136,7 @@ class ApplicationCreate(ApplicationProfileBase):
 
 
 class ApplicationList(SQLModel):
-    participant: "ParticipantRead"
+    participant: "ParticipantList"
 
     country: str
 
@@ -143,7 +147,7 @@ class ApplicationList(SQLModel):
 
 
 class ApplicationRead(ApplicationProfileBase):
-    participant: "ParticipantRead"
+    participant: "ParticipantList"
 
     school: "SchoolList"
     resume: Optional[str]

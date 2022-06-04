@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ExclamationIcon, ExternalLinkIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ExternalLinkIcon, RefreshIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

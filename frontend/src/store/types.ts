@@ -35,6 +35,10 @@ export interface Participant {
   email: string;
 }
 
+export interface ParticipantWithSwag extends Participant {
+  swag_tier?: SwagTier;
+}
+
 export interface School {
   id: string;
   name: string;
@@ -169,4 +173,46 @@ export enum TriggerType {
 export interface MessageTrigger {
   trigger: TriggerType;
   message: ReducedMessage | null;
+}
+
+export interface ReducedFeedback {
+  participant: Participant;
+
+  presentation: number;
+  content: number;
+  interest: number;
+}
+
+export interface Feedback extends ReducedFeedback {
+  comments: string;
+  again: boolean;
+
+  event: ReducedEvent;
+}
+
+export interface ReducedEvent {
+  id: number;
+  name: string;
+
+  code: string;
+  enabled: boolean;
+}
+
+export interface Event extends ReducedEvent {
+  valid_from: string;
+  valid_until: string;
+
+  feedback: ReducedFeedback[];
+  attendees: Participant[];
+}
+
+export interface ReducedSwagTier {
+  id: number;
+  name: string;
+  required_attendance: number;
+}
+
+export interface SwagTier extends ReducedSwagTier {
+  description: string;
+  participants: Participant[];
 }

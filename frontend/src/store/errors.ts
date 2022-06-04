@@ -3,17 +3,28 @@ import { toast } from 'react-hot-toast';
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-const errorLogger: Middleware = () => (next) => (action) => {
-  // Handle RTK query errors
-  if (isRejectedWithValue(action) && action.payload.status !== 404) {
-    const status = action.payload.status;
+/**
+ * Send toasts for RTK query errors
+ * @param skip the endpoints to skip error handling for
+ */
+const errorLogger =
+  (skip: string[] = []): Middleware =>
+  () =>
+  (next) =>
+  (action) => {
+    // Handle RTK query errors
+    if (isRejectedWithValue(action) && action.payload.status !== 404) {
+      const endpoint = action.meta.arg.endpointName;
+      if (skip.includes(endpoint)) return next(action);
 
-    if (status === 401 || status === 403) toast('Invalid token. Please try logging out and back in.');
-    else if (action.payload.data.reason) toast(capitalize(action.payload.data.reason));
-    else toast('An unexpected error occurred, please try again later');
-  }
+      const status = action.payload.status;
 
-  return next(action);
-};
+      if (status === 401 || status === 403) toast.error('Invalid token. Please try logging out and back in.');
+      else if (action.payload.data.reason) toast.error(capitalize(action.payload.data.reason));
+      else toast.error('An unexpected error occurred, please try again later');
+    }
+
+    return next(action);
+  };
 
 export default errorLogger;

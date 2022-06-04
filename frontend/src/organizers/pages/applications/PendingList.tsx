@@ -1,4 +1,4 @@
-import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
+import { RefreshIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
