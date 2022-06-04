@@ -18,7 +18,9 @@ class SwagTier(SwagTierBase, table=True):
 
     id: int = Field(default=None, primary_key=True, nullable=False)
 
-    participants: List["Participant"] = Relationship(back_populates="swag_tier")
+    participants: List["Participant"] = Relationship(
+        back_populates="swag_tier", sa_relationship_kwargs={"cascade": "all"}
+    )
 
 
 class SwagTierCreate(SwagTierBase):

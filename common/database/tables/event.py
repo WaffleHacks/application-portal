@@ -55,7 +55,10 @@ class Event(EventBase, table=True):
         back_populates="attended",
         link_model=EventAttendance,
     )
-    feedback: List["Feedback"] = Relationship(back_populates="event")
+    feedback: List["Feedback"] = Relationship(
+        back_populates="event",
+        sa_relationship_kwargs={"cascade": "all, delete, delete-orphan"},
+    )
 
 
 class EventCreate(SQLModel):
