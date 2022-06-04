@@ -3,6 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import validate_model
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -37,8 +38,15 @@ async def create(params: SwagTierCreate, db: AsyncSession = Depends(with_db)):
     Create a new swag tier
     """
     tier = SwagTier.from_orm(params)
-    db.add(tier)
-    await db.commit()
+
+    try:
+        db.add(tier)
+        await db.commit()
+    except IntegrityError:
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail="attendance requirement already in use",
+        )
 
     return {**tier.dict(), "participants": []}
 

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import validator
+from sqlalchemy import UniqueConstraint
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -22,6 +23,7 @@ class SwagTierBase(SQLModel):
 
 class SwagTier(SwagTierBase, table=True):
     __tablename__ = "swag_tiers"
+    __table_args__ = (UniqueConstraint("required_attendance"),)
 
     id: int = Field(default=None, primary_key=True, nullable=False)
 

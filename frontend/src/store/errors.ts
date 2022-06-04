@@ -19,9 +19,9 @@ const errorLogger =
 
       const status = action.payload.status;
 
-      if (status === 401 || status === 403) toast('Invalid token. Please try logging out and back in.');
-      else if (action.payload.data.reason) toast(capitalize(action.payload.data.reason));
-      else toast('An unexpected error occurred, please try again later');
+      if (status === 401 || status === 403) toast.error('Invalid token. Please try logging out and back in.');
+      else if (action.payload.data.reason) toast.error(capitalize(action.payload.data.reason));
+      else toast.error('An unexpected error occurred, please try again later');
     }
 
     return next(action);
