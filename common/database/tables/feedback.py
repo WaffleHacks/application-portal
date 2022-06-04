@@ -18,9 +18,9 @@ class FeedbackBase(SQLModel):
     again: bool = Field(default=True, nullable=False)
 
     @validator("presentation", "content", "interest")
-    def between_1_and_10(cls, value: int):
-        if value < 1 or value > 10:
-            raise ValueError("must be between 1 and 10 inclusive")
+    def between_1_and_5(cls, value: int):
+        if value < 1 or value > 5:
+            raise ValueError("must be between 1 and 5 inclusive")
         return value
 
 

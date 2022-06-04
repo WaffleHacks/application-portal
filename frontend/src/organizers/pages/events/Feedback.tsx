@@ -8,16 +8,7 @@ import { useGetDetailedEventFeedbackQuery } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
-
-interface ScoreBadgeProps {
-  value: number;
-}
-
-const ScoreBadge = ({ value }: ScoreBadgeProps): JSX.Element => {
-  if (value >= 7) return <Badge color="green">{value} / 10</Badge>;
-  else if (value >= 5) return <Badge color="yellow">{value} / 10</Badge>;
-  else return <Badge color="red">{value} / 10</Badge>;
-};
+import Stars from './Stars';
 
 const Feedback = (): JSX.Element => {
   const { eventId, participantId } = useParams();
@@ -43,13 +34,13 @@ const Feedback = (): JSX.Element => {
       >
         <Section>
           <Item name="Presentation">
-            <ScoreBadge value={data.presentation} />
+            <Stars value={data.presentation} />
           </Item>
           <Item name="Content">
-            <ScoreBadge value={data.content} />
+            <Stars value={data.content} />
           </Item>
           <Item name="Engagement">
-            <ScoreBadge value={data.interest} />
+            <Stars value={data.interest} />
           </Item>
           <Item name="Should we do it again?">
             <Badge color={data.again ? 'green' : 'red'}>{data.again ? 'Yes' : 'No'}</Badge>

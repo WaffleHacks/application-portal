@@ -14,6 +14,7 @@ import { Participant, ReducedFeedback } from '../../../store/types';
 import { Description, Item, Section } from '../../components/description';
 import NotFound from '../../components/NotFound';
 import { EmptyRow, InlineTable, Pagination, Table, usePagination } from '../../components/table';
+import Stars from './Stars';
 
 interface WithMessageId {
   id: string;
@@ -70,9 +71,15 @@ const FeedbackRow = (feedback: FeedbackProps): JSX.Element => (
         {feedback.participant.first_name} {feedback.participant.last_name}
       </Link>
     </Table.Data>
-    <Table.Data>{feedback.presentation}/10</Table.Data>
-    <Table.Data>{feedback.content}/10</Table.Data>
-    <Table.Data>{feedback.interest}/10</Table.Data>
+    <Table.Data>
+      <Stars value={feedback.presentation} />
+    </Table.Data>
+    <Table.Data>
+      <Stars value={feedback.content} />
+    </Table.Data>
+    <Table.Data>
+      <Stars value={feedback.interest} />
+    </Table.Data>
     <Table.Data>
       <Link to={`/events/${feedback.eventId}/feedback/${feedback.participant.id}`}>Details</Link>
     </Table.Data>
