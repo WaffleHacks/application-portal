@@ -134,9 +134,10 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
         )
 
     # Check that the code is still valid
-    now = datetime.now(tz=pytz.utc)
-    if not event.enabled or now < event.valid_from or now > event.valid_until:
-        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
+    with tracer.start_as_current_span("check-validity"):
+        now = datetime.now(tz=pytz.utc)
+        if not event.enabled or now < event.valid_from or now > event.valid_until:
+            raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     return event
 

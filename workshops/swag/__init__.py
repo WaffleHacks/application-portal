@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends
+from opentelemetry import trace
 from pydantic import BaseModel
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,6 +25,7 @@ from common.permissions import Permission, requires_permission
 from . import tiers
 
 router = APIRouter()
+tracer = trace.get_tracer(__name__)
 
 router.include_router(tiers.router, prefix="/tiers")
 
@@ -51,17 +53,19 @@ async def progress(
     Get the current user's progress through the swag tiers
     """
     # Get all the tiers
-    result = await db.execute(
-        select(SwagTier).order_by(SwagTier.required_attendance.desc())  # type: ignore
-    )
-    swag_tiers = result.scalars().all()
+    with tracer.start_as_current_span("find-tiers"):
+        result = await db.execute(
+            select(SwagTier).order_by(SwagTier.required_attendance.desc())  # type: ignore
+        )
+        swag_tiers = result.scalars().all()
 
-    result = await db.execute(
-        select(func.count())
-        .select_from(EventAttendance)
-        .where(EventAttendance.participant_id == participant.id)
-    )
-    attended_events = result.scalar()
+    with tracer.start_as_current_span("find-attended-events"):
+        result = await db.execute(
+            select(func.count())
+            .select_from(EventAttendance)
+            .where(EventAttendance.participant_id == participant.id)
+        )
+        attended_events = result.scalar()
 
     return {
         "attended": attended_events,

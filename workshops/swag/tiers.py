@@ -2,6 +2,7 @@ from http import HTTPStatus
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
+from opentelemetry import trace
 from pydantic import validate_model
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,6 +20,7 @@ from common.database import (
 from common.permissions import Permission, requires_permission
 
 router = APIRouter(dependencies=[Depends(requires_permission(Permission.Organizer))])
+tracer = trace.get_tracer(__name__)
 
 
 @router.get("/", name="List swag tiers", response_model=List[SwagTierList])
@@ -72,13 +74,15 @@ async def update(id: int, params: SwagTierUpdate, db: AsyncSession = Depends(wit
     if tier is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    updated_fields = params.dict(exclude_unset=True)
-    for key, value in updated_fields.items():
-        setattr(tier, key, value)
+    with tracer.start_as_current_span("update"):
+        updated_fields = params.dict(exclude_unset=True)
+        for key, value in updated_fields.items():
+            setattr(tier, key, value)
 
-    *_, error = validate_model(SwagTier, tier.__dict__)
-    if error:
-        raise error
+    with tracer.start_as_current_span("validate"):
+        *_, error = validate_model(SwagTier, tier.__dict__)
+        if error:
+            raise error
 
     db.add(tier)
     await db.commit()
