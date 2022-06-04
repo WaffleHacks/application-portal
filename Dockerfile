@@ -137,3 +137,16 @@ FROM common as sync
 COPY --chown=app sync ./sync
 COPY --chown=app --chmod=775 docker-entrypoints/sync.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
+
+
+###
+#  Workshops
+###
+FROM common as workshops
+EXPOSE 8000/tcp
+
+ENV APP workshops
+
+COPY --chown=app workshops ./workshops
+COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
