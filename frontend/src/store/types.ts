@@ -44,6 +44,10 @@ export interface School {
   name: string;
 }
 
+export interface SchoolList extends School {
+  count: number;
+}
+
 export interface ReducedApplication {
   participant: Participant;
 

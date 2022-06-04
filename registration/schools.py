@@ -5,7 +5,8 @@ import nanoid
 from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
-from pydantic import validate_model
+from pydantic import parse_obj_as, validate_model
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -27,9 +28,13 @@ router = APIRouter()
 tracer = trace.get_tracer(__name__)
 
 
+class SchoolWithCount(SchoolList):
+    count: int
+
+
 @router.get(
     "/",
-    response_model=List[SchoolList],
+    response_model=List[SchoolWithCount],
     name="List schools",
     dependencies=[Depends(is_authenticated)],
 )
@@ -37,9 +42,15 @@ async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
     """
-    statement = select(School).order_by(School.name)
+    statement = (
+        select(School.id, School.name, func.count(Application.school_id))
+        .join(Application, isouter=True)
+        .group_by(School.id)
+        .order_by(func.count(Application.school_id).desc())
+    )
     result = await db.execute(statement)
-    return result.scalars().all()
+
+    return parse_obj_as(List[SchoolWithCount], result.mappings().all())
 
 
 @router.post(

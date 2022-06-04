@@ -36,6 +36,10 @@ interface ApplicationStatus {
   status: Status;
 }
 
+interface SchoolList extends School {
+  count: number;
+}
+
 interface SchoolDetail extends School {
   applications: ReducedApplication[];
 }
@@ -133,9 +137,9 @@ const api = createApi({
     }),
 
     // School endpoints
-    listSchools: builder.query<School[], void>({
+    listSchools: builder.query<SchoolList[], void>({
       query: () => '/registration/schools/',
-      providesTags: (result: School[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
+      providesTags: (result: SchoolList[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
     }),
     getSchool: builder.query<SchoolDetail, string>({
       query: (id) => `/registration/schools/${id}`,

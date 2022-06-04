@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
-import { School, useListSchoolsQuery } from '../../../store';
+import { SchoolList, useListSchoolsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
 
-const Row = (school: School): JSX.Element => (
+const Row = (school: SchoolList): JSX.Element => (
   <tr>
     <Table.Data index>{school.name}</Table.Data>
+    <Table.Data>{school.count}</Table.Data>
     <Table.Data className="relative text-right sm:pr-6">
       <Link to={`/schools/${school.id}`} className="text-indigo-600 hover:text-indigo-900">
         Details
@@ -64,6 +65,7 @@ const List = (): JSX.Element => {
       <Table>
         <Table.Head>
           <Table.Label index>Name</Table.Label>
+          <Table.Label>Applications</Table.Label>
           <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
         <Table.Body>

@@ -69,6 +69,7 @@ export type {
   ReducedApplication,
   ReducedMessage,
   School,
+  SchoolList,
   ParticipantWithSwag,
   ReducedSwagTier,
   SwagTier,
