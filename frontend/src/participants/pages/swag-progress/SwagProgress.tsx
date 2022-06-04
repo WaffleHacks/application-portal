@@ -1,9 +1,10 @@
-import { ArrowUpIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowUpIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 
 import Card from '../../../components/Card';
 import RenderMarkdown from '../../../components/RenderMarkdown';
 import { useGetSwagProgressQuery } from '../../../store';
+import Loading from '../../components/Loading';
 import ProgressBar from './ProgressBar';
 
 const SwagProgress = (): JSX.Element => {
@@ -14,15 +15,7 @@ const SwagProgress = (): JSX.Element => {
     if (!isLoading && data !== undefined) setSelected(data.current_tier || data.tiers[data.tiers.length - 1].id);
   }, [isLoading, data]);
 
-  if (isLoading || data === undefined) {
-    return (
-      <Card>
-        <div className="mt-3 pt-12 pb-6 text-center">
-          <RefreshIcon className="mx-auto h-12 w-12 animate-spin" />
-        </div>
-      </Card>
-    );
-  }
+  if (isLoading || data === undefined) return <Loading />;
 
   const current = data.tiers.find((t) => t.id === selected) || data.tiers[data.tiers.length - 1];
 

@@ -1,8 +1,8 @@
-import { RefreshIcon } from '@heroicons/react/outline';
 import React from 'react';
 
 import Card from '../../../components/Card';
 import { useGetFeedbackStatusQuery } from '../../../store';
+import Loading from '../../components/Loading';
 import Status from '../../components/Status';
 import Form from './Form';
 
@@ -19,13 +19,7 @@ interface Props {
 const Feedback = ({ code }: Props): JSX.Element => {
   const { data: submitted = false, isLoading, refetch } = useGetFeedbackStatusQuery(code);
 
-  if (isLoading) {
-    return (
-      <Card className="mt-10 flex justify-around">
-        <RefreshIcon className="h-8 w-8 animate-spin" />
-      </Card>
-    );
-  }
+  if (isLoading) return <Loading className="mt-10" />;
 
   return (
     <Card className="mt-10">

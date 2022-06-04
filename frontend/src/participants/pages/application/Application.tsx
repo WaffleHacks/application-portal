@@ -1,8 +1,6 @@
-import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import Card from '../../../components/Card';
 import {
   ApplicationAutosave,
   Gender,
@@ -11,6 +9,7 @@ import {
   useGetAutosaveQuery,
   useSetAutosaveMutation,
 } from '../../../store';
+import Loading from '../../components/Loading';
 import { MultiStepForm, Step } from '../../components/steps';
 import AboutForm from './AboutForm';
 import EducationForm from './EducationForm';
@@ -69,12 +68,7 @@ const Application = ({ refetch }: Props): JSX.Element => {
     })();
   }, [isCreating]);
 
-  if (isLoading)
-    return (
-      <Card className="flex justify-around">
-        <RefreshIcon className="h-8 w-8 animate-spin" />
-      </Card>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <MultiStepForm

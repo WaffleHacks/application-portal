@@ -1,9 +1,8 @@
-import { RefreshIcon } from '@heroicons/react/outline';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Card from '../../../components/Card';
 import { useMarkAttendanceMutation } from '../../../store';
+import Loading from '../../components/Loading';
 import Feedback from './Feedback';
 import Status from './Status';
 
@@ -15,12 +14,7 @@ const Attendance = (): JSX.Element => {
     if (isUninitialized) mark(code as string);
   }, [isUninitialized]);
 
-  if (isUninitialized || isLoading)
-    return (
-      <Card className="flex justify-around">
-        <RefreshIcon className="h-8 w-8 animate-spin" />
-      </Card>
-    );
+  if (isUninitialized || isLoading) return <Loading />;
   if (isError) return <Status valid={false} />;
 
   return (
