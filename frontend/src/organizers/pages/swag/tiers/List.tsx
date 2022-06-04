@@ -3,8 +3,7 @@ import React from 'react';
 
 import { LinkButton } from '../../../../components/buttons';
 import Link from '../../../../components/Link';
-import { useListSwagTiersQuery } from '../../../../store';
-import { ReducedSwagTier } from '../../../../store/types';
+import { ReducedSwagTier, useListSwagTiersQuery } from '../../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../../components/table';
 
 const Row = (tier: ReducedSwagTier): JSX.Element => (

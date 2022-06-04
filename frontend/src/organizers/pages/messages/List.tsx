@@ -6,12 +6,12 @@ import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
 import {
+  MessageTrigger,
   ReducedMessage,
   useListMessageTriggersQuery,
   useListMessagesQuery,
   useSetMessageTriggerMutation,
 } from '../../../store';
-import { MessageTrigger } from '../../../store/types';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
 
 const MessageRow = (message: ReducedMessage): JSX.Element => {

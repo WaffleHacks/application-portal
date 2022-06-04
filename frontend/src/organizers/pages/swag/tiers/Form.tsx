@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { Button, LinkButton } from '../../../../components/buttons';
 import { MarkdownInput, NumberInput, TextInput } from '../../../../components/input';
 import Link from '../../../../components/Link';
-import { SwagTier } from '../../../../store/types';
+import { SwagTier } from '../../../../store';
 import { Description, Section } from '../../../components/description';
 
 type Values = Omit<SwagTier, 'id' | 'participants'>;

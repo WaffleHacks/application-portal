@@ -5,8 +5,7 @@ import { toast } from 'react-hot-toast';
 import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
-import { useListEventsQuery } from '../../../store';
-import { ReducedEvent } from '../../../store/types';
+import { ReducedEvent, useListEventsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
 
 const Row = (event: ReducedEvent) => {

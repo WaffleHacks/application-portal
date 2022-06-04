@@ -64,7 +64,19 @@ export {
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';
-export type { ApplicationAutosave, ReducedApplication, ReducedMessage, School } from './types';
+export type {
+  ApplicationAutosave,
+  ReducedApplication,
+  ReducedMessage,
+  School,
+  ParticipantWithSwag,
+  ReducedSwagTier,
+  SwagTier,
+  Participant,
+  ReducedEvent,
+  ReducedFeedback,
+  MessageTrigger,
+} from './types';
 export { Gender, Group, RaceEthnicity, Status } from './types';
 export {
   useMarkAttendanceMutation,
