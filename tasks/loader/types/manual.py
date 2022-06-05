@@ -6,13 +6,18 @@ from pydantic import BaseModel
 from .base import Event
 
 
-@dataclass
+@dataclass(init=False)
 class ManualEvent(Event):
     KIND = "manual"
 
     belongs_to: str
     method: str
     model: Type[BaseModel]
+
+    def __init__(self, belongs_to: str, method: str):
+        self.belongs_to = belongs_to
+        self.method = method
+        self.model = BaseModel
 
     @property
     def name(self) -> str:

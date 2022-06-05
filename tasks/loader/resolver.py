@@ -6,9 +6,9 @@ import sys
 from inspect import Parameter, Signature
 from pathlib import Path
 from types import ModuleType
-from typing import Awaitable, Callable, Dict, List, Optional
+from typing import Awaitable, Callable, Dict, List, Optional, Type
 
-from pydantic import BaseModel
+from pydantic import BaseConfig, BaseModel, Extra, create_model
 
 from tasks.loader.types.errors import InvalidArgument, InvalidReturnType
 
@@ -137,14 +137,8 @@ def load_event(module: ModuleType) -> Event:
     # Manually triggered event override automated events
     manual = getattr(module, "manual", False)
     if manual:
-        model = getattr(module, "Model")
-        if not issubclass(model, BaseModel):
-            raise TypeError(
-                f"expected class 'Model' to be subclass of 'pydantic.BaseModel', got {type(model).__name__!r}"
-            )
-
         parts = module.__name__.split(".")
-        return ManualEvent(belongs_to=parts[-2], method=parts[-1], model=model)
+        return ManualEvent(belongs_to=parts[-2], method=parts[-1])
 
     # Fallback on trying to load as an automated event
     raw = getattr(module, "event")
@@ -177,14 +171,54 @@ def load_callback(module: ModuleType, event: Event) -> Callable[..., Awaitable[N
 
     params = dict(signature.parameters)
 
-    # Get the model parameters
-    model_signature = inspect.signature(event.input_validator)
-    model_params = dict(model_signature.parameters)
+    # Construct the model from the callback for manual events
+    if isinstance(event, ManualEvent):
+        event.model = build_model_from_params(params)
 
+    # Ensure the signature is passed the same parameters as the event sends
+    elif isinstance(event, AutomatedEvent):
+        # Get the model parameters
+        model_signature = inspect.signature(event.input_validator)
+        model_params = dict(model_signature.parameters)
+        validate_automated_signature(params, model_params)
+
+    return callback
+
+
+class ModelConfig(BaseConfig):
+    extra = Extra.forbid
+
+
+def build_model_from_params(signature: Dict[str, Parameter]) -> Type[BaseModel]:
+    """
+    Build a validation model from the method parameters
+    """
+    params = {}
+    for key, param in signature.items():
+        if key.startswith("__"):
+            raise InvalidArgument(
+                f"invalid argument {key!r}, cannot have dunder arguments"
+            )
+
+        # Register the parameter with its default (if provided)
+        if param.default == Parameter.empty:
+            params[key] = (param.annotation, ...)
+        else:
+            params[key] = (param.annotation, param.default)
+
+    return create_model("CallbackValidator", __config__=ModelConfig, **params)  # type: ignore
+
+
+def validate_automated_signature(
+    callback_params: Dict[str, Parameter], model_params: Dict[str, Parameter]
+):
+    """
+    Validate the signature of an automated event
+    """
     # Validate the parameters
     for name, model_param in model_params.items():
         try:
-            param = params.pop(name)
+            param = callback_params.pop(name)
         except KeyError:
             raise InvalidArgument(f"missing required argument {name!r}")
 
@@ -206,7 +240,5 @@ def load_callback(module: ModuleType, event: Event) -> Callable[..., Awaitable[N
             )
 
     # Disallow extra arguments
-    if len(params) != 0:
+    if len(callback_params) != 0:
         raise InvalidArgument(f"extra arguments not in the model are not allowed")
-
-    return callback
