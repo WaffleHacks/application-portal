@@ -1,13 +1,12 @@
-import json
 import logging
-import traceback
 from asyncio import AbstractEventLoop
 from pathlib import Path
-from typing import Awaitable, Callable, Iterable, List
+from typing import Iterable, List
 
 from common import nats
-from common.nats import Msg, Subscription
+from common.nats import Subscription
 
+from . import callback
 from .resolver import resolve
 from .types import Event, Handler
 
@@ -28,9 +27,9 @@ def register_handlers(loop: AbstractEventLoop, base: Path) -> List[Subscription]
 
     subscriptions = []
     for event, handlers in event_handlers.items():
-        subscription = loop.run_until_complete(
-            nats.subscribe(event.subject, generate_super_callback(handlers))
-        )
+        cb = callback.generate(event, handlers)
+        subscription = loop.run_until_complete(nats.subscribe(event.subject, cb))
+
         subscriptions.append(subscription)
 
         logger.info(f"subscribed {len(handlers)} handlers to {event}")
@@ -53,26 +52,3 @@ async def create_streams(events: Iterable[Event]):
                 description=f"for the {event.stream} service",
             )
             created.add(event.stream)
-
-
-def generate_super_callback(
-    handlers: List[Handler],
-) -> Callable[[Msg], Awaitable[None]]:
-    """
-    Build the "super callback" for the subscription that dispatches to the handlers registered to the event. All
-    event handlers are run in sequence, but order is not guaranteed.
-    :param handlers: the handlers to be executed
-    """
-
-    async def callback(message: Msg):
-        kwargs = json.loads(message.data)
-
-        for handler in handlers:
-            try:
-                await handler.callback(**kwargs)
-            except Exception as e:
-                traceback.print_exception(e)  # type: ignore
-
-        await message.ack()
-
-    return callback

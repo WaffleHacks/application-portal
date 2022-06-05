@@ -4,11 +4,13 @@ import signal
 import sys
 from pathlib import Path
 
-from common import SETTINGS
+from common import SETTINGS, tracing
 
 from . import loader
 
 HANDLERS_PATH = Path(__file__).parent / "handlers"
+
+tracing.init()
 
 
 def main():
