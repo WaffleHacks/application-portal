@@ -16,18 +16,51 @@ export interface NavSection {
   items: NavItem[];
 }
 
-const linkClassNames = (isActive: boolean): string =>
-  classNames(
-    isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-    'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-  );
+const NavSection = (section: NavSection): JSX.Element => {
+  const items = section.items.filter((item) => !item.hidden);
 
-const iconClassNames = (isActive: boolean, mobile: boolean): string =>
-  classNames(
-    mobile ? 'mr-4' : 'mr-3',
-    isActive ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
-    'flex-shrink-0 h-6 w-6',
+  return (
+    <div key={section.id}>
+      {section.name && <h3 className="ml-3 mb-2 text-gray-300 text-lg">{section.name}</h3>}
+      {items.map((item) => (
+        <Link
+          key={item.name}
+          item={item}
+          classNames={(isActive: boolean) =>
+            classNames(
+              isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              'group flex items-center px-2 py-2 text-base font-medium rounded-md',
+            )
+          }
+        >
+          {(isActive) =>
+            item.icon && (
+              <item.icon
+                className={classNames(
+                  isActive ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-300',
+                  'mr-3 flex-shrink-0 h-6 w-6',
+                )}
+                aria-hidden="true"
+              />
+            )
+          }
+        </Link>
+      ))}
+    </div>
   );
+};
+
+interface NavSectionsListProps {
+  sections: NavSection[];
+}
+
+const NavSectionsList = ({ sections }: NavSectionsListProps): JSX.Element => (
+  <nav className="mt-5 flex-1 px-2 space-y-5">
+    {sections.map((section) => (
+      <NavSection key={section.id} {...section} />
+    ))}
+  </nav>
+);
 
 const Profile = (): JSX.Element => {
   const { logout } = useAuth0();
@@ -120,20 +153,7 @@ const Navigation = ({ sections, isOpen, setIsOpen }: Props): JSX.Element => {
                   <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
                   <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
                 </div>
-                <nav className="mt-5 flex-1 px-2 space-y-5">
-                  {sections.map((section) => (
-                    <div key={section.id}>
-                      {section.name && <h3 className="ml-3 mb-2 text-gray-300 text-lg">{section.name}</h3>}
-                      {section.items.map((item) => (
-                        <Link key={item.name} item={item} classNames={linkClassNames}>
-                          {(isActive) =>
-                            item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />
-                          }
-                        </Link>
-                      ))}
-                    </div>
-                  ))}
-                </nav>
+                <NavSectionsList sections={sections} />
               </div>
               <div className="flex-shrink-0 flex bg-gray-700 p-4">
                 {profileTokenLoading ? <span className="text-gray-400">Loading...</span> : <Profile />}
@@ -151,20 +171,7 @@ const Navigation = ({ sections, isOpen, setIsOpen }: Props): JSX.Element => {
               <img className="h-8 w-auto" src={logo} alt="WaffleHacks" />
               <span className="text-white ml-3 font-bold text-lg">WaffleHacks</span>
             </div>
-            <nav className="mt-5 flex-1 px-2 space-y-5">
-              {sections.map((section) => (
-                <div key={section.id}>
-                  {section.name && <h3 className="ml-3 mb-2 text-gray-300 text-lg">{section.name}</h3>}
-                  {section.items.map((item) => (
-                    <Link key={item.name} item={item} classNames={linkClassNames}>
-                      {(isActive) =>
-                        item.icon && <item.icon className={iconClassNames(isActive, false)} aria-hidden="true" />
-                      }
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </nav>
+            <NavSectionsList sections={sections} />
           </div>
           <div className="flex-shrink-0 flex bg-gray-700 p-4">
             {profileTokenLoading ? <span className="text-gray-400">Loading...</span> : <Profile />}

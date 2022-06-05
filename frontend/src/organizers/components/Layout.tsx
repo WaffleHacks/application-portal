@@ -33,6 +33,7 @@ const navigation: NavSection[] = [
       { name: 'Accepted', href: '/applications/accepted', icon: CheckCircleIcon },
       { name: 'Rejected', href: '/applications/rejected', icon: XCircleIcon },
       { name: 'Incomplete', href: '/applications/incomplete', icon: QuestionMarkCircleIcon },
+      { name: 'Applications', href: '/applications', hidden: true },
     ],
   },
   {

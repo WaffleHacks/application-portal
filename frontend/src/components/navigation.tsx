@@ -21,16 +21,13 @@ export interface NavItem {
 type ExtraValidator = <Item extends NavItem>(item: Item) => boolean;
 const noopValidator: ExtraValidator = () => true;
 
+const matches = (href: string, path?: string, exact?: boolean) => (exact ? path === href : path?.startsWith(href));
+
 export const usePageTitle = <Item extends NavItem>(paths: Item[], extraValidator: ExtraValidator = noopValidator) => {
   const match = useMatch(window.location.pathname);
 
   const titles = paths
-    .filter((item) => {
-      const extra = extraValidator(item);
-
-      if (item.exact) return match?.pathname === item.href && extra;
-      else return match?.pathname.startsWith(item.href) && extra;
-    })
+    .filter((item) => matches(item.href, match?.pathname, item.exact) && extraValidator(item))
     .reverse();
 
   return titles.length > 0 ? titles[0].name : 'Not found';
