@@ -7,6 +7,7 @@ from nats.aio.subscription import Subscription
 from nats.js import JetStreamContext
 from nats.js.api import RetentionPolicy, StorageType
 from nats.js.errors import NotFoundError
+from pydantic.json import pydantic_encoder
 
 from common import SETTINGS
 
@@ -66,5 +67,5 @@ async def publish(subject: str, message: Any):
     """
     jetstream = await __connect()
 
-    encoded = json.dumps(message).encode()
+    encoded = json.dumps(message, default=pydantic_encoder).encode()
     await jetstream.publish(subject, encoded)
