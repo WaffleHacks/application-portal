@@ -12,6 +12,7 @@ from pydantic import BaseConfig, BaseModel, Extra, create_model
 
 from tasks.loader.types.errors import InvalidArgument, InvalidReturnType
 
+from ..handlers.models import Response
 from .types import AutomatedEvent, Event, Handler, LoaderException, ManualEvent
 
 
@@ -39,7 +40,7 @@ def resolve(
         if not service_path.is_dir():
             logger.debug(f"skipping path {service!r}, must be a directory")
             continue
-        elif service.startswith("__"):
+        elif service.startswith("_"):
             logger.debug(f"skipping service {service!r}, invalid name")
             continue
 
@@ -57,7 +58,7 @@ def resolve(
                     f"{service}: skipping handler file {handler!r}, must be a python file"
                 )
                 continue
-            elif handler.startswith("__"):
+            elif handler.startswith("_"):
                 logger.debug(
                     f"{service}: skipping handler {handler.removesuffix('.py')!r}, invalid name"
                 )
@@ -91,7 +92,7 @@ def resolve(
                     )
 
                 logger.info(
-                    f"{service}: loaded handler {handler_name!r} for {str(event)!r}"
+                    f"{service}: loaded handler {handler_name!r} for {event.KIND} event {str(event)!r}"
                 )
             except AttributeError as e:
                 logger.error(
@@ -160,29 +161,42 @@ def load_callback(module: ModuleType, event: Event) -> Callable[..., Awaitable[N
 
     signature = inspect.signature(callback)
 
-    # Check callback does not return anything
-    if not (
-        signature.return_annotation is None
-        or signature.return_annotation == Signature.empty
-    ):
-        raise InvalidReturnType(
-            f"expected return type of 'None', got {signature.return_annotation.__name__!r}"
-        )
-
     params = dict(signature.parameters)
 
     # Construct the model from the callback for manual events
     if isinstance(event, ManualEvent):
+        expect_returns(signature, None, Response, allow_unannotated=True)
         event.model = build_model_from_params(params)
 
     # Ensure the signature is passed the same parameters as the event sends
     elif isinstance(event, AutomatedEvent):
+        expect_returns(signature, None, allow_unannotated=True)
+
         # Get the model parameters
         model_signature = inspect.signature(event.input_validator)
         model_params = dict(model_signature.parameters)
         validate_automated_signature(params, model_params)
 
     return callback
+
+
+def expect_returns(
+    signature: Signature,
+    *types: Optional[Type],
+    allow_unannotated: bool = True,
+):
+    """
+    Check if the function signature returns one of the given types
+    """
+    if signature.return_annotation == Signature.empty:
+        if not allow_unannotated:
+            raise InvalidReturnType(f"return type must be annotated")
+
+    elif signature.return_annotation not in types:
+        formatted = ["None" if t is None else t.__name__ for t in types]
+        raise InvalidArgument(
+            f"expected return type to be one of {formatted}, got {signature.return_annotation.__name__!r}"
+        )
 
 
 class ModelConfig(BaseConfig):

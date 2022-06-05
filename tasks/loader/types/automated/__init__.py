@@ -33,7 +33,7 @@ class AutomatedEvent(Event):
 
     @property
     def name(self) -> str:
-        return f"{self.service.value}.{self.service.value}"
+        return f"{self.service.value}.{self.action.value}"
 
     @property
     def input_validator(self) -> Type[BaseModel]:

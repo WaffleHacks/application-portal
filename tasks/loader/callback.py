@@ -1,6 +1,6 @@
 import logging
 import traceback
-from typing import Awaitable, Callable, List
+from typing import Any, Awaitable, Callable, Dict, List
 
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind
@@ -9,7 +9,8 @@ from pydantic import ValidationError
 
 from common.nats import Msg
 
-from .types import Event, Handler
+from ..handlers.models import Response, Status
+from .types import Event, Handler, ManualEvent
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,10 @@ def generate(
     :param event: the name of the event
     :param handlers: the handlers to be executed
     """
+    if isinstance(event, ManualEvent):
+        executor = single_executor
+    else:
+        executor = batch_executor
 
     async def callback(message: Msg):
         with tracer.start_as_current_span(
@@ -59,17 +64,85 @@ def generate(
                 await message.ack()
                 return
 
-            failed = 0
-            for handler in handlers:
-                try:
-                    with tracer.start_as_current_span(handler.name):
-                        await handler.callback(**kwargs.dict())
-                except Exception as e:
-                    failed += 1
-                    traceback.print_exception(e)  # type: ignore
-
-            span.set_attribute("task.handlers.failed", failed)
-
-            await message.ack()
+            # Execute the callback(s)
+            await executor(message, handlers, kwargs.dict())
 
     return callback
+
+
+async def batch_executor(message: Msg, handlers: List[Handler], args: Dict[str, Any]):
+    """
+    Execute a batch of handlers in sequence
+    :param message: the message to acknowledge
+    :param handlers: the handlers to execute
+    :param args: keyword arguments to pass to the handler
+    """
+    span = trace.get_current_span()
+
+    failed = 0
+    for handler in handlers:
+        try:
+            with tracer.start_as_current_span(handler.name):
+                await handler.callback(**args)
+        except Exception as e:
+            failed += 1
+            traceback.print_exception(e)  # type: ignore
+
+    span.set_attribute("task.handlers.failed", failed)
+
+    await message.ack()
+
+
+async def single_executor(message: Msg, handlers: List[Handler], args: Dict[str, Any]):
+    """
+    Execute a single handler and act according to its response
+    :param message: the message to use for responses
+    :param handlers: the handler to execute, must be a list with a single element
+    :param args: keyword arguments to pass to the handler
+    """
+    parent = trace.get_current_span()
+
+    failed = False
+    try:
+        with tracer.start_as_current_span(handlers[0].name) as span:
+            result = await handlers[0].callback(**args)
+
+            # Process the response
+            if isinstance(result, Response):
+                # Handle successful or delayed responses
+                if result.status == Status.SUCCESS:
+                    if result.delay:
+                        span.set_attribute("task.delayed", True)
+                        span.set_attribute("task.delayed.for", result.delay)
+                        await message.nak(delay=result.delay)
+                    else:
+                        await message.ack()
+
+                # Handle the different failure modes
+                else:
+                    failed = True
+
+                    if result.status == Status.TRANSIENT_FAILURE:
+                        if result.delay:
+                            span.set_attribute("task.delayed", True)
+                            span.set_attribute("task.delayed.for", result.delay)
+
+                        await message.nak(delay=result.delay)
+                    else:
+                        await message.term()
+
+                    span.set_attribute("error", True)
+                    if result.reason:
+                        span.set_attribute("error_description", result.reason)
+
+            # If anything else is returned, simply acknowledge the message
+            else:
+                await message.ack()
+
+    except Exception as e:
+        failed = True
+
+        traceback.print_exception(e)  # type: ignore
+        await message.ack()
+
+    parent.set_attribute("task.handlers.failed", int(failed))
