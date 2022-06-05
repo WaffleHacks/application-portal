@@ -33,7 +33,7 @@ async def create_stream(name: str, description: Optional[str] = None):
     except NotFoundError:
         await jetstream.add_stream(
             name=name,
-            subjects=[f"{name}.*"],
+            subjects=[f"{name}.automated.*", f"{name}.manual.*"],
             description=description,
             storage=StorageType.FILE,
             retention=RetentionPolicy.WORK_QUEUE,

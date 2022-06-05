@@ -32,7 +32,7 @@ def register_handlers(loop: AbstractEventLoop, base: Path) -> List[Subscription]
 
         subscriptions.append(subscription)
 
-        logger.info(f"subscribed {len(handlers)} handlers to {event}")
+        logger.info(f"subscribed {len(handlers)} handlers to {event} ({event.KIND})")
 
     return subscriptions
 

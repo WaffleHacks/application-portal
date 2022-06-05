@@ -1,4 +1,5 @@
 import re
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Awaitable, Callable, Type, Union
@@ -59,16 +60,81 @@ class WorkshopsAction(BaseEnum):
     pass
 
 
+class Event(ABC):
+    KIND: str
+
+    @classmethod
+    @abstractmethod
+    def parse(cls, raw: str) -> "Event":
+        """
+        Parse the event from a string
+        """
+
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """
+        The name of the event
+        """
+
+    @property
+    @abstractmethod
+    def stream(self) -> str:
+        """
+        The stream to receive messages on
+        """
+
+    @property
+    @abstractmethod
+    def subject(self) -> str:
+        """
+        The subject to route messages through
+        """
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+
 @dataclass
-class Event:
+class ManualEvent(Event):
+    KIND = "manual"
+
+    belongs_to: str
+    method: str
+
+    @property
+    def name(self) -> str:
+        return f"{self.belongs_to}.{self.method}"
+
+    @property
+    def stream(self) -> str:
+        return self.belongs_to
+
+    @property
+    def subject(self) -> str:
+        return f"{self.belongs_to}.{self.KIND}.{self.method}"
+
+    @classmethod
+    def parse(cls, raw: str) -> "Event":
+        raise NotImplementedError("This should be constructed manually by the caller")
+
+    def __hash__(self):
+        return self.belongs_to.__hash__() ^ self.method.__hash__()
+
+
+@dataclass
+class AutomatedEvent(Event):
+    KIND = "automated"
+
     service: Service
-    action: Union[
-        CommunicationAction,
-        IntegrationsAction,
-        RegistrationAction,
-        SyncAction,
-        WorkshopsAction,
-    ]
+    action: BaseEnum
+
+    @property
+    def name(self):
+        return f"{self.service.value}.{self.service.value}"
 
     @property
     def stream(self):
@@ -76,10 +142,7 @@ class Event:
 
     @property
     def subject(self):
-        return f"{self.service.value}.{self.action.value}"
-
-    def __str__(self):
-        return self.subject
+        return f"{self.service.value}.{self.KIND}.{self.action.value}"
 
     @classmethod
     def parse(cls, raw: str) -> "Event":
@@ -98,7 +161,7 @@ class Event:
         except ValueError:
             raise UnknownAction(f"unknown action {raw_action!r} in {raw!r}")
 
-        return cls(service, action)  # type: ignore
+        return cls(service=service, action=action)
 
     def __hash__(self):
         return self.service.__hash__() ^ self.action.__hash__()

@@ -27,12 +27,14 @@ def generate(
 
     async def callback(message: Msg):
         with tracer.start_as_current_span(
-            event.subject,
+            event.name,
             context=propagator.extract(message.headers or {}),
             kind=SpanKind.CONSUMER,
             attributes={
+                "task.name": event.name,
+                "task.kind": event.KIND,
                 "task.stream": event.stream,
-                "task.event": event.subject,
+                "task.subject": event.subject,
                 "task.args": message.data,
                 "task.handlers.total": len(handlers),
             },

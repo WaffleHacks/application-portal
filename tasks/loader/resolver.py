@@ -9,7 +9,7 @@ from types import ModuleType
 from typing import Awaitable, Callable, Dict, List, Optional
 
 from .errors import InvalidArgument, InvalidReturnType, LoaderException
-from .types import Event, Handler
+from .types import AutomatedEvent, Event, Handler, ManualEvent
 
 
 def resolve(
@@ -75,7 +75,7 @@ def resolve(
 
                 # Get the fields
                 event = load_event(module)
-                callback = load_callback(module)
+                callback = load_callback(module, event)
 
                 # Register the handler for the specified event
                 if handler_mapping.get(event) is None:
@@ -87,7 +87,9 @@ def resolve(
                         Handler(name=qualified_handler_name, callback=callback)
                     )
 
-                logger.info(f"loaded handler {handler_name!r}")
+                logger.info(
+                    f"{service}: loaded handler {handler_name!r} for {str(event)!r}"
+                )
             except AttributeError as e:
                 logger.error(
                     f"{service}: failed to load {handler_name!r}, missing attribute {e.name!r}"  # type: ignore
@@ -129,14 +131,21 @@ def load_event(module: ModuleType) -> Event:
     """
     Load the event from the handler module
     """
+    # Manually triggered event override automated events
+    manual = getattr(module, "manual", False)
+    if manual:
+        parts = module.__name__.split(".")
+        return ManualEvent(belongs_to=parts[-2], method=parts[-1])
+
+    # Fallback on trying to load as an automated event
     raw = getattr(module, "event")
     if not isinstance(raw, str):
         raise TypeError(f"expected type 'str' for 'event', got {type(raw).__name__!r}")
 
-    return Event.parse(raw)
+    return AutomatedEvent.parse(raw)
 
 
-def load_callback(module: ModuleType) -> Callable[..., Awaitable[None]]:
+def load_callback(module: ModuleType, event: Event) -> Callable[..., Awaitable[None]]:
     """
     Load the callback function from the handler module
     """
@@ -157,14 +166,18 @@ def load_callback(module: ModuleType) -> Callable[..., Awaitable[None]]:
             f"expected return type of 'None', got {signature.return_annotation.__name__!r}"
         )
 
-    # TODO: allow arguments to change based on action
-    parameters = dict(signature.parameters)
-    check_callback_argument("participant_id", str, parameters)
+    # Input validation can only be done on automated events
+    if isinstance(event, AutomatedEvent):
+        # TODO: allow arguments to change based on action
+        parameters = dict(signature.parameters)
+        check_callback_argument("participant_id", str, parameters)
 
-    # Ensure any extra parameters have defaults
-    for param in parameters.values():
-        if param.default == Parameter.empty:
-            raise InvalidArgument(f"unused argument {param.name!r} must have default")
+        # Ensure any extra parameters have defaults
+        for param in parameters.values():
+            if param.default == Parameter.empty:
+                raise InvalidArgument(
+                    f"unused argument {param.name!r} must have default"
+                )
 
     return callback
 
