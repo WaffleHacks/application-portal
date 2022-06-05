@@ -9,9 +9,10 @@ from .specific import (
     IntegrationsSettings,
     RegistrationSettings,
     SyncSettings,
+    TasksSettings,
     WorkshopsSettings,
 )
-from .types import PostgresDsn
+from .types import NATSUrl, PostgresDsn
 
 
 class App(Enum):
@@ -19,6 +20,7 @@ class App(Enum):
     Integrations = "integrations"
     Registration = "registration"
     Sync = "sync"
+    Tasks = "tasks"
     Workshops = "workshops"
 
     @property
@@ -35,10 +37,14 @@ class Settings(BaseModel):
     integrations_inner: Optional[IntegrationsSettings]
     registration_inner: Optional[RegistrationSettings]
     sync_inner: Optional[SyncSettings]
+    tasks_inner: Optional[TasksSettings]
     workshops_inner: Optional[WorkshopsSettings]
 
     # The Postgres database to connect to
     database_url: PostgresDsn
+
+    # The NATS JetStream instance to connect to
+    nats_url: NATSUrl
 
     # The Redis store to connect to
     redis_url: RedisDsn
@@ -85,6 +91,11 @@ class Settings(BaseModel):
     def sync(self) -> SyncSettings:
         assert self.sync_inner is not None
         return self.sync_inner
+
+    @property
+    def tasks(self) -> TasksSettings:
+        assert self.tasks_inner is not None
+        return self.tasks_inner
 
     @property
     def workshops(self) -> WorkshopsSettings:

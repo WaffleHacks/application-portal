@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, HttpUrl
 
+from .types import LogLevel
+
 
 class BaseAPI(BaseModel):
     """
@@ -41,6 +43,11 @@ class RegistrationSettings(BaseAPI):
 class SyncSettings(BaseModel):
     # The SQS queue for synchronizing the participant info
     queue: HttpUrl
+
+
+class TasksSettings(BaseModel):
+    # The minimum level to emit logs at
+    log_level: LogLevel = LogLevel.INFO
 
 
 class WorkshopsSettings(BaseAPI):
