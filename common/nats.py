@@ -1,8 +1,10 @@
-from typing import Awaitable, Callable, Optional
+import json
+from typing import Any, Awaitable, Callable, Optional
 
 from nats import NATS
 from nats.aio.msg import Msg
 from nats.aio.subscription import Subscription
+from nats.js import JetStreamContext
 from nats.js.api import RetentionPolicy, StorageType
 from nats.js.errors import NotFoundError
 
@@ -11,12 +13,14 @@ from common import SETTINGS
 __client = NATS()
 
 
-async def __connect():
+async def __connect() -> JetStreamContext:
     """
     Handle automatically connecting to NATS when needed
     """
     if not __client.is_connected and not __client.is_reconnecting:
         await __client.connect(servers=SETTINGS.nats_url)
+
+    return __client.jetstream()
 
 
 async def create_stream(name: str, description: Optional[str] = None):
@@ -25,8 +29,7 @@ async def create_stream(name: str, description: Optional[str] = None):
     :param name: the name for the stream
     :param description: a description for the stream
     """
-    await __connect()
-    jetstream = __client.jetstream()
+    jetstream = await __connect()
 
     try:
         await jetstream.stream_info(name)
@@ -48,11 +51,20 @@ async def subscribe(
     """
     Subscribe to a subject
     """
-    await __connect()
-    jetstream = __client.jetstream()
+    jetstream = await __connect()
 
     return await jetstream.subscribe(
         subject=subject,
         queue=subject.replace(".", "-"),
         cb=callback,
     )
+
+
+async def publish(subject: str, message: Any):
+    """
+    Publish a JSON-encoded message
+    """
+    jetstream = await __connect()
+
+    encoded = json.dumps(message).encode()
+    await jetstream.publish(subject, encoded)

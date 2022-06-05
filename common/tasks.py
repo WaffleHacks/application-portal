@@ -1,68 +1,33 @@
-import asyncio
-import logging
-from functools import wraps
-from logging import Logger
-from typing import Any, Awaitable, Callable
+from typing import List, Optional
 
-from celery import Celery, signature
-from celery.result import AsyncResult
-from celery.signals import after_setup_task_logger, worker_process_init
-
-from common import SETTINGS
-
-from . import tracing
-
-# Configure celery
-celery = Celery(broker=SETTINGS.redis_url, backend=SETTINGS.redis_url)
-celery.config_from_object(
-    {
-        "enable_utc": True,
-        "accept_content": ["json"],
-        "task_serializer": "json",
-        "result_accept_content": ["json"],
-        "result_persistent": False,
-        "result_serializer": "json",
-        "worker_send_task_events": True,
-    }
-)
-
-celery.autodiscover_tasks(
-    packages=["communication", "integrations", "registration", "sync", "workshops"]
-)
+from common.nats import publish
 
 
-@after_setup_task_logger.connect
-def on_after_setup_task_logger(logger: Logger, **_):
-    logger.setLevel(logging.INFO)
-
-
-@worker_process_init.connect
-def on_worker_process_init(*_args, **_kwargs):
-    tracing.init(celery=True)
-
-
-def task(module: str, name: str, **options) -> Callable[..., AsyncResult]:
+async def broadcast(service: str, event: str, **kwargs):
     """
-    Call a celery task by name. Supports passing options to `apply_async` via keyword-arguments.
+    Broadcast an automated event to all the task handlers
+    :param service: the service that owns the event
+    :param event: the event to trigger
+    :param kwargs: any parameters to pass to the handlers
     """
-    s = signature(f"{module}.tasks.{name}")
-
-    def inner(*args, **kwargs) -> AsyncResult:
-        return s.apply_async(args, kwargs, **options)
-
-    return inner
+    await publish(f"{service}.automated.{event}", kwargs)
 
 
-def syncify(func: Callable[..., Awaitable[Any]]):
-    """
-    Convert a coroutine function to a synchronous function
-    :param func: the coroutine function
-    :return: a synchronous function
-    """
+class TasksProxy(object):
+    def __init__(self, previous: Optional[List[str]] = None):
+        self.__previous = previous or []
 
-    @wraps(func)
-    def wrapped(*args, **kwargs):
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(func(*args, **kwargs))
+    def __getattr__(self, item: str) -> "TasksProxy":
+        if len(self.__previous) >= 2:
+            raise AttributeError(f"'tasks' object has no attribute {item!r}")
 
-    return wrapped
+        return TasksProxy(self.__previous + [item])
+
+    async def __call__(self, **kwargs):
+        assert len(self.__previous) == 2
+
+        await publish(f"{self.__previous[0]}.manual.{self.__previous[1]}", kwargs)
+
+
+# Used for "magically" calling a task
+tasks = TasksProxy()

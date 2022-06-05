@@ -1,7 +1,5 @@
-from typing import TYPE_CHECKING
+import logging
 
-from celery import shared_task
-from celery.utils.log import get_task_logger
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
@@ -13,14 +11,10 @@ from common.database import (
     db_context,
 )
 from common.mail import mailer_client as mailer
-from common.tasks import syncify
 
 from .util import send_message
 
-if TYPE_CHECKING:
-    from logging import Logger
-
-logger = get_task_logger(__name__)  # type: Logger
+logger = logging.getLogger(__name__)
 
 
 async def send_triggered_message(
@@ -70,41 +64,29 @@ async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
     await send_triggered_message(id, trigger_type)
 
 
-@shared_task()
-@syncify
 async def on_sign_up(id: str):
     trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.SIGN_UP)
 
 
-@shared_task()
-@syncify
 async def incomplete_after_24h(id: str):
     await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_24H)
 
 
-@shared_task()
-@syncify
 async def incomplete_after_7d(id: str):
     await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_7D)
 
 
-@shared_task()
-@syncify
 async def on_apply(id: str):
     trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_SUBMITTED)
 
 
-@shared_task()
-@syncify
 async def on_application_accepted(id: str):
     trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_ACCEPTED)
 
 
-@shared_task()
-@syncify
 async def on_application_rejected(id: str):
     trace.get_current_span().set_attribute("user.id", id)
     await send_triggered_message(id, MessageTriggerType.APPLICATION_REJECTED)

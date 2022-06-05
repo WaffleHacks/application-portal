@@ -111,18 +111,6 @@ def run(app: Optional[str]):
         sys.exit(1)
 
 
-@cli.command()
-def celery():
-    """
-    Run the celery worker
-    """
-    from common.tasks import celery
-
-    worker = celery.Worker()
-    worker.setup_defaults(loglevel=logging.INFO)
-    worker.start()
-
-
 @cli.command(name="seed-algolia")
 @click.option(
     "-i",
