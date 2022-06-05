@@ -8,8 +8,11 @@ from pathlib import Path
 from types import ModuleType
 from typing import Awaitable, Callable, Dict, List, Optional
 
-from .errors import InvalidArgument, InvalidReturnType, LoaderException
-from .types import AutomatedEvent, Event, Handler, ManualEvent
+from pydantic import BaseModel
+
+from tasks.loader.types.errors import InvalidArgument, InvalidReturnType
+
+from .types import AutomatedEvent, Event, Handler, LoaderException, ManualEvent
 
 
 def resolve(
@@ -134,8 +137,14 @@ def load_event(module: ModuleType) -> Event:
     # Manually triggered event override automated events
     manual = getattr(module, "manual", False)
     if manual:
+        model = getattr(module, "Model")
+        if not issubclass(model, BaseModel):
+            raise TypeError(
+                f"expected class 'Model' to be subclass of 'pydantic.BaseModel', got {type(model).__name__!r}"
+            )
+
         parts = module.__name__.split(".")
-        return ManualEvent(belongs_to=parts[-2], method=parts[-1])
+        return ManualEvent(belongs_to=parts[-2], method=parts[-1], model=model)
 
     # Fallback on trying to load as an automated event
     raw = getattr(module, "event")
@@ -166,45 +175,38 @@ def load_callback(module: ModuleType, event: Event) -> Callable[..., Awaitable[N
             f"expected return type of 'None', got {signature.return_annotation.__name__!r}"
         )
 
-    # Input validation can only be done on automated events
-    if isinstance(event, AutomatedEvent):
-        # TODO: allow arguments to change based on action
-        parameters = dict(signature.parameters)
-        check_callback_argument("participant_id", str, parameters)
+    params = dict(signature.parameters)
 
-        # Ensure any extra parameters have defaults
-        for param in parameters.values():
-            if param.default == Parameter.empty:
-                raise InvalidArgument(
-                    f"unused argument {param.name!r} must have default"
-                )
+    # Get the model parameters
+    model_signature = inspect.signature(event.input_validator)
+    model_params = dict(model_signature.parameters)
+
+    # Validate the parameters
+    for name, model_param in model_params.items():
+        try:
+            param = params.pop(name)
+        except KeyError:
+            raise InvalidArgument(f"missing required argument {name!r}")
+
+        # Check argument types
+        if param.annotation != model_param.annotation:
+            raise InvalidArgument(
+                f"mismatch argument type for {name!r}: model expected {model_param.annotation.__name__!r}, "
+                f"but function expected {param.annotation.__name__!r}"
+            )
+
+        # Ensure we can always pass arguments
+        if param.kind in [
+            Parameter.POSITIONAL_ONLY,
+            Parameter.VAR_POSITIONAL,
+            Parameter.VAR_KEYWORD,
+        ]:
+            raise InvalidArgument(
+                f"argument {name!r} must be able to be passed as a keyword argument"
+            )
+
+    # Disallow extra arguments
+    if len(params) != 0:
+        raise InvalidArgument(f"extra arguments not in the model are not allowed")
 
     return callback
-
-
-def check_callback_argument(name: str, type_: type, params: Dict[str, Parameter]):
-    """
-    Check the argument is as expected
-    """
-    # Ensure parameter exists
-    try:
-        param = params.pop(name)
-    except KeyError:
-        raise InvalidArgument(f"missing required argument {name!r}")
-
-    # Ensure
-    if param.annotation != Parameter.empty and param.annotation != type_:
-        raise InvalidArgument(
-            f"mismatch argument type for {name!r}: provided {type_.__name__!r}, "
-            f"function expected {param.annotation.__name__!r}"
-        )
-
-    # Ensure we can always pass arguments
-    if param.kind in [
-        Parameter.POSITIONAL_ONLY,
-        Parameter.VAR_POSITIONAL,
-        Parameter.VAR_KEYWORD,
-    ]:
-        raise InvalidArgument(
-            f"argument {name!r} must be able to be passed as a keyword argument"
-        )
