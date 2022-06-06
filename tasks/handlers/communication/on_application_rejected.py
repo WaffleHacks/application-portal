@@ -1,6 +1,6 @@
 from opentelemetry import trace
 
-from .util import MessageTriggerType, send_triggered_message
+from .shared import MessageTriggerType, send_triggered_message
 
 event = "registration.rejected"
 

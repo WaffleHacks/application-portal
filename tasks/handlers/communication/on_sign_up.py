@@ -4,7 +4,7 @@ from opentelemetry import trace
 
 from common.tasks import tasks
 
-from .util import MessageTriggerType, send_triggered_message
+from .shared import MessageTriggerType, send_triggered_message
 
 event = "sync.sign_up"
 

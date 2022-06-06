@@ -1,24 +1,51 @@
 import logging
 from string import Template
 
-from mailer import BodyType
+from mailer import AsyncClient, BodyType
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
 from common import SETTINGS
 from common.database import (
     Application,
+    Message,
     MessageTrigger,
     MessageTriggerType,
     Participant,
     db_context,
 )
-from common.mail import mailer_client as mailer
 
 shared = True
 
 logger = logging.getLogger(__name__)
 tracer = trace.get_tracer(__name__)
+
+mailer = AsyncClient(SETTINGS.tasks.mailer)
+
+
+async def send_message(recipient: Participant, message: Message):
+    """
+    Send a templated message to the specified recipient
+    :param recipient: who the message should be sent to
+    :param message: the message to send
+    """
+    with tracer.start_as_current_span("send"):
+        with tracer.start_as_current_span("render"):
+            template = Template(message.rendered)
+            content = template.safe_substitute(
+                first_name=recipient.first_name,
+                last_name=recipient.last_name,
+            )
+
+        # Send the message
+        await mailer.send(
+            to_email=recipient.email,
+            from_email=SETTINGS.tasks.sender,
+            subject=message.subject,
+            body=content,
+            body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
+            reply_to=SETTINGS.tasks.reply_to,
+        )
 
 
 async def send_triggered_message(
@@ -48,22 +75,7 @@ async def send_triggered_message(
             logger.warning(f"participant '{id}' no longer exists")
             return
 
-    with tracer.start_as_current_span("send"):
-        with tracer.start_as_current_span("render"):
-            template = Template(trigger.message.rendered)
-            content = template.safe_substitute(
-                first_name=participant.first_name,
-                last_name=participant.last_name,
-            )
-
-        await mailer.send(
-            to_email=participant.email,
-            from_email=SETTINGS.communication.sender,
-            subject=trigger.message.subject,
-            body=content,
-            body_type=BodyType.HTML if trigger.message.is_html else BodyType.PLAIN,
-            reply_to=SETTINGS.communication.reply_to,
-        )
+    await send_message(participant, trigger.message)
 
 
 async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):

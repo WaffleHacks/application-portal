@@ -16,15 +16,8 @@ class BaseAPI(BaseModel):
 
 
 class CommunicationSettings(BaseAPI):
-    # The mailer service to connect to
-    mailer: HttpUrl
-
     # The MJML API to connect to
     mjml_api: HttpUrl
-
-    # The sender email and optional reply to email
-    sender: EmailStr
-    reply_to: Optional[EmailStr]
 
 
 class IntegrationsSettings(BaseAPI):
@@ -48,6 +41,13 @@ class SyncSettings(BaseModel):
 class TasksSettings(BaseModel):
     # The minimum level to emit logs at
     log_level: LogLevel = LogLevel.INFO
+
+    # The mailer service to connect to
+    mailer: HttpUrl
+
+    # The sender email and optional reply to email
+    reply_to: Optional[EmailStr]
+    sender: EmailStr
 
 
 class WorkshopsSettings(BaseAPI):

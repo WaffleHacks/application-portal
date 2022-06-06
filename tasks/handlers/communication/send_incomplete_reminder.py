@@ -4,7 +4,7 @@ from datetime import datetime
 from opentelemetry import trace
 
 from ..models import Response
-from .util import MessageTriggerType, send_incomplete_message
+from .shared import MessageTriggerType, send_incomplete_message
 
 manual = True
 
