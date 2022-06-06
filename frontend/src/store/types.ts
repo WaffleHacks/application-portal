@@ -5,10 +5,17 @@ export interface Profile {
   lastName: string;
 }
 
-export enum Status {
+export enum ApplicationStatus {
   Pending = 'pending',
   Rejected = 'rejected',
   Accepted = 'accepted',
+}
+
+export enum MessageStatus {
+  Draft = 'Draft',
+  Ready = 'Ready to Send',
+  Sending = 'Sending...',
+  Sent = 'Sent',
 }
 
 export enum Gender {
@@ -51,7 +58,7 @@ export interface SchoolList extends School {
 export interface ReducedApplication {
   participant: Participant;
 
-  status: Status;
+  status: ApplicationStatus;
   flagged: boolean;
 
   country: string;
@@ -61,7 +68,7 @@ export interface ReducedApplication {
 
 export interface Application {
   participant: Participant;
-  status: Status;
+  status: ApplicationStatus;
 
   school: School;
   level_of_study: string;
@@ -144,25 +151,17 @@ export interface Recipient {
 
 export interface ReducedMessage {
   id: number;
-  sent: boolean;
+  status: MessageStatus;
   subject: string;
 
   created_at: string;
   updated_at: string;
 }
 
-export interface Message {
-  id: number;
-
-  sent: boolean;
-
-  subject: string;
+export interface Message extends ReducedMessage {
   content: string;
 
   recipients: Recipient[];
-
-  created_at: string;
-  updated_at: string;
 }
 
 export enum TriggerType {

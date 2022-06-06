@@ -15,7 +15,7 @@ enum Tag {
 
 type MessageCreate = Pick<Message, 'subject' | 'content'> & { recipients: Group[] };
 
-type MessageUpdate = Partial<MessageCreate> & Pick<Message, 'id'>;
+type MessageUpdate = Partial<MessageCreate> & Partial<Pick<Message, 'status'>> & Pick<Message, 'id'>;
 
 interface MessageTriggerSet {
   type: TriggerType;

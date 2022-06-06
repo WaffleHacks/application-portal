@@ -1,7 +1,10 @@
 from datetime import datetime
+from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
+from pydantic import validator
 from sqlalchemy import Column
+from sqlalchemy import Enum as SQLEnum
 from sqlmodel import Field, Relationship, SQLModel
 
 from .types import TimeStamp
@@ -10,8 +13,22 @@ if TYPE_CHECKING:
     from .recipient import Group, Recipient, RecipientRead
 
 
+class Status(Enum):
+    DRAFT = "Draft"
+    READY = "Ready to Send"
+    SENDING = "Sending..."
+    SENT = "Sent"
+
+
 class MessageBase(SQLModel):
-    sent: bool = Field(default=False, nullable=False)
+    status: Status = Field(
+        default=Status.DRAFT,
+        sa_column=Column(
+            SQLEnum(Status, name="message_status"),
+            nullable=False,
+            server_default=Status.DRAFT.name,
+        ),
+    )
 
     subject: str
     content: str
@@ -58,7 +75,7 @@ class MessageCreate(SQLModel):
 class MessageList(SQLModel):
     id: int
     subject: str
-    sent: bool
+    status: Status
 
     created_at: datetime
     updated_at: datetime
@@ -74,9 +91,16 @@ class MessageRead(MessageBase):
 
 
 class MessageUpdate(SQLModel):
-    sent: Optional[bool]
+    status: Optional[Status]
 
     recipients: Optional[List["Group"]]
 
     subject: Optional[str]
     content: Optional[str]
+
+    @validator("status")
+    def no_sending_states(cls, value: Status) -> Status:
+        if value not in {Status.DRAFT, Status.READY}:
+            raise ValueError("invalid status for manual modification")
+
+        return value

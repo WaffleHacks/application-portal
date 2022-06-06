@@ -1,17 +1,17 @@
 import React from 'react';
 
 import Badge, { Color } from '../../components/Badge';
-import { Status } from '../../store';
+import { ApplicationStatus } from '../../store';
 
 interface Props {
-  status: Status;
+  status: ApplicationStatus;
   large?: boolean;
 }
 
-const statusToColor: Record<Status, Color> = {
-  [Status.Pending]: 'yellow',
-  [Status.Accepted]: 'green',
-  [Status.Rejected]: 'red',
+const statusToColor: Record<ApplicationStatus, Color> = {
+  [ApplicationStatus.Pending]: 'yellow',
+  [ApplicationStatus.Accepted]: 'green',
+  [ApplicationStatus.Rejected]: 'red',
 };
 
 const StatusBadge = ({ large = false, status }: Props): JSX.Element => (

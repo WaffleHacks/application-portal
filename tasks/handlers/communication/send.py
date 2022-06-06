@@ -8,7 +8,14 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import Select, or_
 
 from common import SETTINGS
-from common.database import Application, Group, Message, Participant, db_context
+from common.database import (
+    Application,
+    Group,
+    Message,
+    MessageStatus,
+    Participant,
+    db_context,
+)
 
 from .shared import mailer
 
@@ -50,7 +57,7 @@ async def handler(message_id: int):
         )
 
         # Mark as sent
-        message.sent = True
+        message.status = MessageStatus.SENT
         await db.commit()
 
         logger.info(f"sent {len(emails)} copies of message {message_id}")

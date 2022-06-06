@@ -9,6 +9,8 @@ from sqlalchemy.orm import selectinload
 
 from common.authentication import with_user_id
 from common.database import (
+    Message,
+    MessageStatus,
     MessageTrigger,
     MessageTriggerRead,
     MessageTriggerType,
@@ -53,16 +55,21 @@ async def update(
     trigger = await db.get(MessageTrigger, type)
     assert trigger is not None
 
-    trigger.message_id = values.message_id
-
-    try:
-        db.add(trigger)
-        await db.commit()
-    except IntegrityError:
+    message = await db.get(Message, values.message_id)
+    if message is None:
         raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail="message not found",
+            status_code=HTTPStatus.NOT_FOUND, detail="message not found"
         )
+
+    if message.status == MessageStatus.DRAFT:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="cannot use drafts messages as triggers",
+        )
+
+    trigger.message_id = message.id
+    db.add(trigger)
+    await db.commit()
 
 
 @router.post(

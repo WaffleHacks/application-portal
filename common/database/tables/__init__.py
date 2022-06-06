@@ -7,8 +7,8 @@ from .application import (
     ApplicationUpdate,
     Gender,
     RaceEthnicity,
-    Status,
 )
+from .application import Status as ApplicationStatus
 from .event import Event, EventCreate, EventList, EventRead, EventUpdate
 from .event_attendance import EventAttendance
 from .feedback import Feedback, FeedbackCreate, FeedbackList, FeedbackRead
@@ -20,6 +20,7 @@ from .message import (
     MessageRead,
     MessageUpdate,
 )
+from .message import Status as MessageStatus
 from .message_trigger import (
     MessageTrigger,
     MessageTriggerRead,
