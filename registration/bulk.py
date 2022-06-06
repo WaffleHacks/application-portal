@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database import Application, ApplicationStatus, with_db
 from common.permissions import Permission, requires_permission
+from common.tasks import broadcast
 
 router = APIRouter()
 tracer = trace.get_tracer(__name__)
@@ -44,3 +45,6 @@ async def bulk_set_status(params: BulkSetStatus, db: AsyncSession = Depends(with
     )
     await db.execute(statement)
     await db.commit()
+
+    for id in params.ids:
+        await broadcast("registration", params.status.value, participant_id=id)
