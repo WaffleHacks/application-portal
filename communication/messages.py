@@ -216,11 +216,21 @@ async def send(
     if message is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
+    # Check the message is in a valid state
     if message.status == MessageStatus.DRAFT:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail="cannot send draft messages",
         )
+    elif message.status == MessageStatus.SENDING:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="message already queued for sending",
+        )
+
+    # Update the status
+    message.status = MessageStatus.SENDING
+    await db.commit()
 
     await tasks.communication.send(message_id=id)
 

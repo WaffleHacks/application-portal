@@ -9,6 +9,7 @@ const color = (status: MessageStatus): 'yellow' | 'green' | 'red' => {
       return 'yellow';
     case MessageStatus.Ready:
       return 'green';
+    case MessageStatus.Sending:
     case MessageStatus.Sent:
       return 'red';
   }

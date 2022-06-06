@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 class Status(Enum):
     DRAFT = "Draft"
     READY = "Ready to Send"
+    SENDING = "Sending..."
     SENT = "Sent"
 
 

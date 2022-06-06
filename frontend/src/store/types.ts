@@ -14,6 +14,7 @@ export enum ApplicationStatus {
 export enum MessageStatus {
   Draft = 'Draft',
   Ready = 'Ready to Send',
+  Sending = 'Sending...',
   Sent = 'Sent',
 }
 
