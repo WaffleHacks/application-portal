@@ -1,4 +1,13 @@
-import { ArrowLeftIcon, PaperAirplaneIcon, PencilIcon, RefreshIcon, TrashIcon } from '@heroicons/react/outline';
+import {
+  ArrowLeftIcon,
+  CheckCircleIcon,
+  DocumentIcon,
+  DocumentTextIcon,
+  PaperAirplaneIcon,
+  PencilIcon,
+  RefreshIcon,
+  TrashIcon,
+} from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +23,7 @@ import {
   useGetMessageQuery,
   useSendMessageMutation,
   useSendTestMessageMutation,
+  useUpdateMessageMutation,
 } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
@@ -57,6 +67,7 @@ interface SendButtonsProps extends WithMessageId {
 }
 
 const SendButtons = ({ id, status }: SendButtonsProps): JSX.Element => {
+  const [update, { isLoading: isUpdateLoading }] = useUpdateMessageMutation();
   const [send, { isLoading: isSendLoading, isSuccess: isSendSuccess }] = useSendMessageMutation();
   const [sendTest, { isLoading: isSendTestLoading, isSuccess: isSendTestSuccess }] = useSendTestMessageMutation();
 
@@ -102,18 +113,40 @@ const SendButtons = ({ id, status }: SendButtonsProps): JSX.Element => {
         style="warning"
       />
 
-      <ButtonGroup
-        elements={[{ children: 'Send Test', action: () => sendTest(parseInt(id as string)) }]}
-        onClick={() => setSendConfirmOpen(true)}
-        disabled={isSendLoading || isDraft}
-      >
-        {isSendLoading ? (
-          <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
-        ) : (
-          <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-        )}
-        Send
-      </ButtonGroup>
+      {isDraft ? (
+        <ButtonGroup
+          elements={[{ children: 'Send Test', disabled: isSendTestLoading, action: () => sendTest(parseInt(id)) }]}
+          onClick={() => update({ id: parseInt(id), status: MessageStatus.Ready })}
+          disabled={isUpdateLoading}
+        >
+          {isUpdateLoading ? (
+            <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+          ) : (
+            <CheckCircleIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+          )}
+          Mark as ready
+        </ButtonGroup>
+      ) : (
+        <ButtonGroup
+          elements={[
+            {
+              children: 'Mark as draft',
+              disabled: isUpdateLoading,
+              action: () => update({ id: parseInt(id), status: MessageStatus.Draft }),
+            },
+            { children: 'Send Test', disabled: isSendTestLoading, action: () => sendTest(parseInt(id)) },
+          ]}
+          onClick={() => setSendConfirmOpen(true)}
+          disabled={isSendLoading}
+        >
+          {isSendLoading ? (
+            <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+          ) : (
+            <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+          )}
+          Send
+        </ButtonGroup>
+      )}
     </>
   );
 };

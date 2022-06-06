@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
+from pydantic import validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlmodel import Field, Relationship, SQLModel
@@ -96,3 +97,10 @@ class MessageUpdate(SQLModel):
 
     subject: Optional[str]
     content: Optional[str]
+
+    @validator("status")
+    def no_sending_states(cls, value: Status) -> Status:
+        if value not in {Status.DRAFT, Status.READY}:
+            raise ValueError("invalid status for manual modification")
+
+        return value
