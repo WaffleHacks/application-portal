@@ -1,8 +1,11 @@
 import logging
+from string import Template
 
+from mailer import BodyType
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
+from common import SETTINGS
 from common.database import (
     Application,
     MessageTrigger,
@@ -12,9 +15,10 @@ from common.database import (
 )
 from common.mail import mailer_client as mailer
 
-from .util import send_message
+shared = True
 
 logger = logging.getLogger(__name__)
+tracer = trace.get_tracer(__name__)
 
 
 async def send_triggered_message(
@@ -44,12 +48,26 @@ async def send_triggered_message(
             logger.warning(f"participant '{id}' no longer exists")
             return
 
-    await send_message(participant, trigger.message, mailer)
+    with tracer.start_as_current_span("send"):
+        with tracer.start_as_current_span("render"):
+            template = Template(trigger.message.rendered)
+            content = template.safe_substitute(
+                first_name=participant.first_name,
+                last_name=participant.last_name,
+            )
+
+        await mailer.send(
+            to_email=participant.email,
+            from_email=SETTINGS.communication.sender,
+            subject=trigger.message.subject,
+            body=content,
+            body_type=BodyType.HTML if trigger.message.is_html else BodyType.PLAIN,
+            reply_to=SETTINGS.communication.reply_to,
+        )
 
 
 async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
     span = trace.get_current_span()
-    span.set_attribute("user.id", id)
 
     async with db_context() as db:
         application = await db.get(Application, id)
@@ -62,31 +80,3 @@ async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
 
     span.set_attribute("complete", False)
     await send_triggered_message(id, trigger_type)
-
-
-async def on_sign_up(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.SIGN_UP)
-
-
-async def incomplete_after_24h(id: str):
-    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_24H)
-
-
-async def incomplete_after_7d(id: str):
-    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_7D)
-
-
-async def on_apply(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_SUBMITTED)
-
-
-async def on_application_accepted(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_ACCEPTED)
-
-
-async def on_application_rejected(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_REJECTED)
