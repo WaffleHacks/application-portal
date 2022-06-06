@@ -16,6 +16,7 @@ from common.database import (
     MessageCreate,
     MessageList,
     MessageRead,
+    MessageStatus,
     MessageUpdate,
     Recipient,
     RecipientCreate,
@@ -214,6 +215,12 @@ async def send(
     message = await db.get(Message, id, options=[selectinload(Message.recipients)])
     if message is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    if message.status == MessageStatus.DRAFT:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="cannot send draft messages",
+        )
 
     await tasks.communication.send(message_id=id)
 
