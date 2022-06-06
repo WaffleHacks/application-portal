@@ -1,5 +1,5 @@
 import json
-from typing import Any, Awaitable, Callable, Optional
+from typing import Any, Awaitable, Callable, Dict, Optional
 
 from nats import NATS
 from nats.aio.msg import Msg
@@ -7,11 +7,13 @@ from nats.aio.subscription import Subscription
 from nats.js import JetStreamContext
 from nats.js.api import RetentionPolicy, StorageType
 from nats.js.errors import NotFoundError
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from pydantic.json import pydantic_encoder
 
 from common import SETTINGS
 
 __client = NATS()
+__propagator = TraceContextTextMapPropagator()
 
 
 async def __connect() -> JetStreamContext:
@@ -67,5 +69,9 @@ async def publish(subject: str, message: Any):
     """
     jetstream = await __connect()
 
+    # Inject tracing information
+    headers: Dict[str, str] = {}
+    __propagator.inject(headers)
+
     encoded = json.dumps(message, default=pydantic_encoder).encode()
-    await jetstream.publish(subject, encoded)
+    await jetstream.publish(subject, encoded, headers=headers)

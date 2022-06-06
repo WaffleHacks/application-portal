@@ -1,9 +1,9 @@
 import logging
 import traceback
-from typing import Any, Awaitable, Callable, Dict, List
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from opentelemetry import trace
-from opentelemetry.trace import SpanKind
+from opentelemetry.trace import Context, Link, SpanKind
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from pydantic import ValidationError
 
@@ -36,7 +36,7 @@ def generate(
     async def callback(message: Msg):
         with tracer.start_as_current_span(
             event.name,
-            context=propagator.extract(message.headers or {}),
+            links=get_linked_trace(message.headers),
             kind=SpanKind.CONSUMER,
             attributes={
                 "task.name": event.name,
@@ -146,3 +146,17 @@ async def single_executor(message: Msg, handlers: List[Handler], args: Dict[str,
         await message.ack()
 
     parent.set_attribute("task.handlers.failed", int(failed))
+
+
+def get_linked_trace(headers: Optional[Dict[str, str]]) -> List[Link]:
+    """
+    Get the linked trace from the message headers
+    """
+    ctx = Context()
+    ctx = propagator.extract(headers or {}, context=ctx)
+
+    span = trace.get_current_span(ctx)
+    if span == trace.INVALID_SPAN:
+        return []
+
+    return [Link(span.get_span_context())]
