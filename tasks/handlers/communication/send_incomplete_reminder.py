@@ -3,7 +3,8 @@ from datetime import datetime
 
 from opentelemetry import trace
 
-from ..models import Response
+from tasks.handlers.models import Response
+
 from .shared import MessageTriggerType, send_incomplete_message
 
 manual = True
