@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from common.authentication import is_internal
-from common.database import Participant, Status, with_db
+from common.database import ApplicationStatus, Participant, with_db
 
 router = APIRouter()
 
@@ -32,6 +32,6 @@ async def link(id, db: AsyncSession = Depends(with_db)):
         "status": (
             participant is not None
             and participant.application is not None
-            and participant.application.status == Status.ACCEPTED
+            and participant.application.status == ApplicationStatus.ACCEPTED
         )
     }

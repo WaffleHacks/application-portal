@@ -10,10 +10,10 @@ from sqlalchemy.orm import selectinload
 
 from common.database import (
     Application,
+    ApplicationStatus,
     EventAttendance,
     Participant,
     ParticipantRead,
-    Status,
     SwagTier,
     SwagTierListWithDescription,
     with_db,
@@ -90,7 +90,7 @@ async def participant_progresses(db: AsyncSession = Depends(with_db)):
         select(Participant)
         .outerjoin(SwagTier)
         .join(Application)
-        .where(Application.status == Status.ACCEPTED)
+        .where(Application.status == ApplicationStatus.ACCEPTED)
         .order_by(SwagTier.required_attendance, Participant.first_name)  # type: ignore
         .options(selectinload(Participant.swag_tier))
     )

@@ -19,11 +19,11 @@ from common.database import (
     ApplicationCreate,
     ApplicationList,
     ApplicationRead,
+    ApplicationStatus,
     ApplicationUpdate,
     Participant,
     ParticipantRead,
     School,
-    Status,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -330,7 +330,7 @@ async def update(
 
 
 class SetStatusRequest(BaseModel):
-    status: Status
+    status: ApplicationStatus
 
 
 @router.put(
@@ -352,12 +352,12 @@ async def set_status(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     # Only allow setting status once
-    if application.status != Status.PENDING:
+    if application.status != ApplicationStatus.PENDING:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST, detail="status already finalized"
         )
     # Only allow setting to accepted or rejected
-    elif values.status == Status.PENDING:
+    elif values.status == ApplicationStatus.PENDING:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
             detail="cannot finalize 'pending' status",
