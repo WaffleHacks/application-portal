@@ -20,10 +20,10 @@ async def handler(participant_id: str):
     await tasks.communication.send_incomplete_reminder(
         participant_id=participant_id,
         kind="24h",
-        at=now + timedelta(minutes=1),
+        at=now + timedelta(days=1),
     )
     await tasks.communication.send_incomplete_reminder(
         participant_id=participant_id,
         kind="7d",
-        at=now + timedelta(minutes=7),
+        at=now + timedelta(days=7),
     )
