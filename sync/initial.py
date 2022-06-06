@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from aws_requests_auth.boto_utils import BotoAWSRequestsAuth
 from boto3.session import Session
 from pydantic import parse_obj_as
-from sqlalchemy.future import select
+from sqlalchemy.dialects.postgresql import Insert, insert
 
 from common import SETTINGS
 from common.database import Participant, db_context
@@ -28,24 +28,22 @@ async def sync():
         logger.info("skipping initial synchronization")
         return
 
+    logger.info("performing initial sync...")
+
     async with db_context() as db:
-        result = await db.execute(select(Participant.id))
-        participants = set(result.scalars().all())
-
         profiles = await fetch_profiles()
+        values = [p.dict() for p in profiles]
 
-        # We don't particularly care if the u
-        if len(participants) >= len(profiles):
-            logger.info("already in sync")
-            return
-
-        logger.info("databases out of sync, fixing...")
-
-        for profile in profiles:
-            if profile.id not in participants:
-                logger.debug(f"adding {profile.id}")
-
-                db.add(Participant.from_orm(profile))
+        base_statement: Insert = insert(Participant).values(values)
+        statement = base_statement.on_conflict_do_update(
+            index_elements=[Participant.id],
+            set_={
+                "first_name": base_statement.excluded.first_name,
+                "last_name": base_statement.excluded.last_name,
+                "email": base_statement.excluded.email,
+            },
+        )
+        await db.execute(statement)
 
         await db.commit()
         logger.info("initial sync complete!")
