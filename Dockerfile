@@ -51,21 +51,6 @@ COPY --chown=app manage.py ./manage.py
 
 
 ###
-#  Celery
-###
-FROM common as celery
-
-COPY --chown=app communication ./communication
-COPY --chown=app integrations ./integrations
-COPY --chown=app registration ./registration
-COPY --chown=app sync ./sync
-COPY --chown=app workshops ./workshops
-
-COPY --chown=app --chmod=775 docker-entrypoints/celery.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
 #  Communication
 ###
 FROM common as communication
@@ -136,6 +121,16 @@ FROM common as sync
 
 COPY --chown=app sync ./sync
 COPY --chown=app --chmod=775 docker-entrypoints/sync.sh ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+###
+#  Tasks
+###
+FROM common as tasks
+
+COPY --chown=app tasks ./tasks
+COPY --chown=app --chmod=775 docker-entrypoints/tasks.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
 

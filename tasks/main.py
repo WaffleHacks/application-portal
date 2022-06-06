@@ -21,7 +21,8 @@ def main():
     )
     logger = logging.getLogger("tasks")
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     logger.info("starting task workers")
 
     subscriptions = loader.register_handlers(loop, HANDLERS_PATH)

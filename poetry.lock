@@ -1194,23 +1194,6 @@ instruments = ["botocore (>=1.0,<2.0)"]
 test = ["moto[all] (>=2.2.6,<2.3.0)", "opentelemetry-test-utils (==0.30b1)", "markupsafe (==2.0.1)", "botocore (>=1.0,<2.0)"]
 
 [[package]]
-name = "opentelemetry-instrumentation-celery"
-version = "0.30b1"
-description = "OpenTelemetry Celery Instrumentation"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-opentelemetry-api = ">=1.3,<2.0"
-opentelemetry-instrumentation = "0.30b1"
-opentelemetry-semantic-conventions = "0.30b1"
-
-[package.extras]
-instruments = ["celery (>=4.0,<6.0)"]
-test = ["pytest", "opentelemetry-test-utils (==0.30b1)", "celery (>=4.0,<6.0)"]
-
-[[package]]
 name = "opentelemetry-instrumentation-fastapi"
 version = "0.30b1"
 description = "OpenTelemetry FastAPI Instrumentation"
@@ -1871,7 +1854,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f2717244d6fe00d7a189e2916f16e33aecdac92d2e5cba92ff1ca1e6cfdaf4cd"
+content-hash = "27044340e3e2a1a23d3d69d0fc2edf9f7cf7a451c452a9c93f002a6379b7937b"
 
 [metadata.files]
 aiodns = [
@@ -2729,10 +2712,6 @@ opentelemetry-instrumentation-asgi = [
 opentelemetry-instrumentation-botocore = [
     {file = "opentelemetry-instrumentation-botocore-0.30b1.tar.gz", hash = "sha256:f47cb00cb8abc8dc831ece112331b695e26985526222eacae421e99bf2911ecd"},
     {file = "opentelemetry_instrumentation_botocore-0.30b1-py3-none-any.whl", hash = "sha256:aeb1442cc42ad4a9b25bd2522d90ea7b9d98fc8401c881bf98ae65d283f09c64"},
-]
-opentelemetry-instrumentation-celery = [
-    {file = "opentelemetry-instrumentation-celery-0.30b1.tar.gz", hash = "sha256:11ca528558ca0633680b06960a5b3095febafba73ddc73b79826bd8fc9a7fef9"},
-    {file = "opentelemetry_instrumentation_celery-0.30b1-py3-none-any.whl", hash = "sha256:725cdb27fe6bb66aa8ec9dbb48b9089a847d4ca51d625c574196ada985ce3fca"},
 ]
 opentelemetry-instrumentation-fastapi = [
     {file = "opentelemetry-instrumentation-fastapi-0.30b1.tar.gz", hash = "sha256:1b1ec3b1b1594f14479026825f148ee7c58bea8b1c918f630d7bd26f5c29c94c"},
