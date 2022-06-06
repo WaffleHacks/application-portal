@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import Card from '../components/Card';
 import NotFound from '../pages/NotFound';
-import { Status, useGetApplicationQuery } from '../store';
+import { ApplicationStatus, useGetApplicationQuery } from '../store';
 import Layout from './components/Layout';
 
 const Application = React.lazy(() => import('./pages/application/Application'));
@@ -56,19 +56,19 @@ const Participants = (): JSX.Element => {
 
   // Change view based on status
   switch (application?.status) {
-    case Status.Pending:
+    case ApplicationStatus.Pending:
       return (
         <Base accepted={false}>
           <Route index element={<PendingStatus />} />
         </Base>
       );
-    case Status.Rejected:
+    case ApplicationStatus.Rejected:
       return (
         <Base accepted={false}>
           <Route index element={<RejectedStatus />} />
         </Base>
       );
-    case Status.Accepted:
+    case ApplicationStatus.Accepted:
       return (
         <Base accepted={true}>
           <Route index element={<AcceptedStatus />} />

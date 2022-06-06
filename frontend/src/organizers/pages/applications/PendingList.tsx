@@ -6,8 +6,8 @@ import { Button } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
 import Link from '../../../components/Link';
 import {
+  ApplicationStatus,
   ReducedApplication,
-  Status,
   useBulkSetApplicationStatusMutation,
   useListApplicationsQuery,
 } from '../../../store';
@@ -71,7 +71,7 @@ const Row = ({ application, selected, setSelected, disabled }: RowProps): JSX.El
 const PendingList = (): JSX.Element => {
   // Listing and displaying data
   const { data = [], isLoading } = useListApplicationsQuery();
-  const filtered = data.filter((a) => a.status === Status.Pending);
+  const filtered = data.filter((a) => a.status === ApplicationStatus.Pending);
   const { sorted, ...sortableProps } = useSorting<SortKey, ReducedApplication>(filtered, sort, SortKey.AppliedAt);
   const { paginated, ...paginationProps } = usePagination(sorted);
   const { setPage } = paginationProps;
@@ -100,7 +100,7 @@ const PendingList = (): JSX.Element => {
   // Bulk operation actions
   const [bulkSetStatus, { isLoading: isSetStatusLoading, isSuccess: isSetStatusSuccess }] =
     useBulkSetApplicationStatusMutation();
-  const [status, setStatus] = useState(Status.Pending);
+  const [status, setStatus] = useState(ApplicationStatus.Pending);
 
   // Reset the checked items on success
   useEffect(() => {
@@ -113,8 +113,8 @@ const PendingList = (): JSX.Element => {
   return (
     <>
       <Confirm
-        isOpen={status !== Status.Pending}
-        close={() => setStatus(Status.Pending)}
+        isOpen={status !== ApplicationStatus.Pending}
+        close={() => setStatus(ApplicationStatus.Pending)}
         onClick={() => bulkSetStatus({ status, ids: selected })}
         title={`Mark ${selected.length} applications as ${status}?`}
         description={`Are you sure you want to change the status of ${selected.length} applications to ${status}? Make sure you have checked that these applicants are eligible to participate. Changing the status of these applications is irreversible.`}
@@ -140,7 +140,7 @@ const PendingList = (): JSX.Element => {
                   type="button"
                   style="success"
                   disabled={isSetStatusLoading}
-                  onClick={() => setStatus(Status.Accepted)}
+                  onClick={() => setStatus(ApplicationStatus.Accepted)}
                 >
                   {isSetStatusLoading ? <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden={true} /> : 'Accept'}
                 </Button>
@@ -148,7 +148,7 @@ const PendingList = (): JSX.Element => {
                   type="button"
                   style="danger"
                   disabled={isSetStatusLoading}
-                  onClick={() => setStatus(Status.Rejected)}
+                  onClick={() => setStatus(ApplicationStatus.Rejected)}
                 >
                   {isSetStatusLoading ? <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden={true} /> : 'Reject'}
                 </Button>

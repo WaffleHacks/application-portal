@@ -9,6 +9,7 @@ import { Button, ButtonGroup, LinkButton } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
 import { BaseCodeEditor } from '../../../components/input';
 import {
+  MessageStatus,
   useDeleteMessageMutation,
   useGetMessageQuery,
   useSendMessageMutation,
@@ -17,6 +18,7 @@ import {
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
+import StatusBadge from './StatusBadge';
 
 interface WithMessageId {
   id: string;
@@ -51,10 +53,10 @@ const DeleteButton = ({ id }: WithMessageId): JSX.Element => {
 };
 
 interface SendButtonsProps extends WithMessageId {
-  sent: boolean;
+  status: MessageStatus;
 }
 
-const SendButtons = ({ id, sent }: SendButtonsProps): JSX.Element => {
+const SendButtons = ({ id, status }: SendButtonsProps): JSX.Element => {
   const [send, { isLoading: isSendLoading, isSuccess: isSendSuccess }] = useSendMessageMutation();
   const [sendTest, { isLoading: isSendTestLoading, isSuccess: isSendTestSuccess }] = useSendTestMessageMutation();
 
@@ -70,6 +72,9 @@ const SendButtons = ({ id, sent }: SendButtonsProps): JSX.Element => {
   useEffect(() => {
     if (!isSendLoading && isSendSuccess) setSendSuccessOpen(true);
   }, [isSendLoading, isSendSuccess]);
+
+  const isDraft = status === MessageStatus.Draft;
+  const isSent = status === MessageStatus.Sent;
 
   return (
     <>
@@ -90,9 +95,9 @@ const SendButtons = ({ id, sent }: SendButtonsProps): JSX.Element => {
         isOpen={sendConfirmOpen}
         close={() => setSendConfirmOpen(false)}
         onClick={() => send(parseInt(id as string))}
-        title={`Send this message ${sent ? ' again' : ''}?`}
-        description={`Are you sure you want to send this message ${
-          sent ? ' again' : ''
+        title={`Send this message${isSent ? ' again' : ''}?`}
+        description={`Are you sure you want to send this message${
+          isSent ? ' again' : ''
         }? This action is irreversible and cannot be cancelled.`}
         style="warning"
       />
@@ -100,7 +105,7 @@ const SendButtons = ({ id, sent }: SendButtonsProps): JSX.Element => {
       <ButtonGroup
         elements={[{ children: 'Send Test', action: () => sendTest(parseInt(id as string)) }]}
         onClick={() => setSendConfirmOpen(true)}
-        disabled={isSendLoading}
+        disabled={isSendLoading || isDraft}
       >
         {isSendLoading ? (
           <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
@@ -126,7 +131,7 @@ const Detail = (): JSX.Element => {
         title={data.subject}
         titleLeft={
           <div className="flex justify-around space-x-2">
-            <SendButtons sent={data.sent} id={id as string} />
+            <SendButtons status={data.status} id={id as string} />
             <LinkButton to={`/messages/${id}/edit`} style="white">
               Edit
               <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
@@ -137,7 +142,7 @@ const Detail = (): JSX.Element => {
       >
         <Section>
           <Item name="Status">
-            <Badge color={data.sent ? 'red' : 'yellow'}>{data.sent ? 'Sent' : 'Draft'}</Badge>
+            <StatusBadge status={data.status} />
           </Item>
           <Item name="Recipients">
             {data.recipients.map((r) => (

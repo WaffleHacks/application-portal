@@ -2,10 +2,10 @@ import { PlusIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
 import {
+  MessageStatus,
   MessageTrigger,
   ReducedMessage,
   useListMessageTriggersQuery,
@@ -13,6 +13,7 @@ import {
   useSetMessageTriggerMutation,
 } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import StatusBadge from './StatusBadge';
 
 const MessageRow = (message: ReducedMessage): JSX.Element => {
   const lastUpdated = DateTime.fromISO(message.updated_at);
@@ -25,7 +26,7 @@ const MessageRow = (message: ReducedMessage): JSX.Element => {
     <tr>
       <Table.Data index>{message.subject}</Table.Data>
       <Table.Data>
-        <Badge color={message.sent ? 'red' : 'yellow'}>{message.sent ? 'Sent' : 'Draft'}</Badge>
+        <StatusBadge status={message.status} />
       </Table.Data>
       <Table.Data>{formattedLastUpdated}</Table.Data>
       <Table.Data className="relative text-right sm:pr-6">
@@ -44,6 +45,7 @@ interface MessageSelectProps {
 
 const MessageSelect = ({ id, setId }: MessageSelectProps): JSX.Element => {
   const { data = [], isLoading } = useListMessagesQuery();
+  const filtered = data.filter((m) => m.status !== MessageStatus.Draft);
 
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     try {
@@ -65,7 +67,7 @@ const MessageSelect = ({ id, setId }: MessageSelectProps): JSX.Element => {
         {!isLoading && (
           <>
             <option value="null">N/A</option>
-            {data.map((m) => (
+            {filtered.map((m) => (
               <option key={m.id} value={m.id} defaultChecked={m.id === id}>
                 {m.subject}
               </option>
@@ -197,7 +199,9 @@ const List = (): JSX.Element => {
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <p className="text-sm text-gray-700">
-              Select messages to be sent automatically based on participant actions.
+              Select messages to be sent automatically based on participant actions. Only messages marked as{' '}
+              <StatusBadge status={MessageStatus.Ready} /> or <StatusBadge status={MessageStatus.Sent} /> can be used
+              for triggers.
             </p>
           </div>
         </div>

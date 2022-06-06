@@ -78,7 +78,7 @@ export type {
   ReducedFeedback,
   MessageTrigger,
 } from './types';
-export { Gender, Group, RaceEthnicity, Status } from './types';
+export { Gender, Group, RaceEthnicity, ApplicationStatus, MessageStatus } from './types';
 export {
   useMarkAttendanceMutation,
   useGetFeedbackStatusQuery,

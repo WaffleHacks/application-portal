@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import React from 'react';
 
 import Link from '../../../components/Link';
-import { ReducedApplication, Status, useListApplicationsQuery } from '../../../store';
+import { ApplicationStatus, ReducedApplication, useListApplicationsQuery } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
 import { SortKey, sort } from './list';
 
@@ -31,7 +31,7 @@ const Row = (application: ReducedApplication): JSX.Element => {
 };
 
 interface Props {
-  status: Status;
+  status: ApplicationStatus;
 }
 
 const StatusList = ({ status }: Props): JSX.Element => {

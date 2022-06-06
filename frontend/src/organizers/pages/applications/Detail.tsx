@@ -7,7 +7,7 @@ import { Button } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
 import Link from '../../../components/Link';
 import {
-  Status,
+  ApplicationStatus,
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useSetApplicationStatusMutation,
@@ -91,11 +91,11 @@ const Notes = ({ id, notes: initialNotes }: NotesProps): JSX.Element => {
   );
 };
 
-const statusOptions: Status[] = [Status.Accepted, Status.Rejected];
+const statusOptions: ApplicationStatus[] = [ApplicationStatus.Accepted, ApplicationStatus.Rejected];
 const SetStatus = ({ id }: WithId): JSX.Element => {
   const [open, setOpen] = useState(false);
 
-  const [status, setStatus] = useState(Status.Accepted);
+  const [status, setStatus] = useState(ApplicationStatus.Accepted);
   const [update, { isLoading }] = useSetApplicationStatusMutation();
 
   return (
@@ -202,7 +202,7 @@ const Detail = (): JSX.Element => {
           <Item name="Notes" wide>
             <Notes id={id as string} notes={data.notes} />
           </Item>
-          {data.status === Status.Pending && (
+          {data.status === ApplicationStatus.Pending && (
             <Item name="Status">
               <SetStatus id={id as string} />
             </Item>

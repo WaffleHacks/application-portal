@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
 import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
-import { Status } from './types';
+import { ApplicationStatus } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -31,9 +31,9 @@ type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' 
   id: string;
 };
 
-interface ApplicationStatus {
+interface UpdateApplicationStatus {
   id: string;
-  status: Status;
+  status: ApplicationStatus;
 }
 
 interface SchoolList extends School {
@@ -54,7 +54,7 @@ interface ApplicationResume {
 }
 
 interface BulkSetApplicationStatus {
-  status: Status;
+  status: ApplicationStatus;
   ids: string[];
 }
 
@@ -101,7 +101,7 @@ const api = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: Tag.Application, id }],
     }),
-    setApplicationStatus: builder.mutation<void, ApplicationStatus>({
+    setApplicationStatus: builder.mutation<void, UpdateApplicationStatus>({
       query: ({ id, ...body }) => ({
         url: `/registration/applications/${id}/status`,
         method: 'PUT',
