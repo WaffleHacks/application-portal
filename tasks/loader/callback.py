@@ -1,9 +1,11 @@
 import logging
 import traceback
+from logging import Logger
 from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from opentelemetry import trace
-from opentelemetry.trace import Context, Link, SpanKind
+from opentelemetry.context import Context
+from opentelemetry.trace import Link, SpanKind
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from pydantic import ValidationError
 
@@ -11,8 +13,6 @@ from common.nats import Msg
 
 from ..handlers.models import Response, Status
 from .types import Event, Handler, ManualEvent
-
-logger = logging.getLogger(__name__)
 
 tracer = trace.get_tracer(__name__)
 propagator = TraceContextTextMapPropagator()
@@ -33,6 +33,8 @@ def generate(
     else:
         executor = batch_executor
 
+    logger = logging.getLogger(f"tasks.{event.name}")
+
     async def callback(message: Msg):
         with tracer.start_as_current_span(
             event.name,
@@ -47,6 +49,7 @@ def generate(
                 "task.handlers.total": len(handlers),
             },
         ) as span:
+            ctx = span.get_span_context()
 
             # Parse and validate the input
             try:
@@ -55,24 +58,28 @@ def generate(
                         message.data.decode("utf-8")
                     )
             except ValidationError:
-                ctx = span.get_span_context()
-                logger.error(
-                    f"invalid input for {event.name} ({event.KIND}) - trace id: {ctx.trace_id}"
-                )
+                logger.error(f"invalid input - trace id: {ctx.trace_id}")
 
                 # Acknowledge the message on failure since retrying it won't yield any benefits
                 await message.ack()
                 return
 
             # Execute the callback(s)
-            await executor(message, handlers, kwargs.dict())
+            await executor(logger, message, handlers, kwargs.dict())
+
+            logger.info(
+                f"executed {len(handlers)} handler(s) - trace id: {ctx.trace_id}"
+            )
 
     return callback
 
 
-async def batch_executor(message: Msg, handlers: List[Handler], args: Dict[str, Any]):
+async def batch_executor(
+    logger: Logger, message: Msg, handlers: List[Handler], args: Dict[str, Any]
+):
     """
     Execute a batch of handlers in sequence
+    :param logger: the logger for the event
     :param message: the message to acknowledge
     :param handlers: the handlers to execute
     :param args: keyword arguments to pass to the handler
@@ -86,6 +93,7 @@ async def batch_executor(message: Msg, handlers: List[Handler], args: Dict[str, 
                 await handler.callback(**args)
         except Exception as e:
             failed += 1
+            logger.error(f"failed to execute {handler.name}")
             traceback.print_exception(e)  # type: ignore
 
     span.set_attribute("task.handlers.failed", failed)
@@ -93,9 +101,12 @@ async def batch_executor(message: Msg, handlers: List[Handler], args: Dict[str, 
     await message.ack()
 
 
-async def single_executor(message: Msg, handlers: List[Handler], args: Dict[str, Any]):
+async def single_executor(
+    logger: Logger, message: Msg, handlers: List[Handler], args: Dict[str, Any]
+):
     """
     Execute a single handler and act according to its response
+    :param logger: the logger for the event
     :param message: the message to use for responses
     :param handlers: the handler to execute, must be a list with a single element
     :param args: keyword arguments to pass to the handler
@@ -141,6 +152,8 @@ async def single_executor(message: Msg, handlers: List[Handler], args: Dict[str,
 
     except Exception as e:
         failed = True
+
+        logger.error(f"failed to execute {handlers[0].name}")
 
         traceback.print_exception(e)  # type: ignore
         await message.ack()
