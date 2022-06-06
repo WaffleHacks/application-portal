@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import traceback
 from typing import TYPE_CHECKING
 
 import boto3
@@ -11,6 +12,7 @@ from common import SETTINGS, tracing
 from common.database import Participant, db_context
 from common.tasks import broadcast
 
+from . import initial
 from .listener import Listener
 from .models import Action, ActionType
 
@@ -74,7 +76,12 @@ async def run():
     logger = logging.getLogger("sync")
     queue = SETTINGS.sync.queue
 
-    # TODO: perform an initial sync
+    try:
+        await initial.sync()
+    except Exception as e:
+        # We want to notify of the error, but it is not fatal if the task fails
+        logger.error("failed to perform initial sync")
+        traceback.print_exception(e)  # type: ignore
 
     # Process messages forever
     listener = Listener(queue, client)
