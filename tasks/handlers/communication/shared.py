@@ -1,26 +1,51 @@
-from typing import TYPE_CHECKING
+import logging
+from string import Template
 
-from celery import shared_task
-from celery.utils.log import get_task_logger
+from mailer import AsyncClient, BodyType
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
+from common import SETTINGS
 from common.database import (
     Application,
+    Message,
     MessageTrigger,
     MessageTriggerType,
     Participant,
     db_context,
 )
-from common.mail import mailer_client as mailer
-from common.tasks import syncify
 
-from .util import send_message
+shared = True
 
-if TYPE_CHECKING:
-    from logging import Logger
+logger = logging.getLogger(__name__)
+tracer = trace.get_tracer(__name__)
 
-logger = get_task_logger(__name__)  # type: Logger
+mailer = AsyncClient(SETTINGS.tasks.mailer)
+
+
+async def send_message(recipient: Participant, message: Message):
+    """
+    Send a templated message to the specified recipient
+    :param recipient: who the message should be sent to
+    :param message: the message to send
+    """
+    with tracer.start_as_current_span("send"):
+        with tracer.start_as_current_span("render"):
+            template = Template(message.rendered)
+            content = template.safe_substitute(
+                first_name=recipient.first_name,
+                last_name=recipient.last_name,
+            )
+
+        # Send the message
+        await mailer.send(
+            to_email=recipient.email,
+            from_email=SETTINGS.tasks.sender,
+            subject=message.subject,
+            body=content,
+            body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
+            reply_to=SETTINGS.tasks.reply_to,
+        )
 
 
 async def send_triggered_message(
@@ -50,12 +75,11 @@ async def send_triggered_message(
             logger.warning(f"participant '{id}' no longer exists")
             return
 
-    await send_message(participant, trigger.message, mailer)
+    await send_message(participant, trigger.message)
 
 
 async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
     span = trace.get_current_span()
-    span.set_attribute("user.id", id)
 
     async with db_context() as db:
         application = await db.get(Application, id)
@@ -68,43 +92,3 @@ async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
 
     span.set_attribute("complete", False)
     await send_triggered_message(id, trigger_type)
-
-
-@shared_task()
-@syncify
-async def on_sign_up(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.SIGN_UP)
-
-
-@shared_task()
-@syncify
-async def incomplete_after_24h(id: str):
-    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_24H)
-
-
-@shared_task()
-@syncify
-async def incomplete_after_7d(id: str):
-    await send_incomplete_message(id, MessageTriggerType.INCOMPLETE_APPLICATION_7D)
-
-
-@shared_task()
-@syncify
-async def on_apply(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_SUBMITTED)
-
-
-@shared_task()
-@syncify
-async def on_application_accepted(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_ACCEPTED)
-
-
-@shared_task()
-@syncify
-async def on_application_rejected(id: str):
-    trace.get_current_span().set_attribute("user.id", id)
-    await send_triggered_message(id, MessageTriggerType.APPLICATION_REJECTED)

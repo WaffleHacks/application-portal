@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common import SETTINGS, tracing
 from common.database import Participant, db_context
-from common.tasks import task
+from common.tasks import broadcast
 
 from .listener import Listener
 from .models import Action, ActionType
@@ -20,25 +20,6 @@ if TYPE_CHECKING:
 
 tracing.init()
 tracer = trace.get_tracer(__name__)
-
-
-def dispatch_email_tasks(id: str):
-    """
-    Enqueues tasks for sign up and reminder emails
-    :param id: the user's ID
-    """
-    task("communication", "on_sign_up")(id)
-
-    # task(
-    #     "communication",
-    #     "incomplete_after_24h",
-    #     countdown=24 * 60 * 60,
-    # )(id)
-    # task(
-    #     "communication",
-    #     "incomplete_after_7d",
-    #     countdown=7 * 24 * 60 * 60,
-    # )(id)
 
 
 async def upsert(action: Action, db: AsyncSession):
@@ -60,7 +41,7 @@ async def upsert(action: Action, db: AsyncSession):
                 logger.info(f"creating participant {action.id}")
                 participant = Participant(**profile)
 
-                dispatch_email_tasks(action.id)
+                await broadcast("sync", "sign_up", participant_id=action.id)
             else:
                 span.set_attribute("action", "update")
                 logger.info(f"updating participant {action.id}")

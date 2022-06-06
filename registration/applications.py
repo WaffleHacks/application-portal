@@ -28,7 +28,7 @@ from common.database import (
 )
 from common.kv import NamespacedClient, with_kv
 from common.permissions import Permission, requires_permission
-from common.tasks import task
+from common.tasks import broadcast
 
 
 class S3PreSignedURL(BaseModel):
@@ -147,7 +147,7 @@ async def create_application(
     await kv.delete(id)
 
     # Send the application received message
-    task("communication", "on_apply")(id)
+    await broadcast("registration", "new_application", participant_id=id)
 
     response = {}
 
@@ -365,7 +365,7 @@ async def set_status(
 
     # Set the participant's status
     application.status = values.status
-    task("communication", f"on_application_{application.status.value}")(id)
+    await broadcast("registration", application.status.value, participant_id=id)
 
     db.add(application)
     await db.commit()

@@ -1,6 +1,20 @@
+from enum import Enum
 from typing import Optional, no_type_check
 
 from pydantic import AnyUrl
+
+
+class LogLevel(Enum):
+    CRITICAL = "CRITICAL"
+    FATAL = "FATAL"
+    ERROR = "ERROR"
+    WARN = "WARN"
+    INFO = "INFO"
+    DEBUG = "DEBUG"
+
+
+class NATSUrl(AnyUrl):
+    allowed_schemes = {"nats"}
 
 
 class PostgresDsn(AnyUrl):

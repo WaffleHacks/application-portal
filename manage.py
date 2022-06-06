@@ -85,6 +85,7 @@ def reset(obj: Config, revision: str):
 @click.option("-s", "--statistics", "app", flag_value="statistics")
 @click.option("-i", "--integrations", "app", flag_value="integrations")
 @click.option("-y", "--sync", "app", flag_value="sync")
+@click.option("-t", "--tasks", "app", flag_value="tasks")
 def run(app: Optional[str]):
     """
     Run an API development server
@@ -108,18 +109,6 @@ def run(app: Optional[str]):
         click.echo(f"{app} is misconfigured, could not find 'run' function")
         click.echo(f"Reason:\n{format_exc()}")
         sys.exit(1)
-
-
-@cli.command()
-def celery():
-    """
-    Run the celery worker
-    """
-    from common.tasks import celery
-
-    worker = celery.Worker()
-    worker.setup_defaults(loglevel=logging.INFO)
-    worker.start()
 
 
 @cli.command(name="seed-algolia")

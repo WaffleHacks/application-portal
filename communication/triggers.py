@@ -13,13 +13,10 @@ from common.database import (
     MessageTriggerRead,
     MessageTriggerType,
     MessageTriggerUpdate,
-    Participant,
     with_db,
 )
-from common.mail import AsyncClient, with_mail
 from common.permissions import Permission, requires_permission
-
-from .util import send_message
+from common.tasks import tasks
 
 router = APIRouter()
 
@@ -78,25 +75,18 @@ async def test(
     type: MessageTriggerType,
     id: str = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
-    mailer: AsyncClient = Depends(with_mail),
 ):
     """
     Test sending a trigger message to the current user
     """
-    trigger = await db.get(
-        MessageTrigger, type, options=[selectinload(MessageTrigger.message)]
-    )
+    trigger = await db.get(MessageTrigger, type)
     assert trigger is not None
 
     # Ensure there is a message to send
-    if trigger.message is None:
+    if trigger.message_id is None:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST, detail="no message configured"
         )
 
-    # Get the user info
-    user = await db.get(Participant, id)
-    assert user is not None
-
     # Send the message
-    await send_message(user, trigger.message, mailer)
+    await tasks.communication.send_test(message_id=trigger.message_id, user_id=id)

@@ -3,6 +3,8 @@ from typing import Optional
 import ujson
 from aiohttp import ClientSession
 
+from common import SETTINGS
+
 
 class MJMLClient(object):
     def __init__(self, base_url: str):
@@ -30,3 +32,14 @@ class MJMLClient(object):
 
         result = await resp.json()
         return result["html"]
+
+
+client = MJMLClient(SETTINGS.communication.mjml_api)
+
+
+async def with_mjml() -> MJMLClient:
+    """
+    Get a MJML API client with session re-use
+    :return: a MJML client
+    """
+    return client
