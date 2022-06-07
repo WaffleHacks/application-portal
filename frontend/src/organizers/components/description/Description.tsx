@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
 interface Props {
-  title: string;
+  title: ReactNode;
   titleLeft?: ReactNode;
   subtitle?: string;
   children: ReactNode;

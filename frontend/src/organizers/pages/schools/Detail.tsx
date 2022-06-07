@@ -1,17 +1,48 @@
-import { ArrowLeftIcon, DocumentDuplicateIcon, PencilIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ClipboardIcon, DocumentDuplicateIcon, PencilIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Badge from '../../../components/Badge';
-import { LinkButton } from '../../../components/buttons';
+import { Button, LinkButton } from '../../../components/buttons';
+import Confirm from '../../../components/Confirm';
 import Link from '../../../components/Link';
-import { useGetSchoolQuery } from '../../../store';
+import { useGetSchoolQuery, useUpdateSchoolMutation } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 import StatusBadge from '../../components/StatusBadge';
 import { EmptyRow, InlineTable, Table } from '../../components/table';
+import WarningFlag from '../../components/WarningFlag';
+
+interface MarkAsReviewedProps {
+  id: string;
+}
+
+const MarkAsReviewed = ({ id }: MarkAsReviewedProps): JSX.Element => {
+  const [update] = useUpdateSchoolMutation();
+  const [isOpen, setOpen] = useState(false);
+
+  return (
+    <>
+      <Confirm
+        isOpen={isOpen}
+        close={() => setOpen(false)}
+        onClick={() => update({ id, needs_review: false })}
+        style="warning"
+        title="Is this school valid?"
+        description="Check to make sure this actually exists and that the name is correct. If anything is incorrect, make the necessary changes before approving the school."
+        falsy="No"
+        truthy="Yes"
+      />
+
+      <Button type="button" style="warning" onClick={() => setOpen(true)}>
+        Review
+        <ClipboardIcon className="h-4 w-4 ml-2" aria-hidden="true" />
+      </Button>
+    </>
+  );
+};
 
 const Detail = (): JSX.Element => {
   const { id } = useParams();
@@ -23,9 +54,15 @@ const Detail = (): JSX.Element => {
   return (
     <>
       <Description
-        title={data.name}
+        title={
+          <span className="flex">
+            {data.name}
+            {data.needs_review && <WarningFlag reason="This school needs to be reviewed" />}
+          </span>
+        }
         titleLeft={
           <div className="space-x-4">
+            {data.needs_review && <MarkAsReviewed id={data.id} />}
             <LinkButton to={`/schools/merge?id=${data.id}&name=${encodeURIComponent(data.name)}`} style="white">
               Merge
               <DocumentDuplicateIcon className="h-4 w-4 ml-2" aria-hidden="true" />
@@ -40,6 +77,7 @@ const Detail = (): JSX.Element => {
       >
         <Section>
           <Item name="Abbreviations">
+            {data.abbreviations.length === 0 && 'N/A'}
             {data.abbreviations.map((a, i) => (
               <Badge key={i} className="mx-0.5">
                 {a}
@@ -47,6 +85,7 @@ const Detail = (): JSX.Element => {
             ))}
           </Item>
           <Item name="Alternatives">
+            {data.alternatives.length === 0 && 'N/A'}
             {data.alternatives.map((a, i) => (
               <Badge key={i} className="mx-0.5">
                 {a}

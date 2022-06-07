@@ -51,6 +51,7 @@ export interface School {
   name: string;
   abbreviations: string[];
   alternatives: string[];
+  needs_review: boolean;
   applications: ReducedApplication[];
 }
 

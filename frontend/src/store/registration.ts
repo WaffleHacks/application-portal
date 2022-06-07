@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-import { SchoolDetail } from '../organizers/pages/schools';
 import baseQuery from './baseQuery';
 import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
 import { ApplicationStatus } from './types';
@@ -37,9 +36,9 @@ interface UpdateApplicationStatus {
   status: ApplicationStatus;
 }
 
-type SchoolCreate = Omit<School, 'id' | 'applications'>;
+type SchoolCreate = Omit<School, 'id' | 'applications' | 'needs_review'>;
 
-type SchoolUpdate = Partial<SchoolCreate> & Pick<School, 'id'>;
+type SchoolUpdate = Partial<Omit<School, 'id' | 'applications'>> & Pick<School, 'id'>;
 
 interface ApplicationResume {
   url: string;

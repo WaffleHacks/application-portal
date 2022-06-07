@@ -7,7 +7,7 @@ import { TextInput } from '../../../components/input';
 import { School } from '../../../store';
 import { Description, NamedSection, Section } from '../../components/description';
 
-type Values = Omit<School, 'id' | 'applications'>;
+type Values = Omit<School, 'id' | 'applications' | 'needs_review'>;
 
 const initialValues: Values = {
   name: '',

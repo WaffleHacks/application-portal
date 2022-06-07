@@ -180,6 +180,7 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
 @router.patch(
     "/{id}",
     name="Update school",
+    status_code=HTTPStatus.NO_CONTENT,
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def update(
