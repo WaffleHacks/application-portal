@@ -61,6 +61,7 @@ export {
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,
+  useUpdateSchoolMutation,
 } from './registration';
 export { ProfileScope, PortalScope } from './scopes';
 export { highestPermission, isDirector } from './selectors';

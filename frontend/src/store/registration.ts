@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+import { SchoolDetail } from '../organizers/pages/schools';
 import baseQuery from './baseQuery';
 import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
 import { ApplicationStatus } from './types';
@@ -37,6 +38,8 @@ interface UpdateApplicationStatus {
 }
 
 type SchoolCreate = Omit<School, 'id' | 'applications'>;
+
+type SchoolUpdate = Partial<SchoolCreate> & Pick<School, 'id'>;
 
 interface ApplicationResume {
   url: string;
@@ -142,6 +145,14 @@ const api = createApi({
       }),
       invalidatesTags: [Tag.School],
     }),
+    updateSchool: builder.mutation<void, SchoolUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/schools/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: Tag.School, id }],
+    }),
   }),
 });
 
@@ -160,4 +171,5 @@ export const {
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,
+  useUpdateSchoolMutation,
 } = api;

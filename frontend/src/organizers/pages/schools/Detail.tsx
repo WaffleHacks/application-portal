@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, PencilIcon } from '@heroicons/react/outline';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -24,6 +24,12 @@ const Detail = (): JSX.Element => {
     <>
       <Description
         title={data.name}
+        titleLeft={
+          <LinkButton to={`/schools/${id}/edit`} style="white">
+            Edit
+            <PencilIcon className="h-4 w-4 ml-2" aria-hidden="true" />
+          </LinkButton>
+        }
         subtitle={`${data.applications.length} applicant${data.applications.length !== 1 ? 's' : ''}`}
       >
         <Section>

@@ -19,6 +19,7 @@ const MessageEdit = React.lazy(() => import('./pages/messages/Edit'));
 const MessageNew = React.lazy(() => import('./pages/messages/New'));
 const MessagesList = React.lazy(() => import('./pages/messages/List'));
 const SchoolDetail = React.lazy(() => import('./pages/schools/Detail'));
+const SchoolEdit = React.lazy(() => import('./pages/schools/Edit'));
 const SchoolList = React.lazy(() => import('./pages/schools/List'));
 const NewSchool = React.lazy(() => import('./pages/schools/New'));
 const SwagProgress = React.lazy(() => import('./pages/swag/Progress'));
@@ -52,6 +53,7 @@ const Organizers = (): JSX.Element => (
         <Route path="/schools" element={<SchoolList />} />
         <Route path="/schools/new" element={<NewSchool />} />
         <Route path="/schools/:id" element={<SchoolDetail />} />
+        <Route path="/schools/:id/edit" element={<SchoolEdit />} />
 
         <Route path="/swag/progress" element={<SwagProgress />} />
 
