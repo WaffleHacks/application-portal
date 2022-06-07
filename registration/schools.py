@@ -122,8 +122,9 @@ async def update(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    if updates.name:
-        school.name = updates.name
+    with tracer.start_as_current_span("update"):
+        for key, value in updates.dict().items():
+            setattr(school, key, value)
 
     # Ensure the updated model is valid
     with tracer.start_as_current_span("validate"):
