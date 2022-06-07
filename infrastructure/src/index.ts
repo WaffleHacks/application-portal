@@ -2,7 +2,7 @@ import { ComponentResource, ComponentResourceOptions, Input, Output, ResourceOpt
 
 import Authentication from './authentication';
 import Registration from './registration';
-import Sync from './sync';
+import Sync, { ProfilesConfig } from './sync';
 
 interface Args {
   /**
@@ -10,13 +10,13 @@ interface Args {
    */
   domain: Input<string>;
   /**
+   * Configuration for the profiles service
+   */
+  profiles: ProfilesConfig;
+  /**
    * The name of the bucket to store resumes in
    */
   resumesBucket: Input<string>;
-  /**
-   * The SNS topic to subscribe to for receiveing participant profile updates
-   */
-  profilesTopic: Input<string>;
 }
 
 class ApplicationPortal extends ComponentResource {
@@ -26,7 +26,7 @@ class ApplicationPortal extends ComponentResource {
     super('wafflehacks:application-portal:ApplicationPortal', name, { options: opts }, opts);
 
     const defaultResourceOptions: ResourceOptions = { parent: this };
-    const { domain, resumesBucket, profilesTopic } = args;
+    const { domain, resumesBucket, profiles } = args;
 
     new Authentication(`${name}-authentication`, { domain }, defaultResourceOptions);
 
@@ -35,7 +35,8 @@ class ApplicationPortal extends ComponentResource {
       { bucket: resumesBucket, domain },
       defaultResourceOptions,
     );
-    const sync = new Sync(`${name}-sync`, { topic: profilesTopic }, defaultResourceOptions);
+
+    const sync = new Sync(`${name}-sync`, profiles, defaultResourceOptions);
 
     this.policies = [registration.policy, sync.policy];
     this.registerOutputs();

@@ -1,20 +1,39 @@
+import { getCallerIdentity } from '@pulumi/aws';
 import { Policy } from '@pulumi/aws/iam';
 import { TopicSubscription } from '@pulumi/aws/sns';
 import { Queue, QueuePolicy } from '@pulumi/aws/sqs';
-import { ComponentResource, ComponentResourceOptions, Input, Output, ResourceOptions } from '@pulumi/pulumi';
+import {
+  ComponentResource,
+  ComponentResourceOptions,
+  Input,
+  Output,
+  ResourceOptions,
+  interpolate,
+} from '@pulumi/pulumi';
 
-interface Args {
+export interface ProfilesConfig {
+  /**
+   * The API gateway ID for the profiles service
+   */
+  apiGateway: Input<string>;
+  /**
+   * The region where the profiles service is deployed
+   */
+  region: Input<string>;
+  /**
+   * The SNS topic to subscribe to for receiveing participant profile updates
+   */
   topic: Input<string>;
 }
 
 class Sync extends ComponentResource {
   public readonly policy: Output<string>;
 
-  constructor(name: string, args: Args, opts?: ComponentResourceOptions) {
+  constructor(name: string, args: ProfilesConfig, opts?: ComponentResourceOptions) {
     super('wafflehacks:application-portal:Sync', name, { options: opts }, opts);
 
     const defaultResourceOptions: ResourceOptions = { parent: this };
-    const { topic } = args;
+    const { apiGateway, region, topic } = args;
 
     const queue = new Queue(
       `${name}-queue`,
@@ -66,6 +85,9 @@ class Sync extends ComponentResource {
       defaultResourceOptions,
     );
 
+    const caller = getCallerIdentity();
+    const accountId = caller.then((current) => current.accountId);
+
     const policy = new Policy(
       `${name}-policy`,
       {
@@ -77,6 +99,13 @@ class Sync extends ComponentResource {
               Effect: 'Allow',
               Action: ['sqs:ChangeMessageVisibility', 'sqs:DeleteMessage', 'sqs:ReceiveMessage'],
               Resource: queue.arn,
+            },
+            {
+              Effect: 'Allow',
+              Action: ['execute-api:Invoke'],
+              Resource: ['manage', 'manage/*'].map(
+                (path) => interpolate`arn:aws:execute-api:${region}:${accountId}:${apiGateway}/prod/GET/${path}`,
+              ),
             },
           ],
         },
