@@ -32,6 +32,7 @@ const EducationForm = (): JSX.Element => {
           required
           placeholder="Hacker University"
           display={display}
+          allowArbitrary
           {...getFieldProps('school')}
         />
         <p className="mt-2 text-sm text-gray-500">

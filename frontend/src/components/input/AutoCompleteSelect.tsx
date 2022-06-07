@@ -11,12 +11,46 @@ export interface BaseItem {
   objectID: string;
 }
 
+interface OptionProps {
+  value: string;
+}
+
+const Option = ({ value }: OptionProps): JSX.Element => (
+  <Combobox.Option
+    value={value}
+    className={({ active }) =>
+      classNames(
+        'relative cursor-default select-none py-2 pl-3 pr-9',
+        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+      )
+    }
+  >
+    {({ active, selected }) => (
+      <>
+        <span className={classNames('block truncate', selected && 'font-semibold')}>{value}</span>
+
+        {selected && (
+          <span
+            className={classNames(
+              'absolute inset-y-0 right-0 flex items-center pr-4',
+              active ? 'text-white' : 'text-indigo-600',
+            )}
+          >
+            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+          </span>
+        )}
+      </>
+    )}
+  </Combobox.Option>
+);
+
 type Props<Item extends BaseItem> = BaseProps<string> & {
   indexName: string;
   appId: string;
   apiKey: string;
   maxHits?: number;
   display?: (item: Item) => string;
+  allowArbitrary?: boolean;
 };
 
 const AutoCompleteSelect = <Item extends BaseItem>({
@@ -26,18 +60,23 @@ const AutoCompleteSelect = <Item extends BaseItem>({
   apiKey,
   display = (item) => item.objectID,
   maxHits = 5,
+  allowArbitrary = false,
   ...props
 }: Props<Item>): JSX.Element => {
   const [{ value, name }, { error }, { setValue }] = useField(props);
+  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [options, setOptions] = useState<string[]>([]);
 
   const client = useMemo(() => algoliasearch(appId, apiKey), [appId, apiKey]);
 
   useEffect(() => {
+    setLoading(true);
+
     const timeout = setTimeout(async () => {
       if (query.length === 0) {
         setOptions([]);
+        setLoading(false);
         return;
       }
 
@@ -51,8 +90,11 @@ const AutoCompleteSelect = <Item extends BaseItem>({
           },
         },
       ]);
+
       const { hits } = responses.results[0];
+
       setOptions(hits.map((v) => display(v)));
+      setLoading(false);
     }, 250);
 
     return () => clearTimeout(timeout);
@@ -94,37 +136,12 @@ const AutoCompleteSelect = <Item extends BaseItem>({
           </div>
         )}
 
-        {options.length > 0 && (
+        {!loading && query.length !== 0 && (
           <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {options.map((option) => (
-              <Combobox.Option
-                key={option}
-                value={option}
-                className={({ active }) =>
-                  classNames(
-                    'relative cursor-default select-none py-2 pl-3 pr-9',
-                    active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                  )
-                }
-              >
-                {({ active, selected }) => (
-                  <>
-                    <span className={classNames('block truncate', selected && 'font-semibold')}>{option}</span>
-
-                    {selected && (
-                      <span
-                        className={classNames(
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-indigo-600',
-                        )}
-                      >
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    )}
-                  </>
-                )}
-              </Combobox.Option>
+              <Option key={option} value={option} />
             ))}
+            {allowArbitrary && <Option value={query} />}
           </Combobox.Options>
         )}
       </div>
