@@ -49,9 +49,12 @@ export interface ParticipantWithSwag extends Participant {
 export interface School {
   id: string;
   name: string;
+  abbreviations: string[];
+  alternatives: string[];
+  applications: ReducedApplication[];
 }
 
-export interface SchoolList extends School {
+export interface SchoolList extends Omit<School, 'abbreviations' | 'alternatives' | 'applications'> {
   count: number;
 }
 

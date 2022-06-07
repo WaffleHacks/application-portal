@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
+import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
 import { ApplicationStatus } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -36,18 +36,7 @@ interface UpdateApplicationStatus {
   status: ApplicationStatus;
 }
 
-interface SchoolList extends School {
-  count: number;
-}
-
-interface SchoolDetail extends School {
-  applications: ReducedApplication[];
-}
-
-interface SchoolCreate extends Omit<School, 'id'> {
-  abbreviations: string[];
-  alternatives: string[];
-}
+type SchoolCreate = Omit<School, 'id' | 'applications'>;
 
 interface ApplicationResume {
   url: string;
@@ -141,9 +130,9 @@ const api = createApi({
       query: () => '/registration/schools/',
       providesTags: (result: SchoolList[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
     }),
-    getSchool: builder.query<SchoolDetail, string>({
+    getSchool: builder.query<School, string>({
       query: (id) => `/registration/schools/${id}`,
-      providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
+      providesTags: (result: School | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
     }),
     createSchool: builder.mutation<void, SchoolCreate>({
       query: (body) => ({
