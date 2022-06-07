@@ -3,10 +3,11 @@ import { DateTime } from 'luxon';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
 import { useGetSchoolQuery } from '../../../store';
-import { Description } from '../../components/description';
+import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 import StatusBadge from '../../components/StatusBadge';
@@ -25,6 +26,23 @@ const Detail = (): JSX.Element => {
         title={data.name}
         subtitle={`${data.applications.length} applicant${data.applications.length !== 1 ? 's' : ''}`}
       >
+        <Section>
+          <Item name="Abbreviations">
+            {data.abbreviations.map((a, i) => (
+              <Badge key={i} className="mx-0.5">
+                {a}
+              </Badge>
+            ))}
+          </Item>
+          <Item name="Alternatives">
+            {data.alternatives.map((a, i) => (
+              <Badge key={i} className="mx-0.5">
+                {a}
+              </Badge>
+            ))}
+          </Item>
+        </Section>
+
         <InlineTable className="mx-4">
           <Table.Head className="bg-white">
             <Table.Label index>Name</Table.Label>
