@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
 interface Props {
-  title: string;
+  title: ReactNode;
   titleLeft?: ReactNode;
   subtitle?: string;
   children: ReactNode;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Description = ({ title, titleLeft, subtitle, children, className = 'mt-5' }: Props): JSX.Element => (
-  <div className={classNames('bg-white shadow overflow-hidden rounded-lg', className)}>
+  <div className={classNames('bg-white shadow rounded-lg', className)}>
     <div className="px-4 py-5 sm:px-6">
       <div className="flex justify-between">
         <h3 className="text-xl leading-6 font-medium text-gray-900">{title}</h3>

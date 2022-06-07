@@ -17,7 +17,7 @@ import { Description, ExternalLinkItem, Item, NamedSection } from '../../compone
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
 import StatusBadge from '../../components/StatusBadge';
-import WarningFlag from './WarningFlag';
+import WarningFlag from '../../components/WarningFlag';
 
 interface WithId {
   id: string;
@@ -171,8 +171,12 @@ const Detail = (): JSX.Element => {
           <Item
             name="School"
             value={
-              <Link to={`/schools/${data.school.id}`} className="text-blue-500 hover:text-blue-700 hover:underline">
+              <Link
+                to={`/schools/${data.school.id}`}
+                className="flex text-blue-500 hover:text-blue-700 hover:underline"
+              >
                 {data.school.name}
+                {data.school.needs_review && <WarningFlag reason="This school has not been reviewed" />}
               </Link>
             }
           />

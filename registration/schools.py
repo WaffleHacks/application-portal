@@ -5,7 +5,7 @@ import nanoid
 from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
-from pydantic import parse_obj_as, validate_model
+from pydantic import BaseModel, parse_obj_as, validate_model
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -43,7 +43,12 @@ async def list(db: AsyncSession = Depends(with_db)):
     Get a list of all school.
     """
     statement = (
-        select(School.id, School.name, func.count(Application.school_id))
+        select(
+            School.id,
+            School.name,
+            School.needs_review,
+            func.count(Application.school_id),
+        )
         .join(Application, isouter=True)
         .group_by(School.id)
         .order_by(func.count(Application.school_id).desc())
@@ -81,6 +86,74 @@ async def create(
     return school
 
 
+class MergeRequest(BaseModel):
+    from_: str
+    into: str
+
+    class Config:
+        fields = {"from_": "from"}
+
+
+@router.put(
+    "/merge",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Merge schools",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
+)
+async def merge(
+    params: MergeRequest,
+    db: AsyncSession = Depends(with_db),
+    index: SearchIndexAsync = Depends(with_schools_index),
+):
+    """
+    Merge two schools together. All participants of the `from` school will be migrated and then the school will be
+    deleted. The `from` school's name will be added as an alternative for the `to` school.
+    """
+    # Ensure both schools exist
+    school_from = await db.get(
+        School,
+        params.from_,
+        options=[selectinload(School.applications)],
+    )
+    school_into = await db.get(School, params.into)
+    if school_from is None or school_into is None:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail="both schools must exist",
+        )
+
+    # Update the applications
+    for application in school_from.applications:
+        application.school = school_into
+
+    # Add the school's name as an alternative
+    with tracer.start_as_current_span("update-index"):
+        school_into.alternatives = [
+            *school_into.alternatives,
+            *school_from.alternatives,
+            school_from.name,
+        ]
+        school_into.abbreviations = [
+            *school_into.abbreviations,
+            *school_from.abbreviations,
+        ]
+        index.partial_update_object(
+            {
+                "objectID": school_into.id,
+                "alternatives": school_into.alternatives,
+                "abbreviations": school_into.abbreviations,
+            }
+        )
+
+    # Delete the original school
+    with tracer.start_as_current_span("delete"):
+        index.delete_object(school_from.id)
+        await db.delete(school_from)
+
+    db.add(school_into)
+    await db.commit()
+
+
 @router.get(
     "/{id}",
     name="Read school",
@@ -107,6 +180,7 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
 @router.patch(
     "/{id}",
     name="Update school",
+    status_code=HTTPStatus.NO_CONTENT,
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def update(
@@ -122,8 +196,9 @@ async def update(
     if school is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    if updates.name:
-        school.name = updates.name
+    with tracer.start_as_current_span("update"):
+        for key, value in updates.dict().items():
+            setattr(school, key, value)
 
     # Ensure the updated model is valid
     with tracer.start_as_current_span("validate"):
@@ -145,29 +220,3 @@ async def update(
     await db.commit()
 
     return school
-
-
-@router.delete(
-    "/{id}",
-    status_code=HTTPStatus.NO_CONTENT,
-    name="Delete school",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
-async def delete(
-    id: str,
-    db: AsyncSession = Depends(with_db),
-    index: SearchIndexAsync = Depends(with_schools_index),
-):
-    """
-    Attempt to delete a school by its ID. This method will not fail if the agreement does not exist.
-    """
-    school = await db.get(School, id)
-
-    # Delete if exists
-    if school is not None:
-        # Delete from Algolia
-        index.delete_object(id)
-
-        # Delete from the database
-        await db.delete(school)
-        await db.commit()

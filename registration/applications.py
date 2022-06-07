@@ -2,6 +2,8 @@ from http import HTTPStatus
 from typing import Dict, List, Optional
 from uuid import uuid4
 
+import nanoid
+from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
 from pydantic import BaseModel, validate_model
@@ -11,6 +13,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from common import SETTINGS
+from common.algolia import with_schools_index
 from common.authentication import with_user_id
 from common.aws import S3Client, with_s3
 from common.database import (
@@ -111,6 +114,7 @@ async def create_application(
     s3: S3Client = Depends(with_s3),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
+    index: SearchIndexAsync = Depends(with_schools_index),
 ):
     """
     Create a new application attached to the currently authenticated participant
@@ -119,11 +123,16 @@ async def create_application(
     with tracer.start_as_current_span("find-school"):
         statement = select(School).where(School.name == values.school)
         result = await db.execute(statement)
-        school = result.scalars().first()
-        if school is None:
-            raise HTTPException(
-                status_code=HTTPStatus.NOT_FOUND, detail="school not found"
+        school: Optional[School] = result.scalars().first()
+
+        missing_school = school is None
+        if missing_school:
+            school = School(
+                name=values.school, id=nanoid.generate(size=8), needs_review=True
             )
+            db.add(school)
+
+        assert school is not None
 
     # Generate a file name for the user's resume if they attempted to provide one
     resume = str(uuid4()) if values.resume else None
@@ -138,6 +147,10 @@ async def create_application(
                 "resume": resume,
             },
         )
+
+        # Flag the participant if their school was created later
+        application.flagged = application.flagged or school.needs_review
+
         db.add(application)
         await db.commit()
     except IntegrityError:
@@ -148,6 +161,13 @@ async def create_application(
 
     # Send the application received message
     await broadcast("registration", "new_application", participant_id=id)
+
+    # Create the school in the index if its missing
+    if missing_school:
+        with tracer.start_as_current_span("create-in-index"):
+            params = school.dict(exclude={"id"})
+            params["objectID"] = school.id
+            index.save_object(params)
 
     response = {}
 

@@ -12,8 +12,8 @@ import {
   useListApplicationsQuery,
 } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
+import WarningFlag from '../../components/WarningFlag';
 import { SortKey, sort } from './list';
-import WarningFlag from './WarningFlag';
 
 interface RowProps {
   application: ReducedApplication;

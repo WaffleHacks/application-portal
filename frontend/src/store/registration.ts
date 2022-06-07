@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, Participant, ReducedApplication, School } from './types';
+import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
 import { ApplicationStatus } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -36,18 +36,9 @@ interface UpdateApplicationStatus {
   status: ApplicationStatus;
 }
 
-interface SchoolList extends School {
-  count: number;
-}
+type SchoolCreate = Omit<School, 'id' | 'applications' | 'needs_review'>;
 
-interface SchoolDetail extends School {
-  applications: ReducedApplication[];
-}
-
-interface SchoolCreate extends Omit<School, 'id'> {
-  abbreviations: string[];
-  alternatives: string[];
-}
+type SchoolUpdate = Partial<Omit<School, 'id' | 'applications'>> & Pick<School, 'id'>;
 
 interface ApplicationResume {
   url: string;
@@ -56,6 +47,11 @@ interface ApplicationResume {
 interface BulkSetApplicationStatus {
   status: ApplicationStatus;
   ids: string[];
+}
+
+interface MergeSchools {
+  from: string;
+  into: string;
 }
 
 const api = createApi({
@@ -141,9 +137,9 @@ const api = createApi({
       query: () => '/registration/schools/',
       providesTags: (result: SchoolList[] = []) => [Tag.School, ...result.map((s) => ({ type: Tag.School, id: s.id }))],
     }),
-    getSchool: builder.query<SchoolDetail, string>({
+    getSchool: builder.query<School, string>({
       query: (id) => `/registration/schools/${id}`,
-      providesTags: (result: SchoolDetail | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
+      providesTags: (result: School | undefined) => (result ? [{ type: Tag.School, id: result.id }] : []),
     }),
     createSchool: builder.mutation<void, SchoolCreate>({
       query: (body) => ({
@@ -152,6 +148,25 @@ const api = createApi({
         body,
       }),
       invalidatesTags: [Tag.School],
+    }),
+    updateSchool: builder.mutation<void, SchoolUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/schools/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: Tag.School, id }],
+    }),
+    mergeSchools: builder.mutation<void, MergeSchools>({
+      query: (body) => ({
+        url: '/registration/schools/merge',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { from, into }) => [
+        { type: Tag.School, id: from },
+        { type: Tag.School, id: into },
+      ],
     }),
   }),
 });
@@ -171,4 +186,6 @@ export const {
   useListSchoolsQuery,
   useGetSchoolQuery,
   useCreateSchoolMutation,
+  useUpdateSchoolMutation,
+  useMergeSchoolsMutation,
 } = api;

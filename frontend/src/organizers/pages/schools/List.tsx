@@ -1,5 +1,6 @@
-import { PlusIcon } from '@heroicons/react/outline';
+import { DocumentDuplicateIcon, PlusIcon } from '@heroicons/react/outline';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { LinkButton } from '../../../components/buttons';
 import Link from '../../../components/Link';
@@ -46,6 +47,8 @@ const List = (): JSX.Element => {
   const { sorted, ...sortableProps } = useSorting<SortKey, SchoolList>(data, sort, SortKey.Applications);
   const { paginated, ...paginationProps } = usePagination(sorted);
 
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="sm:flex sm:items-center">
@@ -55,9 +58,13 @@ const List = (): JSX.Element => {
       </div>
 
       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2">
-        <Search />
+        <Search onClick={(item) => navigate(`/schools/${item.objectID}`)} />
 
-        <div className="mt-5 max-h-10 flex justify-end">
+        <div className="mt-5 max-h-10 flex justify-end space-x-2">
+          <LinkButton size="sm" style="secondary" to="/schools/merge">
+            <DocumentDuplicateIcon className="h-4 w-4 mr-2" />
+            Merge
+          </LinkButton>
           <LinkButton size="sm" to="/schools/new">
             <PlusIcon className="h-4 w-4 mr-2" />
             New

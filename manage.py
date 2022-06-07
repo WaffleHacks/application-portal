@@ -1,18 +1,28 @@
+import asyncio
 import importlib
 import json
-import logging
 import sys
+from functools import wraps
 from traceback import format_exc
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import click
 from alembic import command
 from alembic.config import Config
 from algoliasearch.search_client import SearchClient  # type: ignore
 from dotenv import load_dotenv
+from sqlalchemy.dialects.postgresql import Insert, insert
 
 # Load from environment file
 load_dotenv()
+
+
+def coroutine(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+
+    return wrapper
 
 
 @click.group()
@@ -111,7 +121,19 @@ def run(app: Optional[str]):
         sys.exit(1)
 
 
-@cli.command(name="seed-algolia")
+@cli.group()
+@click.pass_context
+def seed(ctx: click.Context):
+    """
+    Seed different data sources
+    """
+    ctx.obj = {
+        "schools": json.load(open("./common/database/migrations/schools.json", "r")),
+        "majors": json.load(open("./common/database/migrations/majors.json", "r")),
+    }
+
+
+@seed.command(name="algolia")
 @click.option(
     "-i",
     "--app-id",
@@ -126,7 +148,8 @@ def run(app: Optional[str]):
     type=str,
     envvar="REGISTRATION_ALGOLIA_API_KEY",
 )
-def seed_algolia(app_id: str, api_key: str):
+@click.pass_obj
+def seed_algolia(obj: Dict[str, List[Dict[str, Any]]], app_id: str, api_key: str):
     """
     Seed the Algolia search indexes
     """
@@ -137,13 +160,38 @@ def seed_algolia(app_id: str, api_key: str):
         del entry["id"]
         return entry
 
-    schools = json.load(open("./common/database/migrations/schools.json", "r"))
     schools_index = client.init_index("schools")
-    schools_index.save_objects(map(id_to_object_id, schools))
+    schools_index.save_objects(map(id_to_object_id, obj["schools"]))
 
-    majors = json.load(open("./common/database/migrations/majors.json", "r"))
     majors_index = client.init_index("majors")
-    majors_index.save_objects(map(id_to_object_id, majors))
+    majors_index.save_objects(map(id_to_object_id, obj["majors"]))
+
+
+@seed.command(name="database")
+@click.pass_obj
+@coroutine
+async def seed_database(obj: Dict[str, List[Dict[str, Any]]]):
+    """
+    Seed the database with all the schools
+    """
+    # Import here, so we don't need a database connection for every command
+    from common.database import School, db_context
+
+    schools = obj["schools"]
+
+    async with db_context() as db:
+        base_statement: Insert = insert(School).values(schools)
+        statement = base_statement.on_conflict_do_update(
+            index_elements=[School.id],  # type: ignore
+            set_={
+                "name": base_statement.excluded.name,
+                "abbreviations": base_statement.excluded.abbreviations,
+                "alternatives": base_statement.excluded.alternatives,
+            },
+        )
+
+        await db.execute(statement)
+        await db.commit()
 
 
 if __name__ == "__main__":
