@@ -3,19 +3,22 @@ import { SearchIcon, SelectorIcon } from '@heroicons/react/outline';
 import algoliasearch from 'algoliasearch/lite';
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const APP_ID = process.env.REACT_APP_ALGOLIA_APP_ID || '';
 const API_KEY = process.env.REACT_APP_ALGOLIA_API_KEY || '';
 
-interface SearchItem {
+export interface SearchItem {
   objectID: string;
   name: string;
 }
 
-const Search = (): JSX.Element => {
-  const navigate = useNavigate();
+interface Props {
+  label?: string;
+  value?: SearchItem;
+  onClick: (item: SearchItem) => void;
+}
 
+const Search = ({ label = 'Search', onClick, value }: Props): JSX.Element => {
   const [query, setQuery] = useState('');
   const [options, setOptions] = useState<SearchItem[]>([]);
 
@@ -47,8 +50,8 @@ const Search = (): JSX.Element => {
   }, [client, query]);
 
   return (
-    <Combobox as="div" value="" onChange={(id: string) => navigate(`/schools/${id}`)} className="max-w-md">
-      <Combobox.Label className="block text-sm font-medium text-gray-700">Search</Combobox.Label>
+    <Combobox as="div" value={value} onChange={onClick} className="max-w-md">
+      <Combobox.Label className="block text-sm font-medium text-gray-700">{label}</Combobox.Label>
       <div className="relative mt-1 rounded-md shadow-sm">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -56,7 +59,7 @@ const Search = (): JSX.Element => {
         <Combobox.Input
           className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
           onChange={(e) => setQuery(e.target.value)}
-          displayValue={(v: string) => v}
+          displayValue={(item?: SearchItem) => item?.name || ''}
           autoComplete="off"
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
@@ -68,7 +71,7 @@ const Search = (): JSX.Element => {
             {options.map((o) => (
               <Combobox.Option
                 key={o.objectID}
-                value={o.objectID}
+                value={o}
                 className={({ active }) =>
                   classNames(
                     'relative cursor-default select-none py-2 pl-3 pr-9',

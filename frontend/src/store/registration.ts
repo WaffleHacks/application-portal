@@ -50,6 +50,11 @@ interface BulkSetApplicationStatus {
   ids: string[];
 }
 
+interface MergeSchools {
+  from: string;
+  into: string;
+}
+
 const api = createApi({
   reducerPath: 'registration',
   baseQuery: baseQuery('portal', BASE_URL),
@@ -153,6 +158,17 @@ const api = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: Tag.School, id }],
     }),
+    mergeSchools: builder.mutation<void, MergeSchools>({
+      query: (body) => ({
+        url: '/registration/schools/merge',
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { from, into }) => [
+        { type: Tag.School, id: from },
+        { type: Tag.School, id: into },
+      ],
+    }),
   }),
 });
 
@@ -172,4 +188,5 @@ export const {
   useGetSchoolQuery,
   useCreateSchoolMutation,
   useUpdateSchoolMutation,
+  useMergeSchoolsMutation,
 } = api;
