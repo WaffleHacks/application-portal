@@ -123,11 +123,20 @@ async def merge(
 
     # Add the school's name as an alternative
     with tracer.start_as_current_span("update-index"):
-        school_into.alternatives = [*school_into.alternatives, school_from.name]
+        school_into.alternatives = [
+            *school_into.alternatives,
+            *school_from.alternatives,
+            school_from.name,
+        ]
+        school_into.abbreviations = [
+            *school_into.abbreviations,
+            *school_from.abbreviations,
+        ]
         index.partial_update_object(
             {
                 "objectID": school_into.id,
                 "alternatives": school_into.alternatives,
+                "abbreviations": school_into.abbreviations,
             }
         )
 
