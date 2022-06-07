@@ -127,7 +127,9 @@ async def create_application(
 
         missing_school = school is None
         if missing_school:
-            school = School(name=values.school, id=nanoid.generate(size=8))
+            school = School(
+                name=values.school, id=nanoid.generate(size=8), needs_review=True
+            )
             db.add(school)
 
         assert school is not None
@@ -147,7 +149,7 @@ async def create_application(
         )
 
         # Flag the participant if their school was created later
-        application.flagged = application.flagged or missing_school
+        application.flagged = application.flagged or school.needs_review
 
         db.add(application)
         await db.commit()

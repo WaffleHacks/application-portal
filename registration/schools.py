@@ -43,7 +43,12 @@ async def list(db: AsyncSession = Depends(with_db)):
     Get a list of all school.
     """
     statement = (
-        select(School.id, School.name, func.count(Application.school_id))
+        select(
+            School.id,
+            School.name,
+            School.needs_review,
+            func.count(Application.school_id),
+        )
         .join(Application, isouter=True)
         .group_by(School.id)
         .order_by(func.count(Application.school_id).desc())

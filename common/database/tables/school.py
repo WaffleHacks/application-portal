@@ -25,6 +25,7 @@ class School(SchoolBase, table=True):
     __tablename__ = "schools"
 
     id: Optional[str] = Field(default=None, primary_key=True, nullable=False)
+    needs_review: bool = False
 
     applications: List["Application"] = Relationship(back_populates="school")
 
@@ -36,15 +37,19 @@ class SchoolCreate(SchoolBase):
 class SchoolList(SQLModel):
     id: str
     name: str
+    needs_review: bool
 
 
 class SchoolRead(SchoolBase):
     id: str
+    needs_review: bool
     applications: List["ApplicationList"]
 
 
 class SchoolUpdate(SQLModel):
     name: Optional[str]
+
+    needs_review: Optional[bool]
 
     abbreviations: Optional[List[str]]
     alternatives: Optional[List[str]]
