@@ -34,6 +34,14 @@ class RegistrationSettings(BaseAPI):
 
 
 class SyncSettings(BaseModel):
+    # Disables the full database sync on service startup
+    disable_initial_pull: bool = False
+
+    # The profiles service API to use for the initial sync
+    profiles_api: HttpUrl = HttpUrl(
+        url="https://api.id.wafflehacks.org", scheme="https"
+    )
+
     # The SQS queue for synchronizing the participant info
     queue: HttpUrl
 
