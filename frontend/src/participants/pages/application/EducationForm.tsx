@@ -22,26 +22,19 @@ const EducationForm = (): JSX.Element => {
       title="Education"
       description="Tell us about your education. If you're not currently a student, put in the most recent school you attended."
     >
-      <div className="col-span-6 sm:col-span-4">
-        <AutoCompleteSelectInput
-          label="School"
-          indexName="schools"
-          appId={APP_ID}
-          apiKey={API_KEY}
-          maxHits={25}
-          required
-          placeholder="Hacker University"
-          display={display}
-          allowArbitrary
-          {...getFieldProps('school')}
-        />
-        <p className="mt-2 text-sm text-gray-500">
-          Can&apos;t find your school? Send us an email at{' '}
-          <a href="mailto:operations@wafflehacks.org" className="text-blue-500 underline hover:no-underline">
-            operations@wafflehacks.org
-          </a>
-        </p>
-      </div>
+      <AutoCompleteSelectInput
+        className="col-span-6 sm:col-span-4"
+        label="School"
+        indexName="schools"
+        appId={APP_ID}
+        apiKey={API_KEY}
+        maxHits={25}
+        required
+        placeholder="Hacker University"
+        display={display}
+        allowArbitrary
+        {...getFieldProps('school')}
+      />
 
       <NumberInput
         className="col-span-6 sm:col-span-2"
