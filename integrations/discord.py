@@ -13,6 +13,7 @@ router = APIRouter()
 
 
 class StatusResponse(BaseModel):
+    id: Optional[str]
     status: Optional[ApplicationStatus]
 
 
@@ -34,10 +35,13 @@ async def status(email: str, db: AsyncSession = Depends(with_db)):
     result = await db.execute(statement)
     participant: Optional[Participant] = result.scalar()
 
-    if participant is None or participant.application is None:
-        return {"status": None}
+    if participant is None:
+        return {"id": None, "status": None}
+
+    if participant.application is None:
+        return {"id": participant.id, "status": None}
     else:
-        return {"status": participant.application.status}
+        return {"id": participant.id, "status": participant.application.status}
 
 
 class CanLinkResponse(BaseModel):
