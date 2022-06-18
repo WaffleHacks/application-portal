@@ -9,7 +9,7 @@ from sqlalchemy.orm import selectinload
 from common.authentication import is_internal
 from common.database import ApplicationStatus, Participant, with_db
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(is_internal)])
 
 
 class StatusResponse(BaseModel):
@@ -20,7 +20,6 @@ class StatusResponse(BaseModel):
 @router.get(
     "/status",
     response_model=StatusResponse,
-    dependencies=[Depends(is_internal)],
     name="Get application status",
 )
 async def status(email: str, db: AsyncSession = Depends(with_db)):
@@ -51,7 +50,6 @@ class CanLinkResponse(BaseModel):
 @router.get(
     "/can-link",
     response_model=CanLinkResponse,
-    dependencies=[Depends(is_internal)],
     name="Can link?",
 )
 async def link(id, db: AsyncSession = Depends(with_db)):
