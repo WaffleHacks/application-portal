@@ -30,6 +30,7 @@ from .message_trigger import (
 from .participant import Participant, ParticipantBase, ParticipantList, ParticipantRead
 from .recipient import Group, Recipient, RecipientCreate, RecipientRead
 from .school import School, SchoolCreate, SchoolList, SchoolRead, SchoolUpdate
+from .settings import Settings as ApplicationSettings
 from .swag_tier import (
     SwagTier,
     SwagTierCreate,
