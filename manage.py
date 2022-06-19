@@ -96,6 +96,7 @@ def reset(obj: Config, revision: str):
 @click.option("-i", "--integrations", "app", flag_value="integrations")
 @click.option("-y", "--sync", "app", flag_value="sync")
 @click.option("-t", "--tasks", "app", flag_value="tasks")
+@click.option("-o", "--operations", "app", flag_value="operations")
 def run(app: Optional[str]):
     """
     Run an API development server
