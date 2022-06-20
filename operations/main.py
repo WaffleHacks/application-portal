@@ -5,6 +5,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from common import tracing
 
+from . import settings
+
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 app.add_middleware(
     CORSMiddleware,
@@ -15,6 +17,8 @@ app.add_middleware(
 )
 
 tracing.init(app)
+
+app.include_router(settings.router, prefix="/settings")
 
 
 @app.exception_handler(StarletteHTTPException)

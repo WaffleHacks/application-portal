@@ -1,6 +1,6 @@
 import json
 from enum import Enum
-from typing import Any
+from typing import Generic, TypeVar
 
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
@@ -12,6 +12,27 @@ class Key(Enum):
     ACCEPTING_APPLICATIONS = "accepting_applications"
 
 
+T = TypeVar("T")
+
+
+class Entry(Generic[T]):
+    def __init__(self, key: Key, db: AsyncSession) -> None:
+        self.key = key
+        self.db = db
+
+    async def get(self) -> T:
+        setting = await self.db.get(Settings, self.key)
+        assert setting is not None
+
+        return json.loads(setting.value)
+
+    async def set(self, value: T):
+        setting = await self.db.get(Settings, self.key)
+        assert setting is not None
+
+        setting.value = json.dumps(value)
+
+
 class Settings(SQLModel, table=True):
     __tablename__ = "settings"
 
@@ -19,28 +40,9 @@ class Settings(SQLModel, table=True):
     value: str
 
     @staticmethod
-    async def set(key: Key, value: Any, db: AsyncSession):
-        """
-        Set the value of a setting
-        :param key: the key to modify
-        :param value: the value to set
-        :param db: a database connection
-        """
-        setting = await db.get(Settings, key)
-        assert setting is not None
+    def accepting_applications(db: AsyncSession) -> Entry[bool]:
+        return Entry(Key.ACCEPTING_APPLICATIONS, db)
 
-        setting.value = json.dumps(value)
 
-    @staticmethod
-    async def accepting_applications(db: AsyncSession) -> bool:
-        """
-        Get the value for the accepting application
-        :param db: a database connection
-        :return: the status
-        """
-        setting = await db.get(Settings, Key.ACCEPTING_APPLICATIONS)
-        assert setting is not None
-
-        parsed = json.loads(setting.value)
-        assert isinstance(parsed, bool)
-        return parsed
+class SettingsRead(SQLModel):
+    accepting_applications: bool
