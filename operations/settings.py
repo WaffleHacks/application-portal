@@ -5,15 +5,21 @@ from fastapi import APIRouter, Depends
 from pydantic.generics import GenericModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.authentication import is_authenticated
 from common.database import ServiceSettings, SettingsRead, with_db
 from common.permissions import Permission, requires_permission
 
 T = TypeVar("T")
 
-router = APIRouter(dependencies=[Depends(requires_permission(Permission.Organizer))])
+router = APIRouter()
 
 
-@router.get("/", response_model=SettingsRead, name="Get all settings")
+@router.get(
+    "/",
+    response_model=SettingsRead,
+    name="Get all settings",
+    dependencies=[Depends(is_authenticated)],
+)
 async def read(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all the settings and their values
@@ -31,6 +37,7 @@ class UpdateRequest(GenericModel, Generic[T]):
     "/accepting_applications",
     status_code=HTTPStatus.NO_CONTENT,
     name="Update accepting applications setting",
+    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def update(
     params: UpdateRequest[bool],
