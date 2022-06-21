@@ -223,3 +223,7 @@ export interface SwagTier extends ReducedSwagTier {
   description: string;
   participants: Participant[];
 }
+
+export interface ServiceSettings {
+  accepting_applications: boolean;
+}

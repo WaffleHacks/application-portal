@@ -27,6 +27,7 @@ from common.database import (
     Participant,
     ParticipantRead,
     School,
+    ServiceSettings,
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
@@ -119,6 +120,12 @@ async def create_application(
     """
     Create a new application attached to the currently authenticated participant
     """
+    # Check if people can submit applications
+    if not await ServiceSettings.accepting_applications(db).get():
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST, detail="applications are closed"
+        )
+
     # Find the school by name
     with tracer.start_as_current_span("find-school"):
         statement = select(School).where(School.name == values.school)

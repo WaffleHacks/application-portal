@@ -4,6 +4,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import authenticationReducer from './authentication';
 import communicationApi from './communication';
 import errorLogger from './errors';
+import operationsApi from './operations';
 import profileApi from './profile';
 import registrationApi from './registration';
 import workshopsApi from './workshops';
@@ -12,6 +13,7 @@ export const store = configureStore({
   reducer: {
     authentication: authenticationReducer,
     [communicationApi.reducerPath]: communicationApi.reducer,
+    [operationsApi.reducerPath]: operationsApi.reducer,
     [profileApi.reducerPath]: profileApi.reducer,
     [registrationApi.reducerPath]: registrationApi.reducer,
     [workshopsApi.reducerPath]: workshopsApi.reducer,
@@ -19,6 +21,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(communicationApi.middleware)
+      .concat(operationsApi.middleware)
       .concat(profileApi.middleware)
       .concat(registrationApi.middleware)
       .concat(workshopsApi.middleware)
@@ -46,6 +49,7 @@ export {
   useTestMessageTriggerMutation,
 } from './communication';
 export { useDispatch, useSelector } from './hooks';
+export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
 export { useGetProfileQuery } from './profile';
 export {
   useCreateApplicationMutation,

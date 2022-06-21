@@ -7,9 +7,11 @@ import {
   RaceEthnicity,
   useCreateApplicationMutation,
   useGetAutosaveQuery,
+  useGetSettingsQuery,
   useSetAutosaveMutation,
 } from '../../../store';
 import Loading from '../../components/Loading';
+import Status from '../../components/Status';
 import { MultiStepForm, Step } from '../../components/steps';
 import AboutForm from './AboutForm';
 import EducationForm from './EducationForm';
@@ -26,6 +28,9 @@ interface Props {
 }
 
 const Application = ({ refetch }: Props): JSX.Element => {
+  // Check if allowed to apply
+  const { data: settings, isLoading: isSettingsLoading } = useGetSettingsQuery();
+
   // Auto-save hooks
   const { data, isLoading } = useGetAutosaveQuery();
   const [setAutosave, { isLoading: isSaving }] = useSetAutosaveMutation();
@@ -68,7 +73,14 @@ const Application = ({ refetch }: Props): JSX.Element => {
     })();
   }, [isCreating]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isSettingsLoading || settings === undefined) return <Loading />;
+  if (!settings.accepting_applications) {
+    return (
+      <Status kind="failure" title="Applications are closed!">
+        Unfortunately, applications for WaffleHacks are currently closed. We look forward to seeing you next year!
+      </Status>
+    );
+  }
 
   return (
     <MultiStepForm
