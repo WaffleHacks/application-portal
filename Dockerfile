@@ -102,6 +102,19 @@ CMD ["node", "."]
 
 
 ###
+#  Operations
+###
+FROM common as operations
+EXPOSE 8000/tcp
+
+ENV APP operations
+
+COPY --chown=app operations ./operations
+COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+###
 #  Registration
 ###
 FROM common as registration

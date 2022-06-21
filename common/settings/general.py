@@ -7,6 +7,7 @@ from .specific import (
     BaseAPI,
     CommunicationSettings,
     IntegrationsSettings,
+    OperationsSettings,
     RegistrationSettings,
     SyncSettings,
     TasksSettings,
@@ -18,6 +19,7 @@ from .types import NATSUrl, PostgresDsn
 class App(Enum):
     Communication = "communication"
     Integrations = "integrations"
+    Operations = "operations"
     Registration = "registration"
     Sync = "sync"
     Tasks = "tasks"
@@ -35,6 +37,7 @@ class Settings(BaseModel):
     # The different application specific configurations
     communication_inner: Optional[CommunicationSettings]
     integrations_inner: Optional[IntegrationsSettings]
+    operations_inner: Optional[OperationsSettings]
     registration_inner: Optional[RegistrationSettings]
     sync_inner: Optional[SyncSettings]
     tasks_inner: Optional[TasksSettings]
@@ -83,6 +86,11 @@ class Settings(BaseModel):
         return self.integrations_inner
 
     @property
+    def operations(self) -> OperationsSettings:
+        assert self.operations_inner is not None
+        return self.operations_inner
+
+    @property
     def registration(self) -> RegistrationSettings:
         assert self.registration_inner is not None
         return self.registration_inner
@@ -108,6 +116,8 @@ class Settings(BaseModel):
             return self.communication
         elif App.Integrations in self.apps:
             return self.integrations
+        elif App.Operations in self.apps:
+            return self.operations
         elif App.Registration in self.apps:
             return self.registration
         elif App.Workshops in self.apps:
