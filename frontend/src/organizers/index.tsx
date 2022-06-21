@@ -28,6 +28,7 @@ const SwagTierDetail = React.lazy(() => import('./pages/swag/tiers/Detail'));
 const SwagTierEdit = React.lazy(() => import('./pages/swag/tiers/Edit'));
 const ListSwagTiers = React.lazy(() => import('./pages/swag/tiers/List'));
 const SwagTierNew = React.lazy(() => import('./pages/swag/tiers/New'));
+const Settings = React.lazy(() => import('./pages/Settings'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -68,6 +69,8 @@ const Organizers = (): JSX.Element => (
         <Route path="/messages/new" element={<MessageNew />} />
         <Route path="/messages/:id" element={<MessageDetail />} />
         <Route path="/messages/:id/edit" element={<MessageEdit />} />
+
+        <Route path="/settings" element={<Settings />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
