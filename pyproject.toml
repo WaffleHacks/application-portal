@@ -13,7 +13,7 @@ alembic = {version = "^1.7.6", extras = ["tz"]}
 sqlmodel = "^0.0.6"
 asyncpg = "^0.25.0"
 fastapi = "^0.73.0"
-ujson = "^5.1.0"
+ujson = "^5.4.0"
 uvicorn = {version = "^0.17.4", extras = ["standard"]}
 aioredis = "^2.0.1"
 aiohttp = {version = "^3.8.1", extras = ["speedups"]}
