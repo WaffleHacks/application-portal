@@ -34,7 +34,7 @@ class MJMLClient(object):
         return result["html"]
 
 
-client = MJMLClient(SETTINGS.communication.mjml_api)
+client = MJMLClient(SETTINGS.api.mjml_api)
 
 
 async def with_mjml() -> MJMLClient:

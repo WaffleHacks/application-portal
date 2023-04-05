@@ -182,7 +182,7 @@ async def create_application(
     if application.resume:
         with tracer.start_as_current_span("upload-resume"):
             response["upload"] = s3.generate_presigned_post(
-                SETTINGS.registration.bucket,
+                SETTINGS.api.bucket,
                 application.resume,
                 Conditions=[
                     {"acl": "private"},
@@ -310,7 +310,7 @@ async def read_resume(
     with tracer.start_as_current_span("generate-url"):
         url = s3.generate_presigned_url(
             "get_object",
-            Params={"Bucket": SETTINGS.registration.bucket, "Key": application.resume},
+            Params={"Bucket": SETTINGS.api.bucket, "Key": application.resume},
             ExpiresIn=15 * 60,
         )
         return {"url": url}

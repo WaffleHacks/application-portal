@@ -52,8 +52,8 @@ python3 manage.py run -<app>
 # Show all the options
 python3 manage.py run --help
 
-# i.e. start the registration API
-python3 manage.py run --registration
+# i.e. start the API server
+python3 manage.py run --api
 ```
 
 (Make sure you're in the project virtual environment when you're using the `manage.py` script)

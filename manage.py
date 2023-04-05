@@ -89,14 +89,10 @@ def reset(obj: Config, revision: str):
 
 
 @cli.command()
-@click.option("-r", "--registration", "app", flag_value="registration")
-@click.option("-c", "--communication", "app", flag_value="communication")
-@click.option("-w", "--workshops", "app", flag_value="workshops")
+@click.option("-a", "--api", "app", flag_value="api")
 @click.option("-s", "--statistics", "app", flag_value="statistics")
-@click.option("-i", "--integrations", "app", flag_value="integrations")
 @click.option("-y", "--sync", "app", flag_value="sync")
 @click.option("-t", "--tasks", "app", flag_value="tasks")
-@click.option("-o", "--operations", "app", flag_value="operations")
 def run(app: Optional[str]):
     """
     Run an API development server
