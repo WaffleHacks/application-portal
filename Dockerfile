@@ -51,28 +51,15 @@ COPY --chown=app manage.py ./manage.py
 
 
 ###
-#  Communication
+#  API
 ###
-FROM common as communication
+FROM common as api
 EXPOSE 8000/tcp
 
-ENV APP communication
+ENV APP api
 
-COPY --chown=app communication ./communication
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Integrations
-###
-FROM common as integrations
-EXPOSE 8000/tcp
-
-ENV APP integrations
-
-COPY --chown=app integrations ./integrations
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+COPY --chown=app api ./api
+COPY --chown=app --chmod=775 docker-entrypoints/api.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
 
@@ -102,32 +89,6 @@ CMD ["node", "."]
 
 
 ###
-#  Operations
-###
-FROM common as operations
-EXPOSE 8000/tcp
-
-ENV APP operations
-
-COPY --chown=app operations ./operations
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Registration
-###
-FROM common as registration
-EXPOSE 8000/tcp
-
-ENV APP registration
-
-COPY --chown=app registration ./registration
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
 #  Sync
 ###
 FROM common as sync
@@ -144,17 +105,4 @@ FROM common as tasks
 
 COPY --chown=app tasks ./tasks
 COPY --chown=app --chmod=775 docker-entrypoints/tasks.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Workshops
-###
-FROM common as workshops
-EXPOSE 8000/tcp
-
-ENV APP workshops
-
-COPY --chown=app workshops ./workshops
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
