@@ -46,13 +46,6 @@ repos:
           - --fix
         language: system
         files: ^frontend/.*\.[jt]sx?$
-      - id: eslint-infrastructure
-        name: eslint (infrastructure)
-        entry: node ./infrastructure/node_modules/eslint/bin/eslint.js
-        args:
-          - --fix
-        language: system
-        files: ^infrastructure/.*\.ts$
       - id: eslint-mjml
         name: eslint (mjml)
         entry: node ./mjml/node_modules/eslint/bin/eslint.js
