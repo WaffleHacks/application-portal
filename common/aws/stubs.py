@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from botocore.client import BaseClient
 
@@ -6,13 +6,15 @@ from botocore.client import BaseClient
 # They are strictly for type-checking purposes
 
 
-class S3Client(BaseClient):
-    def generate_presigned_post(
-        self,
-        Bucket: str,
-        Key: str,
-        Fields: Dict[str, Any],
-        Conditions: List[Any],
-        ExpiresIn: int = 3600,
-    ) -> Dict[str, Any]:
-        pass
+if TYPE_CHECKING:
+
+    class S3Client(BaseClient):
+        def generate_presigned_post(
+            self,
+            Bucket: str,
+            Key: str,
+            Fields: Dict[str, Any],
+            Conditions: List[Any],
+            ExpiresIn: int = 3600,
+        ) -> Dict[str, Any]:
+            pass

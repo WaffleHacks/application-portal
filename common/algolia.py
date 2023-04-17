@@ -7,8 +7,8 @@ from algoliasearch.search_client_async import SearchClientAsync, SearchIndexAsyn
 from common import SETTINGS
 
 _config = SearchConfig(
-    SETTINGS.registration.algolia_app_id,
-    SETTINGS.registration.algolia_api_key,
+    SETTINGS.api.algolia_app_id,
+    SETTINGS.api.algolia_api_key,
 )
 _sync_client = SearchClient.create_with_config(_config)
 _client = SearchClientAsync(

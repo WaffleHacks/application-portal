@@ -27,7 +27,7 @@
     "react-phone-number-input": "^3.1.52",
     "react-redux": "^7.2.8",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.0",
+    "react-scripts": "5.0.1",
     "remark-gfm": "^3.0.1",
     "typescript": "^4.4.2",
     "yup": "^0.32.11"
@@ -53,11 +53,12 @@
     "tailwindcss": "^3.0.23"
   },
   "scripts": {
-    "start": "HTTPS=true react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE=ssl/dev.local.crt SSL_KEY_FILE=ssl/dev.local.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "eslint --fix ."
   },
   "browserslist": {
     "production": [

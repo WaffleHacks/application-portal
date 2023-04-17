@@ -14,14 +14,10 @@ jobs:
     strategy:
       matrix:
         app:
-          - communication
-          - integrations
+          - api
           - mjml
-          - operations
-          - registration
           - sync
           - tasks
-          - workshops
     steps:
       - uses: actions/checkout@v2
 

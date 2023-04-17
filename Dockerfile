@@ -9,17 +9,6 @@ RUN apt-get update && \
     apt-get upgrade -y
 
 
-# Export dependencies from poetry
-FROM base as export-dependencies
-
-# Install poetry
-RUN pip install --no-cache-dir poetry
-
-# Export dependencies in requirements.txt format
-COPY poetry.lock pyproject.toml ./
-RUN poetry export -f requirements.txt -o requirements.txt --without-hashes
-
-
 # Install dependencies for caching
 FROM base as dependencies
 
@@ -27,7 +16,7 @@ FROM base as dependencies
 RUN apt-get install -y --no-install-recommends build-essential git
 
 # Install the depednencies
-COPY --from=export-dependencies /requirements.txt ./
+COPY requirements.txt ./
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt --prefix=/dependencies --no-warn-script-location
 
@@ -51,28 +40,15 @@ COPY --chown=app manage.py ./manage.py
 
 
 ###
-#  Communication
+#  API
 ###
-FROM common as communication
+FROM common as api
 EXPOSE 8000/tcp
 
-ENV APP communication
+ENV APP api
 
-COPY --chown=app communication ./communication
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Integrations
-###
-FROM common as integrations
-EXPOSE 8000/tcp
-
-ENV APP integrations
-
-COPY --chown=app integrations ./integrations
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
+COPY --chown=app api ./api
+COPY --chown=app --chmod=775 docker-entrypoints/api.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
 
 
@@ -102,32 +78,6 @@ CMD ["node", "."]
 
 
 ###
-#  Operations
-###
-FROM common as operations
-EXPOSE 8000/tcp
-
-ENV APP operations
-
-COPY --chown=app operations ./operations
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Registration
-###
-FROM common as registration
-EXPOSE 8000/tcp
-
-ENV APP registration
-
-COPY --chown=app registration ./registration
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
 #  Sync
 ###
 FROM common as sync
@@ -144,17 +94,4 @@ FROM common as tasks
 
 COPY --chown=app tasks ./tasks
 COPY --chown=app --chmod=775 docker-entrypoints/tasks.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
-#  Workshops
-###
-FROM common as workshops
-EXPOSE 8000/tcp
-
-ENV APP workshops
-
-COPY --chown=app workshops ./workshops
-COPY --chown=app --chmod=775 docker-entrypoints/web.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

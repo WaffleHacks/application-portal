@@ -1,7 +1,7 @@
 import json
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
-from aioredis import ConnectionPool, Redis
+from redis.asyncio import ConnectionPool, Redis
 
 GLOBAL_PREFIX = "application-portal"
 
@@ -36,7 +36,7 @@ class NamespacedClient(object):
     """
 
     def __init__(self, pool: ConnectionPool, prefix: str):
-        self._client = Redis(
+        self._client: Redis = Redis(
             connection_pool=pool, encoding="utf-8", decode_responses=True
         )
         self._prefix = prefix

@@ -3,27 +3,14 @@ from typing import List, Optional
 
 from pydantic import BaseModel, RedisDsn, root_validator, validator
 
-from .specific import (
-    BaseAPI,
-    CommunicationSettings,
-    IntegrationsSettings,
-    OperationsSettings,
-    RegistrationSettings,
-    SyncSettings,
-    TasksSettings,
-    WorkshopsSettings,
-)
+from .specific import APISettings, SyncSettings, TasksSettings
 from .types import NATSUrl, PostgresDsn
 
 
 class App(Enum):
-    Communication = "communication"
-    Integrations = "integrations"
-    Operations = "operations"
-    Registration = "registration"
+    Api = "api"
     Sync = "sync"
     Tasks = "tasks"
-    Workshops = "workshops"
 
     @property
     def inner(self) -> str:
@@ -35,13 +22,9 @@ class Settings(BaseModel):
     apps: List[App]
 
     # The different application specific configurations
-    communication_inner: Optional[CommunicationSettings]
-    integrations_inner: Optional[IntegrationsSettings]
-    operations_inner: Optional[OperationsSettings]
-    registration_inner: Optional[RegistrationSettings]
+    api_inner: Optional[APISettings]
     sync_inner: Optional[SyncSettings]
     tasks_inner: Optional[TasksSettings]
-    workshops_inner: Optional[WorkshopsSettings]
 
     # The Postgres database to connect to
     database_url: PostgresDsn
@@ -76,26 +59,6 @@ class Settings(BaseModel):
         return values
 
     @property
-    def communication(self) -> CommunicationSettings:
-        assert self.communication_inner is not None
-        return self.communication_inner
-
-    @property
-    def integrations(self) -> IntegrationsSettings:
-        assert self.integrations_inner is not None
-        return self.integrations_inner
-
-    @property
-    def operations(self) -> OperationsSettings:
-        assert self.operations_inner is not None
-        return self.operations_inner
-
-    @property
-    def registration(self) -> RegistrationSettings:
-        assert self.registration_inner is not None
-        return self.registration_inner
-
-    @property
     def sync(self) -> SyncSettings:
         assert self.sync_inner is not None
         return self.sync_inner
@@ -106,21 +69,6 @@ class Settings(BaseModel):
         return self.tasks_inner
 
     @property
-    def workshops(self) -> WorkshopsSettings:
-        assert self.workshops_inner is not None
-        return self.workshops_inner
-
-    @property
-    def api(self) -> BaseAPI:
-        if App.Communication in self.apps:
-            return self.communication
-        elif App.Integrations in self.apps:
-            return self.integrations
-        elif App.Operations in self.apps:
-            return self.operations
-        elif App.Registration in self.apps:
-            return self.registration
-        elif App.Workshops in self.apps:
-            return self.workshops
-
-        raise ValueError(f"app '{self.apps}' is not an API")
+    def api(self) -> APISettings:
+        assert self.api_inner is not None
+        return self.api_inner

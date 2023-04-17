@@ -5,30 +5,14 @@ from pydantic import BaseModel, EmailStr, HttpUrl
 from .types import LogLevel
 
 
-class BaseAPI(BaseModel):
-    """
-    The base settings required for all APIs
-    """
-
+class APISettings(BaseModel):
     # JWT authentication configuration
     issuer_url: HttpUrl
     jwks_url: HttpUrl
 
-
-class CommunicationSettings(BaseAPI):
     # The MJML API to connect to
     mjml_api: HttpUrl
 
-
-class IntegrationsSettings(BaseAPI):
-    pass
-
-
-class OperationsSettings(BaseAPI):
-    pass
-
-
-class RegistrationSettings(BaseAPI):
     # The S3 bucket for storing resumes
     bucket: str
 
@@ -60,7 +44,3 @@ class TasksSettings(BaseModel):
     # The sender email and optional reply to email
     reply_to: Optional[EmailStr]
     sender: EmailStr
-
-
-class WorkshopsSettings(BaseAPI):
-    pass
