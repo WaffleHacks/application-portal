@@ -7,7 +7,8 @@
     "build": "tsc",
     "prestart": "yarn build",
     "start": "node .",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "lint:ci": "eslint ."
   },
   "repository": "https://github.com/WaffleHacks/application-portal.git",
   "license": "MIT",

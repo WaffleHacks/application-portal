@@ -4,31 +4,25 @@ on:
   - push
 
 jobs:
-  lint:
-    runs-on: ubuntu-20.04
+  node:
+    name: Node
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        package:
+          - frontend
+          - mjml
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: yarn
           cache-dependency-path: |
-            frontend/yarn.lock
-            mjml/yarn.lock
+            ${{ matrix.package }}/yarn.lock
 
-      - name: yarn install (frontend)
-        run: yarn install
-        working-directory: frontend
-      - name: yarn install (mjml)
-        run: yarn install
-        working-directory: mjml
-
-      - run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
-      - uses: pre-commit/action@v2.0.3
+      - run: yarn install
+        working-directory: ${{ matrix.package }}
+      - run: yarn lint:ci
+        working-directory: ${{ matrix.package }}
