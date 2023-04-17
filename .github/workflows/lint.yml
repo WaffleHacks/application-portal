@@ -17,14 +17,11 @@ jobs:
           cache: yarn
           cache-dependency-path: |
             frontend/yarn.lock
-            infrastructure/yarn.lock
+            mjml/yarn.lock
 
       - name: yarn install (frontend)
         run: yarn install
         working-directory: frontend
-      - name: yarn install (infrastructure)
-        run: yarn install --ignore-scripts
-        working-directory: infrastructure
       - name: yarn install (mjml)
         run: yarn install
         working-directory: mjml
