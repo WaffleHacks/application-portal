@@ -58,8 +58,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "eslint --fix .",
-    "lint:ci": "eslint ."
+    "lint": "eslint --fix ."
   },
   "browserslist": {
     "production": [

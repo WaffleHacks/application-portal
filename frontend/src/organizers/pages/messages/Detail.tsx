@@ -1,8 +1,6 @@
 import {
   ArrowLeftIcon,
   CheckCircleIcon,
-  DocumentIcon,
-  DocumentTextIcon,
   PaperAirplaneIcon,
   PencilIcon,
   RefreshIcon,

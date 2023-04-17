@@ -24,5 +24,5 @@ jobs:
 
       - run: yarn install
         working-directory: ${{ matrix.package }}
-      - run: yarn lint:ci
+      - run: yarn eslint --max-warnings=0 .
         working-directory: ${{ matrix.package }}
