@@ -35,3 +35,14 @@ repos:
           - types-ujson>=5.7.0.3,<5.8.0.0
           - types-pytz>=2023.3.0.0,<2023.4.0
           - types-redis>=4.5.4.1,<4.6.0.0
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.4.2
+    hooks:
+      - id: poetry-check
+      - id: poetry-lock
+      - id: poetry-export
+        args:
+          - -f
+          - requirements.txt
+          - -o
+          - requirements.txt
