@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends
-from fastapi.responses import UJSONResponse
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.session import Session, with_incomplete_profile
@@ -11,6 +10,7 @@ router = APIRouter()
 @router.post("/complete", name="Complete profile", response_model=ParticipantRead)
 async def complete(
     details: ParticipantCreate,
+    response: Response,
     session: Session = Depends(with_incomplete_profile),
     db: AsyncSession = Depends(with_db),
 ):
@@ -19,7 +19,6 @@ async def complete(
     await db.commit()
 
     session.into_authenticated(participant.id)
-
-    response = UJSONResponse(ParticipantRead.from_orm(participant))
     await session.set_cookie(response)
-    return response
+
+    return participant
