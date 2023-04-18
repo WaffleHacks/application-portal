@@ -16,7 +16,6 @@ jobs:
         app:
           - api
           - mjml
-          - sync
           - tasks
     steps:
       - uses: actions/checkout@v2

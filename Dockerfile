@@ -78,16 +78,6 @@ CMD ["node", "."]
 
 
 ###
-#  Sync
-###
-FROM common as sync
-
-COPY --chown=app sync ./sync
-COPY --chown=app --chmod=775 docker-entrypoints/sync.sh ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-###
 #  Tasks
 ###
 FROM common as tasks

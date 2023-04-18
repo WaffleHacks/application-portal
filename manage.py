@@ -91,7 +91,6 @@ def reset(obj: Config, revision: str):
 @cli.command()
 @click.option("-a", "--api", "app", flag_value="api")
 @click.option("-s", "--statistics", "app", flag_value="statistics")
-@click.option("-y", "--sync", "app", flag_value="sync")
 @click.option("-t", "--tasks", "app", flag_value="tasks")
 def run(app: Optional[str]):
     """
