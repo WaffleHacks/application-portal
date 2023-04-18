@@ -55,6 +55,11 @@ class Participant(ParticipantBase, table=True):
     )
 
 
+class ParticipantCreate(SQLModel):
+    first_name: str
+    last_name: str
+
+
 class ParticipantList(ParticipantBase):
     id: int
 

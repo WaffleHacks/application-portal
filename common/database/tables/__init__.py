@@ -30,6 +30,7 @@ from .message_trigger import (
 from .participant import (
     Participant,
     ParticipantBase,
+    ParticipantCreate,
     ParticipantList,
     ParticipantRead,
     Role,
