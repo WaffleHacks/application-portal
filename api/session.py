@@ -93,7 +93,9 @@ def kv_id_from_value(value: str) -> str:
     return sha256(value.encode("utf-8")).hexdigest()
 
 
-async def with_session(session_id: Annotated[Optional[str], Cookie()]) -> Session:
+async def with_session(
+    session_id: Annotated[Optional[str], Cookie()] = None
+) -> Session:
     """
     Retrieve the session from the session cookie
     """
