@@ -30,9 +30,11 @@ class ParticipantBase(SQLModel):
     email: EmailStr
 
     role: Role = Field(
-        sa_column=Column(SqlEnum(Role)),
-        nullable=False,
-        default=Role.Participant,
+        sa_column=Column(
+            SqlEnum(Role),
+            server_default=Role.Participant.value,
+            nullable=False,
+        ),
     )
 
 
