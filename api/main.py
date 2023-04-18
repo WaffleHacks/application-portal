@@ -13,14 +13,15 @@ from . import (
     registration,
     workshops,
 )
+from .settings import SETTINGS
 
 app = FastAPI(docs_url=None, swagger_ui_oauth2_redirect_url=None, redoc_url="/docs")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[SETTINGS.app_url],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allow_headers=["Authorization"],
+    allow_headers=["Cookie"],
 )
 
 tracing.init(app)
