@@ -53,7 +53,7 @@
     "tailwindcss": "^3.0.23"
   },
   "scripts": {
-    "start": "HTTPS=true SSL_CRT_FILE=ssl/dev.local.crt SSL_KEY_FILE=ssl/dev.local.key react-scripts start",
+    "start": "HTTPS=true SSL_CRT_FILE=../ssl/dev.local.crt SSL_KEY_FILE=../ssl/dev.local.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
