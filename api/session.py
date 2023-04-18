@@ -139,3 +139,11 @@ def with_authenticated(session: Session = Depends(with_session)) -> Session:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED, detail="unauthorized")
 
     return session
+
+
+def with_user_id(session: Session = Depends(with_authenticated)) -> int:
+    """
+    Retrieve the current user's ID from the session
+    """
+    assert session.id is not None
+    return session.id

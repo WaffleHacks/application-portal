@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.authentication import with_user_id
+from api.session import with_user_id
 from common.database import (
     Group,
     Message,
@@ -243,7 +243,7 @@ async def send(
 )
 async def send_test(
     id: int,
-    user_id: str = Depends(with_user_id),
+    user_id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """

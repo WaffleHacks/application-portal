@@ -12,9 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.session import with_user_id
 from common import SETTINGS
 from common.algolia import with_schools_index
-from common.authentication import with_user_id
 from common.aws import S3Client, with_s3
 from common.database import (
     Application,
@@ -111,7 +111,7 @@ async def list_incomplete(db: AsyncSession = Depends(with_db)):
 )
 async def create_application(
     values: ApplicationCreate,
-    id: str = Depends(with_user_id),
+    id: int = Depends(with_user_id),
     s3: S3Client = Depends(with_s3),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
@@ -164,7 +164,7 @@ async def create_application(
         raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="already applied")
 
     # Delete the auto-save data
-    await kv.delete(id)
+    await kv.delete(str(id))
 
     # Send the application received message
     await broadcast("registration", "new_application", participant_id=id)
@@ -205,7 +205,7 @@ async def create_application(
     dependencies=[Depends(requires_permission(Permission.Participant))],
 )
 async def get_autosave_application(
-    id: str = Depends(with_user_id), kv: NamespacedClient = Depends(with_kv("autosave"))
+    id: int = Depends(with_user_id), kv: NamespacedClient = Depends(with_kv("autosave"))
 ):
     """
     Get the data for an in-progress application
@@ -225,7 +225,7 @@ async def get_autosave_application(
 )
 async def autosave_application(
     values: ApplicationAutosave,
-    id: str = Depends(with_user_id),
+    id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
     kv: NamespacedClient = Depends(with_kv("autosave")),
 ):
@@ -240,8 +240,8 @@ async def autosave_application(
 
 @router.get("/{id}", response_model=ApplicationRead, name="Read application")
 async def read(
-    id: str,
-    requester_id: str = Depends(with_user_id),
+    id: int,
+    requester_id: int = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(
             Permission.Participant,
@@ -279,8 +279,8 @@ async def read(
     "/{id}/resume", response_model=GetResumeResponse, name="Get application resume"
 )
 async def read_resume(
-    id: str,
-    requester_id: str = Depends(with_user_id),
+    id: int,
+    requester_id: int = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(
             Permission.Participant,
@@ -318,9 +318,9 @@ async def read_resume(
 
 @router.patch("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Update application")
 async def update(
-    id: str,
+    id: int,
     info: ApplicationUpdate,
-    requester_id: str = Depends(with_user_id),
+    requester_id: int = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(Permission.Participant, Permission.Organizer)
     ),
@@ -367,7 +367,7 @@ class SetStatusRequest(BaseModel):
     dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def set_status(
-    id: str,
+    id: int,
     values: SetStatusRequest,
     db: AsyncSession = Depends(with_db),
 ):
@@ -400,8 +400,8 @@ async def set_status(
 
 @router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
 async def delete(
-    id: str,
-    requester_id: str = Depends(with_user_id),
+    id: int,
+    requester_id: int = Depends(with_user_id),
     permission: str = Depends(
         requires_permission(Permission.Participant, Permission.Director)
     ),

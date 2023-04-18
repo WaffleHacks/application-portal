@@ -3,11 +3,10 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.authentication import with_user_id
+from api.session import with_user_id
 from common.database import (
     Message,
     MessageStatus,
@@ -80,7 +79,7 @@ async def update(
 )
 async def test(
     type: MessageTriggerType,
-    id: str = Depends(with_user_id),
+    id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """
