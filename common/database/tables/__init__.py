@@ -33,6 +33,7 @@ from .participant import (
     ParticipantCreate,
     ParticipantList,
     ParticipantRead,
+    ParticipantUpdate,
     Role,
 )
 from .provider import (

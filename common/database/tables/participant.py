@@ -69,3 +69,8 @@ class ParticipantList(ParticipantBase):
 
 class ParticipantRead(ParticipantList):
     swag_tier: Optional["SwagTierList"]
+
+
+class ParticipantUpdate(SQLModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
