@@ -38,6 +38,8 @@ class ParticipantBase(SQLModel):
         default=Role.Participant,
     )
 
+    is_admin: bool = Field(default=False)
+
 
 class Participant(ParticipantBase, table=True):
     __tablename__ = "participants"

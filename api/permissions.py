@@ -27,3 +27,13 @@ def requires_role(*roles: Role) -> Callable[[], Role]:
         )
 
     return validator
+
+
+def is_admin(participant: Participant = Depends(with_current_participant())):
+    """
+    Check that the user is an admin
+    """
+    if not participant.is_admin:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN, detail="permission denied"
+        )
