@@ -60,7 +60,9 @@ async def callback(
     if provider is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    token = await client.exchange(code, SETTINGS.public_url, provider)
+    token = await client.exchange(
+        code, f"{SETTINGS.public_url}/auth/oauth/callback", provider
+    )
     user_info = await client.user_info(token, provider)
 
     # Try to find the user by email
