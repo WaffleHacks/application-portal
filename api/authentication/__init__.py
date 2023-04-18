@@ -9,11 +9,12 @@ from api.session import Session, Status, with_session
 from api.settings import SETTINGS
 from common.database import Participant, ParticipantRead, with_db
 
-from . import oauth, profile
+from . import oauth, profile, providers
 
 router = APIRouter()
 router.include_router(oauth.router, prefix="/oauth", tags=["OAuth"])
 router.include_router(profile.router, prefix="/profile", tags=["Profile"])
+router.include_router(providers.router, prefix="/providers", tags=["Providers"])
 
 
 class Me(BaseModel):
