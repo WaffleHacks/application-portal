@@ -35,6 +35,7 @@ class ParticipantBase(SQLModel):
             server_default=Role.Participant.value,
             nullable=False,
         ),
+        default=Role.Participant,
     )
 
 
