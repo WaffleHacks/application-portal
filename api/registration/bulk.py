@@ -17,7 +17,7 @@ tracer = trace.get_tracer(__name__)
 
 class BulkSetStatus(BaseModel):
     status: ApplicationStatus
-    ids: List[str]
+    ids: List[int]
 
 
 @router.put(
