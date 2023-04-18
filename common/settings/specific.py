@@ -20,6 +20,16 @@ class APISettings(BaseModel):
     algolia_app_id: str
     algolia_api_key: str
 
+    # Where the api is publicly accessible
+    public_url: HttpUrl
+
+    # Where the frontend is publicly accessible
+    app_url: HttpUrl
+
+    # Cookie configuration options
+    cookie_domain: str
+    cookie_secure: bool
+
 
 class SyncSettings(BaseModel):
     # Disables the full database sync on service startup

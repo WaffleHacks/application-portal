@@ -47,9 +47,7 @@ class Provider(ProviderWithSensitive, table=True):
         """
 
         state = "".join(random.choice(string.hexdigits) for _ in range(32))
-
-        url = URL(self.authorization_endpoint)
-        url.include_query_params(
+        url = URL(self.authorization_endpoint).include_query_params(
             response_type="code",
             client_id=self.client_id,
             scope=self.scope,

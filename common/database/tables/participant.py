@@ -20,7 +20,7 @@ class ParticipantBase(SQLModel):
 class Participant(ParticipantBase, table=True):
     __tablename__ = "participants"
 
-    id: str = Field(default=None, primary_key=True, nullable=False)
+    id: int = Field(default=None, primary_key=True, nullable=False)
 
     swag_tier_id: Optional[int] = Field(foreign_key="swag_tiers.id")
     swag_tier: Optional["SwagTier"] = Relationship(back_populates="participants")
@@ -37,7 +37,7 @@ class Participant(ParticipantBase, table=True):
 
 
 class ParticipantList(ParticipantBase):
-    id: str
+    id: int
 
 
 class ParticipantRead(ParticipantList):
