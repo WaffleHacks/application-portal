@@ -11,8 +11,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.session import with_authenticated
 from common.algolia import with_schools_index
-from common.authentication import is_authenticated
 from common.database import (
     Application,
     School,
@@ -36,7 +36,7 @@ class SchoolWithCount(SchoolList):
     "/",
     response_model=List[SchoolWithCount],
     name="List schools",
-    dependencies=[Depends(is_authenticated)],
+    dependencies=[Depends(with_authenticated)],
 )
 async def list(db: AsyncSession = Depends(with_db)):
     """

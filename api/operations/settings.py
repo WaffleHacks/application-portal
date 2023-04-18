@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from pydantic.generics import GenericModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from common.authentication import is_authenticated
+from api.session import with_authenticated
 from common.database import ServiceSettings, SettingsRead, with_db
 from common.permissions import Permission, requires_permission
 
@@ -18,7 +18,7 @@ router = APIRouter()
     "/",
     response_model=SettingsRead,
     name="Get all settings",
-    dependencies=[Depends(is_authenticated)],
+    dependencies=[Depends(with_authenticated)],
 )
 async def read(db: AsyncSession = Depends(with_db)):
     """
