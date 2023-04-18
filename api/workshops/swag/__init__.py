@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.helpers import require_application_accepted, with_current_participant
 from common.database import (
     Application,
     ApplicationStatus,
@@ -17,10 +18,6 @@ from common.database import (
     SwagTier,
     SwagTierListWithDescription,
     with_db,
-)
-from common.database.dependencies import (
-    require_application_accepted,
-    with_current_participant,
 )
 from common.permissions import Permission, requires_permission
 

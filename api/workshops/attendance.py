@@ -11,6 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from api.helpers import require_application_accepted
 from api.session import with_user_id
 from common.database import (
     Event,
@@ -21,7 +22,6 @@ from common.database import (
     SwagTier,
     with_db,
 )
-from common.database.dependencies import require_application_accepted
 from common.permissions import Permission, requires_permission
 
 router = APIRouter(
