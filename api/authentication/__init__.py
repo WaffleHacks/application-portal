@@ -34,7 +34,7 @@ async def me(
         return Me(status=session.status)
 
     if session.status == Status.IncompleteProfile:
-        return Me(status=session.state, email=session.email)
+        return Me(status=session.status, email=session.email)
 
     if session.status == Status.Authenticated:
         participant = await db.get(Participant, session.id)
