@@ -11,9 +11,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.algolia import with_schools_index
 from api.permissions import Role, requires_role
 from api.session import with_authenticated
-from common.algolia import with_schools_index
 from common.database import (
     Application,
     School,

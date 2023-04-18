@@ -12,10 +12,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.algolia import with_schools_index
 from api.permissions import Role, requires_role
 from api.session import with_user_id
-from common import SETTINGS
-from common.algolia import with_schools_index
+from api.settings import SETTINGS
 from common.aws import S3Client, with_s3
 from common.database import (
     Application,
@@ -180,7 +180,7 @@ async def create_application(
     if application.resume:
         with tracer.start_as_current_span("upload-resume"):
             response["upload"] = s3.generate_presigned_post(
-                SETTINGS.api.bucket,
+                SETTINGS.resume_bucket,
                 application.resume,
                 Conditions=[
                     {"acl": "private"},
@@ -308,7 +308,7 @@ async def read_resume(
     with tracer.start_as_current_span("generate-url"):
         url = s3.generate_presigned_url(
             "get_object",
-            Params={"Bucket": SETTINGS.api.bucket, "Key": application.resume},
+            Params={"Bucket": SETTINGS.resume_bucket, "Key": application.resume},
             ExpiresIn=15 * 60,
         )
         return {"url": url}

@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.session import Session, Status, with_session
-from common import SETTINGS
+from api.settings import SETTINGS
 from common.database import Participant, ParticipantRead, with_db
 
 from . import oauth
@@ -47,11 +47,11 @@ async def me(
 
 @router.get("/logout", name="Logout")
 async def logout() -> RedirectResponse:
-    response = RedirectResponse(SETTINGS.api.app_url)
+    response = RedirectResponse(SETTINGS.app_url)
     response.delete_cookie(
         key="session_id",
-        domain=SETTINGS.api.cookie_domain,
-        secure=SETTINGS.api.cookie_secure,
+        domain=SETTINGS.cookie_domain,
+        secure=SETTINGS.cookie_secure,
         httponly=True,
     )
     return response

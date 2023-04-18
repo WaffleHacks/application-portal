@@ -4,9 +4,10 @@ import signal
 import sys
 from pathlib import Path
 
-from common import SETTINGS, tracing
+from common import tracing
 
 from . import loader
+from .settings import SETTINGS
 
 HANDLERS_PATH = Path(__file__).parent / "handlers"
 
@@ -15,7 +16,7 @@ tracing.init()
 
 def main():
     logging.basicConfig(
-        level=SETTINGS.tasks.log_level.value,
+        level=SETTINGS.log_level.value,
         format="[%(asctime)s] %(levelname)s - %(name)s - %(message)s",
         stream=sys.stdout,
     )

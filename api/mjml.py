@@ -3,7 +3,7 @@ from typing import Optional
 import ujson
 from aiohttp import ClientSession
 
-from common import SETTINGS
+from .settings import SETTINGS
 
 
 class MJMLClient(object):
@@ -34,7 +34,7 @@ class MJMLClient(object):
         return result["html"]
 
 
-client = MJMLClient(SETTINGS.api.mjml_api)
+client = MJMLClient(SETTINGS.mjml_api)
 
 
 async def with_mjml() -> MJMLClient:

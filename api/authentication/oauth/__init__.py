@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from api.session import Session, with_oauth, with_session
-from common import SETTINGS
+from api.settings import SETTINGS
 from common.database import Participant, Provider, with_db
 
 from .client import OAuthClient
@@ -27,7 +27,7 @@ async def launch(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     url, state = provider.build_redirect_url(
-        f"{SETTINGS.api.public_url}/auth/oauth/callback"
+        f"{SETTINGS.public_url}/auth/oauth/callback"
     )
 
     session.into_oauth(state, provider.slug)
@@ -60,7 +60,7 @@ async def callback(
     if provider is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    token = await client.exchange(code, SETTINGS.api.public_url, provider)
+    token = await client.exchange(code, SETTINGS.public_url, provider)
     user_info = await client.user_info(token, provider)
 
     # Try to find the user by email
@@ -70,7 +70,7 @@ async def callback(
     participant: Optional[Participant] = result.scalars().first()
 
     # Redirect to the frontend and let it handle the state
-    response = RedirectResponse(SETTINGS.api.app_url)
+    response = RedirectResponse(SETTINGS.app_url)
 
     # Authenticate the user, or mark their profile as incomplete if they don't exist
     if participant is not None:

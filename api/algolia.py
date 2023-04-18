@@ -4,11 +4,11 @@ from algoliasearch.http.transporter_async import TransporterAsync
 from algoliasearch.search_client import SearchClient
 from algoliasearch.search_client_async import SearchClientAsync, SearchIndexAsync
 
-from common import SETTINGS
+from .settings import SETTINGS
 
 _config = SearchConfig(
-    SETTINGS.api.algolia_app_id,
-    SETTINGS.api.algolia_api_key,
+    SETTINGS.algolia_app_id,
+    SETTINGS.algolia_api_key,
 )
 _sync_client = SearchClient.create_with_config(_config)
 _client = SearchClientAsync(

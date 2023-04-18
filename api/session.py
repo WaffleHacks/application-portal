@@ -8,8 +8,9 @@ from typing import Annotated, Optional
 from fastapi import Cookie, Depends, HTTPException, Response
 from pydantic import BaseModel, PrivateAttr
 
-from common import SETTINGS
 from common.kv import engine
+
+from .settings import SETTINGS
 
 IN_14_DAYS = 14 * 24 * 60 * 60
 
@@ -77,8 +78,8 @@ class Session(BaseModel):
             key="session_id",
             value=self._value,
             expires=IN_14_DAYS,
-            domain=SETTINGS.api.cookie_domain,
-            secure=SETTINGS.api.cookie_secure,
+            domain=SETTINGS.cookie_domain,
+            secure=SETTINGS.cookie_secure,
             httponly=True,
         )
 

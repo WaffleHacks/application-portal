@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from api.mjml import MJMLClient, with_mjml
 from api.permissions import Role, requires_role
 from api.session import with_user_id
 from common.database import (
@@ -24,7 +25,6 @@ from common.database import (
     RecipientRead,
     with_db,
 )
-from common.mjml import MJMLClient, with_mjml
 from common.tasks import tasks
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])

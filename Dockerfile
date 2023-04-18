@@ -45,8 +45,6 @@ COPY --chown=app manage.py ./manage.py
 FROM common as api
 EXPOSE 8000/tcp
 
-ENV APP api
-
 COPY --chown=app api ./api
 COPY --chown=app --chmod=775 docker-entrypoints/api.sh ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
