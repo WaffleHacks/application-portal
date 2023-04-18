@@ -9,6 +9,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.helpers import require_application_accepted, with_current_participant
+from api.permissions import Role, requires_role
 from common.database import (
     Application,
     ApplicationStatus,
@@ -19,7 +20,6 @@ from common.database import (
     SwagTierListWithDescription,
     with_db,
 )
-from common.permissions import Permission, requires_permission
 
 from . import tiers
 
@@ -40,7 +40,7 @@ class SwagStatus(BaseModel):
     name="Get current progress",
     response_model=SwagStatus,
     dependencies=[
-        Depends(requires_permission(Permission.Participant)),
+        Depends(requires_role(Role.Participant)),
         Depends(require_application_accepted),
     ],
 )
@@ -77,7 +77,7 @@ async def progress(
     "/participants",
     name="Get progress of all participants",
     response_model=List[ParticipantRead],
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def participant_progresses(db: AsyncSession = Depends(with_db)):
     """

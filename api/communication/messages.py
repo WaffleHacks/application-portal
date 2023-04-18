@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from api.permissions import Role, requires_role
 from api.session import with_user_id
 from common.database import (
     Group,
@@ -24,19 +25,13 @@ from common.database import (
     with_db,
 )
 from common.mjml import MJMLClient, with_mjml
-from common.permissions import Permission, requires_permission
 from common.tasks import tasks
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 tracer = trace.get_tracer(__name__)
 
 
-@router.get(
-    "/",
-    name="List messages",
-    response_model=List[MessageList],
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.get("/", name="List messages", response_model=List[MessageList])
 async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all the messages in the database
@@ -46,12 +41,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.post(
-    "/",
-    name="Create message",
-    response_model=MessageRead,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.post("/", name="Create message", response_model=MessageRead)
 async def create(
     values: MessageCreate,
     db: AsyncSession = Depends(with_db),
@@ -80,12 +70,7 @@ async def create(
     return message
 
 
-@router.get(
-    "/{id}",
-    name="Read message",
-    response_model=MessageRead,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.get("/{id}", name="Read message", response_model=MessageRead)
 async def read(id: int, db: AsyncSession = Depends(with_db)):
     """
     Read a message from the database
@@ -97,12 +82,7 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     return message
 
 
-@router.patch(
-    "/{id}",
-    name="Update message",
-    response_model=MessageRead,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.patch("/{id}", name="Update message", response_model=MessageRead)
 async def update(
     id: int,
     values: MessageUpdate,
@@ -152,12 +132,7 @@ async def update(
     return message
 
 
-@router.post(
-    "/{id}/recipients",
-    name="Add recipient",
-    response_model=RecipientRead,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.post("/{id}/recipients", name="Add recipient", response_model=RecipientRead)
 async def add_recipient(
     id: int, group: RecipientCreate, db: AsyncSession = Depends(with_db)
 ):
@@ -185,7 +160,6 @@ async def add_recipient(
     "/{id}/recipients/{group}",
     name="Delete recipient",
     status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
 )
 async def delete_recipient(id: int, group: Group, db: AsyncSession = Depends(with_db)):
     """
@@ -199,12 +173,7 @@ async def delete_recipient(id: int, group: Group, db: AsyncSession = Depends(wit
     await db.commit()
 
 
-@router.post(
-    "/{id}/send",
-    name="Send message",
-    status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.post("/{id}/send", name="Send message", status_code=HTTPStatus.NO_CONTENT)
 async def send(
     id: int,
     db: AsyncSession = Depends(with_db),
@@ -235,12 +204,7 @@ async def send(
     await tasks.communication.send(message_id=id)
 
 
-@router.post(
-    "/{id}/test",
-    name="Send test message",
-    status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.post("/{id}/test", name="Send test message", status_code=HTTPStatus.NO_CONTENT)
 async def send_test(
     id: int,
     user_id: int = Depends(with_user_id),
@@ -256,12 +220,7 @@ async def send_test(
     await tasks.communication.send_test(message_id=message.id, user_id=user_id)
 
 
-@router.delete(
-    "/{id}",
-    name="Delete message",
-    status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.delete("/{id}", name="Delete message", status_code=HTTPStatus.NO_CONTENT)
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
     """
     Delete a message from the database

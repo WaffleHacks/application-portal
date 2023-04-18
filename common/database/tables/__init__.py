@@ -27,7 +27,13 @@ from .message_trigger import (
     MessageTriggerType,
     MessageTriggerUpdate,
 )
-from .participant import Participant, ParticipantBase, ParticipantList, ParticipantRead
+from .participant import (
+    Participant,
+    ParticipantBase,
+    ParticipantList,
+    ParticipantRead,
+    Role,
+)
 from .provider import (
     Provider,
     ProviderCreate,

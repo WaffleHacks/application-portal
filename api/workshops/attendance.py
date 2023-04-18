@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from api.helpers import require_application_accepted
+from api.permissions import Role, requires_role
 from api.session import with_user_id
 from common.database import (
     Event,
@@ -22,11 +23,10 @@ from common.database import (
     SwagTier,
     with_db,
 )
-from common.permissions import Permission, requires_permission
 
 router = APIRouter(
     dependencies=[
-        Depends(requires_permission(Permission.Participant)),
+        Depends(requires_role(Role.Participant)),
         Depends(require_application_accepted),
     ]
 )

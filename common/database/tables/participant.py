@@ -1,6 +1,9 @@
+from enum import Enum
 from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import EmailStr
+from sqlalchemy import Column
+from sqlalchemy import Enum as SqlEnum
 from sqlmodel import Field, Relationship, SQLModel
 
 from .event_attendance import EventAttendance
@@ -11,10 +14,26 @@ if TYPE_CHECKING:
     from .swag_tier import SwagTier, SwagTierList
 
 
+class Role(Enum):
+    """
+    The different permissions that can be assigned to a user
+    """
+
+    Participant = "participant"
+    Sponsor = "sponsor"
+    Organizer = "organizer"
+
+
 class ParticipantBase(SQLModel):
     first_name: str
     last_name: str
     email: EmailStr
+
+    role: Role = Field(
+        sa_column=Column(SqlEnum(Role)),
+        nullable=False,
+        default=Role.Participant,
+    )
 
 
 class Participant(ParticipantBase, table=True):

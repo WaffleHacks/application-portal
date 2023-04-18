@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends
 from pydantic.generics import GenericModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.permissions import Role, requires_role
 from api.session import with_authenticated
 from common.database import ServiceSettings, SettingsRead, with_db
-from common.permissions import Permission, requires_permission
 
 T = TypeVar("T")
 
@@ -37,7 +37,7 @@ class UpdateRequest(GenericModel, Generic[T]):
     "/accepting_applications",
     status_code=HTTPStatus.NO_CONTENT,
     name="Update accepting applications setting",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def update(
     params: UpdateRequest[bool],

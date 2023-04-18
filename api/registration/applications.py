@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.permissions import Role, requires_role
 from api.session import with_user_id
 from common import SETTINGS
 from common.algolia import with_schools_index
@@ -31,7 +32,6 @@ from common.database import (
     with_db,
 )
 from common.kv import NamespacedClient, with_kv
-from common.permissions import Permission, requires_permission
 from common.tasks import broadcast
 
 
@@ -58,9 +58,7 @@ tracer = trace.get_tracer(__name__)
     name="List applications",
 )
 async def list(
-    permission: str = Depends(
-        requires_permission(Permission.Sponsor, Permission.Organizer)
-    ),
+    role: Role = Depends(requires_role(Role.Sponsor, Role.Organizer)),
     db: AsyncSession = Depends(with_db),
 ):
     """
@@ -73,7 +71,7 @@ async def list(
             selectinload(Application.participant), selectinload(Application.school)
         )
     )
-    if Permission.Sponsor.matches(permission):
+    if role == Role.Sponsor:
         statement = statement.where(Application.share_information)
 
     result = await db.execute(statement)
@@ -85,7 +83,7 @@ async def list(
     "/incomplete",
     response_model=List[ParticipantRead],
     name="List incomplete applications",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def list_incomplete(db: AsyncSession = Depends(with_db)):
     """
@@ -107,7 +105,7 @@ async def list_incomplete(db: AsyncSession = Depends(with_db)):
     response_model=CreateResponse,
     status_code=HTTPStatus.CREATED,
     name="Create application",
-    dependencies=[Depends(requires_permission(Permission.Participant))],
+    dependencies=[Depends(requires_role(Role.Participant))],
 )
 async def create_application(
     values: ApplicationCreate,
@@ -202,7 +200,7 @@ async def create_application(
     "/autosave",
     response_model=ApplicationAutosave,
     name="Get an in-progress application",
-    dependencies=[Depends(requires_permission(Permission.Participant))],
+    dependencies=[Depends(requires_role(Role.Participant))],
 )
 async def get_autosave_application(
     id: int = Depends(with_user_id), kv: NamespacedClient = Depends(with_kv("autosave"))
@@ -221,7 +219,7 @@ async def get_autosave_application(
     "/autosave",
     status_code=HTTPStatus.NO_CONTENT,
     name="Save an in-progress application",
-    dependencies=[Depends(requires_permission(Permission.Participant))],
+    dependencies=[Depends(requires_role(Role.Participant))],
 )
 async def autosave_application(
     values: ApplicationAutosave,
@@ -242,11 +240,11 @@ async def autosave_application(
 async def read(
     id: int,
     requester_id: int = Depends(with_user_id),
-    permission: str = Depends(
-        requires_permission(
-            Permission.Participant,
-            Permission.Sponsor,
-            Permission.Organizer,
+    role: Role = Depends(
+        requires_role(
+            Role.Participant,
+            Role.Sponsor,
+            Role.Organizer,
         )
     ),
     db: AsyncSession = Depends(with_db),
@@ -254,7 +252,7 @@ async def read(
     """
     Returns a single application by id
     """
-    if Permission.Participant.matches(permission) and id != requester_id:
+    if role == Role.Participant and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -269,10 +267,10 @@ async def read(
     )
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    elif Permission.Sponsor.matches(permission) and not application.share_information:
+    elif role == Role.Sponsor and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    return clean_application_response(application, permission)
+    return clean_application_response(application, role)
 
 
 @router.get(
@@ -281,11 +279,11 @@ async def read(
 async def read_resume(
     id: int,
     requester_id: int = Depends(with_user_id),
-    permission: str = Depends(
-        requires_permission(
-            Permission.Participant,
-            Permission.Sponsor,
-            Permission.Organizer,
+    role: Role = Depends(
+        requires_role(
+            Role.Participant,
+            Role.Sponsor,
+            Role.Organizer,
         )
     ),
     s3: S3Client = Depends(with_s3),
@@ -294,7 +292,7 @@ async def read_resume(
     """
     Returns a URL to access an application's resume by id
     """
-    if Permission.Participant.matches(permission) and id != requester_id:
+    if role == Role.Participant and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -302,7 +300,7 @@ async def read_resume(
     application = await db.get(Application, id)
     if application is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-    elif Permission.Sponsor.matches(permission) and not application.share_information:
+    elif role == Role.Sponsor and not application.share_information:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
     elif application.resume is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
@@ -321,15 +319,13 @@ async def update(
     id: int,
     info: ApplicationUpdate,
     requester_id: int = Depends(with_user_id),
-    permission: str = Depends(
-        requires_permission(Permission.Participant, Permission.Organizer)
-    ),
+    role: Role = Depends(requires_role(Role.Participant, Role.Organizer)),
     db: AsyncSession = Depends(with_db),
 ):
     """
     Updates the requester's application
     """
-    if Permission.Participant.matches(permission) and id != requester_id:
+    if role == Role.Participant and id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -340,7 +336,7 @@ async def update(
 
     with tracer.start_as_current_span("update"):
         # Only update notes if organizer
-        if Permission.Organizer.matches(permission) and info.notes is not None:
+        if role == Role.Organizer and info.notes is not None:
             application.notes = info.notes
 
         updated_fields = info.dict(exclude_unset=True, exclude={"notes"})
@@ -364,7 +360,7 @@ class SetStatusRequest(BaseModel):
     "/{id}/status",
     status_code=HTTPStatus.NO_CONTENT,
     name="Set application status",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def set_status(
     id: int,
@@ -398,19 +394,21 @@ async def set_status(
     await db.commit()
 
 
-@router.delete("/{id}", status_code=HTTPStatus.NO_CONTENT, name="Delete application")
+@router.delete(
+    "/{id}",
+    status_code=HTTPStatus.NO_CONTENT,
+    name="Delete application",
+    dependencies=[Depends(requires_role(Role.Participant))],
+)
 async def delete(
     id: int,
     requester_id: int = Depends(with_user_id),
-    permission: str = Depends(
-        requires_permission(Permission.Participant, Permission.Director)
-    ),
     db: AsyncSession = Depends(with_db),
 ) -> None:
     """
     Deletes an application by id
     """
-    if Permission.Participant.matches(permission) and id != requester_id:
+    if id != requester_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail="invalid permissions"
         )
@@ -421,19 +419,17 @@ async def delete(
         await db.commit()
 
 
-def clean_application_response(
-    application: Application, permission: str
-) -> ApplicationRead:
+def clean_application_response(application: Application, role: Role) -> ApplicationRead:
     """
     Removes organizer-specific information from responses
     :param application: the raw application
-    :param permission: the requester's permission
+    :param role: the requester's role
     :return: a response with sensitive information redacted
     """
 
     response = ApplicationRead.from_orm(application)
 
-    if not Permission.Organizer.matches(permission):
+    if not role == Role.Organizer:
         response.notes = None
         response.flagged = None
 
