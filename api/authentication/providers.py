@@ -74,7 +74,7 @@ async def read(slug: str, db: AsyncSession = Depends(with_db)):
 @router.patch(
     "/{slug}",
     name="Update provider",
-    status_code=HTTPStatus.NO_CONTENT,
+    response_model=ProviderRead,
     dependencies=[Depends(is_admin)],
 )
 async def update(
@@ -92,6 +92,9 @@ async def update(
 
     db.add(provider)
     await db.commit()
+
+    await db.refresh(provider)
+    return provider
 
 
 @router.delete(
