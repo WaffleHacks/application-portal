@@ -1,28 +1,26 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
-import authenticationReducer from './authentication';
+import authenticationApi from './authentication';
 import communicationApi from './communication';
 import errorLogger from './errors';
 import operationsApi from './operations';
-import profileApi from './profile';
 import registrationApi from './registration';
 import workshopsApi from './workshops';
 
 export const store = configureStore({
   reducer: {
-    authentication: authenticationReducer,
+    [authenticationApi.reducerPath]: authenticationApi.reducer,
     [communicationApi.reducerPath]: communicationApi.reducer,
     [operationsApi.reducerPath]: operationsApi.reducer,
-    [profileApi.reducerPath]: profileApi.reducer,
     [registrationApi.reducerPath]: registrationApi.reducer,
     [workshopsApi.reducerPath]: workshopsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
+      .concat(authenticationApi.middleware)
       .concat(communicationApi.middleware)
       .concat(operationsApi.middleware)
-      .concat(profileApi.middleware)
       .concat(registrationApi.middleware)
       .concat(workshopsApi.middleware)
       .concat(errorLogger(['markAttendance'])),
@@ -35,7 +33,16 @@ export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = typeof store.dispatch;
 
 // Re-export actions and hooks
-export { setProfileToken, setPortalToken, logout } from './authentication';
+export {
+  useCurrentUserQuery,
+  useCompleteProfileMutation,
+  useUpdateProfileMutation,
+  useListProvidersQuery,
+  useGetProviderQuery,
+  useCreateProviderMutation,
+  useUpdateProviderMutation,
+  useDeleteProviderMutation,
+} from './authentication';
 export {
   useListMessagesQuery,
   useGetMessageQuery,
@@ -48,9 +55,7 @@ export {
   useSetMessageTriggerMutation,
   useTestMessageTriggerMutation,
 } from './communication';
-export { useDispatch, useSelector } from './hooks';
 export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
-export { useGetProfileQuery } from './profile';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,
@@ -68,8 +73,6 @@ export {
   useUpdateSchoolMutation,
   useMergeSchoolsMutation,
 } from './registration';
-export { ProfileScope, PortalScope } from './scopes';
-export { highestPermission, isDirector } from './selectors';
 export type {
   ApplicationAutosave,
   ReducedApplication,

@@ -1,6 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import baseQuery from './baseQuery';
 import { Event, Feedback, ParticipantWithSwag, ReducedEvent, ReducedSwagTier, SwagTier } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -47,7 +46,7 @@ interface DetailedFeedbackRequest {
 
 const api = createApi({
   reducerPath: 'workshops',
-  baseQuery: baseQuery('portal', BASE_URL),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
     // Attendance endpoints

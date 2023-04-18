@@ -1,6 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import baseQuery from './baseQuery';
 import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
 import { ApplicationStatus } from './types';
 
@@ -28,11 +27,11 @@ interface ApplicationCreateResponse {
 }
 
 type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' | 'resume' | 'school'>> & {
-  id: string;
+  id: number;
 };
 
 interface UpdateApplicationStatus {
-  id: string;
+  id: number;
   status: ApplicationStatus;
 }
 
@@ -46,7 +45,7 @@ interface ApplicationResume {
 
 interface BulkSetApplicationStatus {
   status: ApplicationStatus;
-  ids: string[];
+  ids: number[];
 }
 
 interface MergeSchools {
@@ -56,7 +55,7 @@ interface MergeSchools {
 
 const api = createApi({
   reducerPath: 'registration',
-  baseQuery: baseQuery('portal', BASE_URL),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
     listApplications: builder.query<ReducedApplication[], void>({
@@ -73,12 +72,12 @@ const api = createApi({
         ...result.map((i) => ({ type: Tag.Participant, id: i.id })),
       ],
     }),
-    getApplication: builder.query<Application, string>({
+    getApplication: builder.query<Application, string | number>({
       query: (arg) => `/registration/applications/${arg}`,
       providesTags: (result: Application | undefined) =>
         result ? [{ type: Tag.Application, id: result.participant.id }] : [],
     }),
-    getApplicationResume: builder.query<ApplicationResume, string>({
+    getApplicationResume: builder.query<ApplicationResume, string | number>({
       query: (arg) => `/registration/applications/${arg}/resume`,
     }),
     createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({

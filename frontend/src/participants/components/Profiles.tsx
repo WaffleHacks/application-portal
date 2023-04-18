@@ -1,23 +1,23 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 
 import { ProfilePicture } from '../../components/navigation';
-import { useGetProfileQuery } from '../../store';
+import { useCurrentUserQuery } from '../../store';
 
-const logoutOptions = {
-  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  returnTo: window.location.origin,
-};
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const DesktopProfile = (): JSX.Element => {
-  const { data } = useGetProfileQuery();
+  const { data } = useCurrentUserQuery();
+  if (!data?.participant) return <>Loading...</>;
 
-  return <>{data === undefined ? 'Loading...' : data.firstName + ' ' + data.lastName}</>;
+  return (
+    <>
+      {data.participant.first_name} {data.participant.last_name}
+    </>
+  );
 };
 
 const MobileProfile = (): JSX.Element => {
-  const { logout } = useAuth0();
-  const { data } = useGetProfileQuery();
+  const { data } = useCurrentUserQuery();
 
   return (
     <>
@@ -26,17 +26,16 @@ const MobileProfile = (): JSX.Element => {
           <ProfilePicture />
         </div>
         <div className="ml-3 text-base font-medium text-gray-800">
-          {data === undefined ? 'Loading...' : data.firstName + ' ' + data.lastName}
+          {!data?.participant ? 'Loading...' : data.participant.first_name + ' ' + data.participant.last_name}
         </div>
       </div>
       <div className="mt-3 space-y-1">
-        <button
-          type="button"
-          onClick={() => logout(logoutOptions)}
+        <a
+          href={`${BASE_URL}/auth/logout`}
           className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
         >
           Log out
-        </button>
+        </a>
       </div>
     </>
   );

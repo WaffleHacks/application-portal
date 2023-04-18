@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
@@ -6,13 +5,9 @@ import React, { Fragment } from 'react';
 
 import { NavItem as BaseNavItem, Link, ProfilePicture } from '../../components/navigation';
 import logo from '../../logo.png';
-import { useSelector } from '../../store';
 import { DesktopProfile, MobileProfile } from './Profiles';
 
-const logoutOptions = {
-  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  returnTo: window.location.origin,
-};
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const linkClassNames =
   (mobile: boolean) =>
@@ -44,9 +39,6 @@ interface Props {
 }
 
 const Navigation = ({ items, accepted }: Props): JSX.Element => {
-  const { logout } = useAuth0();
-  const profileTokenLoading = useSelector((state) => state.authentication.profile === undefined);
-
   const shownItems = items.filter((i) => !i.hidden && (!i.acceptedOnly || accepted));
 
   return (
@@ -86,17 +78,16 @@ const Navigation = ({ items, accepted }: Props): JSX.Element => {
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         <span className="block px-4 py-2 text-sm text-gray-700 w-full text-left border-b border-gray-300">
-                          {profileTokenLoading ? 'Loading...' : <DesktopProfile />}
+                          <DesktopProfile />
                         </span>
                       </Menu.Item>
                       <Menu.Item>
-                        <button
-                          type="button"
-                          onClick={() => logout(logoutOptions)}
+                        <a
+                          href={`${BASE_URL}/auth/logout`}
                           className="block px-4 py-2 text-sm text-gray-700 w-full text-left hover:bg-gray-200"
                         >
                           Log out
-                        </button>
+                        </a>
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
@@ -124,7 +115,7 @@ const Navigation = ({ items, accepted }: Props): JSX.Element => {
               ))}
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
-              {profileTokenLoading ? <span className="ml-3 text-gray-800">Loading...</span> : <MobileProfile />}
+              <MobileProfile />
             </div>
           </Disclosure.Panel>
         </>

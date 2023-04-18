@@ -35,11 +35,26 @@ export enum RaceEthnicity {
   MultipleOther = 'Multiple ethnicities / Other',
 }
 
+export enum AuthenticationStatus {
+  Unauthenticated = 'unauthenticated',
+  OAuth = 'oauth',
+  IncompleteProfile = 'incomplete-profile',
+  Authenticated = 'authenticated',
+}
+
+export enum Role {
+  Participant = 'participant',
+  Sponsor = 'sponsor',
+  Organizer = 'organizer',
+}
+
 export interface Participant {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
+  role: Role;
+  is_admin: boolean;
 }
 
 export interface ParticipantWithSwag extends Participant {
@@ -226,4 +241,19 @@ export interface SwagTier extends ReducedSwagTier {
 
 export interface ServiceSettings {
   accepting_applications: boolean;
+}
+
+export interface ReducedProvider {
+  slug: string;
+  name: string;
+  icon: string;
+  enabled: boolean;
+}
+
+export interface Provider extends ReducedProvider {
+  client_id: string;
+  authorization_endpoint: string;
+  token_endpoint: string;
+  user_info_endpoint: string;
+  scope: string;
 }

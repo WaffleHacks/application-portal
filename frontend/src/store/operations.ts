@@ -1,6 +1,5 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import baseQuery from './baseQuery';
 import type { ServiceSettings } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -14,7 +13,7 @@ enum Tag {
 
 const api = createApi({
   reducerPath: 'operations',
-  baseQuery: baseQuery('portal', BASE_URL),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
     // Settings endpoints
