@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 from pydantic import BaseModel, validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, Integer
 from sqlmodel import Field, Relationship, SQLModel
 
 from .types import TimeStamp
@@ -113,9 +113,9 @@ class ApplicationBase(ApplicationProfileBase):
 class Application(ApplicationBase, table=True):
     __tablename__ = "applications"
 
-    participant_id: str = Field(
+    participant_id: int = Field(
         sa_column=Column(
-            String(),
+            Integer(),
             ForeignKey("participants.id", ondelete="CASCADE"),
             primary_key=True,
         ),

@@ -11,7 +11,7 @@ manual = True
 logger = logging.getLogger(__name__)
 
 
-async def handler(message_id: int, user_id: str):
+async def handler(message_id: int, user_id: int):
     trace.get_current_span().set_attribute("user.id", user_id)
 
     async with db_context() as db:

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from pydantic import validator
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -27,9 +27,9 @@ class FeedbackBase(SQLModel):
 class Feedback(FeedbackBase, table=True):
     __tablename__ = "feedback"
 
-    participant_id: str = Field(
+    participant_id: int = Field(
         sa_column=Column(
-            String(),
+            Integer(),
             ForeignKey("participants.id", ondelete="CASCADE"),
             nullable=False,
             primary_key=True,

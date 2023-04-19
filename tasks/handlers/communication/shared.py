@@ -5,7 +5,6 @@ from mailer import AsyncClient, BodyType
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
-from common import SETTINGS
 from common.database import (
     Application,
     Message,
@@ -14,13 +13,14 @@ from common.database import (
     Participant,
     db_context,
 )
+from tasks.settings import SETTINGS
 
 shared = True
 
 logger = logging.getLogger(__name__)
 tracer = trace.get_tracer(__name__)
 
-mailer = AsyncClient(SETTINGS.tasks.mailer)
+mailer = AsyncClient(SETTINGS.mailer_api)
 
 
 async def send_message(recipient: Participant, message: Message):
@@ -40,11 +40,11 @@ async def send_message(recipient: Participant, message: Message):
         # Send the message
         await mailer.send(
             to_email=recipient.email,
-            from_email=SETTINGS.tasks.sender,
+            from_email=SETTINGS.sender,
             subject=message.subject,
             body=content,
             body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
-            reply_to=SETTINGS.tasks.reply_to,
+            reply_to=SETTINGS.reply_to,
         )
 
 

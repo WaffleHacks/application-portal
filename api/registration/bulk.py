@@ -7,8 +7,8 @@ from pydantic import BaseModel
 from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.permissions import Role, requires_role
 from common.database import Application, ApplicationStatus, with_db
-from common.permissions import Permission, requires_permission
 from common.tasks import broadcast
 
 router = APIRouter()
@@ -17,14 +17,14 @@ tracer = trace.get_tracer(__name__)
 
 class BulkSetStatus(BaseModel):
     status: ApplicationStatus
-    ids: List[str]
+    ids: List[int]
 
 
 @router.put(
     "/status",
     status_code=HTTPStatus.NO_CONTENT,
     name="Bulk update application status",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def bulk_set_status(params: BulkSetStatus, db: AsyncSession = Depends(with_db)):
     """

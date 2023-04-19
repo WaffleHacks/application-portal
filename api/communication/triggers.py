@@ -3,11 +3,11 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.authentication import with_user_id
+from api.permissions import Role, requires_role
+from api.session import with_user_id
 from common.database import (
     Message,
     MessageStatus,
@@ -17,18 +17,12 @@ from common.database import (
     MessageTriggerUpdate,
     with_db,
 )
-from common.permissions import Permission, requires_permission
 from common.tasks import tasks
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 
 
-@router.get(
-    "/",
-    name="List triggers",
-    response_model=List[MessageTriggerRead],
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.get("/", name="List triggers", response_model=List[MessageTriggerRead])
 async def list(db: AsyncSession = Depends(with_db)):
     """
     Get all the message triggers used for automated events
@@ -38,12 +32,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.put(
-    "/{type}",
-    name="Set trigger",
-    status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.put("/{type}", name="Set trigger", status_code=HTTPStatus.NO_CONTENT)
 async def update(
     type: MessageTriggerType,
     values: MessageTriggerUpdate,
@@ -72,15 +61,10 @@ async def update(
     await db.commit()
 
 
-@router.post(
-    "/{type}/test",
-    name="Test trigger",
-    status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
-)
+@router.post("/{type}/test", name="Test trigger", status_code=HTTPStatus.NO_CONTENT)
 async def test(
     type: MessageTriggerType,
-    id: str = Depends(with_user_id),
+    id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """

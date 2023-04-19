@@ -10,9 +10,8 @@ from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from common import SETTINGS
-from common.database.engine import engine
-
+from ..database.engine import engine
+from ..settings import SETTINGS
 from .botocore import FilteredBotocoreInstrumentor
 
 

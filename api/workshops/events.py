@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
+from api.permissions import Role, requires_role
 from common.database import (
     Event,
     EventCreate,
@@ -19,9 +20,8 @@ from common.database import (
     FeedbackRead,
     with_db,
 )
-from common.permissions import Permission, requires_permission
 
-router = APIRouter(dependencies=[Depends(requires_permission(Permission.Organizer))])
+router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 tracer = trace.get_tracer(__name__)
 
 

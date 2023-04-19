@@ -1,7 +1,14 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import baseQuery from './baseQuery';
-import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
+import type {
+  Application,
+  ApplicationAutosave,
+  Participant,
+  ReducedApplication,
+  Role,
+  School,
+  SchoolList,
+} from './types';
 import { ApplicationStatus } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -28,11 +35,11 @@ interface ApplicationCreateResponse {
 }
 
 type ApplicationUpdate = Partial<Omit<Application, 'participant' | 'created_at' | 'resume' | 'school'>> & {
-  id: string;
+  id: number;
 };
 
 interface UpdateApplicationStatus {
-  id: string;
+  id: number;
   status: ApplicationStatus;
 }
 
@@ -46,7 +53,7 @@ interface ApplicationResume {
 
 interface BulkSetApplicationStatus {
   status: ApplicationStatus;
-  ids: string[];
+  ids: number[];
 }
 
 interface MergeSchools {
@@ -54,9 +61,15 @@ interface MergeSchools {
   into: string;
 }
 
+interface ParticipantPermissionUpdate {
+  id: number;
+  role?: Role;
+  is_admin?: boolean;
+}
+
 const api = createApi({
   reducerPath: 'registration',
-  baseQuery: baseQuery('portal', BASE_URL),
+  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
     listApplications: builder.query<ReducedApplication[], void>({
@@ -73,12 +86,12 @@ const api = createApi({
         ...result.map((i) => ({ type: Tag.Participant, id: i.id })),
       ],
     }),
-    getApplication: builder.query<Application, string>({
+    getApplication: builder.query<Application, string | number>({
       query: (arg) => `/registration/applications/${arg}`,
       providesTags: (result: Application | undefined) =>
         result ? [{ type: Tag.Application, id: result.participant.id }] : [],
     }),
-    getApplicationResume: builder.query<ApplicationResume, string>({
+    getApplicationResume: builder.query<ApplicationResume, string | number>({
       query: (arg) => `/registration/applications/${arg}/resume`,
     }),
     createApplication: builder.mutation<ApplicationCreateResponse, ApplicationCreate>({
@@ -168,6 +181,28 @@ const api = createApi({
         { type: Tag.School, id: into },
       ],
     }),
+
+    // Participant endpoints
+    listParticipants: builder.query<Participant[], void>({
+      query: () => '/registration/participants/',
+      providesTags: (result: Participant[] = []) => [
+        Tag.Participant,
+        ...result.map((p) => ({ type: Tag.Participant, id: p.id })),
+      ],
+    }),
+    getParticipant: builder.query<Participant, number>({
+      query: (id) => `/registration/participants/${id}`,
+      providesTags: (result: Participant | undefined) =>
+        result !== undefined ? [{ type: Tag.Participant, id: result.id }] : [],
+    }),
+    updateParticipantPermissions: builder.mutation<Participant, ParticipantPermissionUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/participants/${id}/permissions`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [Tag.Participant, { type: Tag.Participant, id }],
+    }),
   }),
 });
 
@@ -188,4 +223,7 @@ export const {
   useCreateSchoolMutation,
   useUpdateSchoolMutation,
   useMergeSchoolsMutation,
+  useListParticipantsQuery,
+  useGetParticipantQuery,
+  useUpdateParticipantPermissionsMutation,
 } = api;

@@ -6,7 +6,7 @@ import Card from '../../../components/Card';
 import { CheckboxInput } from '../../../components/input';
 import Link from '../../../components/Link';
 import SidebarCard from '../../../components/SidebarCard';
-import { ApplicationAutosave, useGetProfileQuery } from '../../../store';
+import { ApplicationAutosave, useCurrentUserQuery } from '../../../store';
 
 interface RowProps {
   name: string;
@@ -22,7 +22,7 @@ const Row = ({ name, value }: RowProps) => (
 
 const Review = (): JSX.Element => {
   const { getFieldProps, values } = useFormikContext<ApplicationAutosave>();
-  const { data: user } = useGetProfileQuery();
+  const { data: user } = useCurrentUserQuery();
 
   return (
     <>
@@ -30,8 +30,8 @@ const Review = (): JSX.Element => {
         <Row
           name="Name"
           value={
-            user ? (
-              user.firstName + ' ' + user.lastName
+            user?.participant ? (
+              user.participant.first_name + ' ' + user.participant.last_name
             ) : (
               <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
             )

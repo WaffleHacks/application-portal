@@ -59,16 +59,20 @@ class NamespacedClient(object):
         else:
             return value.decode("utf-8")
 
-    async def set(self, key: str, value: Any):
+    async def set(self, key: str, value: Any, expires_in: Optional[int] = None):
         """
         Set a value in Redis. If the value is not a string, it will be converted to JSON
         :param key: the key to store the value at
         :param value: the value to store
+        :param expires_in: when the value should expire
         """
         if not isinstance(value, str):
             value = json.dumps(value)
 
-        await self._client.set(self.__format_key(key), value)
+        if expires_in is None:
+            await self._client.set(self.__format_key(key), value)
+        else:
+            await self._client.setex(self.__format_key(key), expires_in, value)
 
     async def delete(self, key: str):
         """

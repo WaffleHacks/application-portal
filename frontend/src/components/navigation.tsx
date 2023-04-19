@@ -1,8 +1,10 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { RefreshIcon, UserIcon } from '@heroicons/react/outline';
+import { UserIcon } from '@heroicons/react/outline';
+import Hex from 'crypto-js/enc-hex';
+import md5 from 'crypto-js/md5';
 import React, { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
+import { useCurrentUserQuery } from '../store';
 import BaseLink from './Link';
 
 interface NavItemIconProps {
@@ -34,12 +36,18 @@ export const usePageTitle = <Item extends NavItem>(paths: Item[], extraValidator
 };
 
 export const ProfilePicture = (): JSX.Element => {
-  const { isAuthenticated, user, isLoading } = useAuth0();
+  const { data } = useCurrentUserQuery();
 
-  if (isLoading) return <RefreshIcon className="h-8 w-8 rounded-full text-gray-500 animate-spin" />;
-  else if (isAuthenticated && user?.picture)
-    return <img className="h-8 w-8 rounded-full" src={user.picture} alt="profile picture" />;
-  else return <UserIcon className="h-8 w-8 rounded-full text-gray-500" />;
+  if (!data?.participant) return <UserIcon className="h-8 w-8 rounded-full text-gray-500" />;
+
+  const url = buildAvatarURL(data.participant.email);
+  return <img className="h-8 w-8 rounded-full" src={url} alt="profile picture"></img>;
+};
+
+const buildAvatarURL = (email: string): string => {
+  const normalized = email.toLowerCase().trim();
+  const hash = Hex.stringify(md5(normalized));
+  return `https://www.gravatar.com/avatar/${hash}.png`;
 };
 
 interface LinkProps {

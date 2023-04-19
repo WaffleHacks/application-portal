@@ -10,7 +10,7 @@ from nats.js.errors import NotFoundError
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from pydantic.json import pydantic_encoder
 
-from common import SETTINGS
+from .settings import SETTINGS
 
 __client = NATS()
 __propagator = TraceContextTextMapPropagator()

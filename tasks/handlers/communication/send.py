@@ -7,7 +7,6 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import Select, or_
 
-from common import SETTINGS
 from common.database import (
     Application,
     Group,
@@ -16,6 +15,7 @@ from common.database import (
     Participant,
     db_context,
 )
+from tasks.settings import SETTINGS
 
 from .shared import mailer
 
@@ -49,11 +49,11 @@ async def handler(message_id: int):
 
         await mailer.send_template(
             emails,
-            SETTINGS.tasks.sender,
+            SETTINGS.sender,
             message.subject,
             message.rendered,
             body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
-            reply_to=SETTINGS.tasks.reply_to,
+            reply_to=SETTINGS.reply_to,
         )
 
         # Mark as sent

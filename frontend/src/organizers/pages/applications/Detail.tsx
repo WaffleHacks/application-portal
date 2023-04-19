@@ -83,7 +83,7 @@ const Notes = ({ id, notes: initialNotes }: NotesProps): JSX.Element => {
       </div>
 
       <div className="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end">
-        <Button type="button" style="primary" onClick={() => update({ id, notes })}>
+        <Button type="button" style="primary" onClick={() => update({ id: parseInt(id), notes })}>
           {isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Save'}
         </Button>
       </div>
@@ -103,7 +103,7 @@ const SetStatus = ({ id }: WithId): JSX.Element => {
       <Confirm
         isOpen={open}
         close={() => setOpen(false)}
-        onClick={() => update({ id, status })}
+        onClick={() => update({ id: parseInt(id), status })}
         title={`Change the status to ${status}?`}
         description={`Are you sure you want to mark this application as ${status}? Changing the status of this application is irreversible.`}
         truthy={isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Yes'}

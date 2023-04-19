@@ -17,8 +17,8 @@ import { SortKey, sort } from './list';
 
 interface RowProps {
   application: ReducedApplication;
-  selected: string[];
-  setSelected: (selected: string[]) => void;
+  selected: number[];
+  setSelected: (selected: number[]) => void;
   disabled: boolean;
 }
 
@@ -80,7 +80,7 @@ const PendingList = (): JSX.Element => {
   const checkbox = useRef<HTMLInputElement>(null);
   const [checked, setChecked] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
 
   useLayoutEffect(() => {
     setChecked(selected.length === sorted.length && sorted.length !== 0);

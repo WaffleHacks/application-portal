@@ -1,11 +1,10 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { RefreshIcon } from '@heroicons/react/outline';
 import React, { ReactNode, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Card from '../components/Card';
 import NotFound from '../pages/NotFound';
-import { ApplicationStatus, useGetApplicationQuery } from '../store';
+import { ApplicationStatus, useCurrentUserQuery, useGetApplicationQuery } from '../store';
 import Layout from './components/Layout';
 
 const Application = React.lazy(() => import('./pages/application/Application'));
@@ -15,6 +14,8 @@ const SwagProgress = React.lazy(() => import('./pages/swag-progress/SwagProgress
 const AcceptedStatus = React.lazy(() => import('./pages/statuses/Accepted'));
 const PendingStatus = React.lazy(() => import('./pages/statuses/Pending'));
 const RejectedStatus = React.lazy(() => import('./pages/statuses/Rejected'));
+
+const Profile = React.lazy(() => import('./pages/Profile'));
 
 interface BaseProps {
   children: ReactNode;
@@ -26,6 +27,7 @@ const Base = ({ children, accepted }: BaseProps): JSX.Element => (
     <Suspense fallback={<>Loading...</>}>
       <Routes>
         {children}
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
@@ -33,8 +35,8 @@ const Base = ({ children, accepted }: BaseProps): JSX.Element => (
 );
 
 const Participants = (): JSX.Element => {
-  const { user, isLoading: isUserLoading } = useAuth0();
-  const { data: application, isLoading, isError, refetch } = useGetApplicationQuery(user?.sub || '');
+  const { data: user, isLoading: isUserLoading } = useCurrentUserQuery();
+  const { data: application, isLoading, isError, refetch } = useGetApplicationQuery(user?.participant?.id || 0);
 
   if (isLoading || isUserLoading) {
     return (

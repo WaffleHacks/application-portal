@@ -27,7 +27,22 @@ from .message_trigger import (
     MessageTriggerType,
     MessageTriggerUpdate,
 )
-from .participant import Participant, ParticipantBase, ParticipantList, ParticipantRead
+from .participant import (
+    Participant,
+    ParticipantBase,
+    ParticipantCreate,
+    ParticipantList,
+    ParticipantRead,
+    ParticipantUpdate,
+    Role,
+)
+from .provider import (
+    Provider,
+    ProviderCreate,
+    ProviderList,
+    ProviderRead,
+    ProviderUpdate,
+)
 from .recipient import Group, Recipient, RecipientCreate, RecipientRead
 from .school import School, SchoolCreate, SchoolList, SchoolRead, SchoolUpdate
 from .settings import Key as SettingsKey

@@ -18,6 +18,10 @@ const MessageDetail = React.lazy(() => import('./pages/messages/Detail'));
 const MessageEdit = React.lazy(() => import('./pages/messages/Edit'));
 const MessageNew = React.lazy(() => import('./pages/messages/New'));
 const MessagesList = React.lazy(() => import('./pages/messages/List'));
+const ProviderDetail = React.lazy(() => import('./pages/admin/providers/Detail'));
+const ProviderEdit = React.lazy(() => import('./pages/admin/providers/Edit'));
+const ProvidersList = React.lazy(() => import('./pages/admin/providers/List'));
+const NewProvider = React.lazy(() => import('./pages/admin/providers/New'));
 const SchoolDetail = React.lazy(() => import('./pages/schools/Detail'));
 const SchoolEdit = React.lazy(() => import('./pages/schools/Edit'));
 const SchoolList = React.lazy(() => import('./pages/schools/List'));
@@ -28,7 +32,9 @@ const SwagTierDetail = React.lazy(() => import('./pages/swag/tiers/Detail'));
 const SwagTierEdit = React.lazy(() => import('./pages/swag/tiers/Edit'));
 const ListSwagTiers = React.lazy(() => import('./pages/swag/tiers/List'));
 const SwagTierNew = React.lazy(() => import('./pages/swag/tiers/New'));
-const Settings = React.lazy(() => import('./pages/Settings'));
+const Settings = React.lazy(() => import('./pages/settings'));
+const UserEdit = React.lazy(() => import('./pages/admin/users/Edit'));
+const UserList = React.lazy(() => import('./pages/admin/users/List'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -71,6 +77,14 @@ const Organizers = (): JSX.Element => (
         <Route path="/messages/:id/edit" element={<MessageEdit />} />
 
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/providers" element={<ProvidersList />} />
+        <Route path="/providers/new" element={<NewProvider />} />
+        <Route path="/providers/:slug" element={<ProviderDetail />} />
+        <Route path="/providers/:slug/edit" element={<ProviderEdit />} />
+
+        <Route path="/users" element={<UserList />} />
+        <Route path="/users/:id/edit" element={<UserEdit />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

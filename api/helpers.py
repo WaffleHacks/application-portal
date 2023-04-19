@@ -4,10 +4,9 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from common.authentication import with_user_id
+from common.database import Participant, with_db
 
-from .engine import with_db
-from .tables import Participant
+from .session import with_user_id
 
 
 def with_current_participant(load_application=False):
@@ -20,7 +19,7 @@ def with_current_participant(load_application=False):
         options.append(selectinload(Participant.application))
 
     async def dependency(
-        id: str = Depends(with_user_id),
+        id: int = Depends(with_user_id),
         db: AsyncSession = Depends(with_db),
     ):
         participant = await db.get(Participant, id, options=options)

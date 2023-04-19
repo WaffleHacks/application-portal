@@ -11,8 +11,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from common.algolia import with_schools_index
-from common.authentication import is_authenticated
+from api.algolia import with_schools_index
+from api.permissions import Role, requires_role
+from api.session import with_authenticated
 from common.database import (
     Application,
     School,
@@ -22,7 +23,6 @@ from common.database import (
     SchoolUpdate,
     with_db,
 )
-from common.permissions import Permission, requires_permission
 
 router = APIRouter()
 tracer = trace.get_tracer(__name__)
@@ -36,7 +36,7 @@ class SchoolWithCount(SchoolList):
     "/",
     response_model=List[SchoolWithCount],
     name="List schools",
-    dependencies=[Depends(is_authenticated)],
+    dependencies=[Depends(with_authenticated)],
 )
 async def list(db: AsyncSession = Depends(with_db)):
     """
@@ -63,7 +63,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     response_model=SchoolList,
     status_code=HTTPStatus.CREATED,
     name="Create school",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def create(
     values: SchoolCreate,
@@ -98,7 +98,7 @@ class MergeRequest(BaseModel):
     "/merge",
     status_code=HTTPStatus.NO_CONTENT,
     name="Merge schools",
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def merge(
     params: MergeRequest,
@@ -158,7 +158,7 @@ async def merge(
     "/{id}",
     name="Read school",
     response_model=SchoolRead,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def read(id: str, db: AsyncSession = Depends(with_db)):
     """
@@ -181,7 +181,7 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
     "/{id}",
     name="Update school",
     status_code=HTTPStatus.NO_CONTENT,
-    dependencies=[Depends(requires_permission(Permission.Organizer))],
+    dependencies=[Depends(requires_role(Role.Organizer))],
 )
 async def update(
     id: str,

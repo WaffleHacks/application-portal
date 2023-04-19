@@ -1,13 +1,13 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer
 from sqlmodel import Field, SQLModel
 
 
 class EventAttendance(SQLModel, table=True):
     __tablename__ = "event_attendance"
 
-    participant_id: str = Field(
+    participant_id: int = Field(
         sa_column=Column(
-            String(),
+            Integer(),
             ForeignKey("participants.id", ondelete="CASCADE"),
             primary_key=True,
         )

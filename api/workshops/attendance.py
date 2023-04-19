@@ -11,7 +11,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from common.authentication import with_user_id
+from api.helpers import require_application_accepted
+from api.permissions import Role, requires_role
+from api.session import with_user_id
 from common.database import (
     Event,
     EventAttendance,
@@ -21,12 +23,10 @@ from common.database import (
     SwagTier,
     with_db,
 )
-from common.database.dependencies import require_application_accepted
-from common.permissions import Permission, requires_permission
 
 router = APIRouter(
     dependencies=[
-        Depends(requires_permission(Permission.Participant)),
+        Depends(requires_role(Role.Participant)),
         Depends(require_application_accepted),
     ]
 )
@@ -37,7 +37,7 @@ tracer = trace.get_tracer(__name__)
 async def mark(
     code: str,
     tasks: BackgroundTasks,
-    user_id: str = Depends(with_user_id),
+    user_id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """
@@ -69,7 +69,7 @@ class StatusResponse(BaseModel):
 )
 async def status(
     code: str,
-    user_id: str = Depends(with_user_id),
+    user_id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """
@@ -96,7 +96,7 @@ async def status(
 async def submit(
     code: str,
     params: FeedbackCreate,
-    user_id: str = Depends(with_user_id),
+    user_id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """
@@ -142,7 +142,7 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
     return event
 
 
-async def update_swag_tier(id: str, db: AsyncSession):
+async def update_swag_tier(id: int, db: AsyncSession):
     """
     Update the participant's swag tier
     """
