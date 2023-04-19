@@ -257,3 +257,7 @@ export interface Provider extends ReducedProvider {
   user_info_endpoint: string;
   scope: string;
 }
+
+export interface ProviderWithClientSecret extends Provider {
+  client_secret: string;
+}

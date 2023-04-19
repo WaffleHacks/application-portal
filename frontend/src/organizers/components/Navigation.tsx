@@ -13,6 +13,7 @@ export interface NavSection {
   id: string;
   name?: string;
   items: NavItem[];
+  adminOnly?: boolean;
 }
 
 const NavSection = (section: NavSection): JSX.Element => {

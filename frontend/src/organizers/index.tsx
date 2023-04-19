@@ -18,6 +18,10 @@ const MessageDetail = React.lazy(() => import('./pages/messages/Detail'));
 const MessageEdit = React.lazy(() => import('./pages/messages/Edit'));
 const MessageNew = React.lazy(() => import('./pages/messages/New'));
 const MessagesList = React.lazy(() => import('./pages/messages/List'));
+const ProviderDetail = React.lazy(() => import('./pages/admin/providers/Detail'));
+const ProviderEdit = React.lazy(() => import('./pages/admin/providers/Edit'));
+const ProvidersList = React.lazy(() => import('./pages/admin/providers/List'));
+const NewProvider = React.lazy(() => import('./pages/admin/providers/New'));
 const SchoolDetail = React.lazy(() => import('./pages/schools/Detail'));
 const SchoolEdit = React.lazy(() => import('./pages/schools/Edit'));
 const SchoolList = React.lazy(() => import('./pages/schools/List'));
@@ -71,6 +75,11 @@ const Organizers = (): JSX.Element => (
         <Route path="/messages/:id/edit" element={<MessageEdit />} />
 
         <Route path="/settings" element={<Settings />} />
+
+        <Route path="/providers" element={<ProvidersList />} />
+        <Route path="/providers/new" element={<NewProvider />} />
+        <Route path="/providers/:slug" element={<ProviderDetail />} />
+        <Route path="/providers/:slug/edit" element={<ProviderEdit />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

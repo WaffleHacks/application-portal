@@ -19,7 +19,8 @@ const errorLogger =
 
       const status = action.payload.status;
 
-      if (status === 401 || status === 403) toast.error('Invalid token. Please try logging out and back in.');
+      if (status === 401) toast.error('Invalid session. Please try logging out and back in.');
+      else if (status === 403) toast.error('You are not authorized to access this resource.');
       else if (action.payload.data.reason) toast.error(capitalize(action.payload.data.reason));
       else toast.error('An unexpected error occurred, please try again later');
     }

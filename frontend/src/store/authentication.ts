@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { AuthenticationStatus, Participant, Provider, ReducedProvider } from './types';
+import { AuthenticationStatus, Participant, Provider, ProviderWithClientSecret, ReducedProvider } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -25,9 +25,9 @@ interface ProfileCreate {
 
 type ProfileUpdate = Partial<ProfileCreate>;
 
-type ProviderCreate = Provider;
+type ProviderCreate = ProviderWithClientSecret;
 
-type ProviderUpdate = Partial<Omit<Provider, 'slug'>> & Pick<Provider, 'slug'>;
+type ProviderUpdate = Partial<Omit<ProviderWithClientSecret, 'slug'>> & Pick<ProviderWithClientSecret, 'slug'>;
 
 const api = createApi({
   reducerPath: 'authentication',

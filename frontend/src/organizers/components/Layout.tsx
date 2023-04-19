@@ -5,16 +5,19 @@ import {
   DotsCircleHorizontalIcon,
   HomeIcon,
   LibraryIcon,
+  LockClosedIcon,
   MailOpenIcon,
   MenuIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
+  UserIcon,
   XCircleIcon,
 } from '@heroicons/react/outline';
 import { ChartBarIcon } from '@heroicons/react/solid';
 import React, { ReactNode, useState } from 'react';
 
 import { NavItem, usePageTitle } from '../../components/navigation';
+import { useCurrentUserQuery } from '../../store';
 import Navigation, { NavSection } from './Navigation';
 
 const navigation: NavSection[] = [
@@ -47,6 +50,15 @@ const navigation: NavSection[] = [
       { name: 'Progress', href: '/swag/progress', icon: UserGroupIcon },
     ],
   },
+  {
+    id: 'admin',
+    name: 'Admin',
+    adminOnly: true,
+    items: [
+      { name: 'Providers', href: '/providers', icon: LockClosedIcon },
+      { name: 'Users', href: '/users', icon: UserIcon },
+    ],
+  },
 ];
 const paths: NavItem[] = navigation.flatMap((s) => s.items);
 
@@ -55,12 +67,16 @@ interface Props {
 }
 
 const Layout = ({ children }: Props): JSX.Element => {
+  const { data: user } = useCurrentUserQuery();
+
   const [isOpen, setIsOpen] = useState(false);
   const title = usePageTitle(paths);
 
+  const sections = navigation.filter((s) => !s.adminOnly || user?.participant?.is_admin);
+
   return (
     <div className="min-h-full">
-      <Navigation sections={navigation} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Navigation sections={sections} isOpen={isOpen} setIsOpen={setIsOpen} />
 
       <div className="md:pl-64 flex flex-col flex-1">
         <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">

@@ -5,7 +5,11 @@ import React from 'react';
 
 import { BaseProps, generateId } from './common';
 
-const Text = ({ label, ...props }: BaseProps<string>): JSX.Element => {
+type Props = BaseProps<string> & {
+  password?: boolean;
+};
+
+const Text = ({ label, password = false, ...props }: Props): JSX.Element => {
   const [field, { error, touched }] = useField(props);
   const { className, placeholder, autoComplete, disabled, required } = props;
   const id = generateId('text', label);
@@ -20,7 +24,7 @@ const Text = ({ label, ...props }: BaseProps<string>): JSX.Element => {
       </label>
       <div className="mt-1 relative rounded-md shadow-sm">
         <input
-          type="text"
+          type={password ? 'password' : 'text'}
           id={id}
           className={classNames(
             error
