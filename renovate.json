@@ -1,6 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
-  ]
+    "config:base",
+    "group:reactMonorepo",
+    "group:googleapis",
+    "group:nodeJs",
+    "group:postcss",
+    "group:opentelemetry-jsMonorepo",
+    "group:react-routerMonorepo",
+    "group:typescript-eslintMonorepo",
+    ":prImmediately",
+    ":prHourlyLimitNone"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["^@?tailwindcss"],
+      "matchUpdateTypes": ["digest", "patch", "minor", "major"],
+      "groupName": "tailwindcss monorepo"
+    }
+  ],
+  "rebaseWhen": "auto"
 }

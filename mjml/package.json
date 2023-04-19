@@ -47,5 +47,8 @@
     "html-minifier": "^4.0.0",
     "mjml": "^4.14.1",
     "winston": "^3.8.2"
+  },
+  "engines": {
+    "node": "^18"
   }
 }
