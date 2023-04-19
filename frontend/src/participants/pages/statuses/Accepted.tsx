@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import { LinkButton } from '../../../components/buttons';
@@ -10,7 +10,7 @@ const Accepted = (): JSX.Element => (
     <br />
     <br />
     <LinkButton to="https://discord.gg/xDkwbAqU55" style="success" external>
-      Discord <ExternalLinkIcon className="h-4 w-4 ml-2" aria-hidden="true" />
+      Discord <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-2" aria-hidden="true" />
     </LinkButton>
     <br />
     <br />

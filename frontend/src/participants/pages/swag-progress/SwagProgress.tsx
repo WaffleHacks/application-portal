@@ -1,11 +1,11 @@
-import { ArrowUpIcon } from '@heroicons/react/outline';
+import { ArrowUpIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 
+import ProgressBar from './ProgressBar';
 import Card from '../../../components/Card';
 import RenderMarkdown from '../../../components/RenderMarkdown';
 import { useGetSwagProgressQuery } from '../../../store';
 import Loading from '../../components/Loading';
-import ProgressBar from './ProgressBar';
 
 const SwagProgress = (): JSX.Element => {
   const { data, isLoading } = useGetSwagProgressQuery();

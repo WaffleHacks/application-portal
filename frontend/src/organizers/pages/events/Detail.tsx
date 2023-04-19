@@ -1,9 +1,10 @@
-import { ArrowLeftIcon, ClipboardCopyIcon, PencilIcon, TrashIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ClipboardDocumentIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import Stars from './Stars';
 import Badge from '../../../components/Badge';
 import { Button, LinkButton } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
@@ -13,7 +14,6 @@ import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery 
 import { Description, Item, Section } from '../../components/description';
 import NotFound from '../../components/NotFound';
 import { EmptyRow, InlineTable, Pagination, Table, usePagination } from '../../components/table';
-import Stars from './Stars';
 
 interface WithMessageId {
   id: string;
@@ -118,7 +118,7 @@ const Detail = (): JSX.Element => {
           <Item name="Code">
             <span>{data.code}</span>
             <button type="button" onClick={onCopy}>
-              <ClipboardCopyIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
+              <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
             </button>
           </Item>
           <Item name="Valid from">{validFrom}</Item>

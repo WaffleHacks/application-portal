@@ -1,13 +1,13 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import Search, { SearchItem } from './Search';
 import { Button } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
 import { useMergeSchoolsMutation } from '../../../store';
 import { Description, Section } from '../../components/description';
-import Search, { SearchItem } from './Search';
 
 const getInitial = (params: URLSearchParams): SearchItem | undefined => {
   const id = params.get('id');

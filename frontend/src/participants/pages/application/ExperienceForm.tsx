@@ -39,7 +39,7 @@ const ExperienceForm = (): JSX.Element => {
         <FileInput
           label="Resume"
           description="PDF up to 10MB"
-          accept={['.pdf', 'application/pdf']}
+          accept={{ 'application/pdf': ['.pdf'] }}
           maxSize={10 * 1024 * 1024 /* 10MB in bytes */}
           {...getFieldProps('resume')}
         />

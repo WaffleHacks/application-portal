@@ -1,5 +1,5 @@
 import { Combobox } from '@headlessui/react';
-import { SearchIcon, SelectorIcon } from '@heroicons/react/outline';
+import { ArrowsUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import algoliasearch from 'algoliasearch/lite';
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -54,7 +54,7 @@ const Search = ({ label = 'Search', onClick, value }: Props): JSX.Element => {
       <Combobox.Label className="block text-sm font-medium text-gray-700">{label}</Combobox.Label>
       <div className="relative mt-1 rounded-md shadow-sm">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </div>
         <Combobox.Input
           className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
@@ -63,7 +63,7 @@ const Search = ({ label = 'Search', onClick, value }: Props): JSX.Element => {
           autoComplete="off"
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowsUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Combobox.Button>
 
         {options.length > 0 && (

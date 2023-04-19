@@ -1,5 +1,5 @@
-import { StarIcon as EmptyStarIcon } from '@heroicons/react/outline';
-import { StarIcon as FilledStarIcon } from '@heroicons/react/solid';
+import { StarIcon as EmptyStarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 
 interface Props {

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useMarkAttendanceMutation } from '../../../store';
-import Loading from '../../components/Loading';
 import Feedback from './Feedback';
 import Status from './Status';
+import { useMarkAttendanceMutation } from '../../../store';
+import Loading from '../../components/Loading';
 
 const Attendance = (): JSX.Element => {
   const { code } = useParams();

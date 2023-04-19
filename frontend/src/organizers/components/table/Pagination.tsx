@@ -1,4 +1,4 @@
-import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon } from '@heroicons/react/outline';
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 
@@ -65,7 +65,7 @@ const Pagination = ({ page, setPage, max }: Props): JSX.Element => {
             page === 0 ? '' : 'border-t-2 border-transparent hover:text-gray-700 hover:border-gray-300',
           )}
         >
-          <ArrowNarrowLeftIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowLongLeftIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
           Previous
         </button>
       </div>
@@ -89,7 +89,7 @@ const Pagination = ({ page, setPage, max }: Props): JSX.Element => {
           )}
         >
           Next
-          <ArrowNarrowRightIcon className="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowLongRightIcon className="ml-3 h-5 w-5 text-gray-400" aria-hidden="true" />
         </button>
       </div>
     </nav>

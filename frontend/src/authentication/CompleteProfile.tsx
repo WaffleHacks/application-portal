@@ -1,12 +1,12 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
+import Layout from './components/Layout';
 import { Button } from '../components/buttons';
 import { ReadOnlyTextInput, TextInput } from '../components/input';
 import { useCompleteProfileMutation, useCurrentUserQuery } from '../store';
-import Layout from './components/Layout';
 
 interface Values {
   first_name: string;
@@ -64,7 +64,7 @@ const CompleteProfile = (): JSX.Element => {
               disabled={!isValid || isSubmitting || isFormikSubmitting}
             >
               {isSubmitting || isFormikSubmitting ? (
-                <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
+                <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
               ) : (
                 'Save'
               )}

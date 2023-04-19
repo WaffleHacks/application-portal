@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ClipboardIcon, DocumentDuplicateIcon, PencilIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ClipboardIcon, DocumentDuplicateIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';

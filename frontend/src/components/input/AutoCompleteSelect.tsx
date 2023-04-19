@@ -1,5 +1,5 @@
 import { Combobox } from '@headlessui/react';
-import { CheckIcon, ExclamationCircleIcon, SelectorIcon } from '@heroicons/react/outline';
+import { ArrowsUpDownIcon, CheckIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import algoliasearch from 'algoliasearch/lite';
 import classNames from 'classnames';
 import { useField } from 'formik';
@@ -105,7 +105,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
   const errorId = generateId('autocomplete-select', label) + '-error';
 
   return (
-    <Combobox as="div" value={value} onChange={(v) => setValue(v, true)} className={className}>
+    <Combobox as="div" value={value} onChange={(v) => setValue(v, true)} className={className} disabled={disabled}>
       <Combobox.Label className="block text-sm font-medium text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </Combobox.Label>
@@ -122,13 +122,12 @@ const AutoCompleteSelect = <Item extends BaseItem>({
           displayValue={(v: string) => v}
           placeholder={placeholder}
           required={required}
-          disabled={disabled}
           autoComplete="off"
           aria-describedby={errorId}
           aria-invalid={hasError}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ArrowsUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Combobox.Button>
         {error && (
           <div className="absolute inset-y-0 right-5 pr-3 flex items-center pointer-events-none">

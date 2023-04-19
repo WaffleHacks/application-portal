@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationIcon } from '@heroicons/react/outline';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { Fragment, ReactNode, useRef } from 'react';
 
@@ -72,7 +72,7 @@ const Confirm = ({
                         'mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10',
                       )}
                     >
-                      <ExclamationIcon
+                      <ExclamationTriangleIcon
                         className={classNames(
                           { 'text-red-600': style === 'danger', 'text-yellow-600': style === 'warning' },
                           'h-6 w-6',

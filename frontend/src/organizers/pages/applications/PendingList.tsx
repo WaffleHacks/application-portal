@@ -1,7 +1,8 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
+import { SortKey, sort } from './list';
 import { Button } from '../../../components/buttons';
 import Confirm from '../../../components/Confirm';
 import Link from '../../../components/Link';
@@ -13,7 +14,6 @@ import {
 } from '../../../store';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
 import WarningFlag from '../../components/WarningFlag';
-import { SortKey, sort } from './list';
 
 interface RowProps {
   application: ReducedApplication;
@@ -118,7 +118,7 @@ const PendingList = (): JSX.Element => {
         onClick={() => bulkSetStatus({ status, ids: selected })}
         title={`Mark ${selected.length} applications as ${status}?`}
         description={`Are you sure you want to change the status of ${selected.length} applications to ${status}? Make sure you have checked that these applicants are eligible to participate. Changing the status of these applications is irreversible.`}
-        truthy={isSetStatusLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Yes'}
+        truthy={isSetStatusLoading ? <ArrowPathIcon className="h-4 w-4 animate-spin" /> : 'Yes'}
         style="warning"
       />
 
@@ -142,7 +142,11 @@ const PendingList = (): JSX.Element => {
                   disabled={isSetStatusLoading}
                   onClick={() => setStatus(ApplicationStatus.Accepted)}
                 >
-                  {isSetStatusLoading ? <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden={true} /> : 'Accept'}
+                  {isSetStatusLoading ? (
+                    <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden={true} />
+                  ) : (
+                    'Accept'
+                  )}
                 </Button>
                 <Button
                   type="button"
@@ -150,7 +154,11 @@ const PendingList = (): JSX.Element => {
                   disabled={isSetStatusLoading}
                   onClick={() => setStatus(ApplicationStatus.Rejected)}
                 >
-                  {isSetStatusLoading ? <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden={true} /> : 'Reject'}
+                  {isSetStatusLoading ? (
+                    <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden={true} />
+                  ) : (
+                    'Reject'
+                  )}
                 </Button>
               </div>
             )}

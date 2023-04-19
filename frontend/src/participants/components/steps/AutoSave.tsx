@@ -1,4 +1,4 @@
-import { CheckCircleIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { FormikValues, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 
@@ -8,7 +8,11 @@ interface Props<Values extends FormikValues> {
   isSaving: boolean;
 }
 
-const AutoSave = <Values,>({ debounce: debounceMs = 250, isSaving, onSave }: Props<Values>): JSX.Element => {
+const AutoSave = <Values extends FormikValues>({
+  debounce: debounceMs = 250,
+  isSaving,
+  onSave,
+}: Props<Values>): JSX.Element => {
   const { values, validateForm } = useFormikContext<Values>();
   const [awaiting, setAwaiting] = useState(false);
 
@@ -23,7 +27,7 @@ const AutoSave = <Values,>({ debounce: debounceMs = 250, isSaving, onSave }: Pro
 
   const icon =
     awaiting || isSaving ? (
-      <RefreshIcon className="inline h-4 w-4 animate-spin" />
+      <ArrowPathIcon className="inline h-4 w-4 animate-spin" />
     ) : (
       <CheckCircleIcon className="inline h-4 w-4" />
     );

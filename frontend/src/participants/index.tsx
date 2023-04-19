@@ -1,11 +1,11 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import Layout from './components/Layout';
 import Card from '../components/Card';
 import NotFound from '../pages/NotFound';
 import { ApplicationStatus, useCurrentUserQuery, useGetApplicationQuery } from '../store';
-import Layout from './components/Layout';
 
 const Application = React.lazy(() => import('./pages/application/Application'));
 const Attendance = React.lazy(() => import('./pages/attendance/Attendance'));
@@ -42,7 +42,7 @@ const Participants = (): JSX.Element => {
     return (
       <Layout accepted={false}>
         <Card className="flex justify-around">
-          <RefreshIcon className="h-8 w-8 animate-spin" />
+          <ArrowPathIcon className="h-8 w-8 animate-spin" />
         </Card>
       </Layout>
     );

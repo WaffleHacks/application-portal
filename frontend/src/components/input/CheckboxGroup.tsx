@@ -1,4 +1,4 @@
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Field, useField } from 'formik';
 import React from 'react';
 

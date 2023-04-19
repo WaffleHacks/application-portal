@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import { LinkButton } from '../../components/buttons';

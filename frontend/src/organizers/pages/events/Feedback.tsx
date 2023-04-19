@@ -1,14 +1,14 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import Stars from './Stars';
 import Badge from '../../../components/Badge';
 import { LinkButton } from '../../../components/buttons';
 import { useGetDetailedEventFeedbackQuery } from '../../../store';
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
-import Stars from './Stars';
 
 const Feedback = (): JSX.Element => {
   const { eventId, participantId } = useParams();

@@ -1,4 +1,4 @@
-import { CheckCircleIcon, DocumentTextIcon, XCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon, DocumentTextIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
