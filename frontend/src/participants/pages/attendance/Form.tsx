@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Formik, Form as FormikForm } from 'formik';
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
@@ -75,7 +75,7 @@ const Form = ({ code, refetch }: Props): JSX.Element => {
           <div className="flex justify-end">
             <Button type="submit" style="success" disabled={!isValid}>
               {isSubmitting || isLoading ? (
-                <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
+                <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
               ) : (
                 'Submit'
               )}

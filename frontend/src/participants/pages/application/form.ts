@@ -65,7 +65,8 @@ export const validationSchema = {
       .test(
         'file-provided',
         'Your resume was not auto-saved, please add it again.',
-        (value: AutosaveResume | null | undefined) => value === undefined || value === null || value instanceof File,
+        (ctx, value: AutosaveResume | null | undefined) =>
+          value === undefined || value === null || value instanceof File,
       ),
     share_information: Yup.boolean(),
   }),

@@ -1,9 +1,9 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
+import Layout from './components/Layout';
 import { useListProvidersQuery } from '../store';
 import { ReducedProvider } from '../store/types';
-import Layout from './components/Layout';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -12,7 +12,7 @@ const Login = (): JSX.Element => {
 
   let inner;
   if (isLoading) {
-    inner = <RefreshIcon className="mx-auto h-12 w-12 animate-spin" />;
+    inner = <ArrowPathIcon className="mx-auto h-12 w-12 animate-spin" />;
   } else if (providers.length === 0) {
     inner = (
       <p className="text-red-500 font-bold text-center">

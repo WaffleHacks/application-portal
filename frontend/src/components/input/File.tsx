@@ -1,15 +1,15 @@
-import { DocumentAddIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
+import { DocumentPlusIcon, DocumentTextIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useField } from 'formik';
 import React from 'react';
-import { useDropzone } from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 
-import { Button } from '../buttons';
 import { BaseProps, generateId } from './common';
+import { Button } from '../buttons';
 
 type Props = BaseProps<File | undefined> & {
   description: string;
-  accept?: string[];
+  accept?: Accept;
   maxSize?: number;
 };
 
@@ -37,7 +37,7 @@ const File = ({ label, description, accept, maxSize, ...props }: Props): JSX.Ele
     icon = <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />;
     text = value.name;
   } else {
-    icon = <DocumentAddIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />;
+    icon = <DocumentPlusIcon className="mx-auto h-12 w-12 text-gray-400 stroke-1" />;
     text = 'Upload a file or drag and drop';
   }
 

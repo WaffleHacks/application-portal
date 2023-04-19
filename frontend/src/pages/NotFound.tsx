@@ -1,4 +1,4 @@
-import { ArrowSmLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline';
+import { ArrowSmallLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import { LinkButton } from '../components/buttons';
@@ -18,7 +18,7 @@ const NotFound = ({ to = '/' }: Props): JSX.Element => (
       </p>
       <div className="mt-6">
         <LinkButton to={to}>
-          <ArrowSmLeftIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+          <ArrowSmallLeftIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
           Return home
         </LinkButton>
       </div>

@@ -1,4 +1,4 @@
-import { DocumentIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon, DocumentIcon } from '@heroicons/react/24/outline';
 import React, { ReactNode } from 'react';
 
 interface RowSpan {
@@ -9,7 +9,7 @@ export const LoadingRow = ({ span = 5 }: RowSpan): JSX.Element => (
   <tr>
     <td colSpan={span}>
       <div className="flex justify-around py-5">
-        <RefreshIcon className="h-8 w-8 animate-spin" />
+        <ArrowPathIcon className="h-8 w-8 animate-spin" />
       </div>
     </td>
   </tr>

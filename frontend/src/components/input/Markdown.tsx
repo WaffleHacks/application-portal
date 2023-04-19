@@ -1,12 +1,12 @@
 import { Tab } from '@headlessui/react';
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useField } from 'formik';
 import React, { ReactNode } from 'react';
 
+import { BaseProps, generateId } from './common';
 import Link from '../Link';
 import RenderMarkdown from '../RenderMarkdown';
-import { BaseProps, generateId } from './common';
 
 type Props = BaseProps<string> & {
   description?: ReactNode;

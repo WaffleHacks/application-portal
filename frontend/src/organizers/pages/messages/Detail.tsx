@@ -1,15 +1,16 @@
 import {
   ArrowLeftIcon,
+  ArrowPathIcon,
   CheckCircleIcon,
   PaperAirplaneIcon,
   PencilIcon,
-  RefreshIcon,
   TrashIcon,
-} from '@heroicons/react/outline';
+} from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import StatusBadge from './StatusBadge';
 import Alert from '../../../components/Alert';
 import Badge from '../../../components/Badge';
 import { Button, ButtonGroup, LinkButton } from '../../../components/buttons';
@@ -26,7 +27,6 @@ import {
 import { Description, Item, Section } from '../../components/description';
 import Loading from '../../components/Loading';
 import NotFound from '../../components/NotFound';
-import StatusBadge from './StatusBadge';
 
 interface WithMessageId {
   id: string;
@@ -118,7 +118,7 @@ const SendButtons = ({ id, status }: SendButtonsProps): JSX.Element => {
           disabled={isUpdateLoading}
         >
           {isUpdateLoading ? (
-            <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+            <ArrowPathIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
           ) : (
             <CheckCircleIcon className="h-4 w-4 mr-2" aria-hidden="true" />
           )}
@@ -138,7 +138,7 @@ const SendButtons = ({ id, status }: SendButtonsProps): JSX.Element => {
           disabled={isSendLoading}
         >
           {isSendLoading ? (
-            <RefreshIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
+            <ArrowPathIcon className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
           ) : (
             <PaperAirplaneIcon className="h-4 w-4 mr-2" aria-hidden="true" />
           )}

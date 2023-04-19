@@ -1,10 +1,10 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Form from './Form';
 import { LinkButton } from '../../../components/buttons';
 import { useCreateMessageMutation } from '../../../store';
-import Form from './Form';
 
 const New = (): JSX.Element => {
   const navigate = useNavigate();

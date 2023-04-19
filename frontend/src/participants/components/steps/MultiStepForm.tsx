@@ -1,11 +1,11 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Form, Formik, FormikValues } from 'formik';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Button } from '../../../components/buttons';
 import AutoSave from './AutoSave';
 import Progress from './Progress';
 import { Props as StepProps } from './Step';
+import { Button } from '../../../components/buttons';
 
 interface ValidatorProps {
   step: number;
@@ -30,7 +30,7 @@ interface Props<Values extends FormikValues> {
   children: ReactElement<StepProps>[];
 }
 
-const MultiStepForm = <Values,>({
+const MultiStepForm = <Values extends FormikValues>({
   initialValues,
   onSubmit,
   onAutosave,
@@ -73,7 +73,7 @@ const MultiStepForm = <Values,>({
             >
               {step === children.length - 1 ? 'Submit' : 'Next'}
               {(formik.isSubmitting || isSubmitting) && (
-                <RefreshIcon className="h-4 w-5 animate-spin" aria-hidden="true" />
+                <ArrowPathIcon className="h-4 w-5 animate-spin" aria-hidden="true" />
               )}
             </Button>
           </div>

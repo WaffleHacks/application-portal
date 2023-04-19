@@ -1,11 +1,11 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
+import { DesktopProfile, MobileProfile } from './Profiles';
 import { NavItem as BaseNavItem, Link, ProfilePicture } from '../../components/navigation';
 import logo from '../../logo.png';
-import { DesktopProfile, MobileProfile } from './Profiles';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -97,9 +97,9 @@ const Navigation = ({ items, accepted }: Props): JSX.Element => {
                 <Disclosure.Button className="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XIcon className="block h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>

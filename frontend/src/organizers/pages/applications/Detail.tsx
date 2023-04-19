@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ExternalLinkIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ArrowPathIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -41,9 +41,9 @@ const ResumeLink = ({ id }: WithId): JSX.Element => {
     <Button type="button" onClick={onClick} disabled={isLoading}>
       {isLoading ? 'Opening...' : 'Open'}
       {isLoading ? (
-        <RefreshIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+        <ArrowPathIcon className="ml-2 h-4 w-4" aria-hidden="true" />
       ) : (
-        <ExternalLinkIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+        <ArrowTopRightOnSquareIcon className="ml-2 h-4 w-4" aria-hidden="true" />
       )}
     </Button>
   );
@@ -84,7 +84,7 @@ const Notes = ({ id, notes: initialNotes }: NotesProps): JSX.Element => {
 
       <div className="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end">
         <Button type="button" style="primary" onClick={() => update({ id: parseInt(id), notes })}>
-          {isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Save'}
+          {isLoading ? <ArrowPathIcon className="h-4 w-4 animate-spin" /> : 'Save'}
         </Button>
       </div>
     </div>
@@ -106,7 +106,7 @@ const SetStatus = ({ id }: WithId): JSX.Element => {
         onClick={() => update({ id: parseInt(id), status })}
         title={`Change the status to ${status}?`}
         description={`Are you sure you want to mark this application as ${status}? Changing the status of this application is irreversible.`}
-        truthy={isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Yes'}
+        truthy={isLoading ? <ArrowPathIcon className="h-4 w-4 animate-spin" /> : 'Yes'}
         style="warning"
       />
       <div className="flex justify-around">
@@ -131,7 +131,7 @@ const SetStatus = ({ id }: WithId): JSX.Element => {
           </div>
         </fieldset>
         <Button type="button" style="secondary" onClick={() => setOpen(true)}>
-          {isLoading ? <RefreshIcon className="h-4 w-4 animate-spin" /> : 'Save'}
+          {isLoading ? <ArrowPathIcon className="h-4 w-4 animate-spin" /> : 'Save'}
         </Button>
       </div>
     </>

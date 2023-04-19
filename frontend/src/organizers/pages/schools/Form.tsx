@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, RefreshIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { ArrayHelpers, FieldArray, Formik, Form as FormikForm, FormikProps } from 'formik';
 import React from 'react';
 
@@ -82,7 +82,7 @@ const Form = ({ returnTo, values = initialValues, onSubmit, isSubmitting, title,
                   Back
                 </LinkButton>
                 <Button type="submit" style="success" disabled={!isValid || isSubmitting || isFormikSubmitting}>
-                  {isSubmitting ? <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" /> : 'Submit'}
+                  {isSubmitting ? <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" /> : 'Submit'}
                 </Button>
               </div>
             </Section>

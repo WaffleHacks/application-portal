@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 
@@ -33,13 +33,13 @@ const Review = (): JSX.Element => {
             user?.participant ? (
               user.participant.first_name + ' ' + user.participant.last_name
             ) : (
-              <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
+              <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
             )
           }
         />
         <Row
           name="Email"
-          value={user ? user.email : <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />}
+          value={user ? user.email : <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />}
         />
         <Row name="Gender" value={values.gender} />
         <Row name="Race / Ethnicity" value={values.race_ethnicity} />

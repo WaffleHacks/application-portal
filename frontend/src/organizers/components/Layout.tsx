@@ -1,32 +1,32 @@
 import {
+  Bars3Icon,
+  BuildingLibraryIcon,
   CalendarIcon,
   CheckCircleIcon,
   CogIcon,
-  DotsCircleHorizontalIcon,
+  EllipsisHorizontalCircleIcon,
+  EnvelopeOpenIcon,
   HomeIcon,
-  LibraryIcon,
   LockClosedIcon,
-  MailOpenIcon,
-  MenuIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
   UserIcon,
   XCircleIcon,
-} from '@heroicons/react/outline';
-import { ChartBarIcon } from '@heroicons/react/solid';
+} from '@heroicons/react/24/outline';
+import { ChartBarIcon } from '@heroicons/react/24/solid';
 import React, { ReactNode, useState } from 'react';
 
+import Navigation, { NavSection } from './Navigation';
 import { NavItem, usePageTitle } from '../../components/navigation';
 import { useCurrentUserQuery } from '../../store';
-import Navigation, { NavSection } from './Navigation';
 
 const navigation: NavSection[] = [
   {
     id: 'general',
     items: [
       { name: 'Dashboard', href: '/', icon: HomeIcon, exact: true },
-      { name: 'Messages', href: '/messages', icon: MailOpenIcon },
-      { name: 'Schools', href: '/schools', icon: LibraryIcon },
+      { name: 'Messages', href: '/messages', icon: EnvelopeOpenIcon },
+      { name: 'Schools', href: '/schools', icon: BuildingLibraryIcon },
       { name: 'Settings', href: '/settings', icon: CogIcon },
     ],
   },
@@ -34,7 +34,7 @@ const navigation: NavSection[] = [
     id: 'applications',
     name: 'Applications',
     items: [
-      { name: 'Pending', href: '/applications/pending', icon: DotsCircleHorizontalIcon },
+      { name: 'Pending', href: '/applications/pending', icon: EllipsisHorizontalCircleIcon },
       { name: 'Accepted', href: '/applications/accepted', icon: CheckCircleIcon },
       { name: 'Rejected', href: '/applications/rejected', icon: XCircleIcon },
       { name: 'Incomplete', href: '/applications/incomplete', icon: QuestionMarkCircleIcon },
@@ -86,7 +86,7 @@ const Layout = ({ children }: Props): JSX.Element => {
             onClick={() => setIsOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
-            <MenuIcon className="h-6 w-6" aria-hidden="true" />
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
 

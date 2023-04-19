@@ -1,6 +1,6 @@
 import { RadioGroup } from '@headlessui/react';
-import { StarIcon as EmptyStarIcon, ExclamationCircleIcon } from '@heroicons/react/outline';
-import { StarIcon as FilledStarIcon } from '@heroicons/react/solid';
+import { StarIcon as EmptyStarIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { StarIcon as FilledStarIcon } from '@heroicons/react/24/solid';
 import { useField } from 'formik';
 import React from 'react';
 

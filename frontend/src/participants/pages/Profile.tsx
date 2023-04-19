@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
@@ -49,7 +49,7 @@ const Profile = (): JSX.Element => {
               disabled={!isValid || isFormikSubmitting || isLoading}
             >
               {isFormikSubmitting || isLoading ? (
-                <RefreshIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
+                <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
               ) : (
                 'Save'
               )}

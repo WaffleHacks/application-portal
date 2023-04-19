@@ -1,11 +1,11 @@
-import { UserIcon } from '@heroicons/react/outline';
+import { UserIcon } from '@heroicons/react/24/outline';
 import Hex from 'crypto-js/enc-hex';
 import md5 from 'crypto-js/md5';
 import React, { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
-import { useCurrentUserQuery } from '../store';
 import BaseLink from './Link';
+import { useCurrentUserQuery } from '../store';
 
 interface NavItemIconProps {
   className?: string;
@@ -17,7 +17,7 @@ export interface NavItem {
   external?: boolean;
   hidden?: boolean;
   exact?: boolean;
-  icon?: (props: NavItemIconProps) => JSX.Element;
+  icon?: (props: NavItemIconProps) => JSX.Element | null;
 }
 
 type ExtraValidator = <Item extends NavItem>(item: Item) => boolean;

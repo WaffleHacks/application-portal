@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -10,7 +10,7 @@ interface Props {
 
 const Loading = ({ className }: Props): JSX.Element => (
   <Card className={classNames('flex justify-around', className)}>
-    <RefreshIcon className="h-8 w-8 animate-spin" />
+    <ArrowPathIcon className="h-8 w-8 animate-spin" />
   </Card>
 );
 

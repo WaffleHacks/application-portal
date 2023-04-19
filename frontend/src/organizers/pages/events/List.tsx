@@ -1,4 +1,4 @@
-import { ClipboardCopyIcon, PlusIcon } from '@heroicons/react/outline';
+import { ClipboardDocumentIcon, PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -20,7 +20,7 @@ const Row = (event: ReducedEvent) => {
       <Table.Data>
         <span>{event.code}</span>
         <button type="button" onClick={onClick}>
-          <ClipboardCopyIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
+          <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
         </button>
       </Table.Data>
       <Table.Data>

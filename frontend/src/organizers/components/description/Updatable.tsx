@@ -1,4 +1,4 @@
-import { RefreshIcon } from '@heroicons/react/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { ReactNode, useCallback, useState } from 'react';
 
@@ -79,7 +79,7 @@ export const UpdatableItem = <T,>({
         Cancel
       </MinimalButton>
       <span className="text-gray-500 font-bold mx-3" aria-hidden="true">
-        {loading ? <RefreshIcon className="mt-0.5 h-4 w-4 animate-spin" aria-hidden="true" /> : '|'}
+        {loading ? <ArrowPathIcon className="mt-0.5 h-4 w-4 animate-spin" aria-hidden="true" /> : '|'}
       </span>
       <MinimalButton onClick={onSubmit} disabled={loading}>
         Save
