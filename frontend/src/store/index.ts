@@ -29,9 +29,6 @@ export const store = configureStore({
 // Trigger re-fetches upon reconnection and upon regaining focus
 setupListeners(store.dispatch);
 
-export type RootState = ReturnType<typeof store.getState>;
-export type Dispatch = typeof store.dispatch;
-
 // Re-export actions and hooks
 export {
   useCurrentUserQuery,
@@ -72,6 +69,9 @@ export {
   useCreateSchoolMutation,
   useUpdateSchoolMutation,
   useMergeSchoolsMutation,
+  useListParticipantsQuery,
+  useGetParticipantQuery,
+  useUpdateParticipantPermissionsMutation,
 } from './registration';
 export type {
   ApplicationAutosave,

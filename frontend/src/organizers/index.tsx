@@ -33,6 +33,8 @@ const SwagTierEdit = React.lazy(() => import('./pages/swag/tiers/Edit'));
 const ListSwagTiers = React.lazy(() => import('./pages/swag/tiers/List'));
 const SwagTierNew = React.lazy(() => import('./pages/swag/tiers/New'));
 const Settings = React.lazy(() => import('./pages/settings'));
+const UserEdit = React.lazy(() => import('./pages/admin/users/Edit'));
+const UserList = React.lazy(() => import('./pages/admin/users/List'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -80,6 +82,9 @@ const Organizers = (): JSX.Element => (
         <Route path="/providers/new" element={<NewProvider />} />
         <Route path="/providers/:slug" element={<ProviderDetail />} />
         <Route path="/providers/:slug/edit" element={<ProviderEdit />} />
+
+        <Route path="/users" element={<UserList />} />
+        <Route path="/users/:id/edit" element={<UserEdit />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,6 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { Application, ApplicationAutosave, Participant, ReducedApplication, School, SchoolList } from './types';
+import type {
+  Application,
+  ApplicationAutosave,
+  Participant,
+  ReducedApplication,
+  Role,
+  School,
+  SchoolList,
+} from './types';
 import { ApplicationStatus } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -51,6 +59,12 @@ interface BulkSetApplicationStatus {
 interface MergeSchools {
   from: string;
   into: string;
+}
+
+interface ParticipantPermissionUpdate {
+  id: number;
+  role?: Role;
+  is_admin?: boolean;
 }
 
 const api = createApi({
@@ -167,6 +181,28 @@ const api = createApi({
         { type: Tag.School, id: into },
       ],
     }),
+
+    // Participant endpoints
+    listParticipants: builder.query<Participant[], void>({
+      query: () => '/registration/participants/',
+      providesTags: (result: Participant[] = []) => [
+        Tag.Participant,
+        ...result.map((p) => ({ type: Tag.Participant, id: p.id })),
+      ],
+    }),
+    getParticipant: builder.query<Participant, number>({
+      query: (id) => `/registration/participants/${id}`,
+      providesTags: (result: Participant | undefined) =>
+        result !== undefined ? [{ type: Tag.Participant, id: result.id }] : [],
+    }),
+    updateParticipantPermissions: builder.mutation<Participant, ParticipantPermissionUpdate>({
+      query: ({ id, ...body }) => ({
+        url: `/registration/participants/${id}/permissions`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [Tag.Participant, { type: Tag.Participant, id }],
+    }),
   }),
 });
 
@@ -187,4 +223,7 @@ export const {
   useCreateSchoolMutation,
   useUpdateSchoolMutation,
   useMergeSchoolsMutation,
+  useListParticipantsQuery,
+  useGetParticipantQuery,
+  useUpdateParticipantPermissionsMutation,
 } = api;
