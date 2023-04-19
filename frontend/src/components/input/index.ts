@@ -11,6 +11,7 @@ export { default as MarkdownInput } from './Markdown';
 export { default as NumberInput } from './Number';
 export { default as PhoneInput } from './PhoneInput';
 export { default as RatingInput } from './Rating';
+export { default as ReadOnlyTextInput } from './ReadOnlyText';
 export { default as SelectInput } from './Select';
 export { default as SwitchInput } from './Switch';
 export { default as TextInput } from './Text';

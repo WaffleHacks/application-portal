@@ -15,6 +15,8 @@ const AcceptedStatus = React.lazy(() => import('./pages/statuses/Accepted'));
 const PendingStatus = React.lazy(() => import('./pages/statuses/Pending'));
 const RejectedStatus = React.lazy(() => import('./pages/statuses/Rejected'));
 
+const Profile = React.lazy(() => import('./pages/Profile'));
+
 interface BaseProps {
   children: ReactNode;
   accepted: boolean;
@@ -25,6 +27,7 @@ const Base = ({ children, accepted }: BaseProps): JSX.Element => (
     <Suspense fallback={<>Loading...</>}>
       <Routes>
         {children}
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

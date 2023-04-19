@@ -4,7 +4,7 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { Button } from '../components/buttons';
-import { TextInput } from '../components/input';
+import { ReadOnlyTextInput, TextInput } from '../components/input';
 import { useCompleteProfileMutation, useCurrentUserQuery } from '../store';
 import Layout from './components/Layout';
 
@@ -42,7 +42,7 @@ const CompleteProfile = (): JSX.Element => {
       >
         {({ getFieldProps, isValid, isSubmitting: isFormikSubmitting }) => (
           <Form>
-            <ReadOnlyText id="email" label="Your email" value={email} />
+            <ReadOnlyTextInput id="email" label="Your email" value={email} />
             <TextInput
               className="mt-4"
               label="What is your given (or 'first') name?"
@@ -75,28 +75,5 @@ const CompleteProfile = (): JSX.Element => {
     </Layout>
   );
 };
-
-interface ReadOnlyTextProps {
-  id: string;
-  label: string;
-  value: string;
-}
-
-const ReadOnlyText = ({ id, label, value }: ReadOnlyTextProps): JSX.Element => (
-  <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-      {label} (read only)
-    </label>
-    <div className="mt-1 relative rounded-md shadow-sm">
-      <input
-        type="text"
-        id={id}
-        className="bg-gray-100 border-gray-300 block w-full shadow-sm sm:text-sm rounded-md"
-        disabled
-        value={value}
-      />
-    </div>
-  </div>
-);
 
 export default CompleteProfile;
