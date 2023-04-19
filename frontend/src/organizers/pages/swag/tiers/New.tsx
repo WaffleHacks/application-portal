@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useCreateSwagTierMutation } from '../../../../store';
 import Form from './Form';
+import { useCreateSwagTierMutation } from '../../../../store';
 
 const New = (): JSX.Element => {
   const navigate = useNavigate();

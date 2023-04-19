@@ -1,9 +1,9 @@
 import React from 'react';
 
+import AcceptingApplicationsToggle from './AcceptingApplicationsToggle';
 import { useGetSettingsQuery } from '../../../store';
 import { Description, UpdatableSection } from '../../components/description';
 import Loading from '../../components/Loading';
-import AcceptingApplicationsToggle from './AcceptingApplicationsToggle';
 
 const Settings = (): JSX.Element => {
   const { data: settings, isLoading } = useGetSettingsQuery();
