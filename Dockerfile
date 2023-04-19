@@ -9,6 +9,15 @@ RUN apt-get update && \
     apt-get upgrade -y
 
 
+FROM base as export-dependencies
+
+RUN pip install --no-cache-dir poetry
+
+# Export dependencies to requirements.txt format
+COPY poetry.lock pyproject.toml ./
+RUN poetry export -f requirements.txt -o requirements.txt
+
+
 # Install dependencies for caching
 FROM base as dependencies
 
@@ -16,7 +25,7 @@ FROM base as dependencies
 RUN apt-get install -y --no-install-recommends build-essential git
 
 # Install the depednencies
-COPY requirements.txt ./
+COPY --from=export-dependencies /requirements.txt ./
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt --prefix=/dependencies --no-warn-script-location
 

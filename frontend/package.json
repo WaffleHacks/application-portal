@@ -60,6 +60,9 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "eslint --fix ."
   },
+  "engines": {
+    "node": "^18"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
