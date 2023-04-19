@@ -12,11 +12,6 @@ import { Description, Section } from '../../../components/description';
 import Loading from '../../../components/Loading';
 import NotFound from '../../../components/NotFound';
 
-interface Values {
-  role?: Role;
-  is_admin?: boolean;
-}
-
 const validationSchema = Yup.object({
   role: Yup.string().required('This field is required').oneOf(Object.values(Role), 'You must select an option'),
   is_admin: Yup.boolean(),
