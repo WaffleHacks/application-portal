@@ -77,6 +77,5 @@ class CredentialsResponse(BaseModel):
 
 
 class UserInfo(BaseModel):
-    id: str
     email: str
     email_verified: bool = True
