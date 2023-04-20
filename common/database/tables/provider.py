@@ -51,7 +51,7 @@ class Provider(ProviderWithSensitive, table=True):
             response_type="code",
             client_id=self.client_id,
             scope=self.scope,
-            redirect_url=redirect,
+            redirect_uri=redirect,
             state=state,
         )
 
