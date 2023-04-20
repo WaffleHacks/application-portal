@@ -36,7 +36,7 @@ def init(app: Optional[FastAPI] = None):
         AioHttpClientInstrumentor().instrument()
         FilteredBotocoreInstrumentor().instrument(excluded=["SQS.ReceiveMessage"])
         if app:
-            FastAPIInstrumentor.instrument_app(app)
+            FastAPIInstrumentor.instrument_app(app, excluded_urls="health")
         SQLAlchemyInstrumentor().instrument(engine=engine.sync_engine)
     else:
         print("OpenTelemetry: disabled")
