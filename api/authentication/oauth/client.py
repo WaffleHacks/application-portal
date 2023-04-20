@@ -12,9 +12,15 @@ class OAuthClientException(Exception):
 
 class OAuthClient(object):
     def __init__(self):
-        self.session = ClientSession(headers={"Accept": "application/json"})
+        self.session: ClientSession = None  # type: ignore
+
+    async def __init_session(self):
+        if self.session is None:
+            self.session = ClientSession(headers={"Accept": "application/json"})
 
     async def exchange(self, code: str, redirect_uri: str, provider: Provider) -> str:
+        await self.__init_session()
+
         response = await self.session.post(
             provider.token_endpoint,
             data=FormData(
@@ -46,6 +52,8 @@ class OAuthClient(object):
         return credentials.access_token
 
     async def user_info(self, token: str, provider: Provider) -> "UserInfo":
+        await self.__init_session()
+
         response = await self.session.get(
             provider.user_info_endpoint,
             headers={"Authorization": f"Bearer {token}"},
