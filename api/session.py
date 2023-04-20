@@ -6,6 +6,7 @@ from http import HTTPStatus
 from typing import Annotated, Optional
 
 from fastapi import Cookie, Depends, HTTPException, Response
+from opentelemetry import trace
 from pydantic import BaseModel, PrivateAttr
 
 from common.kv import engine
@@ -109,6 +110,10 @@ async def with_session(
 
     session = Session.parse_raw(session)
     session._value = session_id
+
+    if session.id:
+        trace.get_current_span().set_attribute("user.id", session.id)
+
     return session
 
 
