@@ -1,16 +1,12 @@
-name: Docker
+name: Deploy
 
 on:
-  push:
-    branches:
-      - "**"
-    tags:
-      - "v*.*.*"
+  - push
 
 jobs:
-  applications:
-    name: Applications
-    runs-on: ubuntu-20.04
+  containers:
+    name: Containers
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -77,3 +73,23 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-22.04
+    needs: [containers]
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - api
+          - mjml
+          - tasks
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - run: flyctl deploy --remote-only -c fly.${{ matrix.app }}.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_TOKEN }}

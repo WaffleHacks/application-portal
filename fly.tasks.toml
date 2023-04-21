@@ -1,0 +1,44 @@
+# fly.toml app configuration file generated for application-portal-tasks on 2023-04-20T17:00:04-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "application-portal-tasks"
+primary_region = "yyz"
+
+[build]
+  image = "public.ecr.aws/wafflehacks/application-portal-tasks:main"
+
+[deploy]
+  strategy = "rolling"
+
+[env]
+  LOG_LEVEL = "INFO"
+
+  NATS_URL = "nats://wafflehacks-nats.internal:4222"
+
+  MAILER_API = "http://wafflehacks-mailer.internal:8000"
+
+  SENDER = "apply@wafflehacks.org"
+  REPLY_TO = "team@wafflehacks.org"
+
+  HEALTHCHECK_HOST = "0.0.0.0"
+  HEALTHCHECK_PORT = "8000"
+
+  OTEL_ENABLE = "yes"
+  OTEL_DEBUG = "no"
+  OTEL_SERVICE_NAME = "application-portal/tasks"
+  OTEL_EXPORTER_OTLP_ENDPOINT = "https://api.honeycomb.io"
+
+[checks]
+  [checks.alive]
+    type = "http"
+    port = 8000
+    method = "get"
+    path = "/health"
+    protocol = "http"
+
+    grace_period = "10s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "3s"

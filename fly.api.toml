@@ -1,0 +1,59 @@
+# fly.toml app configuration file generated for application-portal-api on 2023-04-19T15:16:22-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "application-portal-api"
+primary_region = "yyz"
+
+[build]
+   image = "public.ecr.aws/wafflehacks/application-portal-api:main"
+
+[deploy]
+  release_command = "migrate"
+  strategy = "rolling"
+
+[env]
+  OTEL_ENABLE = "yes"
+  OTEL_DEBUG = "no"
+  OTEL_SERVICE_NAME = "application-portal/api"
+  OTEL_EXPORTER_OTLP_ENDPOINT = "https://api.honeycomb.io"
+
+  NATS_URL = "nats://wafflehacks-nats.internal:4222"
+
+  MJML_API = "http://application-portal-mjml.internal:8000"
+
+  APP_URL = "https://apply.wafflehacks.org"
+  PUBLIC_URL = "https://api.wafflehacks.org"
+
+  COOKIE_DOMAIN = "wafflehacks.org"
+  COOKIE_SECURE = "true"
+
+[[services]]
+  internal_port = 8000
+  processes = ["app"]
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 250
+    soft_limit = 200
+    type = "requests"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.http_checks]]
+    method = "get"
+    path = "/health"
+    protocol = "http"
+
+    grace_period = "20s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "3s"
