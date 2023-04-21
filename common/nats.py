@@ -26,6 +26,14 @@ async def __connect() -> JetStreamContext:
     return __client.jetstream()
 
 
+async def healthcheck():
+    """
+    Check that the NATS connection is working
+    """
+    jetstream = await __connect()
+    await jetstream.streams_info()
+
+
 async def create_stream(name: str, description: Optional[str] = None):
     """
     Create a new stream if it doesn't already exist

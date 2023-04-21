@@ -24,5 +24,9 @@ class Settings(BaseSettings):
     reply_to: Optional[EmailStr]
     sender: EmailStr
 
+    # Healthcheck server configuration
+    healthcheck_host: str = "127.0.0.1"
+    healthcheck_port: int = 8000
+
 
 SETTINGS = Settings()

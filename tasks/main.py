@@ -2,9 +2,10 @@ import asyncio
 import logging
 import signal
 import sys
+from asyncio import StreamReader, StreamWriter
 from pathlib import Path
 
-from common import tracing
+from common import nats, tracing
 
 from . import loader
 from .settings import SETTINGS
@@ -46,11 +47,38 @@ def main():
     except NotImplementedError:
         pass
 
+    loop.create_task(
+        asyncio.start_server(
+            healthcheck,
+            host=SETTINGS.healthcheck_host,
+            port=SETTINGS.healthcheck_port,
+        )
+    )
+    logger.info(
+        f"healthcheck server running on {SETTINGS.healthcheck_host}:{SETTINGS.healthcheck_port}"
+    )
+
     # Start the handlers
     try:
         loop.run_forever()
     finally:
         logger.info("shutdown successfully, bye :)")
+
+
+async def healthcheck(reader: StreamReader, writer: StreamWriter):
+    # Wait for the request to come in
+    await reader.readuntil(b"\r\n")
+
+    await nats.healthcheck()
+
+    writer.write(
+        b"HTTP/1.1 200 OK\r\n"
+        b"Content-Type: text/plain\r\n"
+        b"Content-Length: 2\r\n"
+        b"\r\n"
+        b"ok"
+    )
+    writer.close()
 
 
 if __name__ == "__main__":
