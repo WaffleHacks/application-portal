@@ -47,6 +47,11 @@ COPY --chown=app alembic.ini ./alembic.ini
 COPY --chown=app common ./common
 COPY --chown=app manage.py ./manage.py
 
+# Add commit info
+RUN set -ex \
+    short_sha=$(git rev-parse --short HEAD) \
+    echo 'version = "$short_sha"' > common/version.py
+
 
 ###
 #  API

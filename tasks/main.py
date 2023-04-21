@@ -5,7 +5,7 @@ import sys
 from asyncio import StreamReader, StreamWriter
 from pathlib import Path
 
-from common import database, nats, tracing
+from common import database, nats, tracing, version
 
 from . import loader
 from .settings import SETTINGS
@@ -18,7 +18,7 @@ tracing.init()
 def main():
     logging.basicConfig(
         level=SETTINGS.log_level.value,
-        format="[%(asctime)s] %(levelname)s - %(name)s - %(message)s",
+        format=f"[%(asctime)s] %(levelname)s ({version.commit}) - %(name)s - %(message)s",
         stream=sys.stdout,
     )
     logger = logging.getLogger("tasks")
@@ -74,13 +74,13 @@ async def healthcheck(reader: StreamReader, writer: StreamWriter):
     await database.healthcheck()
     await nats.healthcheck()
 
-    writer.write(
-        b"HTTP/1.1 200 OK\r\n"
-        b"Content-Type: text/plain\r\n"
-        b"Content-Length: 2\r\n"
-        b"\r\n"
-        b"ok"
-    )
+    body = f"version: {version.commit}".encode()
+    content_length = f"Content-Length: {len(body)}\r\n".encode()
+
+    writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n")
+    writer.write(content_length)
+    writer.write(b"\r\n")
+    writer.write(body)
     writer.close()
 
 

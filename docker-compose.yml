@@ -39,10 +39,9 @@ services:
       - "9465:9000"  # gRPC
 
   jaeger:
-    image: jaegertracing/all-in-one:1.34
+    image: jaegertracing/all-in-one:1.44
     ports:
-      - "9431:6831/udp"
       - "9486:16686"
-      - "9411:9411"
+      - "9417:4317"
     environment:
-      COLLECTOR_ZIPKIN_HOST_PORT: :9411
+      - COLLECTOR_OTLP_ENABLED=true

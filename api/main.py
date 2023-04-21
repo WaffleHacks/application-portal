@@ -2,10 +2,10 @@ from http import HTTPStatus
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import UJSONResponse
+from fastapi.responses import PlainTextResponse, UJSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from common import database, kv, nats, tracing
+from common import database, kv, nats, tracing, version
 
 from . import (
     authentication,
@@ -41,11 +41,13 @@ async def startup():
     await database.warm_up()
 
 
-@app.get("/health", name="Healthcheck", status_code=HTTPStatus.NO_CONTENT)
+@app.get("/health", name="Healthcheck", response_class=PlainTextResponse)
 async def health():
     await database.healthcheck()
     await kv.healthcheck()
     await nats.healthcheck()
+
+    return f"version: {version.commit}"
 
 
 @app.exception_handler(StarletteHTTPException)
