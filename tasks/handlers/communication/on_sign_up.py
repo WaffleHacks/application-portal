@@ -6,7 +6,7 @@ from common.tasks import tasks
 
 from .shared import MessageTriggerType, send_triggered_message
 
-event = "sync.sign_up"
+event = "authentication.sign_up"
 
 
 async def handler(participant_id: str):

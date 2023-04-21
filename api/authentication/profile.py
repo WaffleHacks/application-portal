@@ -11,6 +11,7 @@ from common.database import (
     ParticipantUpdate,
     with_db,
 )
+from common.tasks import broadcast
 
 router = APIRouter()
 
@@ -28,6 +29,8 @@ async def complete(
 
     session.into_authenticated(participant.id)
     await session.set_cookie(response)
+
+    await broadcast("authentication", "sign_up", participant_id=participant.id)
 
     return participant
 
