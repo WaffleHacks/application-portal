@@ -5,7 +5,7 @@ import sys
 from asyncio import StreamReader, StreamWriter
 from pathlib import Path
 
-from common import nats, tracing
+from common import database, nats, tracing
 
 from . import loader
 from .settings import SETTINGS
@@ -28,6 +28,8 @@ def main():
     logger.info("starting task workers")
 
     subscriptions = loader.register_handlers(loop, HANDLERS_PATH)
+
+    loop.run_until_complete(database.warm_up())
 
     def on_shutdown():
         logger.info("received shutdown signal")
@@ -69,6 +71,7 @@ async def healthcheck(reader: StreamReader, writer: StreamWriter):
     # Wait for the request to come in
     await reader.readuntil(b"\r\n")
 
+    await database.healthcheck()
     await nats.healthcheck()
 
     writer.write(

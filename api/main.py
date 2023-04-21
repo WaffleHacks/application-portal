@@ -1,13 +1,11 @@
 from http import HTTPStatus
 
-from fastapi import Depends, FastAPI, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import UJSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from common import tracing
-from common.database import ServiceSettings, with_db
+from common import database, kv, nats, tracing
 
 from . import (
     authentication,
@@ -38,10 +36,16 @@ app.include_router(registration.router, prefix="/registration")
 app.include_router(workshops.router, prefix="/workshops")
 
 
+@app.on_event("startup")
+async def startup():
+    await database.warm_up()
+
+
 @app.get("/health", name="Healthcheck", status_code=HTTPStatus.NO_CONTENT)
-async def health(db: AsyncSession = Depends(with_db)):
-    entry = ServiceSettings.accepting_applications(db)
-    await entry.get()
+async def health():
+    await database.healthcheck()
+    await kv.healthcheck()
+    await nats.healthcheck()
 
 
 @app.exception_handler(StarletteHTTPException)

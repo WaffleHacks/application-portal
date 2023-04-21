@@ -8,6 +8,13 @@ from .engine import Engine, NamespacedClient
 engine = Engine(SETTINGS.redis_url)
 
 
+async def healthcheck():
+    """
+    Check that the Redis connection is working
+    """
+    await engine.client().ping()
+
+
 def with_kv(namespace: Optional[str] = None) -> Callable[[], NamespacedClient]:
     """
     Open a Redis connection from the connection pool
