@@ -6,21 +6,21 @@ from pydantic import BaseModel
 
 from ..base import Event
 from ..errors import LoaderException
-from .base_action import BaseAction
-from .registration import Registration as _RegistrationAction
-from .sync import Sync as _SyncAction
 
 # Register the actions with the base class
+from .authentication import Authentication as _AuthenticationAction
+from .base_action import BaseAction
+from .registration import Registration as _RegistrationAction
 from .unused_actions import Communication as _CommunicationAction
 from .unused_actions import Integrations as _IntegrationsAction
 from .unused_actions import Workshops as _WorkshopsAction
 
 
 class Service(Enum):
+    Authentication = "authentication"
     Communication = "communication"
     Integrations = "integrations"
     Registration = "registration"
-    Sync = "sync"
     Workshops = "workshops"
 
 
