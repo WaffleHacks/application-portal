@@ -83,6 +83,12 @@ USER app
 WORKDIR /application-portal
 
 COPY --chown=app mjml .
+
+# Add commit info
+RUN set -ex \
+    short_sha=$(git rev-parse --short HEAD) \
+    echo "export const COMMIT = '$short_sha';" > mjml/src/version.ts
+
 RUN yarn && yarn build
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
