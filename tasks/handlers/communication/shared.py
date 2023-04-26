@@ -1,7 +1,7 @@
 import logging
 from string import Template
 
-from mailer import AsyncClient, BodyType
+from mailer import AsyncClient, Format
 from opentelemetry import trace
 from sqlalchemy.orm import selectinload
 
@@ -43,7 +43,7 @@ async def send_message(recipient: Participant, message: Message):
             from_email=SETTINGS.sender,
             subject=message.subject,
             body=content,
-            body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
+            format=Format.HTML if message.is_html else Format.PLAIN,
             reply_to=SETTINGS.reply_to,
         )
 
