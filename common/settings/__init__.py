@@ -15,7 +15,6 @@ class Settings(BaseSettings):
 
     # Whether to enable OpenTelemetry observability
     otel_enable: bool = False
-    otel_debug: bool = False
 
     class Config:
         env_file = ".env"

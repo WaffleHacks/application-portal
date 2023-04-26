@@ -47,6 +47,10 @@ COPY --chown=app alembic.ini ./alembic.ini
 COPY --chown=app common ./common
 COPY --chown=app manage.py ./manage.py
 
+# Add commit info
+ARG COMMIT_SHA=dev
+RUN echo "commit = \"$COMMIT_SHA\"" > common/version.py
+
 
 ###
 #  API
@@ -78,6 +82,11 @@ USER app
 WORKDIR /application-portal
 
 COPY --chown=app mjml .
+
+# Add commit info
+ARG COMMIT_SHA=dev
+RUN echo "export const COMMIT = '$COMMIT_SHA';" > src/version.ts
+
 RUN yarn && yarn build
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]

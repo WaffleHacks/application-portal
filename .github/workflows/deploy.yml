@@ -40,6 +40,10 @@ jobs:
         with:
           registry-type: public
 
+      - name: Get short Git SHA
+        id: short-sha
+        run: echo "SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
       - uses: docker/setup-buildx-action@v2
 
       - uses: docker/metadata-action@v4
@@ -58,6 +62,8 @@ jobs:
       - uses: docker/build-push-action@v4
         with:
           context: .
+          build-args: |
+            COMMIT_SHA=${{ steps.short-sha.outputs.SHA }}
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}

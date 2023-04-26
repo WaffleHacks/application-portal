@@ -1,15 +1,22 @@
+import platform
 from typing import Optional
 
 from fastapi import FastAPI
 from opentelemetry import trace
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+from opentelemetry.sdk.resources import (
+    HOST_NAME,
+    SERVICE_VERSION,
+    ProcessResourceDetector,
+    Resource,
+)
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
+from .. import version
 from ..database.engine import engine
 from ..settings import SETTINGS
 from .botocore import FilteredBotocoreInstrumentor
@@ -18,16 +25,18 @@ from .botocore import FilteredBotocoreInstrumentor
 def init(app: Optional[FastAPI] = None):
     if SETTINGS.otel_enable:
         # Select the exporter
-        if SETTINGS.otel_debug:
-            print("OpenTelemetry: Jaeger")
-            exporter = JaegerExporter(agent_port=9431)
-        else:
-            print("OpenTelemetry: OTLP")
-            exporter = OTLPSpanExporter()
+        print("OpenTelemetry: enabled")
+        exporter = OTLPSpanExporter()
 
         # Setup the provider
         processor = BatchSpanProcessor(exporter)
-        provider = TracerProvider()
+        resource = Resource.create(
+            {
+                SERVICE_VERSION: version.commit,
+                HOST_NAME: platform.node(),
+            }
+        ).merge(ProcessResourceDetector().detect())
+        provider = TracerProvider(resource=resource)
         provider.add_span_processor(processor)
 
         trace.set_tracer_provider(provider)

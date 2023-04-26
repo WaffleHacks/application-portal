@@ -12,6 +12,7 @@ import { minify } from 'html-minifier';
 import mjml2html from 'mjml';
 
 import logger, { middleware } from './logging';
+import { COMMIT } from './version';
 
 // Get configuration
 const HOST = process.env.HOST || '0.0.0.0';
@@ -25,7 +26,7 @@ app.use(express.json());
 app.use(middleware);
 
 // Healthcheck endpoint
-app.get('/health', (req, res) => res.status(204).end());
+app.get('/health', (req, res) => res.status(200).send(`version: ${COMMIT}`).end());
 
 // Renderer endpoint
 const renderBody = {
