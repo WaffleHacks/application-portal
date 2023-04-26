@@ -1,7 +1,7 @@
 import logging
 from typing import Set
 
-from mailer import BodyType
+from mailer import Format
 from opentelemetry import trace
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -52,7 +52,7 @@ async def handler(message_id: int):
             SETTINGS.sender,
             message.subject,
             message.rendered,
-            body_type=BodyType.HTML if message.is_html else BodyType.PLAIN,
+            format=Format.HTML if message.is_html else Format.PLAIN,
             reply_to=SETTINGS.reply_to,
         )
 
