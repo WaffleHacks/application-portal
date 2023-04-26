@@ -7,7 +7,7 @@ app = "application-portal-tasks"
 primary_region = "yyz"
 
 [build]
-  image = "public.ecr.aws/wafflehacks/application-portal-tasks:main"
+  image = "public.ecr.aws/wafflehacks/application-portal-tasks:sha-SHORT_SHA"
 
 [deploy]
   strategy = "rolling"
