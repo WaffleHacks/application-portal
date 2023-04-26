@@ -48,9 +48,8 @@ COPY --chown=app common ./common
 COPY --chown=app manage.py ./manage.py
 
 # Add commit info
-RUN set -ex \
-    short_sha=$(git rev-parse --short HEAD) \
-    echo 'version = "$short_sha"' > common/version.py
+ARG COMMIT_SHA=dev
+RUN echo "commit = \"$COMMIT_SHA\"" > common/version.py
 
 
 ###
@@ -85,9 +84,8 @@ WORKDIR /application-portal
 COPY --chown=app mjml .
 
 # Add commit info
-RUN set -ex \
-    short_sha=$(git rev-parse --short HEAD) \
-    echo "export const COMMIT = '$short_sha';" > mjml/src/version.ts
+ARG COMMIT_SHA=dev
+RUN echo "export const COMMIT = '$COMMIT_SHA';" > src/version.ts
 
 RUN yarn && yarn build
 
