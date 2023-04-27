@@ -1,8 +1,9 @@
 import React from 'react';
 
-import Badge from '../../../../components/Badge';
+import Badge, { Color } from '../../../../components/Badge';
 import Link from '../../../../components/Link';
 import { Participant, useListParticipantsQuery } from '../../../../store';
+import { Role } from '../../../../store/types';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../../components/table';
 
 const Row = (participant: Participant): JSX.Element => (
@@ -11,7 +12,9 @@ const Row = (participant: Participant): JSX.Element => (
       {participant.first_name} {participant.last_name}
     </Table.Data>
     <Table.Data>{participant.email}</Table.Data>
-    <Table.Data>{participant.role}</Table.Data>
+    <Table.Data>
+      <Badge color={roleColor(participant.role)}>{participant.role}</Badge>
+    </Table.Data>
     <Table.Data>
       <Badge color={participant.is_admin ? 'green' : 'red'}>{participant.is_admin ? 'Yes' : 'No'}</Badge>
     </Table.Data>
@@ -22,6 +25,19 @@ const Row = (participant: Participant): JSX.Element => (
     </Table.Data>
   </tr>
 );
+
+const roleColor = (role: Role): Color => {
+  switch (role) {
+    case Role.Participant:
+      return 'gray';
+    case Role.Sponsor:
+      return 'blue';
+    case Role.Organizer:
+      return 'purple';
+    default:
+      throw new Error(`unknown role: ${role}`);
+  }
+};
 
 const List = (): JSX.Element => {
   const { data: users = [], isLoading } = useListParticipantsQuery();
