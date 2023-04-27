@@ -29,6 +29,8 @@ primary_region = "yyz"
   COOKIE_DOMAIN = "wafflehacks.org"
   COOKIE_SECURE = "true"
 
+  ORGANIZER_EMAIL_DOMAIN = "wafflehacks.org"
+
 [[services]]
   internal_port = 8000
   processes = ["app"]
