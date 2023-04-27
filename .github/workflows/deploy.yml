@@ -23,7 +23,9 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('**/poetry.lock') }}-${{ matrix.app }}
+          key: ${{ runner.os }}-docker-buildx-${{ matrix.app }}-${{ hashFiles('**/poetry.lock') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-buildx-${{ matrix.app }}-${{ hashFiles('**/poetry.lock') }}-
 
       - uses: aws-actions/configure-aws-credentials@v2
         with:
