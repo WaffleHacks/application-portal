@@ -22,5 +22,8 @@ class Settings(BaseSettings):
     cookie_domain: str
     cookie_secure: bool
 
+    # The domain emails must end with to be automatically assigned organizer permissions
+    organizer_email_domain: str
+
 
 SETTINGS = Settings()

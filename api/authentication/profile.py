@@ -4,11 +4,13 @@ from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.session import Session, with_incomplete_profile, with_user_id
+from api.settings import SETTINGS
 from common.database import (
     Participant,
     ParticipantCreate,
     ParticipantRead,
     ParticipantUpdate,
+    Role,
     with_db,
 )
 from common.tasks import broadcast
@@ -24,6 +26,9 @@ async def complete(
     db: AsyncSession = Depends(with_db),
 ):
     participant = Participant.from_orm(details, {"email": session.email})
+    if participant.email.endswith("@" + SETTINGS.organizer_email_domain):
+        participant.role = Role.Organizer
+
     db.add(participant)
     await db.commit()
 
