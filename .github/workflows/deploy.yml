@@ -23,11 +23,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ hashFiles('**/poetry.lock') }}-${{ matrix.app }}-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-${{ hashFiles('**/poetry.lock') }}-${{ matrix.app }}-
-            ${{ runner.os }}-buildx-${{ hashFiles('**/poetry.lock') }}-
-            ${{ runner.os }}-buildx-
+          key: ${{ runner.os }}-buildx-${{ hashFiles('**/poetry.lock') }}-${{ matrix.app }}
 
       - uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -70,7 +66,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           target: ${{ matrix.app }}
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       # Temp fix for:
       # https://github.com/docker/build-push-action/issues/252
