@@ -2013,9 +2013,9 @@
     "@types/serve-static" "*"
 
 "@types/google.maps@^3.52.5":
-  version "3.52.5"
-  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.52.5.tgz#84322c45fcfac76ecd80afc8b6115b1be2f7dc96"
-  integrity sha512-nhFo5xLsWnjr2zuL0V5khlpo2pPFXJzYdnuIt3hLBGgcvMkLfRqKP8TdKrjh0gUuWfm55Iex+3XU1v+oAyu1jw==
+  version "3.52.6"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.52.6.tgz#5a3f0d1ae005580f9016683b5d0acf71ae2f4465"
+  integrity sha512-CnwN5UcezNiRuJzV0wGIsqXWNwMM6WzIxmy9lOUx+yauRQMee5XH/N7NaVOsiY5T5ygrnBwPO+csND652HYsTQ==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.6"
