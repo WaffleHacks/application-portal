@@ -93,6 +93,7 @@ async def list_incomplete(db: AsyncSession = Depends(with_db)):
         select(Participant)
         .outerjoin(Application, full=True)
         .where(Application.participant_id == None)
+        .where(Participant.role == Role.Participant)
     )
 
     result = await db.execute(statement)
