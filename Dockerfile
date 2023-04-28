@@ -66,7 +66,7 @@ ENTRYPOINT ["./entrypoint.sh"]
 ###
 #  MJML API
 ###
-FROM node:18-alpine as mjml
+FROM node:20-alpine as mjml
 
 ENV HOST 0.0.0.0
 ENV PORT 8000
