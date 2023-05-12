@@ -1,6 +1,6 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 import Card from '../../../components/Card';
 import { CheckboxInput } from '../../../components/input';
@@ -29,6 +29,7 @@ const Review = (): JSX.Element => {
       <SidebarCard title="About You" grid={false}>
         <Row name="Name" value={`${user?.participant?.first_name} ${user?.participant?.last_name}`} />
         <Row name="Email" value={user?.participant?.email} />
+        <Row name="Phone number" value={formatPhoneNumberIntl(values.phone_number)} />
         <Row name="Gender" value={values.gender} />
         <Row name="Race / Ethnicity" value={values.race_ethnicity} />
         <Row name="Date of Birth" value={values.date_of_birth} />
