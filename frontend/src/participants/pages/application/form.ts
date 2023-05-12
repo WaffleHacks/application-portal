@@ -3,8 +3,6 @@ import * as Yup from 'yup';
 
 import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
 
-type AutosaveResume = File | { path: string };
-
 export const initialValues: ApplicationAutosave = {
   phone_number: '',
   gender: '',
