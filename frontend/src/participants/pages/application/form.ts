@@ -76,7 +76,10 @@ export const validationSchema = {
     country: Yup.string().required(required),
   }),
   review: Yup.object({
-    agree_to_privacy: Yup.boolean(),
-    agree_to_rules: Yup.boolean(),
+    agree_to_privacy: Yup.boolean().isTrue(),
+    agree_to_rules: Yup.boolean().isTrue(),
+    mlh_code_of_conduct: Yup.boolean().isTrue(),
+    mlh_event_logistics_information: Yup.boolean().isTrue(),
+    mlh_communications: Yup.boolean().isTrue(),
   }),
 };
