@@ -27,20 +27,8 @@ const Review = (): JSX.Element => {
   return (
     <>
       <SidebarCard title="About You" grid={false}>
-        <Row
-          name="Name"
-          value={
-            user?.participant ? (
-              user.participant.first_name + ' ' + user.participant.last_name
-            ) : (
-              <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />
-            )
-          }
-        />
-        <Row
-          name="Email"
-          value={user ? user.email : <ArrowPathIcon className="h-4 w-4 animate-spin" aria-hidden="true" />}
-        />
+        <Row name="Name" value={`${user?.participant?.first_name} ${user?.participant?.last_name}`} />
+        <Row name="Email" value={user?.participant?.email} />
         <Row name="Gender" value={values.gender} />
         <Row name="Race / Ethnicity" value={values.race_ethnicity} />
         <Row name="Date of Birth" value={values.date_of_birth} />
