@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from api.mjml import MJMLClient, with_mjml
 from api.permissions import Role, requires_role
 from api.session import with_user_id
 from common.database import (
@@ -26,6 +25,16 @@ from common.database import (
     with_db,
 )
 from common.tasks import tasks
+
+# Import rust-based mjml if available, otherwise disable MJML support
+try:
+    from pymjml import to_html
+except ImportError:
+
+    def to_html(input: str, minify: bool = False) -> str:
+        print("Warning: running in dev mode, MJML support not enabled by default")
+        return "MJML support not enabled"
+
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 tracer = trace.get_tracer(__name__)
@@ -45,14 +54,13 @@ async def list(db: AsyncSession = Depends(with_db)):
 async def create(
     values: MessageCreate,
     db: AsyncSession = Depends(with_db),
-    mjml: MJMLClient = Depends(with_mjml),
 ):
     """
     Creates a new message, but does not send it
     """
 
     # Convert the body from MJML to HTML if needed
-    rendered, is_html = await render_mjml(values.content, mjml)
+    rendered, is_html = render_mjml(values.content)
 
     # Create the message
     message = Message.from_orm(
@@ -87,7 +95,6 @@ async def update(
     id: int,
     values: MessageUpdate,
     db: AsyncSession = Depends(with_db),
-    mjml: MJMLClient = Depends(with_mjml),
 ):
     """
     Update the contents and recipients of a message.
@@ -110,7 +117,9 @@ async def update(
     # Update the content
     if values.content:
         with tracer.start_span("update-content"):
-            rendered, is_html = await render_mjml(values.content, mjml)
+            rendered, is_html = render_mjml(
+                values.content,
+            )
             message.rendered = rendered
             message.is_html = is_html
 
@@ -231,11 +240,10 @@ async def delete(id: int, db: AsyncSession = Depends(with_db)):
         await db.commit()
 
 
-async def render_mjml(source: str, client: MJMLClient) -> Tuple[str, bool]:
+def render_mjml(source: str) -> Tuple[str, bool]:
     """
     Call to the MJML API to render the message
     :param source: content that might be MJML
-    :param client: the MJML API client
     :returns: rendered MJML or plain text with a boolean denoting if it is HTML
     """
     with tracer.start_as_current_span("render"):
@@ -245,4 +253,4 @@ async def render_mjml(source: str, client: MJMLClient) -> Tuple[str, bool]:
         ):
             return source, False
 
-        return await client.render(source), True
+        return to_html(source), True

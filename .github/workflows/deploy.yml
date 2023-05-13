@@ -12,7 +12,6 @@ jobs:
       matrix:
         app:
           - api
-          - mjml
           - tasks
     permissions:
       contents: read
@@ -88,7 +87,6 @@ jobs:
       matrix:
         app:
           - api
-          - mjml
           - tasks
     steps:
       - uses: actions/checkout@v3
