@@ -4,30 +4,24 @@ on:
   - push
 
 jobs:
-  node:
-    name: Node
+  frontend:
+    name: Frontend
     runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        package:
-          - frontend
-      fail-fast: false
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version-file: ${{ matrix.package }}/.nvmrc
+          node-version-file: frontend/.nvmrc
           cache: yarn
-          cache-dependency-path: |
-            ${{ matrix.package }}/yarn.lock
+          cache-dependency-path: frontend/yarn.lock
 
       - run: yarn install
-        working-directory: ${{ matrix.package }}
+        working-directory: frontend
       - run: yarn eslint --max-warnings=0 .
-        working-directory: ${{ matrix.package }}
+        working-directory: frontend
 
-  rust:
-    name: Rust
+  mjml:
+    name: MJML
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
