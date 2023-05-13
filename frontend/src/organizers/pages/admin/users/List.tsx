@@ -1,4 +1,3 @@
-import Bugsnag from '@bugsnag/js';
 import React from 'react';
 
 import Badge, { Color } from '../../../../components/Badge';
@@ -51,8 +50,6 @@ const List = (): JSX.Element => {
           <p className="mt-2 text-sm text-gray-700">Manage user permissions.</p>
         </div>
       </div>
-
-      <button onClick={() => Bugsnag.notify(new Error('test error'))}>Test Error</button>
 
       <Table className="mt-2">
         <Table.Head>
