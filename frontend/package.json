@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bugsnag/js": "^7.20.2",
+    "@bugsnag/plugin-react": "^7.19.0",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.17",
     "@reduxjs/toolkit": "^1.9.5",
@@ -32,6 +34,7 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@bugsnag/source-maps": "^2.3.1",
     "@types/crypto-js": "^4.1.1",
     "@types/google.maps": "^3.52.5",
     "@types/luxon": "^3.3.0",
@@ -57,8 +60,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "lint": "eslint --fix ."
+    "source-map:upload": "node scripts/upload-source-maps.mjs",
+    "source-map:analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "eslint --fix .",
+    "production": "yarn build && yarn source-map:upload"
   },
   "engines": {
     "node": "^18"

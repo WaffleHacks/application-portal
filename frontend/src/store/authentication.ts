@@ -1,3 +1,4 @@
+import Bugsnag from '@bugsnag/js';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { AuthenticationStatus, Participant, Provider, ProviderWithClientSecret, ReducedProvider } from './types';
@@ -37,6 +38,23 @@ const api = createApi({
     // User endpoints
     currentUser: builder.query<Me, void>({
       query: () => ({ url: '/auth/me' }),
+      transformResponse: (response: Me) => {
+        // Add the user context if able
+        if (response.email) {
+          Bugsnag.setUser(undefined, response.email, undefined);
+          Bugsnag.addMetadata('authentication', { status: response.status, email: response.email });
+        }
+        if (response.participant) {
+          Bugsnag.setUser(
+            response.participant.id.toString(),
+            response.participant.email,
+            `${response.participant.first_name} ${response.participant.last_name}`,
+          );
+          Bugsnag.addMetadata('authentication', { status: response.status, ...response.participant });
+        }
+
+        return response;
+      },
       providesTags: () => [Tag.Profile],
     }),
     completeProfile: builder.mutation<Participant, ProfileCreate>({
