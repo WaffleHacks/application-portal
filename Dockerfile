@@ -9,11 +9,28 @@ RUN apt-get update && \
     apt-get upgrade -y
 
 # Build the MJML package
-FROM ghcr.io/pyo3/maturin:v0.15.1 as mjml-build
+FROM base as mjml-build
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH \
+    RUST_VERSION=1.69.0
+
+RUN apt-get install -y --no-install-recommends curl git build-essential
+
+# Install rust
+RUN set -ex; \
+    curl --proto '=https' --tlsv1.2 -sSf -o ./rustup-init https://sh.rustup.rs; \
+    chmod +x ./rustup-init; \
+    ./rustup-init --profile minimal --no-modify-path --default-toolchain $RUST_VERSION -y; \
+    rm rustup-init; \
+    chmod -R a+w $RUSTUP_HOME $CARGO_HOME; \
+    rustup --version; cargo --version; rustc --version
+
+RUN pip install --no-cache-dir maturin
 
 COPY ./mjml .
-
-RUN pwd; maturin build --release --strip
+RUN maturin build --release --strip
 
 
 FROM base as export-dependencies
@@ -33,10 +50,10 @@ RUN apt-get install -y --no-install-recommends build-essential git
 
 # Install the depednencies
 COPY --from=export-dependencies /requirements.txt ./
-COPY --from=mjml-build /io/target/wheels/*.whl ./
+COPY --from=mjml-build /target/wheels/*.whl ./
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt --prefix=/dependencies --no-warn-script-location && \
-    pip install --no-cache-dir --prefix=/dependencies ./*.whl --no-warn-script-location
+    pip install --no-cache-dir --prefix=/dependencies *.whl
 
 
 # Setup the common files
