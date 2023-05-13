@@ -24,7 +24,7 @@ if (API_KEY === undefined) {
 } else {
   Bugsnag.start({
     apiKey: API_KEY,
-    appVersion: VERSION,
+    appVersion: VERSION.substring(0, 7),
     releaseStage: STAGE,
     plugins: [new BugsnagPluginReact()],
   });

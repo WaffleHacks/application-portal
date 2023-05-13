@@ -14,7 +14,7 @@ async function main() {
 
   await browser.uploadMultiple({
     apiKey: API_KEY,
-    appVersion: VERSION,
+    appVersion: VERSION.substring(0, 7),
     overwrite: true,
     directory: './build/static/js',
     baseUrl: `${BASE_DOMAIN}/static/js`,

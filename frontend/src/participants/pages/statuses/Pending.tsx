@@ -1,4 +1,3 @@
-import Bugsnag from '@bugsnag/js';
 import React from 'react';
 
 import Link from '../../../components/Link';
@@ -20,7 +19,6 @@ const Pending = (): JSX.Element => (
       Twitter
     </Link>{' '}
     to keep up-to-date with the latest information.
-    <button onClick={() => Bugsnag.notify(new Error('test error'))}>Error</button>
   </Status>
 );
 
