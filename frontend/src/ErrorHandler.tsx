@@ -8,10 +8,6 @@ const VERSION = process.env.REACT_APP_BUGSNAG_VERSION || 'dev';
 const BRANCH = process.env.REACT_APP_BUGSNAG_BRANCH || 'dev';
 const STAGE = BRANCH === 'main' ? 'production' : BRANCH;
 
-console.log(VERSION);
-console.log(BRANCH);
-console.log(STAGE);
-
 interface Props {
   children: ReactNode;
 }
