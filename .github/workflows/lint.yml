@@ -25,3 +25,17 @@ jobs:
         working-directory: ${{ matrix.package }}
       - run: yarn eslint --max-warnings=0 .
         working-directory: ${{ matrix.package }}
+
+  rust:
+    name: Rust
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - run: cargo fmt --check
+        working-directory: mjml
+      - run: cargo clippy -- -D warnings
+        working-directory: mjml
