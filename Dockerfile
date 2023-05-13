@@ -33,7 +33,7 @@ RUN apt-get install -y --no-install-recommends build-essential git
 
 # Install the depednencies
 COPY --from=export-dependencies /requirements.txt ./
-#COPY --from=mjml-build /io/target/wheels/*.whl ./
+COPY --from=mjml-build /io/target/wheels/*.whl ./
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt --prefix=/dependencies --no-warn-script-location && \
     pip install --no-cache-dir --prefix=/dependencies ./*.whl --no-warn-script-location
