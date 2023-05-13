@@ -13,6 +13,7 @@ from common.database import (
     Message,
     MessageStatus,
     Participant,
+    Role,
     db_context,
 )
 from tasks.settings import SETTINGS
@@ -39,7 +40,8 @@ async def handler(message_id: int):
 
         # Retrieve all the recipient emails
         groups = {r.group for r in message.recipients}
-        result = await db.execute(recipients_query(groups))
+        statement = recipients_query(groups).where(Participant.role == Role.Participant)
+        result = await db.execute(statement)
         participants = result.all()
 
         with tracer.start_as_current_span("build-context"):
