@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 class WithParticipantId(BaseModel):
-    participant_id: str
+    participant_id: int
 
 
 class BaseAction(Enum):

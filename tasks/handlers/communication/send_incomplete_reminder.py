@@ -12,7 +12,7 @@ manual = True
 logger = logging.getLogger(__name__)
 
 
-async def handler(participant_id: str, kind: str, at: datetime) -> Response:
+async def handler(participant_id: int, kind: str, at: datetime) -> Response:
     trace.get_current_span().set_attribute("user.id", participant_id)
 
     # Check if we need to delay allowing for some jitter

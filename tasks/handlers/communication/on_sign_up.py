@@ -9,7 +9,7 @@ from .shared import MessageTriggerType, send_triggered_message
 event = "authentication.sign_up"
 
 
-async def handler(participant_id: str):
+async def handler(participant_id: int):
     trace.get_current_span().set_attribute("user.id", participant_id)
 
     # Send the message

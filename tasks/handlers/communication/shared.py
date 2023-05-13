@@ -49,7 +49,7 @@ async def send_message(recipient: Participant, message: Message):
 
 
 async def send_triggered_message(
-    id: str,
+    id: int,
     trigger_type: MessageTriggerType,
 ):
     """
@@ -78,7 +78,7 @@ async def send_triggered_message(
     await send_message(participant, trigger.message)
 
 
-async def send_incomplete_message(id: str, trigger_type: MessageTriggerType):
+async def send_incomplete_message(id: int, trigger_type: MessageTriggerType):
     span = trace.get_current_span()
 
     async with db_context() as db:
