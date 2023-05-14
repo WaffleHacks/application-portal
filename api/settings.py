@@ -2,9 +2,6 @@ from pydantic import BaseSettings, HttpUrl
 
 
 class Settings(BaseSettings):
-    # The MJML API to connect to
-    mjml_api: HttpUrl
-
     # The S3 bucket for storing resumes
     resume_bucket: str
 
