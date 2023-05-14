@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Badge, { Color } from '../../components/Badge';
-import { ApplicationStatus } from '../../store';
+import Badge, { Color } from 'components/Badge';
+import { ApplicationStatus } from 'store';
 
 interface Props {
   status: ApplicationStatus;

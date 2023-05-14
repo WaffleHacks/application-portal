@@ -4,9 +4,10 @@ import classNames from 'classnames';
 import { useField } from 'formik';
 import React, { ReactNode } from 'react';
 
+import Link from 'components/Link';
+import RenderMarkdown from 'components/RenderMarkdown';
+
 import { BaseProps, generateId } from './common';
-import Link from '../Link';
-import RenderMarkdown from '../RenderMarkdown';
 
 type Props = BaseProps<string> & {
   description?: ReactNode;

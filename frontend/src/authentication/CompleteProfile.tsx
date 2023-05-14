@@ -3,10 +3,11 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
+import { Button } from 'components/buttons';
+import { ReadOnlyTextInput, TextInput } from 'components/input';
+import { useCompleteProfileMutation, useCurrentUserQuery } from 'store';
+
 import Layout from './components/Layout';
-import { Button } from '../components/buttons';
-import { ReadOnlyTextInput, TextInput } from '../components/input';
-import { useCompleteProfileMutation, useCurrentUserQuery } from '../store';
 
 interface Values {
   first_name: string;

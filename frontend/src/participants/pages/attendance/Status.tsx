@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Link from '../../../components/Link';
-import BaseStatus from '../../components/Status';
+import Link from 'components/Link';
+import BaseStatus from 'participants/components/Status';
 
 interface Props {
   valid: boolean;

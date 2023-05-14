@@ -16,9 +16,10 @@ import {
 import { ChartBarIcon } from '@heroicons/react/24/solid';
 import React, { ReactNode, useState } from 'react';
 
+import { NavItem, usePageTitle } from 'components/navigation';
+import { useCurrentUserQuery } from 'store';
+
 import Navigation, { NavSection } from './Navigation';
-import { NavItem, usePageTitle } from '../../components/navigation';
-import { useCurrentUserQuery } from '../../store';
 
 const navigation: NavSection[] = [
   {

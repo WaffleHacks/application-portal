@@ -1,8 +1,8 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-import { LinkButton } from '../../../components/buttons';
-import Status from '../../components/Status';
+import { LinkButton } from 'components/buttons';
+import Status from 'participants/components/Status';
 
 const Accepted = (): JSX.Element => (
   <Status kind="success" title="Congratulations, you're in!">

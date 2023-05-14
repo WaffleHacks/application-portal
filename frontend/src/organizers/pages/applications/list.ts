@@ -1,5 +1,5 @@
-import { ReducedApplication } from '../../../store';
-import { Order } from '../../components/table';
+import { Order } from 'organizers/components/table';
+import { ReducedApplication } from 'store';
 
 enum SortKey {
   Name,

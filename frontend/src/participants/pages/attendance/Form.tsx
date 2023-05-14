@@ -3,10 +3,9 @@ import { Formik, Form as FormikForm } from 'formik';
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 
-import { Button } from '../../../components/buttons';
-import { LongTextInput, SwitchInput } from '../../../components/input';
-import Rating from '../../../components/input/Rating';
-import { useSubmitFeedbackMutation } from '../../../store';
+import { Button } from 'components/buttons';
+import { LongTextInput, RatingInput, SwitchInput } from 'components/input';
+import { useSubmitFeedbackMutation } from 'store';
 
 interface Values {
   presentation: number;
@@ -55,9 +54,9 @@ const Form = ({ code, refetch }: Props): JSX.Element => {
       {({ getFieldProps, isValid, isSubmitting }) => (
         <FormikForm className="space-y-5">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Rating label="Presentation" required {...getFieldProps('presentation')} />
-            <Rating label="Content" required {...getFieldProps('content')} />
-            <Rating label="Engagement" required {...getFieldProps('interest')} />
+            <RatingInput label="Presentation" required {...getFieldProps('presentation')} />
+            <RatingInput label="Content" required {...getFieldProps('content')} />
+            <RatingInput label="Engagement" required {...getFieldProps('interest')} />
           </div>
 
           <div className="max-w-lg">

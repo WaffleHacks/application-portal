@@ -3,11 +3,11 @@ import { Formik, Form as FormikForm } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { Button } from '../../../components/buttons';
-import { CheckboxGroupInput, CodeEditorInput, TextInput } from '../../../components/input';
-import Link from '../../../components/Link';
-import { Group } from '../../../store';
-import { Description, Section } from '../../components/description';
+import { Button } from 'components/buttons';
+import { CheckboxGroupInput, CodeEditorInput, TextInput } from 'components/input';
+import Link from 'components/Link';
+import { Description, Section } from 'organizers/components/description';
+import { Group } from 'store';
 
 interface Values {
   subject: string;

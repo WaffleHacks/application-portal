@@ -10,12 +10,14 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import StatusBadge from './StatusBadge';
-import Alert from '../../../components/Alert';
-import Badge from '../../../components/Badge';
-import { Button, ButtonGroup, LinkButton } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import { BaseCodeEditor } from '../../../components/input';
+import Alert from 'components/Alert';
+import Badge from 'components/Badge';
+import { Button, ButtonGroup, LinkButton } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import { BaseCodeEditor } from 'components/input';
+import NotFound from 'organizers/components//NotFound';
+import { Description, Item, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
 import {
   MessageStatus,
   useDeleteMessageMutation,
@@ -23,10 +25,9 @@ import {
   useSendMessageMutation,
   useSendTestMessageMutation,
   useUpdateMessageMutation,
-} from '../../../store';
-import { Description, Item, Section } from '../../components/description';
-import Loading from '../../components/Loading';
-import NotFound from '../../components/NotFound';
+} from 'store';
+
+import StatusBadge from './StatusBadge';
 
 interface WithMessageId {
   id: string;

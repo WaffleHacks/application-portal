@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { useGetSchoolQuery, useUpdateSchoolMutation } from 'store';
+
 import Form from './Form';
-import { useGetSchoolQuery, useUpdateSchoolMutation } from '../../../store';
-import Loading from '../../components/Loading';
-import NotFound from '../../components/NotFound';
 
 const Edit = (): JSX.Element => {
   const { id } = useParams();

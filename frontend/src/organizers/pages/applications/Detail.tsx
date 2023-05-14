@@ -3,21 +3,21 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import Link from '../../../components/Link';
+import { Button } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import Link from 'components/Link';
+import { Description, ExternalLinkItem, Item, NamedSection } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import StatusBadge from 'organizers/components/StatusBadge';
+import WarningFlag from 'organizers/components/WarningFlag';
 import {
   ApplicationStatus,
   useGetApplicationQuery,
   useGetApplicationResumeQuery,
   useSetApplicationStatusMutation,
   useUpdateApplicationMutation,
-} from '../../../store';
-import { Description, ExternalLinkItem, Item, NamedSection } from '../../components/description';
-import Loading from '../../components/Loading';
-import NotFound from '../../components/NotFound';
-import StatusBadge from '../../components/StatusBadge';
-import WarningFlag from '../../components/WarningFlag';
+} from 'store';
 
 interface WithId {
   id: string;

@@ -2,11 +2,12 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { LinkButton } from 'components/buttons';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { useGetMessageQuery, useUpdateMessageMutation } from 'store';
+
 import Form from './Form';
-import { LinkButton } from '../../../components/buttons';
-import { useGetMessageQuery, useUpdateMessageMutation } from '../../../store';
-import Loading from '../../components/Loading';
-import NotFound from '../../components/NotFound';
 
 const Edit = (): JSX.Element => {
   const { id } = useParams();

@@ -1,9 +1,9 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 
-import { AutoCompleteSelectInput, NumberInput, SelectInput } from '../../../components/input';
-import type { BaseItem } from '../../../components/input';
-import SidebarCard from '../../../components/SidebarCard';
+import { AutoCompleteSelectInput, NumberInput, SelectInput } from 'components/input';
+import type { BaseItem } from 'components/input';
+import SidebarCard from 'components/SidebarCard';
 
 const APP_ID = process.env.REACT_APP_ALGOLIA_APP_ID || '';
 const API_KEY = process.env.REACT_APP_ALGOLIA_API_KEY || '';

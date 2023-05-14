@@ -2,10 +2,10 @@ import { ArrowLeftIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { ArrayHelpers, FieldArray, Formik, Form as FormikForm, FormikProps } from 'formik';
 import React from 'react';
 
-import { Button, LinkButton } from '../../../components/buttons';
-import { TextInput } from '../../../components/input';
-import { School } from '../../../store';
-import { Description, NamedSection, Section } from '../../components/description';
+import { Button, LinkButton } from 'components/buttons';
+import { TextInput } from 'components/input';
+import { Description, NamedSection, Section } from 'organizers/components/description';
+import { School } from 'store';
 
 type Values = Omit<School, 'id' | 'applications' | 'needs_review'>;
 

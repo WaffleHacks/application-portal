@@ -1,10 +1,10 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-import { LinkButton } from '../../../../components/buttons';
-import Link from '../../../../components/Link';
-import { ReducedSwagTier, useListSwagTiersQuery } from '../../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../../components/table';
+import { LinkButton } from 'components/buttons';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { ReducedSwagTier, useListSwagTiersQuery } from 'store';
 
 const Row = (tier: ReducedSwagTier): JSX.Element => (
   <tr>

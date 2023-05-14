@@ -1,10 +1,11 @@
 import React from 'react';
 
+import Card from 'components/Card';
+import Loading from 'participants/components/Loading';
+import Status from 'participants/components/Status';
+import { useGetFeedbackStatusQuery } from 'store';
+
 import Form from './Form';
-import Card from '../../../components/Card';
-import { useGetFeedbackStatusQuery } from '../../../store';
-import Loading from '../../components/Loading';
-import Status from '../../components/Status';
 
 const Submitted = (): JSX.Element => (
   <Status kind="success" title="Submitted!" standalone>

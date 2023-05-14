@@ -2,18 +2,19 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { SortKey, sort } from './list';
-import { Button } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import Link from '../../../components/Link';
+import { Button } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from 'organizers/components/table';
+import WarningFlag from 'organizers/components/WarningFlag';
 import {
   ApplicationStatus,
   ReducedApplication,
   useBulkSetApplicationStatusMutation,
   useListApplicationsQuery,
-} from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
-import WarningFlag from '../../components/WarningFlag';
+} from 'store';
+
+import { SortKey, sort } from './list';
 
 interface RowProps {
   application: ReducedApplication;

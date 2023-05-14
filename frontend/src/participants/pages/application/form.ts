@@ -1,7 +1,7 @@
 import { isValidPhoneNumber } from 'react-phone-number-input';
 import * as Yup from 'yup';
 
-import { ApplicationAutosave, Gender, RaceEthnicity } from '../../../store';
+import { ApplicationAutosave, Gender, RaceEthnicity } from 'store';
 
 export const initialValues: ApplicationAutosave = {
   phone_number: '',

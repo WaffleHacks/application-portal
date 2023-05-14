@@ -1,8 +1,8 @@
 import { useFormikContext } from 'formik';
 import React from 'react';
 
-import { FileInput, NumberInput, SwitchInput, TextInput } from '../../../components/input';
-import SidebarCard from '../../../components/SidebarCard';
+import { FileInput, NumberInput, SwitchInput, TextInput } from 'components/input';
+import SidebarCard from 'components/SidebarCard';
 
 const ExperienceForm = (): JSX.Element => {
   const { getFieldProps } = useFormikContext();

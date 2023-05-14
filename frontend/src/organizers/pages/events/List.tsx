@@ -2,11 +2,11 @@ import { ClipboardDocumentIcon, PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 
-import Badge from '../../../components/Badge';
-import { LinkButton } from '../../../components/buttons';
-import Link from '../../../components/Link';
-import { ReducedEvent, useListEventsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import Badge from 'components/Badge';
+import { LinkButton } from 'components/buttons';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { ReducedEvent, useListEventsQuery } from 'store';
 
 const Row = (event: ReducedEvent) => {
   const onClick = async () => {

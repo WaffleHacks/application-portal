@@ -3,17 +3,17 @@ import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Badge from '../../../components/Badge';
-import { Button, LinkButton } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import Link from '../../../components/Link';
-import { useGetSchoolQuery, useUpdateSchoolMutation } from '../../../store';
-import { Description, Item, Section } from '../../components/description';
-import Loading from '../../components/Loading';
-import NotFound from '../../components/NotFound';
-import StatusBadge from '../../components/StatusBadge';
-import { EmptyRow, InlineTable, Table } from '../../components/table';
-import WarningFlag from '../../components/WarningFlag';
+import Badge from 'components/Badge';
+import { Button, LinkButton } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import Link from 'components/Link';
+import { Description, Item, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import StatusBadge from 'organizers/components/StatusBadge';
+import { EmptyRow, InlineTable, Table } from 'organizers/components/table';
+import WarningFlag from 'organizers/components/WarningFlag';
+import { useGetSchoolQuery, useUpdateSchoolMutation } from 'store';
 
 interface MarkAsReviewedProps {
   id: string;

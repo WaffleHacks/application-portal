@@ -2,13 +2,13 @@ import { ArrowLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Badge from '../../../../components/Badge';
-import { Button, LinkButton } from '../../../../components/buttons';
-import Confirm from '../../../../components/Confirm';
-import { useDeleteProviderMutation, useGetProviderQuery } from '../../../../store';
-import { Description, Item, NamedSection, Section } from '../../../components/description';
-import Loading from '../../../components/Loading';
-import NotFound from '../../../components/NotFound';
+import Badge from 'components/Badge';
+import { Button, LinkButton } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import { Description, Item, NamedSection, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { useDeleteProviderMutation, useGetProviderQuery } from 'store';
 
 const Detail = (): JSX.Element => {
   const { slug } = useParams();

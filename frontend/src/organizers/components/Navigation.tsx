@@ -3,9 +3,9 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
-import { Link, NavItem, ProfilePicture } from '../../components/navigation';
-import logo from '../../logo.png';
-import { useCurrentUserQuery } from '../../store';
+import { Link, NavItem, ProfilePicture } from 'components/navigation';
+import logo from 'logo.png';
+import { useCurrentUserQuery } from 'store';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 

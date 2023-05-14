@@ -4,13 +4,13 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { Button, LinkButton } from '../../../../components/buttons';
-import { SelectInput, SwitchInput } from '../../../../components/input';
-import { useGetParticipantQuery, useUpdateParticipantPermissionsMutation } from '../../../../store';
-import { Role } from '../../../../store/types';
-import { Description, Section } from '../../../components/description';
-import Loading from '../../../components/Loading';
-import NotFound from '../../../components/NotFound';
+import { Button, LinkButton } from 'components/buttons';
+import { SelectInput, SwitchInput } from 'components/input';
+import { Description, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { useGetParticipantQuery, useUpdateParticipantPermissionsMutation } from 'store';
+import { Role } from 'store/types';
 
 const validationSchema = Yup.object({
   role: Yup.string().required('This field is required').oneOf(Object.values(Role), 'You must select an option'),

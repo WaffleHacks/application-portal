@@ -1,8 +1,9 @@
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
+import { usePageTitle } from 'components/navigation';
+
 import Navigation, { NavItem } from './Navigation';
-import { usePageTitle } from '../../components/navigation';
 
 const navigation: NavItem[] = [
   { name: 'Your Application', href: '/', exact: true },

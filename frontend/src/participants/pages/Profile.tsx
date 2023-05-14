@@ -4,10 +4,10 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
 
-import { Button } from '../../components/buttons';
-import Card from '../../components/Card';
-import { ReadOnlyTextInput, TextInput } from '../../components/input';
-import { useCurrentUserQuery, useUpdateProfileMutation } from '../../store';
+import { Button } from 'components/buttons';
+import Card from 'components/Card';
+import { ReadOnlyTextInput, TextInput } from 'components/input';
+import { useCurrentUserQuery, useUpdateProfileMutation } from 'store';
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required('This field is required'),

@@ -3,10 +3,10 @@ import { Formik, Form as FormikForm } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { Button, LinkButton } from '../../../../components/buttons';
-import { SwitchInput, TextInput } from '../../../../components/input';
-import { ProviderWithClientSecret } from '../../../../store/types';
-import { Description, NamedSection, Section } from '../../../components/description';
+import { Button, LinkButton } from 'components/buttons';
+import { SwitchInput, TextInput } from 'components/input';
+import { Description, NamedSection, Section } from 'organizers/components/description';
+import { ProviderWithClientSecret } from 'store/types';
 
 interface Props {
   canEditSlug?: boolean;

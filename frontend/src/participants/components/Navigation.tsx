@@ -3,9 +3,10 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
 
+import { NavItem as BaseNavItem, Link, ProfilePicture } from 'components/navigation';
+import logo from 'logo.png';
+
 import { DesktopProfile, MobileProfile } from './Profiles';
-import { NavItem as BaseNavItem, Link, ProfilePicture } from '../../components/navigation';
-import logo from '../../logo.png';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 

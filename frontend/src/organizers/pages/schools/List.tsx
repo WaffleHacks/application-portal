@@ -2,11 +2,12 @@ import { DocumentDuplicateIcon, PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { LinkButton } from 'components/buttons';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from 'organizers/components/table';
+import { SchoolList, useListSchoolsQuery } from 'store';
+
 import Search from './Search';
-import { LinkButton } from '../../../components/buttons';
-import Link from '../../../components/Link';
-import { SchoolList, useListSchoolsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from '../../components/table';
 
 enum SortKey {
   Name,

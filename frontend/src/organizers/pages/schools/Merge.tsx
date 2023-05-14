@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { Button } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import { Description, Section } from 'organizers/components/description';
+import { useMergeSchoolsMutation } from 'store';
+
 import Search, { SearchItem } from './Search';
-import { Button } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import { useMergeSchoolsMutation } from '../../../store';
-import { Description, Section } from '../../components/description';
 
 const getInitial = (params: URLSearchParams): SearchItem | undefined => {
   const id = params.get('id');

@@ -2,7 +2,7 @@ import { CheckCircleIcon, DocumentTextIcon, XCircleIcon } from '@heroicons/react
 import classNames from 'classnames';
 import React, { ReactNode } from 'react';
 
-import Card from '../../components/Card';
+import Card from 'components/Card';
 
 type Kind = 'pending' | 'success' | 'failure';
 

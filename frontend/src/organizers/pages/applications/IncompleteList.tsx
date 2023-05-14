@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useListIncompleteApplicationsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { useListIncompleteApplicationsQuery } from 'store';
 
 const IncompleteList = (): JSX.Element => {
   const { data = [], isLoading } = useListIncompleteApplicationsQuery();

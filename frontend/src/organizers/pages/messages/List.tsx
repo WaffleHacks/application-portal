@@ -2,9 +2,9 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
-import StatusBadge from './StatusBadge';
-import { LinkButton } from '../../../components/buttons';
-import Link from '../../../components/Link';
+import { LinkButton } from 'components/buttons';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
 import {
   MessageStatus,
   MessageTrigger,
@@ -12,8 +12,9 @@ import {
   useListMessageTriggersQuery,
   useListMessagesQuery,
   useSetMessageTriggerMutation,
-} from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+} from 'store';
+
+import StatusBadge from './StatusBadge';
 
 const MessageRow = (message: ReducedMessage): JSX.Element => {
   const lastUpdated = DateTime.fromISO(message.updated_at);

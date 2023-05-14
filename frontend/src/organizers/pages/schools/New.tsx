@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useCreateSchoolMutation } from 'store';
+
 import Form from './Form';
-import { useCreateSchoolMutation } from '../../../store';
 
 const New = (): JSX.Element => {
   const navigate = useNavigate();

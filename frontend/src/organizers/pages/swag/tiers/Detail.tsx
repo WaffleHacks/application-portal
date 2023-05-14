@@ -2,15 +2,15 @@ import { ArrowLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outlin
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button, LinkButton } from '../../../../components/buttons';
-import Confirm from '../../../../components/Confirm';
-import Link from '../../../../components/Link';
-import RenderMarkdown from '../../../../components/RenderMarkdown';
-import { Participant, useDeleteSwagTierMutation, useGetSwagTierQuery } from '../../../../store';
-import { Description, Item, Section } from '../../../components/description';
-import Loading from '../../../components/Loading';
-import NotFound from '../../../components/NotFound';
-import { EmptyRow, InlineTable, Pagination, Table, usePagination } from '../../../components/table';
+import { Button, LinkButton } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import Link from 'components/Link';
+import RenderMarkdown from 'components/RenderMarkdown';
+import { Description, Item, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { EmptyRow, InlineTable, Pagination, Table, usePagination } from 'organizers/components/table';
+import { Participant, useDeleteSwagTierMutation, useGetSwagTierQuery } from 'store';
 
 interface WithTierId {
   id: string;

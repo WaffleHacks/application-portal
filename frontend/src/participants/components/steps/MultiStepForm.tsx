@@ -2,10 +2,11 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Form, Formik, FormikValues } from 'formik';
 import React, { ReactElement, useEffect, useState } from 'react';
 
+import { Button } from 'components/buttons';
+
 import AutoSave from './AutoSave';
 import Progress from './Progress';
 import { Props as StepProps } from './Step';
-import { Button } from '../../../components/buttons';
 
 interface ValidatorProps {
   step: number;

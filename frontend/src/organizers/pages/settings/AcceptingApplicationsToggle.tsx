@@ -2,9 +2,9 @@ import { Switch } from '@headlessui/react';
 import classNames from 'classnames';
 import React from 'react';
 
-import Badge from '../../../components/Badge';
-import { useSetAcceptingApplicationsSettingMutation } from '../../../store';
-import { UpdatableItem } from '../../components/description';
+import Badge from 'components/Badge';
+import { UpdatableItem } from 'organizers/components/description';
+import { useSetAcceptingApplicationsSettingMutation } from 'store';
 
 interface CheckboxProps {
   value: boolean;

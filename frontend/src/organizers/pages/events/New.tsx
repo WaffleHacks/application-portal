@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useCreateEventMutation } from 'store';
+
 import Form from './Form';
-import { useCreateEventMutation } from '../../../store';
 
 const New = (): JSX.Element => {
   const navigate = useNavigate();

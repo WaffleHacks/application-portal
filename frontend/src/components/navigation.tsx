@@ -4,8 +4,9 @@ import md5 from 'crypto-js/md5';
 import React, { ReactNode } from 'react';
 import { useMatch } from 'react-router-dom';
 
+import { useCurrentUserQuery } from 'store';
+
 import BaseLink from './Link';
-import { useCurrentUserQuery } from '../store';
 
 interface NavItemIconProps {
   className?: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { ProfilePicture } from '../../components/navigation';
-import { useCurrentUserQuery } from '../../store';
+import { ProfilePicture } from 'components/navigation';
+import { useCurrentUserQuery } from 'store';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 

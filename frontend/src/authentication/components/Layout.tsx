@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import logo from '../../logo.png';
+import logo from 'logo.png';
 
 interface Props {
   title: string;

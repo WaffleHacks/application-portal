@@ -4,9 +4,9 @@ import { DateTime } from 'luxon';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { Button, LinkButton } from '../../../components/buttons';
-import { DateTimeInput, SwitchInput, TextInput } from '../../../components/input';
-import { Description, NamedSection, Section } from '../../components/description';
+import { Button, LinkButton } from 'components/buttons';
+import { DateTimeInput, SwitchInput, TextInput } from 'components/input';
+import { Description, NamedSection, Section } from 'organizers/components/description';
 
 interface Values {
   name: string;

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Link from '../../../components/Link';
-import { ParticipantWithSwag, useGetAllParticipantSwagProgressQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../components/table';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { ParticipantWithSwag, useGetAllParticipantSwagProgressQuery } from 'store';
 
 const Row = (participant: ParticipantWithSwag): JSX.Element => (
   <tr>

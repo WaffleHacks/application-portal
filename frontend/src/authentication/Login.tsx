@@ -1,9 +1,10 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
+import { useListProvidersQuery } from 'store';
+import { ReducedProvider } from 'store/types';
+
 import Layout from './components/Layout';
-import { useListProvidersQuery } from '../store';
-import { ReducedProvider } from '../store/types';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 

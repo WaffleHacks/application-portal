@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-import { LinkButton } from '../../components/buttons';
-import Card from '../../components/Card';
+import { LinkButton } from 'components/buttons';
+import Card from 'components/Card';
 
 interface Props {
   message: string;

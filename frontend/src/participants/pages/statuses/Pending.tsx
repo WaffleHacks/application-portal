@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Link from '../../../components/Link';
-import Status from '../../components/Status';
+import Link from 'components/Link';
+import Status from 'participants/components/Status';
 
 const Pending = (): JSX.Element => (
   <Status kind="pending" title="Submitted!">

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import AboutForm from './AboutForm';
-import EducationForm from './EducationForm';
-import ExperienceForm from './ExperienceForm';
-import { initialValues, validationSchema } from './form';
-import Review from './Review';
-import ShippingForm from './ShippingForm';
+import Loading from 'participants/components/Loading';
+import Status from 'participants/components/Status';
+import { MultiStepForm, Step } from 'participants/components/steps';
 import {
   ApplicationAutosave,
   Gender,
@@ -15,10 +12,14 @@ import {
   useGetAutosaveQuery,
   useGetSettingsQuery,
   useSetAutosaveMutation,
-} from '../../../store';
-import Loading from '../../components/Loading';
-import Status from '../../components/Status';
-import { MultiStepForm, Step } from '../../components/steps';
+} from 'store';
+
+import AboutForm from './AboutForm';
+import EducationForm from './EducationForm';
+import ExperienceForm from './ExperienceForm';
+import { initialValues, validationSchema } from './form';
+import Review from './Review';
+import ShippingForm from './ShippingForm';
 
 const formatAddress = (street: string, apartment: string, city: string, region: string, postal_code: string): string =>
   `${street}${apartment.length > 0 ? ', ' + apartment : ''}, ${city}, ${region} ${postal_code}`;

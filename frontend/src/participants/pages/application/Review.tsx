@@ -2,11 +2,11 @@ import { useFormikContext } from 'formik';
 import React, { ReactNode } from 'react';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
-import Card from '../../../components/Card';
-import { CheckboxInput } from '../../../components/input';
-import Link from '../../../components/Link';
-import SidebarCard from '../../../components/SidebarCard';
-import { ApplicationAutosave, useCurrentUserQuery } from '../../../store';
+import Card from 'components/Card';
+import { CheckboxInput } from 'components/input';
+import Link from 'components/Link';
+import SidebarCard from 'components/SidebarCard';
+import { ApplicationAutosave, useCurrentUserQuery } from 'store';
 
 interface RowProps {
   name: string;

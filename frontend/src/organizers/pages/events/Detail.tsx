@@ -4,16 +4,17 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import Badge from 'components/Badge';
+import { Button, LinkButton } from 'components/buttons';
+import Confirm from 'components/Confirm';
+import Link from 'components/Link';
+import { Description, Item, Section } from 'organizers/components/description';
+import Loading from 'organizers/components/Loading';
+import NotFound from 'organizers/components/NotFound';
+import { EmptyRow, InlineTable, Pagination, Table, usePagination } from 'organizers/components/table';
+import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery } from 'store';
+
 import Stars from './Stars';
-import Badge from '../../../components/Badge';
-import { Button, LinkButton } from '../../../components/buttons';
-import Confirm from '../../../components/Confirm';
-import Link from '../../../components/Link';
-import Loading from '../../../Loading';
-import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery } from '../../../store';
-import { Description, Item, Section } from '../../components/description';
-import NotFound from '../../components/NotFound';
-import { EmptyRow, InlineTable, Pagination, Table, usePagination } from '../../components/table';
 
 interface WithMessageId {
   id: string;

@@ -3,11 +3,11 @@ import { Formik, Form as FormikForm } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { Button, LinkButton } from '../../../../components/buttons';
-import { MarkdownInput, NumberInput, TextInput } from '../../../../components/input';
-import Link from '../../../../components/Link';
-import { SwagTier } from '../../../../store';
-import { Description, Section } from '../../../components/description';
+import { Button, LinkButton } from 'components/buttons';
+import { MarkdownInput, NumberInput, TextInput } from 'components/input';
+import Link from 'components/Link';
+import { Description, Section } from 'organizers/components/description';
+import { SwagTier } from 'store';
 
 type Values = Omit<SwagTier, 'id' | 'participants'>;
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Badge, { Color } from '../../../../components/Badge';
-import Link from '../../../../components/Link';
-import { Participant, useListParticipantsQuery } from '../../../../store';
-import { Role } from '../../../../store/types';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../../components/table';
+import Badge, { Color } from 'components/Badge';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { Participant, useListParticipantsQuery } from 'store';
+import { Role } from 'store/types';
 
 const Row = (participant: Participant): JSX.Element => (
   <tr>

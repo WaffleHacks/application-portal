@@ -1,12 +1,12 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-import Badge from '../../../../components/Badge';
-import { LinkButton } from '../../../../components/buttons';
-import Link from '../../../../components/Link';
-import { useListProvidersQuery } from '../../../../store';
-import { ReducedProvider } from '../../../../store/types';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from '../../../components/table';
+import Badge from 'components/Badge';
+import { LinkButton } from 'components/buttons';
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
+import { useListProvidersQuery } from 'store';
+import { ReducedProvider } from 'store/types';
 
 const Row = (provider: ReducedProvider): JSX.Element => (
   <tr>

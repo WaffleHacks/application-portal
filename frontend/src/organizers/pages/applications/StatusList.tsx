@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon';
 import React from 'react';
 
+import Link from 'components/Link';
+import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from 'organizers/components/table';
+import { ApplicationStatus, ReducedApplication, useListApplicationsQuery } from 'store';
+
 import { SortKey, sort } from './list';
-import Link from '../../../components/Link';
-import { ApplicationStatus, ReducedApplication, useListApplicationsQuery } from '../../../store';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination, useSorting } from '../../components/table';
 
 const Row = (application: ReducedApplication): JSX.Element => {
   const createdAt = DateTime.fromISO(application.created_at);

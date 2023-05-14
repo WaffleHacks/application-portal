@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Badge from '../../../components/Badge';
-import { MessageStatus } from '../../../store';
+import Badge from 'components/Badge';
+import { MessageStatus } from 'store';
 
 const color = (status: MessageStatus): 'yellow' | 'green' | 'red' => {
   switch (status) {
