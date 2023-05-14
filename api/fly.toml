@@ -7,7 +7,7 @@ app = "application-portal-api"
 primary_region = "yyz"
 
 [build]
-   image = "public.ecr.aws/wafflehacks/application-portal-api:sha-SHORT_SHA"
+  image = "us-central1-docker.pkg.dev/wafflehacks-production/application-portal/api:sha-SHORT_SHA"
 
 [deploy]
   release_command = "migrate"

@@ -26,16 +26,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-buildx-${{ matrix.app }}-${{ hashFiles('**/poetry.lock') }}-
 
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: google-github-actions/auth@v1
+        id: gcp
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
-          role-session-name: ${{ github.run_id }}
-          aws-region: us-east-1
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+          access_token_lifetime: 150s
 
-      - uses: aws-actions/amazon-ecr-login@v1
-        id: login-ecr
+      - uses: docker/login-action@v1
         with:
-          registry-type: public
+          registry: us-central1-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.gcp.outputs.access_token }}
 
       - name: Get short Git SHA
         id: short-sha
@@ -46,7 +49,7 @@ jobs:
       - uses: docker/metadata-action@v4
         id: meta
         with:
-          images: ${{ steps.login-ecr.outputs.registry }}/wafflehacks/application-portal-${{ matrix.app }}
+          images: us-central1-docker.pkg.dev/wafflehacks-production/application-portal/${{ matrix.app }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
