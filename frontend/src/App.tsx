@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { lazy } from 'react';
 
 import Loading from './Loading';
 import { useCurrentUserQuery } from './store';
 import { AuthenticationStatus, Role } from './store/types';
 
-const Login = React.lazy(() => import('./authentication/Login'));
-const CompleteProfile = React.lazy(() => import('./authentication/CompleteProfile'));
-const Participants = React.lazy(() => import('./participants'));
-const Organizers = React.lazy(() => import('./organizers'));
+const Login = lazy(() => import('./authentication/Login'));
+const CompleteProfile = lazy(() => import('./authentication/CompleteProfile'));
+const Participants = lazy(() => import('./participants'));
+const Organizers = lazy(() => import('./organizers'));
 
 const App = (): JSX.Element => {
   const { data, isLoading } = useCurrentUserQuery();

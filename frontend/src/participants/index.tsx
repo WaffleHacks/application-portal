@@ -1,5 +1,5 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import React, { ReactNode, Suspense } from 'react';
+import React, { ReactNode, Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout';
@@ -7,15 +7,15 @@ import Card from '../components/Card';
 import NotFound from '../pages/NotFound';
 import { ApplicationStatus, useCurrentUserQuery, useGetApplicationQuery } from '../store';
 
-const Application = React.lazy(() => import('./pages/application/Application'));
-const Attendance = React.lazy(() => import('./pages/attendance/Attendance'));
-const SwagProgress = React.lazy(() => import('./pages/swag-progress/SwagProgress'));
+const Application = lazy(() => import('./pages/application/Application'));
+const Attendance = lazy(() => import('./pages/attendance/Attendance'));
+const SwagProgress = lazy(() => import('./pages/swag-progress/SwagProgress'));
 
-const AcceptedStatus = React.lazy(() => import('./pages/statuses/Accepted'));
-const PendingStatus = React.lazy(() => import('./pages/statuses/Pending'));
-const RejectedStatus = React.lazy(() => import('./pages/statuses/Rejected'));
+const AcceptedStatus = lazy(() => import('./pages/statuses/Accepted'));
+const PendingStatus = lazy(() => import('./pages/statuses/Pending'));
+const RejectedStatus = lazy(() => import('./pages/statuses/Rejected'));
 
-const Profile = React.lazy(() => import('./pages/Profile'));
+const Profile = lazy(() => import('./pages/Profile'));
 
 interface BaseProps {
   children: ReactNode;
