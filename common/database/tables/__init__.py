@@ -56,6 +56,7 @@ from .swag_tier import (
     SwagTierRead,
     SwagTierUpdate,
 )
+from .webhook import Webhook, WebhookCreate, WebhookList, WebhookRead, WebhookUpdate
 
 # Update hydrated references
 ApplicationList.update_forward_refs(ParticipantList=ParticipantList)
