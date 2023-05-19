@@ -7,6 +7,7 @@ import errorLogger from './errors';
 import integrationsApi from './integrations';
 import operationsApi from './operations';
 import registrationApi from './registration';
+import { WebhookTriggers } from './types';
 import workshopsApi from './workshops';
 
 export const store = configureStore({
@@ -99,7 +100,15 @@ export type {
   Webhook,
   ReducedWebhook,
 } from './types';
-export { Gender, Group, RaceEthnicity, ApplicationStatus, MessageStatus, WebhookFormat } from './types';
+export {
+  Gender,
+  Group,
+  RaceEthnicity,
+  ApplicationStatus,
+  MessageStatus,
+  WebhookFormat,
+  WebhookTriggers,
+} from './types';
 export {
   useMarkAttendanceMutation,
   useGetFeedbackStatusQuery,

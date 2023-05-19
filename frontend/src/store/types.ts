@@ -267,6 +267,13 @@ export enum WebhookFormat {
   Discord = 'Discord',
 }
 
+export const WebhookTriggers: Record<number, string> = {
+  1: 'Sign up',
+  2: 'Application - Submitted',
+  4: 'Application - Accepted',
+  8: 'Application - Rejected',
+};
+
 export interface ReducedWebhook {
   id: number;
   enabled: boolean;
