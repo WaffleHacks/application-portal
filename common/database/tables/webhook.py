@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Optional
 
-from pydantic import HttpUrl
+from pydantic import HttpUrl, validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlmodel import Field, SQLModel
@@ -63,7 +63,12 @@ class Webhook(WebhookBaseWithSensitive, table=True):
 
 
 class WebhookCreate(WebhookBaseWithSensitive):
-    pass
+    @validator("secret")
+    def empty_string_as_null(cls, value):
+        if isinstance(value, str) and len(value) == 0:
+            return None
+
+        return value
 
 
 class WebhookRead(WebhookBase):
@@ -82,3 +87,10 @@ class WebhookUpdate(SQLModel):
     secret: Optional[str]
     format: Optional[Format]
     triggered_by: Optional[Trigger]
+
+    @validator("secret")
+    def empty_string_as_null(cls, value):
+        if isinstance(value, str) and len(value) == 0:
+            return None
+
+        return value
