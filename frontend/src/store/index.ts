@@ -7,7 +7,6 @@ import errorLogger from './errors';
 import integrationsApi from './integrations';
 import operationsApi from './operations';
 import registrationApi from './registration';
-import { WebhookTriggers } from './types';
 import workshopsApi from './workshops';
 
 export const store = configureStore({

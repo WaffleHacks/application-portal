@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import type { ReducedWebhook, Webhook, WebhookWithSecret } from './types';
-import { WebhookFormat } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
