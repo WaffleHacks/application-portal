@@ -4,6 +4,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import authenticationApi from './authentication';
 import communicationApi from './communication';
 import errorLogger from './errors';
+import integrationsApi from './integrations';
 import operationsApi from './operations';
 import registrationApi from './registration';
 import workshopsApi from './workshops';
@@ -12,6 +13,7 @@ export const store = configureStore({
   reducer: {
     [authenticationApi.reducerPath]: authenticationApi.reducer,
     [communicationApi.reducerPath]: communicationApi.reducer,
+    [integrationsApi.reducerPath]: integrationsApi.reducer,
     [operationsApi.reducerPath]: operationsApi.reducer,
     [registrationApi.reducerPath]: registrationApi.reducer,
     [workshopsApi.reducerPath]: workshopsApi.reducer,
@@ -20,6 +22,7 @@ export const store = configureStore({
     getDefaultMiddleware()
       .concat(authenticationApi.middleware)
       .concat(communicationApi.middleware)
+      .concat(integrationsApi.middleware)
       .concat(operationsApi.middleware)
       .concat(registrationApi.middleware)
       .concat(workshopsApi.middleware)
@@ -52,6 +55,13 @@ export {
   useSetMessageTriggerMutation,
   useTestMessageTriggerMutation,
 } from './communication';
+export {
+  useListWebhooksQuery,
+  useGetWebhookQuery,
+  useCreateWebhookMutation,
+  useUpdateWebhookMutation,
+  useDeleteWebhookMutation,
+} from './integrations';
 export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
 export {
   useCreateApplicationMutation,
@@ -86,8 +96,18 @@ export type {
   ReducedEvent,
   ReducedFeedback,
   MessageTrigger,
+  Webhook,
+  ReducedWebhook,
 } from './types';
-export { Gender, Group, RaceEthnicity, ApplicationStatus, MessageStatus } from './types';
+export {
+  Gender,
+  Group,
+  RaceEthnicity,
+  ApplicationStatus,
+  MessageStatus,
+  WebhookFormat,
+  WebhookTriggers,
+} from './types';
 export {
   useMarkAttendanceMutation,
   useGetFeedbackStatusQuery,

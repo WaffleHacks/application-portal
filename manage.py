@@ -4,7 +4,7 @@ import json
 import sys
 from functools import wraps
 from traceback import format_exc
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 
 import click
 from alembic import command
@@ -12,6 +12,8 @@ from alembic.config import Config
 from algoliasearch.search_client import SearchClient  # type: ignore
 from dotenv import load_dotenv
 from sqlalchemy.dialects.postgresql import Insert, insert
+
+from common import nats
 
 # Load from environment file
 load_dotenv()
@@ -188,6 +190,44 @@ async def seed_database(obj: Dict[str, List[Dict[str, Any]]]):
 
         await db.execute(statement)
         await db.commit()
+
+
+@cli.command()
+@click.argument("namespace")
+@click.argument("event")
+@click.argument("data", nargs=-1)
+@click.option(
+    "--manual",
+    is_flag=True,
+    help="Send a manually triggered event, defaults to automated events",
+)
+@coroutine
+async def publish_event(
+    namespace: str,
+    event: str,
+    data: Iterable[str],
+    manual: bool = True,
+):
+    """
+    Publish an event to the NATS message bus
+    """
+    await nats.healthcheck()
+
+    payload = {}
+    for pair in data:
+        try:
+            [key, value] = pair.split("=")
+        except ValueError:
+            click.echo("data must be formatted as key=value pairs")
+            sys.exit(1)
+
+        if value.isdecimal():
+            value = int(value)  # type: ignore
+
+        payload[key] = value
+
+    event_type = "manual" if manual else "automated"
+    await nats.publish(f"{namespace}.{event_type}.{event}", payload)
 
 
 if __name__ == "__main__":

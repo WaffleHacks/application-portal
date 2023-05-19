@@ -24,6 +24,12 @@ class Settings(BaseSettings):
     reply_to: Optional[EmailStr]
     sender: EmailStr
 
+    # Where the frontend is publicly accessible
+    app_url: HttpUrl
+
+    # The icon to show in the Discord embed
+    embed_icon_url: HttpUrl
+
     # Healthcheck server configuration
     healthcheck_host: str = "127.0.0.1"
     healthcheck_port: int = 8000
