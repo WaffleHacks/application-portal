@@ -62,7 +62,11 @@ const Detail = (): JSX.Element => {
 
   return (
     <>
-      <Description title={data.url}>
+      <Description
+        title={data.url}
+        subtitle="View all the details of a webhook"
+        titleLeft={<LinkButton to={`/webhooks/${id}/edit`}>Edit</LinkButton>}
+      >
         <Section>
           <Item name="Status">
             <StatusBadge enabled={data.enabled} truthy="Enabled" falsy="Disabled" />
