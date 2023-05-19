@@ -35,6 +35,7 @@ const SwagTierNew = lazy(() => import('./pages/swag/tiers/New'));
 const Settings = lazy(() => import('./pages/settings'));
 const UserEdit = lazy(() => import('./pages/admin/users/Edit'));
 const UserList = lazy(() => import('./pages/admin/users/List'));
+const WebhookList = lazy(() => import('./pages/webhooks/List'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -85,6 +86,8 @@ const Organizers = (): JSX.Element => (
 
         <Route path="/users" element={<UserList />} />
         <Route path="/users/:id/edit" element={<UserEdit />} />
+
+        <Route path="/webhooks" element={<WebhookList />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

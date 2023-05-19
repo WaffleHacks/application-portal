@@ -9,6 +9,7 @@ import {
   HomeIcon,
   LockClosedIcon,
   QuestionMarkCircleIcon,
+  ShareIcon,
   UserGroupIcon,
   UserIcon,
   XCircleIcon,
@@ -50,6 +51,11 @@ const navigation: NavSection[] = [
       { name: 'Tiers', href: '/swag/tiers', icon: ChartBarIcon },
       { name: 'Progress', href: '/swag/progress', icon: UserGroupIcon },
     ],
+  },
+  {
+    id: 'integrations',
+    name: 'Integrations',
+    items: [{ name: 'Webhooks', href: '/webhooks', icon: ShareIcon }],
   },
   {
     id: 'admin',

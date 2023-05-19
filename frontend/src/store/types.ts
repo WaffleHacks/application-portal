@@ -261,3 +261,23 @@ export interface Provider extends ReducedProvider {
 export interface ProviderWithClientSecret extends Provider {
   client_secret: string;
 }
+
+export enum WebhookFormat {
+  JSON = 'JSON',
+  Discord = 'Discord',
+}
+
+export interface ReducedWebhook {
+  id: number;
+  enabled: boolean;
+  url: string;
+}
+
+export interface Webhook extends ReducedWebhook {
+  format: WebhookFormat;
+  triggered_by: number;
+}
+
+export interface WebhookWithSecret extends Webhook {
+  secret?: string;
+}
