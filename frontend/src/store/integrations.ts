@@ -22,7 +22,7 @@ const api = createApi({
   endpoints: (builder) => ({
     // Webhook endpoints
     listWebhooks: builder.query<ReducedWebhook[], void>({
-      query: () => '/integrations/webhooks',
+      query: () => '/integrations/webhooks/',
       providesTags: (result: ReducedWebhook[] = []) => [
         Tag.Webhook,
         ...result.map((w) => ({ type: Tag.Webhook, id: w.id })),
