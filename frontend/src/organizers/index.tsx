@@ -37,6 +37,7 @@ const UserEdit = lazy(() => import('./pages/admin/users/Edit'));
 const UserList = lazy(() => import('./pages/admin/users/List'));
 const WebhookDetail = lazy(() => import('./pages/webhooks/Detail'));
 const WebhookList = lazy(() => import('./pages/webhooks/List'));
+const NewWebhook = lazy(() => import('./pages/webhooks/New'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -89,6 +90,7 @@ const Organizers = (): JSX.Element => (
         <Route path="/users/:id/edit" element={<UserEdit />} />
 
         <Route path="/webhooks" element={<WebhookList />} />
+        <Route path="/webhooks/new" element={<NewWebhook />} />
         <Route path="/webhooks/:id" element={<WebhookDetail />} />
 
         <Route path="*" element={<NotFound />} />
