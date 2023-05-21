@@ -59,7 +59,7 @@ export const validationSchema = {
     vcs_url: Yup.string().url('Must be a valid URL').optional(),
     hackathons_attended: Yup.number().min(0).max(50).required(required),
     resume: Yup.mixed()
-      .optional()
+      .nullable()
       .test(
         'file-provided',
         'Your resume was not auto-saved, please add it again.',
