@@ -146,7 +146,7 @@ const Detail = (): JSX.Element => {
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that application" returnTo="/applications" />;
 
-  const age = DateTime.fromFormat(data.date_of_birth, 'd-M-yyyy').diffNow('years').negate().years;
+  const age = DateTime.fromFormat(data.date_of_birth, 'yyyy-M-d').diffNow('years').negate().years;
 
   return (
     <>
