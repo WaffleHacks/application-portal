@@ -1,4 +1,5 @@
-from typing import List
+from datetime import datetime, timedelta
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
@@ -15,6 +16,33 @@ router = APIRouter()
 class StatisticEntry(BaseModel):
     label: str
     count: int
+
+
+@router.get("/per-day", response_model=List[StatisticEntry])
+async def per_day(
+    start: Optional[datetime] = None,
+    end: Optional[datetime] = None,
+    db: AsyncSession = Depends(with_db),
+):
+    if end is None:
+        end = datetime.utcnow()
+    if start is None:
+        start = end - timedelta(days=7)
+
+    result = await db.execute(
+        select(
+            func.date_trunc("day", Application.created_at).label("label"),
+            func.count(Application.participant_id),
+        )
+        .where(Application.created_at > start)  # type: ignore
+        .where(Application.created_at < end)  # type: ignore
+        .group_by("label")
+        .order_by("label")
+    )
+    return [
+        StatisticEntry(label=row.label.isoformat(), count=row.count)
+        for row in result.all()
+    ]
 
 
 @router.get("/age", response_model=List[StatisticEntry])
