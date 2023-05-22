@@ -83,9 +83,9 @@ async def experience(db: AsyncSession = Depends(with_db)):
         select(
             case(
                 (Application.hackathons_attended == 0, "first"),
-                (Application.hackathons_attended in [1, 2], "beginner"),
-                (Application.hackathons_attended in [3, 4, 5], "beginner"),
-                else_="expert",
+                (Application.hackathons_attended in [1, 2], "beginner (1-2)"),
+                (Application.hackathons_attended in [3, 4, 5], "beginner (3-5)"),
+                else_="expert (6+)",
             ).label("label"),
             func.count(Application.participant_id),
         ).group_by("label")
