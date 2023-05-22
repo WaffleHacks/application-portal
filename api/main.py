@@ -13,6 +13,7 @@ from . import (
     integrations,
     operations,
     registration,
+    statistics,
     workshops,
 )
 from .settings import SETTINGS
@@ -33,6 +34,7 @@ app.include_router(communication.router, prefix="/communication")
 app.include_router(integrations.router, prefix="/integrations")
 app.include_router(operations.router, prefix="/operations")
 app.include_router(registration.router, prefix="/registration")
+app.include_router(statistics.router, prefix="/statistics")
 app.include_router(workshops.router, prefix="/workshops")
 
 
