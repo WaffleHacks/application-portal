@@ -288,3 +288,14 @@ export interface Webhook extends ReducedWebhook {
 export interface WebhookWithSecret extends Webhook {
   secret?: string;
 }
+
+export interface StatisticEntry {
+  label: string;
+  count: number;
+}
+
+export interface SchoolStatisticEntry {
+  id: string;
+  name: string;
+  count: number;
+}
