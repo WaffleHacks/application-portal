@@ -86,6 +86,7 @@ export {
   useGetParticipantQuery,
   useUpdateParticipantPermissionsMutation,
 } from './registration';
+export type { RegistrationStatistic } from './statistics';
 export {
   useGetRegistrationStatisticsQuery,
   useGetPerDayRegistrationStatisticsQuery,

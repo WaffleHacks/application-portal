@@ -14,13 +14,13 @@ import {
 } from 'd3';
 import React, { ComponentType, useEffect, useId, useRef } from 'react';
 
-import { StatisticEntry, useGetRegistrationStatisticsQuery } from 'store';
+import { RegistrationStatistic, StatisticEntry, useGetRegistrationStatisticsQuery } from 'store';
 
 const HEIGHT = 400;
 
 interface ContainerProps {
   title: string;
-  source: string;
+  source: RegistrationStatistic;
   width?: number;
 }
 

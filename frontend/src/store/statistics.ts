@@ -5,6 +5,16 @@ import { SchoolStatisticEntry, StatisticEntry } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
+export type RegistrationStatistic =
+  | 'age'
+  | 'experience'
+  | 'graduation-year'
+  | 'country'
+  | 'gender'
+  | 'level-of-study'
+  | 'major'
+  | 'race-ethnicity';
+
 interface PerDayArgs {
   start?: DateTime;
   end?: DateTime;
@@ -15,7 +25,7 @@ const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: [],
   endpoints: (builder) => ({
-    getRegistrationStatistics: builder.query<StatisticEntry[], string>({
+    getRegistrationStatistics: builder.query<StatisticEntry[], RegistrationStatistic>({
       query: (kind) => `/statistics/registration/${kind}`,
     }),
     getPerDayRegistrationStatistics: builder.query<StatisticEntry[], PerDayArgs>({
