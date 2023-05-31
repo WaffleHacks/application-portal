@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import NotFound from '../pages/NotFound';
 import { ApplicationStatus } from '../store';
 
+const Dashboard = lazy(() => import('./pages/dashboard'));
 const ApplicationDetail = lazy(() => import('./pages/applications/Detail'));
 const ListApplicationsByStatus = lazy(() => import('./pages/applications/StatusList'));
 const ListIncompleteApplications = lazy(() => import('./pages/applications/IncompleteList'));
@@ -44,6 +45,8 @@ const Organizers = (): JSX.Element => (
   <Layout>
     <Suspense fallback={<>Loading...</>}>
       <Routes>
+        <Route index element={<Dashboard />} />
+
         <Route path="/applications/pending" element={<ListPendingApplications />} />
         <Route
           path="/applications/accepted"
