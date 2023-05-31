@@ -82,10 +82,10 @@ async def experience(db: AsyncSession = Depends(with_db)):
     result = await db.execute(
         select(
             case(
-                (Application.hackathons_attended == 0, "first"),
-                (Application.hackathons_attended in [1, 2], "beginner (1-2)"),
-                (Application.hackathons_attended in [3, 4, 5], "beginner (3-5)"),
-                else_="expert (6+)",
+                (Application.hackathons_attended == 0, "None"),
+                (Application.hackathons_attended.in_([1, 2]), "Beginner (1-2)"),  # type: ignore
+                (Application.hackathons_attended.in_([3, 4, 5]), "Intermediate (3-5)"),  # type: ignore
+                else_="Expert (6+)",
             ).label("label"),
             func.count(Application.participant_id),
         ).group_by("label")
