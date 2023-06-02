@@ -6,6 +6,8 @@ import Flatpickr from 'react-flatpickr';
 
 import { BaseProps, generateId } from './common';
 
+const CORRECTED_DATE_FORMAT = /^\d{4}-\d{1,2}-\d{1,2}$/;
+
 const Date = ({ label, ...props }: BaseProps<string>): JSX.Element => {
   const [{ value }, { error }, { setValue }] = useField(props);
   const { className, required, disabled } = props;
@@ -13,6 +15,9 @@ const Date = ({ label, ...props }: BaseProps<string>): JSX.Element => {
 
   const hasError = error !== undefined;
   const errorId = id + '-error';
+
+  // Switch from DD-MM-YYYY to YYYY-MM-DD date format
+  if (!CORRECTED_DATE_FORMAT.test(value)) setValue(value.split('-').reverse().join('-'), true);
 
   return (
     <div className={className}>
@@ -24,7 +29,7 @@ const Date = ({ label, ...props }: BaseProps<string>): JSX.Element => {
           id={id}
           required={required}
           disabled={disabled}
-          options={{ altInput: true, altFormat: 'F j, Y', dateFormat: 'd-m-Y' }}
+          options={{ altInput: true, altFormat: 'F j, Y', dateFormat: 'Y-m-d' }}
           value={value}
           onChange={(date) => setValue(`${date[0].getDate()}-${date[0].getMonth() + 1}-${date[0].getFullYear()}`)}
           className={classNames(

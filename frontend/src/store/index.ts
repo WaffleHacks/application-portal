@@ -7,6 +7,7 @@ import errorLogger from './errors';
 import integrationsApi from './integrations';
 import operationsApi from './operations';
 import registrationApi from './registration';
+import statisticsApi from './statistics';
 import workshopsApi from './workshops';
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     [integrationsApi.reducerPath]: integrationsApi.reducer,
     [operationsApi.reducerPath]: operationsApi.reducer,
     [registrationApi.reducerPath]: registrationApi.reducer,
+    [statisticsApi.reducerPath]: statisticsApi.reducer,
     [workshopsApi.reducerPath]: workshopsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -25,6 +27,7 @@ export const store = configureStore({
       .concat(integrationsApi.middleware)
       .concat(operationsApi.middleware)
       .concat(registrationApi.middleware)
+      .concat(statisticsApi.middleware)
       .concat(workshopsApi.middleware)
       .concat(errorLogger(['markAttendance'])),
 });
@@ -83,6 +86,12 @@ export {
   useGetParticipantQuery,
   useUpdateParticipantPermissionsMutation,
 } from './registration';
+export type { RegistrationStatistic } from './statistics';
+export {
+  useGetRegistrationStatisticsQuery,
+  useGetPerDayRegistrationStatisticsQuery,
+  useGetSchoolStatisticsQuery,
+} from './statistics';
 export type {
   ApplicationAutosave,
   ReducedApplication,
@@ -98,6 +107,8 @@ export type {
   MessageTrigger,
   Webhook,
   ReducedWebhook,
+  StatisticEntry,
+  SchoolStatisticEntry,
 } from './types';
 export {
   Gender,

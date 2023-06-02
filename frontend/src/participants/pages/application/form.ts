@@ -42,7 +42,7 @@ export const validationSchema = {
     gender: Yup.string().oneOf(Object.values(Gender), required).required(required),
     race_ethnicity: Yup.string().oneOf(Object.values(RaceEthnicity), required).required(required),
     date_of_birth: Yup.string()
-      .matches(/\d{1,2}-\d{1,2}-\d{4}/, 'Must be a valid date (DD-MM-YYYY)')
+      .matches(/\d{4}-\d{1,2}-\d{1,2}/, 'Must be a valid date (YYYY-MM-DD)')
       .required(required),
   }),
   education: Yup.object({

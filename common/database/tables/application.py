@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
@@ -55,7 +55,7 @@ class ApplicationProfileBase(SQLModel):
     vcs_url: Optional[str]
 
     gender: Gender = Field(sa_column=Column(SQLEnum(Gender), nullable=False))
-    date_of_birth: str
+    date_of_birth: date
     race_ethnicity: RaceEthnicity = Field(
         sa_column=Column(SQLEnum(RaceEthnicity), nullable=False)
     )
@@ -96,15 +96,12 @@ class ApplicationBase(ApplicationProfileBase):
     @validator("flagged", always=True)
     def should_flag(cls, value: bool, values: Dict[str, Any]):
         # Ensure the dependent values are present
-        raw_date_of_birth = values.get("date_of_birth")
+        date_of_birth = values.get("date_of_birth")
         graduation_year = values.get("graduation_year")
-        if raw_date_of_birth is None or graduation_year is None:
+        if date_of_birth is None or graduation_year is None:
             return value
 
-        now = datetime.now()
-
-        # Check age
-        date_of_birth = datetime.strptime(raw_date_of_birth, "%d-%m-%Y")
+        now = date.today()
         age = (now - date_of_birth).days / 365.25
 
         return age < 13 or graduation_year < now.year - 1
