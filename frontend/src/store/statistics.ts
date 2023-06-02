@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { DateTime } from 'luxon';
 
 import { SchoolStatisticEntry, StatisticEntry } from './types';
 
@@ -16,8 +15,8 @@ export type RegistrationStatistic =
   | 'race-ethnicity';
 
 interface PerDayArgs {
-  start?: DateTime;
-  end?: DateTime;
+  start?: string;
+  end?: string;
 }
 
 const api = createApi({
@@ -29,9 +28,9 @@ const api = createApi({
       query: (kind) => `/statistics/registration/${kind}`,
     }),
     getPerDayRegistrationStatistics: builder.query<StatisticEntry[], PerDayArgs>({
-      query: ({ start, end }) => ({
+      query: (params) => ({
         url: '/statistics/registration/per-day',
-        params: { start: start?.toISO(), end: end?.toISO() },
+        params,
       }),
     }),
     getSchoolStatistics: builder.query<SchoolStatisticEntry[], void>({
