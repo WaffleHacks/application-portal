@@ -1,7 +1,7 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useField } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Flatpickr from 'react-flatpickr';
 
 import { BaseProps, generateId } from './common';
@@ -17,7 +17,9 @@ const Date = ({ label, ...props }: BaseProps<string>): JSX.Element => {
   const errorId = id + '-error';
 
   // Switch from DD-MM-YYYY to YYYY-MM-DD date format
-  if (!CORRECTED_DATE_FORMAT.test(value)) setValue(value.split('-').reverse().join('-'), true);
+  useEffect(() => {
+    if (!CORRECTED_DATE_FORMAT.test(value)) setValue(value.split('-').reverse().join('-'), true);
+  }, [value]);
 
   return (
     <div className={className}>
