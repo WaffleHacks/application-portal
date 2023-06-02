@@ -40,7 +40,7 @@ async def per_day(
         .order_by("label")
     )
     return [
-        StatisticEntry(label=row.label.isoformat(), count=row.count)
+        StatisticEntry(label=row.label.date().isoformat(), count=row.count)
         for row in result.all()
     ]
 
