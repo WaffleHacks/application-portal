@@ -64,6 +64,9 @@ export {
   useCreateWebhookMutation,
   useUpdateWebhookMutation,
   useDeleteWebhookMutation,
+  useListExportsQuery,
+  useGetExportDownloadUrlQuery,
+  useInitiateExportMutation,
 } from './integrations';
 export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
 export {
@@ -95,6 +98,7 @@ export {
 export type {
   ApplicationAutosave,
   ReducedApplication,
+  Export,
   ReducedMessage,
   School,
   SchoolList,
@@ -111,6 +115,7 @@ export type {
   SchoolStatisticEntry,
 } from './types';
 export {
+  ExportStatus,
   Gender,
   Group,
   RaceEthnicity,
