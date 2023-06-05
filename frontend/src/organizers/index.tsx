@@ -15,6 +15,8 @@ const EventEdit = lazy(() => import('./pages/events/Edit'));
 const EventFeedback = lazy(() => import('./pages/events/Feedback'));
 const ListEvents = lazy(() => import('./pages/events/List'));
 const EventNew = lazy(() => import('./pages/events/New'));
+const ExportList = lazy(() => import('./pages/exports/List'));
+const NewExport = lazy(() => import('./pages/exports/New'));
 const MessageDetail = lazy(() => import('./pages/messages/Detail'));
 const MessageEdit = lazy(() => import('./pages/messages/Edit'));
 const MessageNew = lazy(() => import('./pages/messages/New'));
@@ -92,6 +94,9 @@ const Organizers = (): JSX.Element => (
 
         <Route path="/users" element={<UserList />} />
         <Route path="/users/:id/edit" element={<UserEdit />} />
+
+        <Route path="/exports" element={<ExportList />} />
+        <Route path="/exports/new" element={<NewExport />} />
 
         <Route path="/webhooks" element={<WebhookList />} />
         <Route path="/webhooks/new" element={<NewWebhook />} />
