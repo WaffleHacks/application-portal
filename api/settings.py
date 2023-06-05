@@ -2,9 +2,6 @@ from pydantic import BaseSettings, HttpUrl
 
 
 class Settings(BaseSettings):
-    # The S3 bucket for storing data exports
-    export_bucket: str
-
     # The S3 bucket for storing resumes
     resume_bucket: str
 

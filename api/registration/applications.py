@@ -13,10 +13,10 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.algolia import with_schools_index
-from api.aws import S3Client, with_s3
 from api.permissions import Role, requires_role
 from api.session import with_user_id
 from api.settings import SETTINGS
+from common.aws import S3Client, with_s3
 from common.database import (
     Application,
     ApplicationAutosave,

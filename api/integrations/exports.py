@@ -6,10 +6,9 @@ from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from api.aws import S3Client, with_s3
 from api.permissions import Role, requires_role
 from api.session import with_user_id
-from api.settings import SETTINGS
+from common.aws import S3Client, with_s3
 from common.database import (
     Export,
     ExportCreate,
@@ -18,6 +17,7 @@ from common.database import (
     Participant,
     with_db,
 )
+from common.settings import SETTINGS
 from common.tasks import tasks
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])

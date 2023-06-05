@@ -1,11 +1,13 @@
 import logging
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Awaitable, Callable, Dict, List, Optional
+from typing import Dict
+from uuid import uuid4
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.aws import with_s3
 from common.database import Export, ExportStatus, db_context
+from common.settings import SETTINGS
 
 from .applications import MLHRegistered, ResumeBook
 from .base import Exporter
@@ -13,6 +15,7 @@ from .base import Exporter
 manual = True
 
 logger = logging.getLogger(__name__)
+s3 = with_s3()
 
 
 EXPORTERS: Dict[str, Dict[str, Exporter]] = {
@@ -44,8 +47,16 @@ async def handler(export_id: int, table: str, kind: str):
 
         csv = await exporter.export(db)
 
-        # TODO: upload to S3
+        filename = str(uuid4()) + ".csv"
+        s3.put_object(
+            Bucket=SETTINGS.export_bucket,
+            Key=filename,
+            Body=csv.getvalue(),
+            ACL="private",
+            ContentType="text/csv",
+        )
 
+        export.file = filename
         await mark_export(ExportStatus.COMPLETED, export, db)
 
 
