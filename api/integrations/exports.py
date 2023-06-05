@@ -18,6 +18,7 @@ from common.database import (
     Participant,
     with_db,
 )
+from common.tasks import tasks
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 
@@ -48,7 +49,11 @@ async def create(
     db.add(export)
     await db.commit()
 
-    # TODO: trigger task
+    await tasks.integration.export(
+        export_id=export.id,
+        table=values.table,
+        kind=values.kind,
+    )
 
     return export
 

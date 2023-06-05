@@ -1,12 +1,18 @@
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional
+from typing import Dict, Optional
 
+from pydantic import validator
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
 from sqlmodel import Field, SQLModel
 
 from .types import TimeStamp
+
+# The valid exports for each table
+VALID_EXPORTS = {
+    "applications": {"mlh-registered", "resume-book"},
+}
 
 
 class Status(Enum):
@@ -52,7 +58,25 @@ class ExportCreate(SQLModel):
 
     # These are used by the export task
     table: str
-    columns: List[str]
+    kind: str
+
+    @validator("table")
+    def exportable_table(cls, table: str) -> str:
+        if table not in VALID_EXPORTS:
+            raise ValueError(f"table {table!r} cannot be exported")
+
+        return table
+
+    @validator("kind")
+    def valid_kind_for_table(cls, kind: str, values: Dict[str, str]):
+        table = values.get("table")
+        if not table:
+            return kind
+
+        if kind not in VALID_EXPORTS.get(table, set()):
+            raise ValueError("unknown export for table")
+
+        return kind
 
 
 class ExportList(SQLModel):
