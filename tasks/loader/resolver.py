@@ -51,8 +51,13 @@ def resolve(
 
             # Ignore invalid names, wrong file types, and directories
             if not handler_path.is_file():
-                logger.debug(f"{service}: skipping path {handler!r}, must be a file")
-                continue
+                if handler_path.is_dir() and (handler_path / "__init__.py").exists():
+                    logger.debug(f"{service}: path {handler!r} is a python module")
+                else:
+                    logger.debug(
+                        f"{service}: skipping path {handler!r}, must be a file"
+                    )
+                    continue
             elif not handler.endswith(".py"):
                 logger.debug(
                     f"{service}: skipping handler file {handler!r}, must be a python file"
@@ -119,7 +124,10 @@ def import_file(path: Path, parent: str) -> ModuleType:
     module_name = f"{parent}.{service_name}.{handler_name}"
 
     # Get the module
-    spec = importlib_util.spec_from_file_location(module_name, path)
+    if path.is_dir():
+        spec = importlib_util.spec_from_file_location(module_name, path / "__init__.py")
+    else:
+        spec = importlib_util.spec_from_file_location(module_name, path)
     assert spec is not None
     module = importlib_util.module_from_spec(spec)
 
