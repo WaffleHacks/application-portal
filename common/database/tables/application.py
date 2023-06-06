@@ -21,6 +21,9 @@ class Gender(Enum):
     NON_BINARY = "Non-binary"
     OTHER = "Other"
 
+    def __str__(self):
+        return self.value
+
 
 # Names from https://boards.cdn.greenhouse.io/docs/RaceEthnicityDefinitions.pdf
 class RaceEthnicity(Enum):
@@ -32,11 +35,17 @@ class RaceEthnicity(Enum):
     CAUCASIAN = "White / Caucasian"
     MULTIPLE_OTHER = "Multiple ethnicities / Other"
 
+    def __str__(self):
+        return self.value
+
 
 class Status(Enum):
     PENDING = "pending"
     REJECTED = "rejected"
     ACCEPTED = "accepted"
+
+    def __str__(self):
+        return self.value
 
 
 def require_legal_agreements(v: bool) -> bool:

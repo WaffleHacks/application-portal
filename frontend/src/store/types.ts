@@ -299,3 +299,18 @@ export interface SchoolStatisticEntry {
   name: string;
   count: number;
 }
+
+export enum ExportStatus {
+  Processing = 'processing',
+  Failed = 'failed',
+  Completed = 'completed',
+}
+
+export interface Export {
+  id: number;
+  name: string;
+  requester: string;
+  status: ExportStatus;
+  created_at: string;
+  finished_at: string | null;
+}

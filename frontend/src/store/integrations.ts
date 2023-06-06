@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { ReducedWebhook, Webhook, WebhookWithSecret } from './types';
+import type { Export, ReducedWebhook, Webhook, WebhookWithSecret } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -9,11 +9,22 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
  */
 enum Tag {
   Webhook = 'webhook',
+  Export = 'export',
 }
 
 type WebhookCreate = Omit<WebhookWithSecret, 'id'>;
 
 type WebhookUpdate = Partial<WebhookWithSecret>;
+
+interface DownloadUrl {
+  url: string;
+}
+
+interface ExportCreate {
+  name: string;
+  table: string;
+  kind: string;
+}
 
 const api = createApi({
   reducerPath: 'integrations',
@@ -55,6 +66,23 @@ const api = createApi({
       }),
       invalidatesTags: (result, error, id) => [{ type: Tag.Webhook, id }],
     }),
+
+    // Export endpoints
+    listExports: builder.query<Export[], void>({
+      query: () => '/integrations/exports/',
+      providesTags: [Tag.Export],
+    }),
+    getExportDownloadUrl: builder.query<DownloadUrl, number>({
+      query: (id) => `/integrations/exports/${id}/download`,
+    }),
+    initiateExport: builder.mutation<void, ExportCreate>({
+      query: (body) => ({
+        url: '/integrations/exports/',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [Tag.Export],
+    }),
   }),
 });
 
@@ -65,4 +93,7 @@ export const {
   useCreateWebhookMutation,
   useUpdateWebhookMutation,
   useDeleteWebhookMutation,
+  useListExportsQuery,
+  useGetExportDownloadUrlQuery,
+  useInitiateExportMutation,
 } = api;

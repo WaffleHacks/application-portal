@@ -4,6 +4,7 @@ import {
   CalendarIcon,
   CheckCircleIcon,
   CogIcon,
+  DocumentArrowDownIcon,
   EllipsisHorizontalCircleIcon,
   EnvelopeOpenIcon,
   HomeIcon,
@@ -55,7 +56,10 @@ const navigation: NavSection[] = [
   {
     id: 'integrations',
     name: 'Integrations',
-    items: [{ name: 'Webhooks', href: '/webhooks', icon: ShareIcon }],
+    items: [
+      { name: 'Export Data', href: '/exports', icon: DocumentArrowDownIcon },
+      { name: 'Webhooks', href: '/webhooks', icon: ShareIcon },
+    ],
   },
   {
     id: 'admin',

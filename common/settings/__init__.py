@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     # The Redis store to connect to
     redis_url: RedisDsn
 
+    # The S3 bucket for storing data exports
+    export_bucket: str
+
     # Whether to enable OpenTelemetry observability
     otel_enable: bool = False
 
