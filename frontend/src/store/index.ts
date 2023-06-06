@@ -94,6 +94,7 @@ export {
   useGetRegistrationStatisticsQuery,
   useGetPerDayRegistrationStatisticsQuery,
   useGetSchoolStatisticsQuery,
+  useGetParticipantCountsByStatusQuery,
 } from './statistics';
 export type {
   ApplicationAutosave,
