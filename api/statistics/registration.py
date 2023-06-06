@@ -13,6 +13,19 @@ from common.database import Application, School, with_db
 router = APIRouter()
 
 
+class Counts(BaseModel):
+    accepted: int = 0
+    pending: int = 0
+    rejected: int = 0
+    total: int
+
+
+@router.get("/", response_model=Counts)
+async def status(db: AsyncSession = Depends(with_db)):
+    result = await db.execute(grouped_count("status"))
+    return {row.label.value: row.count for row in result.all()}
+
+
 class StatisticEntry(BaseModel):
     label: str
     count: int

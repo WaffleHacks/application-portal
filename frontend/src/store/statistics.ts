@@ -19,6 +19,12 @@ interface PerDayArgs {
   end?: string;
 }
 
+interface Counts {
+  pending: number;
+  accepted: number;
+  rejected: number;
+}
+
 const api = createApi({
   reducerPath: 'statistics',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
@@ -36,6 +42,9 @@ const api = createApi({
     getSchoolStatistics: builder.query<SchoolStatisticEntry[], void>({
       query: () => '/statistics/registration/school',
     }),
+    getParticipantCountsByStatus: builder.query<Counts, void>({
+      query: () => '/statistics/registration/',
+    }),
   }),
 });
 
@@ -44,4 +53,5 @@ export const {
   useGetRegistrationStatisticsQuery,
   useGetPerDayRegistrationStatisticsQuery,
   useGetSchoolStatisticsQuery,
+  useGetParticipantCountsByStatusQuery,
 } = api;

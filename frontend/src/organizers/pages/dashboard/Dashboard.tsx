@@ -2,6 +2,7 @@ import React from 'react';
 
 import BarChart from './BarChart';
 import ChartContainer from './ChartContainer';
+import ParticipantCounts from './ParticipantCounts';
 import PieChart from './PieChart';
 import RegistrationsPerDay from './RegistrationsPerDay';
 
@@ -16,7 +17,9 @@ const Dashboard = (): JSX.Element => {
         </div>
       </div>
 
-      <RegistrationsPerDay />
+      <ParticipantCounts />
+
+      <RegistrationsPerDay className="mt-8" />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 justify-items-center mt-6 gap-y-8 gap-x-4">
         <ChartContainer title="Gender" source="gender" chart={PieChart} />
