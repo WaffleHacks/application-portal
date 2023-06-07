@@ -8,7 +8,7 @@ import { IconWithLabel } from './ChartContainer';
 const ParticipantCounts = (): JSX.Element => {
   const { data, isLoading } = useGetParticipantCountsByStatusQuery();
 
-  if (isLoading) return <IconWithLabel text="Loading..." icon={ArrowPathIcon} />;
+  if (isLoading) return <IconWithLabel text="Loading..." className="animate-spin" icon={ArrowPathIcon} />;
   else if (data === undefined) return <IconWithLabel text="No data" icon={QuestionMarkCircleIcon} />;
 
   return (

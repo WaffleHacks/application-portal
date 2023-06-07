@@ -17,7 +17,6 @@ class Counts(BaseModel):
     accepted: int = 0
     pending: int = 0
     rejected: int = 0
-    total: int
 
 
 @router.get("/", response_model=Counts)
