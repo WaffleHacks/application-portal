@@ -22,5 +22,9 @@ class Settings(BaseSettings):
     # The domain emails must end with to be automatically assigned organizer permissions
     organizer_email_domain: str
 
+    # The pre-shared key for authenticating WaffleBot
+    # TODO: replace this with something more robust
+    wafflebot_key: str
+
 
 SETTINGS = Settings()
