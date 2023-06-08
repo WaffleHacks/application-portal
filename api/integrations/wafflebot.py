@@ -9,7 +9,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.settings import SETTINGS
-from common.database import Application, ApplicationStatus, Participant, with_db
+from common.database import ApplicationStatus, Participant, with_db
 
 token_scheme = HTTPBearer()
 
@@ -26,13 +26,14 @@ router = APIRouter(dependencies=[Depends(requires_key)])
 
 
 class StatusResponse(BaseModel):
-    status: Optional[ApplicationStatus]
+    id: int
+    status: ApplicationStatus
 
 
 @router.get(
     "/status",
     name="Check participant application status",
-    response_model=StatusResponse,
+    response_model=Optional[StatusResponse],
 )
 async def check_status(email: str, db: AsyncSession = Depends(with_db)):
     """
@@ -46,6 +47,6 @@ async def check_status(email: str, db: AsyncSession = Depends(with_db)):
     participant: Optional[Participant] = result.scalar_one_or_none()
 
     if participant is None or participant.application is None:
-        return StatusResponse(status=None)
+        return None
 
-    return StatusResponse(status=participant.application.status)
+    return StatusResponse(id=participant.id, status=participant.application.status)
