@@ -53,6 +53,7 @@ async def check_status(email: str, db: AsyncSession = Depends(with_db)):
 
 
 class LookupResponse(BaseModel):
+    id: int
     first_name: str
     last_name: str
     email: str
@@ -87,6 +88,7 @@ async def lookup(
         return participant
 
     return LookupResponse(
+        id=participant.id,
         first_name=participant.first_name,
         last_name=participant.last_name,
         email=participant.email,
