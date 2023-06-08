@@ -50,3 +50,45 @@ async def check_status(email: str, db: AsyncSession = Depends(with_db)):
         return None
 
     return StatusResponse(id=participant.id, status=participant.application.status)
+
+
+class LookupResponse(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+    link: str
+
+
+@router.get(
+    "/lookup",
+    name="Lookup a participant's application",
+    response_model=Optional[LookupResponse],
+)
+async def lookup(
+    id: Optional[int] = None,
+    email: Optional[str] = None,
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Lookup a participant's information by either ID or email. If both are specified, ID takes precedence.
+    """
+    if id is not None:
+        participant = await db.get(Participant, id)
+    elif email is not None:
+        result = await db.execute(select(Participant).where(Participant.email == email))
+        participant = result.scalar_one_or_none()
+    else:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="one of id or email is required",
+        )
+
+    if participant is None:
+        return participant
+
+    return LookupResponse(
+        first_name=participant.first_name,
+        last_name=participant.last_name,
+        email=participant.email,
+        link=f"{SETTINGS.app_url}/applications/{participant.id}",
+    )
