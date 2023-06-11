@@ -150,7 +150,7 @@ const Detail = (): JSX.Element => {
             ))}
           </Table.Body>
         </InlineTable>
-        <div className="mx-4 my-4">
+        <div className="mx-4 my-4 pb-4">
           <Pagination {...attendeePaginatedProps} />
         </div>
       </Description>
@@ -171,7 +171,7 @@ const Detail = (): JSX.Element => {
             ))}
           </Table.Body>
         </InlineTable>
-        <div className="mx-4 my-4">
+        <div className="mx-4 my-4 pb-4">
           <Pagination {...feedbackPaginatedProps} />
         </div>
       </Description>
