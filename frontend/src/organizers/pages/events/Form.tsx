@@ -6,10 +6,11 @@ import * as Yup from 'yup';
 
 import { Button, LinkButton } from 'components/buttons';
 import { DateTimeInput, SwitchInput, TextInput } from 'components/input';
-import { Description, NamedSection, Section } from 'organizers/components/description';
+import { Description, Section } from 'organizers/components/description';
 
 interface Values {
   name: string;
+  link: string | null;
   valid_from: string;
   valid_until: string;
   enabled: boolean;
@@ -17,6 +18,7 @@ interface Values {
 
 const initialValues: Values = {
   name: '',
+  link: '',
   valid_from: '',
   valid_until: '',
   enabled: false,
@@ -37,6 +39,7 @@ interface Props {
 const dateTimeValid = (value: string | undefined): boolean => DateTime.fromISO(value || '').isValid;
 const validationSchema = Yup.object({
   name: Yup.string().required('This field is required'),
+  link: Yup.string().nullable().url('Must be a URL'),
   valid_from: Yup.string().required('This field is required').test('valid', 'Must be a valid timestamp', dateTimeValid),
   valid_until: Yup.string()
     .required('This field is required')
@@ -62,7 +65,7 @@ const Form = ({
 }: Props): JSX.Element => (
   <Formik
     initialValues={values}
-    onSubmit={onSubmit}
+    onSubmit={(values) => onSubmit({ ...values, link: values.link === '' ? null : values.link })}
     validationSchema={validationSchema}
     validateOnMount={true}
     validateOnChange={true}
@@ -72,21 +75,22 @@ const Form = ({
         <Description title={title} subtitle={subtitle}>
           <Section>
             <TextInput label="Name" required autoComplete="off" {...getFieldProps('name')} />
+            <TextInput label="URL" type="url" autoComplete="off" {...getFieldProps('link')} />
             {editEnabled && (
               <SwitchInput
                 className="max-w-xs"
-                label="Enabled?"
-                description="Allow attendance to be taken for this event within the times specified below"
+                label="Public?"
+                description="Whether the event should be publicly visible"
                 required
                 {...getFieldProps('enabled')}
               />
             )}
           </Section>
 
-          <NamedSection name="Code Validity" description="The times when the attendance/feedback code should be valid">
-            <DateTimeInput label="From" required {...getFieldProps('valid_from')} />
-            <DateTimeInput label="Until" required {...getFieldProps('valid_until')} />
-          </NamedSection>
+          <Section>
+            <DateTimeInput label="Starts at" required {...getFieldProps('valid_from')} />
+            <DateTimeInput label="Ends at" required {...getFieldProps('valid_until')} />
+          </Section>
 
           <Section>
             <div className="flex justify-between col-span-3">

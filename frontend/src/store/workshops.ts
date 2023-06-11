@@ -22,7 +22,7 @@ interface FeedbackStatus {
   submitted: boolean;
 }
 
-type EventCreate = Pick<Event, 'name' | 'valid_from' | 'valid_until'>;
+type EventCreate = Pick<Event, 'name' | 'link' | 'valid_from' | 'valid_until'>;
 
 interface EventUpdate extends EventCreate {
   id: string;

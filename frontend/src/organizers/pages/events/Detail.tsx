@@ -122,11 +122,22 @@ const Detail = (): JSX.Element => {
               <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
             </button>
           </Item>
-          <Item name="Valid from">{validFrom}</Item>
-          <Item name="Valid until">{validUntil}</Item>
+          <Item name="URL">
+            {data.link ? (
+              <a href={data.link} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
+                {data.link}
+              </a>
+            ) : (
+              'N/A'
+            )}
+          </Item>
           <Item name="Enabled">
             <Badge color={data.enabled ? 'green' : 'red'}>{data.enabled ? 'Yes' : 'No'}</Badge>
           </Item>
+        </Section>
+        <Section>
+          <Item name="Starts at">{validFrom}</Item>
+          <Item name="Ends at">{validUntil}</Item>
         </Section>
       </Description>
 
