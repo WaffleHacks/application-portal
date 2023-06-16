@@ -80,8 +80,8 @@ async def create(
         index.save_object(params)
 
     school = School.from_orm(values, update={"id": id})
-    async with db.begin():
-        db.add(school)
+    db.add(school)
+    await db.commit()
 
     return school
 
@@ -197,7 +197,7 @@ async def update(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     with tracer.start_as_current_span("update"):
-        for key, value in updates.dict().items():
+        for key, value in updates.dict(exclude_unset=True).items():
             setattr(school, key, value)
 
     # Ensure the updated model is valid
@@ -208,12 +208,14 @@ async def update(
 
     # Update the index
     with tracer.start_as_current_span("update-index"):
-        obj: Dict[str, Any] = {"objectID": school.id, "name": school.name}
-        if updates.abbreviations is not None:
-            obj["abbreviations"] = updates.abbreviations
-        if updates.alternatives is not None:
-            obj["alternatives"] = updates.alternatives
-        index.partial_update_object(obj)
+        index.partial_update_object(
+            {
+                "objectID": school.id,
+                "name": school.name,
+                "abbreviations": school.abbreviations,
+                "alternatives": school.alternatives,
+            }
+        )
 
     # Save the changes
     db.add(school)
