@@ -197,7 +197,7 @@ async def update(
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     with tracer.start_as_current_span("update"):
-        for key, value in updates.dict().items():
+        for key, value in updates.dict(exclude_unset=True).items():
             setattr(school, key, value)
 
     # Ensure the updated model is valid
