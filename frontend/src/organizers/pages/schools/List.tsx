@@ -34,7 +34,7 @@ const sort =
 
 const Row = (school: SchoolList): JSX.Element => (
   <tr>
-    <Table.Data index>
+    <Table.Data index className="flex">
       {school.name} {school.needs_review && <WarningFlag reason="This school needs to be reviewed" />}
     </Table.Data>
     <Table.Data>{school.count}</Table.Data>
