@@ -80,8 +80,8 @@ async def create(
         index.save_object(params)
 
     school = School.from_orm(values, update={"id": id})
-    async with db.begin():
-        db.add(school)
+    db.add(school)
+    await db.commit()
 
     return school
 
