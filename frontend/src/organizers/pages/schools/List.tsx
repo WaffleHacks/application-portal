@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LinkButton } from 'components/buttons';
 import Link from 'components/Link';
 import { EmptyRow, LoadingRow, Order, Pagination, Table, usePagination, useSorting } from 'organizers/components/table';
+import WarningFlag from 'organizers/components/WarningFlag';
 import { SchoolList, useListSchoolsQuery } from 'store';
 
 import Search from './Search';
@@ -33,7 +34,9 @@ const sort =
 
 const Row = (school: SchoolList): JSX.Element => (
   <tr>
-    <Table.Data index>{school.name}</Table.Data>
+    <Table.Data index>
+      {school.name} {school.needs_review && <WarningFlag reason="This school needs to be reviewed" />}
+    </Table.Data>
     <Table.Data>{school.count}</Table.Data>
     <Table.Data className="relative text-right sm:pr-6">
       <Link to={`/schools/${school.id}`} className="text-indigo-600 hover:text-indigo-900">
