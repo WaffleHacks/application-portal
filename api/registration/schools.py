@@ -208,12 +208,14 @@ async def update(
 
     # Update the index
     with tracer.start_as_current_span("update-index"):
-        obj: Dict[str, Any] = {"objectID": school.id, "name": school.name}
-        if updates.abbreviations is not None:
-            obj["abbreviations"] = updates.abbreviations
-        if updates.alternatives is not None:
-            obj["alternatives"] = updates.alternatives
-        index.partial_update_object(obj)
+        index.partial_update_object(
+            {
+                "objectID": school.id,
+                "name": school.name,
+                "abbreviations": school.abbreviations,
+                "alternatives": school.alternatives,
+            }
+        )
 
     # Save the changes
     db.add(school)
