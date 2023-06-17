@@ -3,6 +3,7 @@ import {
   BuildingLibraryIcon,
   CalendarIcon,
   CheckCircleIcon,
+  ClipboardDocumentCheckIcon,
   CogIcon,
   DocumentArrowDownIcon,
   EllipsisHorizontalCircleIcon,
@@ -45,10 +46,17 @@ const navigation: NavSection[] = [
     ],
   },
   {
+    id: 'attendance',
+    name: 'Attendance',
+    items: [
+      { name: 'Events', href: '/events', icon: CalendarIcon },
+      { name: 'Check-ins', href: '/check-ins', icon: ClipboardDocumentCheckIcon },
+    ],
+  },
+  {
     id: 'swag',
     name: 'Swag',
     items: [
-      { name: 'Events', href: '/events', icon: CalendarIcon },
       { name: 'Tiers', href: '/swag/tiers', icon: ChartBarIcon },
       { name: 'Progress', href: '/swag/progress', icon: UserGroupIcon },
     ],
