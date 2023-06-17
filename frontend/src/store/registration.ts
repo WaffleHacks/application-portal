@@ -203,6 +203,17 @@ const api = createApi({
       }),
       invalidatesTags: (result, error, { id }) => [Tag.Participant, { type: Tag.Participant, id }],
     }),
+
+    // Check-in endpoints
+    checkInParticipant: builder.mutation<void, void>({
+      query: () => ({
+        url: '/registration/check-in/',
+        method: 'PUT',
+      }),
+    }),
+    listCheckedInParticipants: builder.query<Participant[], void>({
+      query: () => '/registration/check-in/',
+    }),
   }),
 });
 
@@ -226,4 +237,6 @@ export const {
   useListParticipantsQuery,
   useGetParticipantQuery,
   useUpdateParticipantPermissionsMutation,
+  useCheckInParticipantMutation,
+  useListCheckedInParticipantsQuery,
 } = api;

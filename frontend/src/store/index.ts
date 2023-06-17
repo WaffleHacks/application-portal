@@ -93,6 +93,8 @@ export {
   useListParticipantsQuery,
   useGetParticipantQuery,
   useUpdateParticipantPermissionsMutation,
+  useCheckInParticipantMutation,
+  useListCheckedInParticipantsQuery,
 } from './registration';
 export type { RegistrationStatistic } from './statistics';
 export {
