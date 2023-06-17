@@ -1,13 +1,15 @@
+from datetime import datetime
 from http import HTTPStatus
 from typing import List
 
-from fastapi import APIRouter, Depends
+import pytz
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from api.helpers import require_application_accepted, with_current_participant
 from api.permissions import Role, requires_role
-from common.database import Participant, ParticipantList, with_db
+from common.database import Participant, ParticipantList, ServiceSettings, with_db
 
 router = APIRouter()
 
@@ -45,6 +47,12 @@ async def mark(
     """
     Mark the current participant as checked in
     """
+    start = await ServiceSettings.checkin_start(db).get()
+    end = await ServiceSettings.checkin_end(db).get()
+
+    now = datetime.now(tz=pytz.utc)
+    if now < start or now > end:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="check-in closed")
 
     participant.checked_in = True
     db.add(participant)
