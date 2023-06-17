@@ -1,10 +1,9 @@
 import json
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Generic, Type, TypeVar
 
-import pytz
 from pydantic.json import pydantic_encoder
 from sqlalchemy import Column
 from sqlalchemy import Enum as SQLEnum
@@ -47,14 +46,22 @@ class JSONFormatter(Formatter[Any]):
 
 class DateTimeFormatter(Formatter[datetime]):
     FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+    LOCAL_TIMEZONE = datetime.now().astimezone().tzinfo
 
     @staticmethod
     def encode(value: datetime) -> str:
-        return value.astimezone(pytz.utc).strftime(DateTimeFormatter.FORMAT)
+        if value.tzinfo is None:
+            value = value.astimezone(DateTimeFormatter.LOCAL_TIMEZONE)
+
+        return value.astimezone(timezone.utc).strftime(DateTimeFormatter.FORMAT)
 
     @staticmethod
     def decode(raw: str) -> datetime:
-        return datetime.strptime(raw, DateTimeFormatter.FORMAT).astimezone(pytz.utc)
+        value = datetime.strptime(raw, DateTimeFormatter.FORMAT)
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+
+        return value.astimezone(timezone.utc)
 
 
 class Entry(Generic[T]):
