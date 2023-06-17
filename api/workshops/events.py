@@ -72,7 +72,7 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     response_model=FeedbackRead,
 )
 async def read_feedback(
-    event_id: int, user_id: str, db: AsyncSession = Depends(with_db)
+    event_id: int, user_id: int, db: AsyncSession = Depends(with_db)
 ):
     """
     Get the detailed feedback for a given participant
@@ -85,13 +85,20 @@ async def read_feedback(
     if workshop is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    with tracer.start_as_current_span("find-feedback"):
-        for f in workshop.feedback:
-            if f.participant_id == user_id:
-                f.event = f.event  # I have no idea why this is needed
-                return f
+    statement = (
+        select(Feedback)
+        .where(Feedback.event_id == workshop.id)
+        .where(Feedback.participant_id == user_id)
+        .options(selectinload(Feedback.participant))
+    )
+    result = await db.execute(statement)
+    feedback = result.scalars().first()
 
-    raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    if feedback is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    feedback.event = workshop  # populate the event field in the response
+    return feedback
 
 
 @router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)
