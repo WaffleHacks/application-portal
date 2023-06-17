@@ -1,16 +1,46 @@
-from sqlalchemy import func
+from sqlalchemy import Integer, cast, extract, func
 from sqlalchemy.future import select
 
-from common.database import Event, EventAttendance, Feedback, Participant
+from common.database import (
+    Application,
+    Event,
+    EventAttendance,
+    Feedback,
+    Participant,
+    School,
+)
 
 from .base import Exporter
 
 
 class CheckIns(Exporter):
-    header = ["First name", "Last name", "Email"]
-    statement = select(
-        Participant.first_name, Participant.last_name, Participant.email
-    ).where(Participant.checked_in)
+    header = [
+        "First name",
+        "Last name",
+        "Age",
+        "Email",
+        "School",
+        "Phone number",
+        "Country",
+        "Level of study",
+        "Acknowledged checkboxes",
+    ]
+    statement = (
+        select(
+            Participant.first_name,
+            Participant.last_name,
+            cast(extract("year", func.age(Application.date_of_birth)), Integer),
+            Participant.email,
+            School.name,
+            Application.phone_number,
+            Application.country,
+            Application.level_of_study,
+            Application.legal_agreements_acknowledged,
+        )
+        .join_from(Application, Participant)
+        .join_from(Application, School)
+        .where(Participant.checked_in)
+    )
 
 
 class Events(Exporter):
