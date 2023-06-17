@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, cast, extract, func
+from sqlalchemy import Integer, case, cast, extract, func
 from sqlalchemy.future import select
 
 from common.database import (
@@ -44,22 +44,30 @@ class CheckIns(Exporter):
 
 
 class Events(Exporter):
+    header = ["Name", "Attended"]
+    statement = (
+        select(Event.name, func.count(EventAttendance.participant_id))
+        .join_from(Event, EventAttendance)
+        .group_by(Event.name)
+    )
+
+
+class EventFeedback(Exporter):
     header = [
         "Name",
-        "Attended",
-        "Avg Presentation Rating",
-        "Avg Content Rating",
-        "Avg Interest Rating",
+        "Avg presentation rating",
+        "Avg content rating",
+        "Avg interest rating",
+        "Do next year?",
     ]
     statement = (
         select(
             Event.name,
-            func.count(EventAttendance.participant_id),
             func.coalesce(func.avg(Feedback.presentation), 0),
             func.coalesce(func.avg(Feedback.content), 0),
             func.coalesce(func.avg(Feedback.interest), 0),
+            func.avg(case((Feedback.again, 1), else_=0)),
         )
-        .join_from(Event, EventAttendance)
-        .join_from(Event, Feedback, full=True)
+        .join_from(Event, Feedback)
         .group_by(Event.name)
     )
