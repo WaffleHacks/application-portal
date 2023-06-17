@@ -5,6 +5,7 @@ import Loading from 'organizers/components/Loading';
 import { useGetSettingsQuery } from 'store';
 
 import AcceptingApplicationsToggle from './AcceptingApplicationsToggle';
+import { CheckInEndItem, CheckInStartItem } from './CheckInItems';
 
 const Settings = (): JSX.Element => {
   const { data: settings, isLoading } = useGetSettingsQuery();
@@ -22,6 +23,13 @@ const Settings = (): JSX.Element => {
       <Description title="Registration">
         <UpdatableSection>
           <AcceptingApplicationsToggle value={settings.accepting_applications} />
+        </UpdatableSection>
+      </Description>
+
+      <Description title="Check-in">
+        <UpdatableSection>
+          <CheckInStartItem value={settings.checkin_start} />
+          <CheckInEndItem value={settings.checkin_end} />
         </UpdatableSection>
       </Description>
     </>

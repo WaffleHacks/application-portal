@@ -245,6 +245,8 @@ export interface SwagTier extends ReducedSwagTier {
 
 export interface ServiceSettings {
   accepting_applications: boolean;
+  checkin_start: string;
+  checkin_end: string;
 }
 
 export interface ReducedProvider {

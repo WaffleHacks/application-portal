@@ -68,7 +68,12 @@ export {
   useGetExportDownloadUrlQuery,
   useInitiateExportMutation,
 } from './integrations';
-export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
+export {
+  useGetSettingsQuery,
+  useSetAcceptingApplicationsSettingMutation,
+  useSetCheckInStartSettingMutation,
+  useSetCheckInEndSettingMutation,
+} from './operations';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,

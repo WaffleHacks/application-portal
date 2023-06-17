@@ -25,14 +25,31 @@ const api = createApi({
       query: (value) => ({
         url: '/operations/settings/accepting_applications',
         method: 'PUT',
-        body: {
-          value,
-        },
+        body: { value },
       }),
       invalidatesTags: [Tag.Setting],
+    }),
+    setCheckInStartSetting: builder.mutation<void, string>({
+      query: (value) => ({
+        url: '/operations/settings/check_in/start',
+        method: 'PUT',
+        body: { value },
+      }),
+    }),
+    setCheckInEndSetting: builder.mutation<void, string>({
+      query: (value) => ({
+        url: '/operations/settings/check_in/end',
+        method: 'PUT',
+        body: { value },
+      }),
     }),
   }),
 });
 
 export default api;
-export const { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } = api;
+export const {
+  useGetSettingsQuery,
+  useSetAcceptingApplicationsSettingMutation,
+  useSetCheckInStartSettingMutation,
+  useSetCheckInEndSettingMutation,
+} = api;
