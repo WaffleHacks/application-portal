@@ -40,7 +40,7 @@ const Review = (): JSX.Element => {
         <Row name="Level of study" value={values.level_of_study} />
         <Row name="Major" value={values.major} />
       </SidebarCard>
-      <SidebarCard title="Shipping" className="mt-3" grid={false}>
+      <SidebarCard title="Experience" className="mt-3" grid={false}>
         <Row
           name="Portfolio"
           value={
@@ -65,7 +65,7 @@ const Review = (): JSX.Element => {
         <Row name="Resume" value={values.resume?.name} />
         <Row name="Share with sponsors" value={values.share_information ? 'yes' : 'no'} />
       </SidebarCard>
-      <SidebarCard title="Experience" className="mt-3" grid={false}>
+      <SidebarCard title="Shipping" className="mt-3" grid={false}>
         <Row name="Street address" value={values.street} />
         <Row name="Apartment / Suite" value={values.apartment} />
         <Row name="City" value={values.city} />
