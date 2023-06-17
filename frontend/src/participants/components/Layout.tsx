@@ -7,6 +7,7 @@ import Navigation, { NavItem } from './Navigation';
 
 const navigation: NavItem[] = [
   { name: 'Your Application', href: '/', exact: true },
+  { name: 'Check in', href: '/check-in', acceptedOnly: true },
   { name: 'Swag Progress', href: '/swag', acceptedOnly: true },
   { name: 'Profile', href: '/profile' },
   { name: 'Workshops', href: '/workshop/', acceptedOnly: true, hidden: true },
