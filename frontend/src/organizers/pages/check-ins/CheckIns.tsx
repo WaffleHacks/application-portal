@@ -1,51 +1,19 @@
 import React from 'react';
 
-import Link from 'components/Link';
-import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
-import { Participant, useListCheckedInParticipantsQuery } from 'store';
+import List from './List';
+import Statistics from './Statistics';
 
-const Row = (participant: Participant): JSX.Element => (
-  <tr>
-    <Table.Data index>
-      {participant.first_name} {participant.last_name}
-    </Table.Data>
-    <Table.Data>{participant.email}</Table.Data>
-    <Table.Data className="relative text-right sm:pr-6">
-      <Link to={`/applications/${participant.id}`} className="text-indigo-600 hover:text-indigo-900">
-        Details
-      </Link>
-    </Table.Data>
-  </tr>
-);
-
-const CheckIns = (): JSX.Element => {
-  const { data: checkedIn = [], isLoading } = useListCheckedInParticipantsQuery();
-  const { paginated, ...paginationProps } = usePagination(checkedIn);
-
-  return (
-    <>
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <p className="mt-2 text-sm text-gray-700">View the participant&apos;s that have checked-in to the event</p>
-        </div>
+const CheckIns = (): JSX.Element => (
+  <>
+    <div className="sm:flex sm:items-center">
+      <div className="sm:flex-auto">
+        <p className="mt-2 text-sm text-gray-700">View the participant&apos;s that have checked-in to the event</p>
       </div>
+    </div>
 
-      <Table className="mt-4">
-        <Table.Head>
-          <Table.Label index>Name</Table.Label>
-          <Table.Label>Email</Table.Label>
-          <Table.InvisibleLabel>View</Table.InvisibleLabel>
-        </Table.Head>
-        <Table.Body>
-          {isLoading && <LoadingRow />}
-          {!isLoading && paginated.length === 0 && <EmptyRow message="No participant's have checked-in yet" />}
-          {!isLoading && paginated.map((p) => <Row key={p.id} {...p} />)}
-        </Table.Body>
-      </Table>
-
-      <Pagination {...paginationProps} />
-    </>
-  );
-};
+    <Statistics />
+    <List />
+  </>
+);
 
 export default CheckIns;
