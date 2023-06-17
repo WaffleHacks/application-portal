@@ -2,45 +2,46 @@ from http import HTTPStatus
 
 from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
-from common.database import Participant, with_db
+from common.database import Application, Participant, with_db
 
 from .session import with_user_id
 
 
-def with_current_participant(load_application=False):
+async def with_current_participant(
+    id: int = Depends(with_user_id),
+    db: AsyncSession = Depends(with_db),
+):
     """
     Get the current participant
-    :param load_application: whether to fetch the application
     """
-    options = []
-    if load_application:
-        options.append(selectinload(Participant.application))
+    participant = await db.get(Participant, id)
+    if participant is None:
+        raise HTTPException(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            detail="no participant found for token",
+        )
 
-    async def dependency(
-        id: int = Depends(with_user_id),
-        db: AsyncSession = Depends(with_db),
-    ):
-        participant = await db.get(Participant, id, options=options)
-        if participant is None:
-            raise HTTPException(
-                status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
-                detail="no participant for token",
-            )
+    return participant
 
-        return participant
 
-    return dependency
+async def with_current_application(
+    id: int = Depends(with_user_id),
+    db: AsyncSession = Depends(with_db),
+):
+    """
+    Get the current participant's application, may be None
+    """
+    return await db.get(Application, id)
 
 
 async def require_application_accepted(
-    participant: Participant = Depends(with_current_participant(load_application=True)),
+    application: Application = Depends(with_current_application),
 ):
     """
     Require that the participant's application was accepted
     """
-    if participant.application is None or not participant.application.accepted:
+    if application is None or not application.accepted:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN,
             detail="application must be accepted",

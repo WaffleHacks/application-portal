@@ -45,7 +45,7 @@ class SwagStatus(BaseModel):
     ],
 )
 async def progress(
-    participant: Participant = Depends(with_current_participant(load_application=True)),
+    participant: Participant = Depends(with_current_participant),
     db: AsyncSession = Depends(with_db),
 ):
     """
