@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Dict, List, Optional
 
+import pytz
 from pydantic import root_validator
 from sqlalchemy import Column
 from sqlmodel import Field, Relationship, SQLModel
@@ -60,6 +61,18 @@ class Event(EventBase, table=True):
         back_populates="event",
         sa_relationship_kwargs={"cascade": "all, delete, delete-orphan"},
     )
+
+    @property
+    def can_mark_attendance(self) -> bool:
+        """
+        Only mark attendance within 2.5 mins of the event on either end and it is enabled
+        :return:
+        """
+        now = datetime.now(tz=pytz.utc)
+        offset = timedelta(minutes=2, seconds=30)
+        in_duration = (self.valid_from - offset) <= now <= (self.valid_until + offset)
+
+        return in_duration and self.enabled
 
 
 class EventCreate(SQLModel):

@@ -44,17 +44,16 @@ interface DetailedFeedbackRequest {
   participant_id: string;
 }
 
+type ParticipantEventDetails = Omit<Event, 'enabled' | 'attendees' | 'feedback' | 'valid_until' | 'valid_from'>;
+
 const api = createApi({
   reducerPath: 'workshops',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: Object.values(Tag),
   endpoints: (builder) => ({
     // Attendance endpoints
-    markAttendance: builder.mutation<void, string>({
-      query: (code) => ({
-        url: `/workshops/attendance/${code}`,
-        method: 'PUT',
-      }),
+    getEventAttendance: builder.query<ParticipantEventDetails, string>({
+      query: (code) => `/workshops/attendance/${code}`,
     }),
     getFeedbackStatus: builder.query<boolean, string>({
       query: (code) => `/workshops/attendance/${code}/feedback`,
@@ -157,7 +156,7 @@ const api = createApi({
 
 export default api;
 export const {
-  useMarkAttendanceMutation,
+  useGetEventAttendanceQuery,
   useGetFeedbackStatusQuery,
   useSubmitFeedbackMutation,
   useListEventsQuery,

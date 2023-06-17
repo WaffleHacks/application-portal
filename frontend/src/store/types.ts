@@ -230,6 +230,8 @@ export interface Event extends ReducedEvent {
   attendees: Participant[];
 }
 
+export type ParticipantEvent = Pick<Event, 'code' | 'name' | 'link'>;
+
 export interface ReducedSwagTier {
   id: number;
   name: string;

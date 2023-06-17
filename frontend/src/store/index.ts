@@ -126,7 +126,7 @@ export {
   WebhookTriggers,
 } from './types';
 export {
-  useMarkAttendanceMutation,
+  useGetEventAttendanceQuery,
   useGetFeedbackStatusQuery,
   useSubmitFeedbackMutation,
   useListEventsQuery,

@@ -1,29 +1,58 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Link from 'components/Link';
 import Loading from 'participants/components/Loading';
-import { useMarkAttendanceMutation } from 'store';
-
-import Feedback from './Feedback';
-import Status from './Status';
+import Status from 'participants/components/Status';
+import { useGetEventAttendanceQuery } from 'store';
 
 const Attendance = (): JSX.Element => {
   const { code } = useParams();
-  const [mark, { isUninitialized, isLoading, isError }] = useMarkAttendanceMutation();
+  const { data, isLoading, isError } = useGetEventAttendanceQuery(code as string);
 
   useEffect(() => {
-    if (isUninitialized) mark(code as string);
-  }, [isUninitialized]);
+    if (isLoading || data === undefined) return;
 
-  if (isUninitialized || isLoading) return <Loading />;
-  if (isError) return <Status valid={false} />;
+    setTimeout(() => {
+      if (data.link) window.location.href = data.link;
+    }, 1000);
+  }, [isLoading, data]);
 
-  return (
-    <>
-      <Status valid={true} />
-      <Feedback code={code as string} />
-    </>
-  );
+  if (isLoading || data === undefined) return <Loading />;
+  if (isError) {
+    return (
+      <Status kind="failure" title="This event URL isn't valid">
+        If you believe this is incorrect, please contact an organizer.
+      </Status>
+    );
+  }
+
+  if (data.link) {
+    return (
+      <Status
+        kind="success"
+        title={
+          <>
+            Redirecting you to <b>{data.name}</b>...
+          </>
+        }
+      >
+        If you aren&apos;t redirected shortly, please click{' '}
+        <a className="text-blue-500 hover:underline" href={data.link}>
+          here
+        </a>
+      </Status>
+    );
+  } else {
+    return (
+      <Status kind="success" title="Attendance recorded!">
+        We hope you enjoy <b>{data.name}</b>!
+        <br />
+        <br />
+        You can check your <Link to="/swag">swag progress</Link> to see what amazing things you&apos;ll get!
+      </Status>
+    );
+  }
 };
 
 export default Attendance;
