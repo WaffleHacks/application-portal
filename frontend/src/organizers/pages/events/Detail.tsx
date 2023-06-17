@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ClipboardDocumentIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -96,9 +96,14 @@ const Detail = (): JSX.Element => {
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that event" returnTo="/events" />;
 
-  const onCopy = async () => {
+  const onCopyAttendance = async () => {
     await navigator.clipboard.writeText(`${window.origin}/workshop/${data.code}`);
     toast.success('Attendance URL copied to clipboard!');
+  };
+
+  const onCopyFeedback = async () => {
+    await navigator.clipboard.writeText(`${window.origin}/workshop/${data.code}/feedback`);
+    toast.success('Feedback URL copied to clipboard!');
   };
 
   const validFrom = DateTime.fromISO(data.valid_from).toLocaleString(DateTime.DATETIME_MED);
@@ -116,12 +121,19 @@ const Detail = (): JSX.Element => {
         subtitle="View all the details of the event"
       >
         <Section>
-          <Item name="Code">
-            <span>{data.code}</span>
-            <button type="button" onClick={onCopy}>
-              <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
-            </button>
+          <Item name="Attendance URL">
+            <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
+              Copy
+            </Button>
           </Item>
+          <Item name="Feedback URL">
+            <Button type="button" size="xs" style="secondary" onClick={onCopyFeedback}>
+              Copy
+            </Button>
+          </Item>
+        </Section>
+        <Section>
+          <Item name="Code">{data.code}</Item>
           <Item name="URL">
             {data.link ? (
               <a href={data.link} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">

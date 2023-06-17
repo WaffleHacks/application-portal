@@ -90,11 +90,15 @@ async def status(
     """
     Check if the requester has already submitted feedback for the specified event
     """
+    event = await get_event_by_code(code, db)
+    if not event.can_submit_feedback:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
+
     statement = (
         select(Feedback)
-        .join(Event)
-        .where(Event.code == code)
+        .where(Feedback.event_id == event.id)
         .where(Feedback.participant_id == user_id)
+        .limit(1)
     )
     result = await db.execute(statement)
     feedback = result.scalars().first()
@@ -118,6 +122,8 @@ async def submit(
     Submit feedback for an event
     """
     event = await get_event_by_code(code, db)
+    if not event.can_submit_feedback:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     try:
         feedback = Feedback.from_orm(

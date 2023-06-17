@@ -74,6 +74,13 @@ class Event(EventBase, table=True):
 
         return in_duration and self.enabled
 
+    @property
+    def can_submit_feedback(self) -> bool:
+        """
+        Only allow submitting feedback if the event is enabled and has started
+        """
+        return self.enabled and self.valid_from <= datetime.now(tz=pytz.utc)
+
 
 class EventCreate(SQLModel):
     name: str

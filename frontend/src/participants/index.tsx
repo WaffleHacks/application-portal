@@ -9,6 +9,7 @@ import { ApplicationStatus, useCurrentUserQuery, useGetApplicationQuery } from '
 
 const Application = lazy(() => import('./pages/application/Application'));
 const Attendance = lazy(() => import('./pages/attendance/Attendance'));
+const EventFeedback = lazy(() => import('./pages/attendance/Feedback'));
 const SwagProgress = lazy(() => import('./pages/swag-progress/SwagProgress'));
 
 const AcceptedStatus = lazy(() => import('./pages/statuses/Accepted'));
@@ -76,6 +77,7 @@ const Participants = (): JSX.Element => {
           <Route index element={<AcceptedStatus />} />
           <Route path="/swag" element={<SwagProgress />} />
           <Route path="/workshop/:code" element={<Attendance />} />
+          <Route path="/workshop/:code/feedback" element={<EventFeedback />} />
         </Base>
       );
     default:

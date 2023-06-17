@@ -3,25 +3,35 @@ import React from 'react';
 import { toast } from 'react-hot-toast';
 
 import Badge from 'components/Badge';
-import { LinkButton } from 'components/buttons';
+import { Button, LinkButton } from 'components/buttons';
 import Link from 'components/Link';
 import { EmptyRow, LoadingRow, Pagination, Table, usePagination } from 'organizers/components/table';
 import { ReducedEvent, useListEventsQuery } from 'store';
 
 const Row = (event: ReducedEvent) => {
-  const onClick = async () => {
+  const onCopyAttendance = async () => {
     await navigator.clipboard.writeText(`${window.origin}/workshop/${event.code}`);
     toast.success('Attendance URL copied to clipboard!');
+  };
+
+  const onCopyFeedback = async () => {
+    await navigator.clipboard.writeText(`${window.origin}/workshop/${event.code}/feedback`);
+    toast.success('Feedback URL copied to clipboard!');
   };
 
   return (
     <tr>
       <Table.Data index>{event.name}</Table.Data>
+      <Table.Data>{event.code}</Table.Data>
       <Table.Data>
-        <span>{event.code}</span>
-        <button type="button" onClick={onClick}>
+        <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
+          Attendance
           <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
-        </button>
+        </Button>
+        <Button className="ml-2" type="button" size="xs" style="secondary" onClick={onCopyFeedback}>
+          Feedback
+          <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
+        </Button>
       </Table.Data>
       <Table.Data>
         <Badge color={event.enabled ? 'green' : 'red'}>{event.enabled ? 'Yes' : 'No'}</Badge>
@@ -58,6 +68,7 @@ const List = (): JSX.Element => {
         <Table.Head>
           <Table.Label index>Name</Table.Label>
           <Table.Label>Code</Table.Label>
+          <Table.Label>URLs</Table.Label>
           <Table.Label>Enabled</Table.Label>
           <Table.InvisibleLabel>View</Table.InvisibleLabel>
         </Table.Head>
