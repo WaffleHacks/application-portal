@@ -278,6 +278,8 @@ export const WebhookTriggers: Record<number, string> = {
   2: 'Application - Submitted',
   4: 'Application - Accepted',
   8: 'Application - Rejected',
+  16: 'Event - Updated',
+  32: 'Event - Deleted',
 };
 
 export interface ReducedWebhook {

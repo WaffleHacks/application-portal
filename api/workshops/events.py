@@ -20,6 +20,7 @@ from common.database import (
     FeedbackRead,
     with_db,
 )
+from common.tasks import broadcast
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 tracer = trace.get_tracer(__name__)
@@ -43,6 +44,8 @@ async def create(params: EventCreate, db: AsyncSession = Depends(with_db)):
 
     db.add(workshop)
     await db.commit()
+
+    await broadcast("workshops", "updated", **workshop.dict())
 
     return workshop
 
@@ -123,6 +126,8 @@ async def update(id: int, params: EventUpdate, db: AsyncSession = Depends(with_d
     db.add(workshop)
     await db.commit()
 
+    await broadcast("workshops", "updated", **workshop.dict())
+
 
 @router.delete("/{id}", name="Delete workshop", status_code=HTTPStatus.NO_CONTENT)
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
@@ -133,3 +138,5 @@ async def delete(id: int, db: AsyncSession = Depends(with_db)):
     if workshop:
         await db.delete(workshop)
         await db.commit()
+
+    await broadcast("workshops", "deleted", id=id)
