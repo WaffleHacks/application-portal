@@ -45,7 +45,7 @@ async def create(params: EventCreate, db: AsyncSession = Depends(with_db)):
     db.add(workshop)
     await db.commit()
 
-    await broadcast("workshops", "updated", **workshop.dict())
+    await broadcast("workshops", "updated", event_id=workshop.id)
 
     return workshop
 
@@ -126,7 +126,7 @@ async def update(id: int, params: EventUpdate, db: AsyncSession = Depends(with_d
     db.add(workshop)
     await db.commit()
 
-    await broadcast("workshops", "updated", **workshop.dict())
+    await broadcast("workshops", "updated", event_id=workshop.id)
 
 
 @router.delete("/{id}", name="Delete workshop", status_code=HTTPStatus.NO_CONTENT)
@@ -139,4 +139,4 @@ async def delete(id: int, db: AsyncSession = Depends(with_db)):
         await db.delete(workshop)
         await db.commit()
 
-    await broadcast("workshops", "deleted", id=id)
+    await broadcast("workshops", "deleted", event_id=id)

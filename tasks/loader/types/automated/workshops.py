@@ -7,7 +7,7 @@ from .base_action import BaseAction
 
 
 class WithEventId(BaseModel):
-    id: int
+    event_id: int
 
 
 class Workshops(BaseAction):

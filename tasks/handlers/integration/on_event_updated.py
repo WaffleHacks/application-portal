@@ -27,12 +27,12 @@ class WorkshopUpdated(BaseEvent):
         embed.add_field("Code", self.event.code)
 
 
-async def handler(id: int):
-    trace.get_current_span().set_attribute("event.id", id)
+async def handler(event_id: int):
+    trace.get_current_span().set_attribute("event.id", event_id)
 
     async with db_context() as db:
-        event = await db.get(Event, id)
+        event = await db.get(Event, event_id)
         if event is None:
-            logger.warning(f"event '{id}' no longer exists")
+            logger.warning(f"event '{event_id}' no longer exists")
 
     await send(WebhookTrigger.WORKSHOP_UPDATED, WorkshopUpdated(event=event))

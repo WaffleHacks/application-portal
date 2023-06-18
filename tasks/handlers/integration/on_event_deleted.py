@@ -20,7 +20,7 @@ class WorkshopDeleted(BaseEvent):
         embed.add_field("ID", str(self.id))
 
 
-async def handler(id: int):
-    trace.get_current_span().set_attribute("event.id", id)
+async def handler(event_id: int):
+    trace.get_current_span().set_attribute("event.id", event_id)
 
-    await send(WebhookTrigger.WORKSHOP_UPDATED, WorkshopDeleted(id=id))
+    await send(WebhookTrigger.WORKSHOP_UPDATED, WorkshopDeleted(id=event_id))
