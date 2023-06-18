@@ -1,3 +1,4 @@
+from datetime import datetime
 from http import HTTPStatus
 from typing import List, Optional
 
@@ -10,7 +11,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.settings import SETTINGS
-from common.database import Application, ApplicationStatus, Participant, with_db
+from common.database import Application, ApplicationStatus, Event, Participant, with_db
 
 token_scheme = HTTPBearer()
 
@@ -122,3 +123,54 @@ async def check_in(request: CheckInRequest, db: AsyncSession = Depends(with_db))
         )
     )
     await db.commit()
+
+
+class EventDetails(BaseModel):
+    id: int
+    name: str
+
+    url: str
+
+    start: datetime
+    end: datetime
+
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        valid_from: datetime,
+        valid_until: datetime,
+        code: str,
+        **kwargs,
+    ):
+        super().__init__(
+            id=id,
+            name=name,
+            start=valid_from,
+            end=valid_until,
+            url=f"{SETTINGS.app_url}/workshop/{code}",
+            **kwargs,
+        )
+
+
+@router.get("/events", name="List events", response_model=List[EventDetails])
+async def events(db: AsyncSession = Depends(with_db)):
+    """
+    Get a list of all workshops
+    """
+    result = await db.execute(
+        select(Event).where(Event.enabled).order_by(Event.valid_from)
+    )
+    return result.scalars().all()
+
+
+@router.get("/events/{id}", name="Get event details", response_model=EventDetails)
+async def event_details(id: int, db: AsyncSession = Depends(with_db)):
+    """
+    Get the details about a specific event
+    """
+    event = await db.get(Event, id)
+    if event is None or not event.enabled:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    return event
