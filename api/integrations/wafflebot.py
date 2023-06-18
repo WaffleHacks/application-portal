@@ -1,15 +1,16 @@
 from http import HTTPStatus
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.settings import SETTINGS
-from common.database import ApplicationStatus, Participant, with_db
+from common.database import Application, ApplicationStatus, Participant, with_db
 
 token_scheme = HTTPBearer()
 
@@ -94,3 +95,30 @@ async def lookup(
         email=participant.email,
         link=f"{SETTINGS.app_url}/applications/{participant.id}",
     )
+
+
+class CheckInRequest(BaseModel):
+    participants: List[int]
+
+
+@router.put(
+    "/check-in",
+    name="Mark a participant as checked-in",
+    status_code=HTTPStatus.NO_CONTENT,
+)
+async def check_in(request: CheckInRequest, db: AsyncSession = Depends(with_db)):
+    """
+    Mark a participant as checked-in from Discord
+    """
+
+    await db.execute(
+        (
+            update(Participant)
+            .values(checked_in=True)
+            .where(Participant.id == Application.participant_id)
+            .where(Application.status == ApplicationStatus.ACCEPTED)
+            .where(Participant.id.in_(request.participants))  # type: ignore
+            .execution_options(synchronize_session=False)
+        )
+    )
+    await db.commit()
