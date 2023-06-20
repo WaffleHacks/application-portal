@@ -140,7 +140,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
             {options.map((option) => (
               <Option key={option} value={option} />
             ))}
-            {allowArbitrary && <Option value={query} />}
+            {allowArbitrary && <Option value={`Add "${query}"...`} />}
           </Combobox.Options>
         )}
       </div>
