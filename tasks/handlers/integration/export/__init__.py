@@ -10,6 +10,7 @@ from common.database import Export, ExportStatus, db_context
 from common.settings import SETTINGS
 
 from .applications import MLHRegistered, ResumeBook
+from .attendance import CheckIns, EventFeedback, Events
 from .base import Exporter
 
 manual = True
@@ -22,7 +23,12 @@ EXPORTERS: Dict[str, Dict[str, Exporter]] = {
     "applications": {
         "mlh-registered": MLHRegistered(),
         "resume-book": ResumeBook(),
-    }
+    },
+    "attendance": {
+        "check-ins": CheckIns(),
+        "events": Events(),
+        "event-feedback": EventFeedback(),
+    },
 }
 
 

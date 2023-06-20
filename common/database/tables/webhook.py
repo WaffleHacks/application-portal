@@ -17,6 +17,8 @@ class Trigger(int):
     APPLICATION_SUBMITTED = 2
     APPLICATION_ACCEPTED = 4
     APPLICATION_REJECTED = 8
+    WORKSHOP_UPDATED = 16
+    WORKSHOP_DELETED = 32
 
     @staticmethod
     def all() -> "Trigger":
@@ -25,6 +27,8 @@ class Trigger(int):
             | Trigger.APPLICATION_SUBMITTED
             | Trigger.APPLICATION_ACCEPTED
             | Trigger.APPLICATION_REJECTED
+            | Trigger.WORKSHOP_UPDATED
+            | Trigger.WORKSHOP_DELETED
         )
 
     @classmethod

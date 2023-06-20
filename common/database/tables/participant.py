@@ -39,6 +39,7 @@ class ParticipantBase(SQLModel):
     )
 
     is_admin: bool = Field(default=False)
+    checked_in: Optional[bool]
 
 
 class Participant(ParticipantBase, table=True):

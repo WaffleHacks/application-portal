@@ -68,7 +68,12 @@ export {
   useGetExportDownloadUrlQuery,
   useInitiateExportMutation,
 } from './integrations';
-export { useGetSettingsQuery, useSetAcceptingApplicationsSettingMutation } from './operations';
+export {
+  useGetSettingsQuery,
+  useSetAcceptingApplicationsSettingMutation,
+  useSetCheckInStartSettingMutation,
+  useSetCheckInEndSettingMutation,
+} from './operations';
 export {
   useCreateApplicationMutation,
   useGetApplicationQuery,
@@ -88,6 +93,8 @@ export {
   useListParticipantsQuery,
   useGetParticipantQuery,
   useUpdateParticipantPermissionsMutation,
+  useCheckInParticipantMutation,
+  useListCheckedInParticipantsQuery,
 } from './registration';
 export type { RegistrationStatistic } from './statistics';
 export {
@@ -95,6 +102,7 @@ export {
   useGetPerDayRegistrationStatisticsQuery,
   useGetSchoolStatisticsQuery,
   useGetParticipantCountsByStatusQuery,
+  useGetCheckInStatisticsQuery,
 } from './statistics';
 export type {
   ApplicationAutosave,
@@ -126,7 +134,7 @@ export {
   WebhookTriggers,
 } from './types';
 export {
-  useMarkAttendanceMutation,
+  useGetEventAttendanceQuery,
   useGetFeedbackStatusQuery,
   useSubmitFeedbackMutation,
   useListEventsQuery,

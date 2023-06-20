@@ -16,7 +16,7 @@ def requires_role(*roles: Role) -> Callable[[], Role]:
     """
 
     def validator(
-        participant: Participant = Depends(with_current_participant()),
+        participant: Participant = Depends(with_current_participant),
     ) -> Role:
         for r in roles:
             if r.value == participant.role.value:
@@ -29,7 +29,7 @@ def requires_role(*roles: Role) -> Callable[[], Role]:
     return validator
 
 
-def is_admin(participant: Participant = Depends(with_current_participant())):
+def is_admin(participant: Participant = Depends(with_current_participant)):
     """
     Check that the user is an admin
     """

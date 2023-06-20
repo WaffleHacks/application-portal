@@ -1,8 +1,6 @@
-from datetime import datetime
 from http import HTTPStatus
 from typing import Optional
 
-import pytz
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response
 from opentelemetry import trace
 from pydantic import BaseModel
@@ -33,17 +31,32 @@ router = APIRouter(
 tracer = trace.get_tracer(__name__)
 
 
-@router.put("/{code}", name="Mark attendance", status_code=HTTPStatus.NO_CONTENT)
-async def mark(
+class ParticipantEvent(BaseModel):
+    code: str
+    name: str
+    link: Optional[str]
+
+
+@router.get(
+    "/{code}",
+    name="Get participant event details",
+    response_model=ParticipantEvent,
+)
+async def redirect(
     code: str,
     tasks: BackgroundTasks,
     user_id: int = Depends(with_user_id),
     db: AsyncSession = Depends(with_db),
 ):
     """
-    Mark the participant as having attended the event by its code
+    Mark the participant as having attended and get event details for the participant
     """
     event = await get_event_by_code(code, db)
+    response = dict(code=event.code, name=event.name, link=event.link)
+
+    # Check that the code is still valid
+    if not event.can_mark_attendance:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     try:
         attendance = EventAttendance(event_id=event.id, participant_id=user_id)
@@ -54,8 +67,10 @@ async def mark(
         # Only update tier when attendance successfully marked
         tasks.add_task(update_swag_tier, id=user_id, db=db)
     except IntegrityError:
-        # Already marked their attendance, all good
+        # Already marked attendance, all good
         pass
+
+    return response
 
 
 class StatusResponse(BaseModel):
@@ -75,11 +90,15 @@ async def status(
     """
     Check if the requester has already submitted feedback for the specified event
     """
+    event = await get_event_by_code(code, db)
+    if not event.can_submit_feedback:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
+
     statement = (
         select(Feedback)
-        .join(Event)
-        .where(Event.code == code)
+        .where(Feedback.event_id == event.id)
         .where(Feedback.participant_id == user_id)
+        .limit(1)
     )
     result = await db.execute(statement)
     feedback = result.scalars().first()
@@ -103,6 +122,8 @@ async def submit(
     Submit feedback for an event
     """
     event = await get_event_by_code(code, db)
+    if not event.can_submit_feedback:
+        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     try:
         feedback = Feedback.from_orm(
@@ -132,12 +153,6 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
             status_code=HTTPStatus.BAD_REQUEST,
             detail="invalid attendance code",
         )
-
-    # Check that the code is still valid
-    with tracer.start_as_current_span("check-validity"):
-        now = datetime.now(tz=pytz.utc)
-        if not event.enabled or now < event.valid_from or now > event.valid_until:
-            raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
 
     return event
 

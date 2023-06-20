@@ -53,6 +53,8 @@ const Form = ({ code, refetch }: Props): JSX.Element => {
     >
       {({ getFieldProps, isValid, isSubmitting }) => (
         <FormikForm className="space-y-5">
+          <p className="text-gray-800">Give us the gift of feedback and let us know how we did!</p>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <RatingInput label="Presentation" required {...getFieldProps('presentation')} />
             <RatingInput label="Content" required {...getFieldProps('content')} />

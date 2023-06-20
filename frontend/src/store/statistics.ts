@@ -19,10 +19,15 @@ interface PerDayArgs {
   end?: string;
 }
 
-interface Counts {
+interface ApplicationCounts {
   pending: number;
   accepted: number;
   rejected: number;
+}
+
+interface CheckInCounts {
+  yes: number;
+  no: number;
 }
 
 const api = createApi({
@@ -30,6 +35,7 @@ const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, credentials: 'include' }),
   tagTypes: [],
   endpoints: (builder) => ({
+    // Registration statistics
     getRegistrationStatistics: builder.query<StatisticEntry[], RegistrationStatistic>({
       query: (kind) => `/statistics/registration/${kind}`,
     }),
@@ -42,8 +48,13 @@ const api = createApi({
     getSchoolStatistics: builder.query<SchoolStatisticEntry[], void>({
       query: () => '/statistics/registration/school',
     }),
-    getParticipantCountsByStatus: builder.query<Counts, void>({
+    getParticipantCountsByStatus: builder.query<ApplicationCounts, void>({
       query: () => '/statistics/registration/',
+    }),
+
+    // Check-in statistics
+    getCheckInStatistics: builder.query<CheckInCounts, void>({
+      query: () => '/statistics/check-in',
     }),
   }),
 });
@@ -54,4 +65,5 @@ export const {
   useGetPerDayRegistrationStatisticsQuery,
   useGetSchoolStatisticsQuery,
   useGetParticipantCountsByStatusQuery,
+  useGetCheckInStatisticsQuery,
 } = api;

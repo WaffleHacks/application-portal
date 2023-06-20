@@ -7,7 +7,3 @@ class Communication(BaseAction):
 
 class Integrations(BaseAction):
     pass
-
-
-class Workshops(BaseAction):
-    pass

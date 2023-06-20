@@ -20,6 +20,7 @@ from common.database import (
     FeedbackRead,
     with_db,
 )
+from common.tasks import broadcast
 
 router = APIRouter(dependencies=[Depends(requires_role(Role.Organizer))])
 tracer = trace.get_tracer(__name__)
@@ -43,6 +44,8 @@ async def create(params: EventCreate, db: AsyncSession = Depends(with_db)):
 
     db.add(workshop)
     await db.commit()
+
+    await broadcast("workshops", "updated", event_id=workshop.id)
 
     return workshop
 
@@ -72,7 +75,7 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
     response_model=FeedbackRead,
 )
 async def read_feedback(
-    event_id: int, user_id: str, db: AsyncSession = Depends(with_db)
+    event_id: int, user_id: int, db: AsyncSession = Depends(with_db)
 ):
     """
     Get the detailed feedback for a given participant
@@ -85,13 +88,20 @@ async def read_feedback(
     if workshop is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
-    with tracer.start_as_current_span("find-feedback"):
-        for f in workshop.feedback:
-            if f.participant_id == user_id:
-                f.event = f.event  # I have no idea why this is needed
-                return f
+    statement = (
+        select(Feedback)
+        .where(Feedback.event_id == workshop.id)
+        .where(Feedback.participant_id == user_id)
+        .options(selectinload(Feedback.participant))
+    )
+    result = await db.execute(statement)
+    feedback = result.scalars().first()
 
-    raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+    if feedback is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    feedback.event = workshop  # populate the event field in the response
+    return feedback
 
 
 @router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)
@@ -116,6 +126,8 @@ async def update(id: int, params: EventUpdate, db: AsyncSession = Depends(with_d
     db.add(workshop)
     await db.commit()
 
+    await broadcast("workshops", "updated", event_id=workshop.id)
+
 
 @router.delete("/{id}", name="Delete workshop", status_code=HTTPStatus.NO_CONTENT)
 async def delete(id: int, db: AsyncSession = Depends(with_db)):
@@ -126,3 +138,5 @@ async def delete(id: int, db: AsyncSession = Depends(with_db)):
     if workshop:
         await db.delete(workshop)
         await db.commit()
+
+    await broadcast("workshops", "deleted", event_id=id)

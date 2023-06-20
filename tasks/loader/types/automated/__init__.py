@@ -13,7 +13,7 @@ from .base_action import BaseAction
 from .registration import Registration as _RegistrationAction
 from .unused_actions import Communication as _CommunicationAction
 from .unused_actions import Integrations as _IntegrationsAction
-from .unused_actions import Workshops as _WorkshopsAction
+from .workshops import Workshops as _WorkshopsAction
 
 
 class Service(Enum):

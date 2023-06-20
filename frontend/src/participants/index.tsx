@@ -9,7 +9,9 @@ import { ApplicationStatus, useCurrentUserQuery, useGetApplicationQuery } from '
 
 const Application = lazy(() => import('./pages/application/Application'));
 const Attendance = lazy(() => import('./pages/attendance/Attendance'));
+const EventFeedback = lazy(() => import('./pages/attendance/Feedback'));
 const SwagProgress = lazy(() => import('./pages/swag-progress/SwagProgress'));
+const CheckIn = lazy(() => import('./pages/attendance/CheckIn'));
 
 const AcceptedStatus = lazy(() => import('./pages/statuses/Accepted'));
 const PendingStatus = lazy(() => import('./pages/statuses/Pending'));
@@ -76,6 +78,8 @@ const Participants = (): JSX.Element => {
           <Route index element={<AcceptedStatus />} />
           <Route path="/swag" element={<SwagProgress />} />
           <Route path="/workshop/:code" element={<Attendance />} />
+          <Route path="/workshop/:code/feedback" element={<EventFeedback />} />
+          <Route path="/check-in" element={<CheckIn />} />
         </Base>
       );
     default:

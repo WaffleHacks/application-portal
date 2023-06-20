@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Dict, List, Optional
 
+import pytz
 from pydantic import root_validator
 from sqlalchemy import Column
 from sqlmodel import Field, Relationship, SQLModel
@@ -15,6 +16,8 @@ if TYPE_CHECKING:
 
 class EventBase(SQLModel):
     name: str
+    link: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
 
     code: str
 
@@ -60,9 +63,30 @@ class Event(EventBase, table=True):
         sa_relationship_kwargs={"cascade": "all, delete, delete-orphan"},
     )
 
+    @property
+    def can_mark_attendance(self) -> bool:
+        """
+        Only mark attendance within 2.5 mins of the event on either end and it is enabled
+        :return:
+        """
+        now = datetime.now(tz=pytz.utc)
+        offset = timedelta(minutes=2, seconds=30)
+        in_duration = (self.valid_from - offset) <= now <= (self.valid_until + offset)
+
+        return in_duration and self.enabled
+
+    @property
+    def can_submit_feedback(self) -> bool:
+        """
+        Only allow submitting feedback if the event is enabled and has started
+        """
+        return self.enabled and self.valid_from <= datetime.now(tz=pytz.utc)
+
 
 class EventCreate(SQLModel):
     name: str
+    link: Optional[str]
+    description: Optional[str]
 
     valid_from: datetime
     valid_until: datetime
@@ -85,6 +109,8 @@ class EventRead(EventBase):
 
 class EventUpdate(SQLModel):
     name: Optional[str]
+    link: Optional[str]
+    description: Optional[str]
 
     valid_from: Optional[datetime]
     valid_until: Optional[datetime]

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import Card from 'components/Card';
 import Loading from 'participants/components/Loading';
@@ -13,21 +14,31 @@ const Submitted = (): JSX.Element => (
   </Status>
 );
 
-interface Props {
-  code: string;
-}
-
-const Feedback = ({ code }: Props): JSX.Element => {
-  const { data: submitted = false, isLoading, refetch } = useGetFeedbackStatusQuery(code);
+const Feedback = (): JSX.Element => {
+  const { code } = useParams();
+  const { data: submitted = false, isLoading, isError, refetch } = useGetFeedbackStatusQuery(code as string);
 
   if (isLoading) return <Loading className="mt-10" />;
+  if (isError) {
+    return (
+      <Status kind="failure" title="You're too early!">
+        This event hasn&apos;t started yet!
+        <br />
+        <br />
+        While we appreciate your enthusiasm for wanting to submit feedback, you should probably wait until you&apos;ve
+        attended the event first.
+      </Status>
+    );
+  }
 
   return (
     <Card className="mt-10">
       <div className="px-4 py-5 sm:px-6">
         <h3 className="text-2xl leading-6 font-medium text-gray-900">Feedback</h3>
       </div>
-      <div className="px-4 py-2 sm:px-6">{submitted ? <Submitted /> : <Form code={code} refetch={refetch} />}</div>
+      <div className="px-4 py-2 sm:px-6">
+        {submitted ? <Submitted /> : <Form code={code as string} refetch={refetch} />}
+      </div>
     </Card>
   );
 };

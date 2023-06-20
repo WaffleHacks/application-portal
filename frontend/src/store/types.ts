@@ -221,12 +221,17 @@ export interface ReducedEvent {
 }
 
 export interface Event extends ReducedEvent {
+  link: string | null;
+  description: string | null;
+
   valid_from: string;
   valid_until: string;
 
   feedback: ReducedFeedback[];
   attendees: Participant[];
 }
+
+export type ParticipantEvent = Pick<Event, 'code' | 'name' | 'link'>;
 
 export interface ReducedSwagTier {
   id: number;
@@ -241,6 +246,8 @@ export interface SwagTier extends ReducedSwagTier {
 
 export interface ServiceSettings {
   accepting_applications: boolean;
+  checkin_start: string;
+  checkin_end: string;
 }
 
 export interface ReducedProvider {
@@ -272,6 +279,8 @@ export const WebhookTriggers: Record<number, string> = {
   2: 'Application - Submitted',
   4: 'Application - Accepted',
   8: 'Application - Rejected',
+  16: 'Event - Updated',
+  32: 'Event - Deleted',
 };
 
 export interface ReducedWebhook {

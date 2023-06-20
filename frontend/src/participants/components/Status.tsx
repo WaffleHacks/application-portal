@@ -9,7 +9,7 @@ type Kind = 'pending' | 'success' | 'failure';
 interface Props {
   kind: Kind;
   standalone?: boolean;
-  title: string;
+  title: ReactNode;
   children?: ReactNode;
 }
 
