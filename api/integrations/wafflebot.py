@@ -164,13 +164,17 @@ async def events(db: AsyncSession = Depends(with_db)):
     return result.scalars().all()
 
 
-@router.get("/events/{id}", name="Get event details", response_model=EventDetails)
+@router.get(
+    "/events/{id}",
+    name="Get event details",
+    response_model=Optional[EventDetails],
+)
 async def event_details(id: int, db: AsyncSession = Depends(with_db)):
     """
     Get the details about a specific event
     """
     event = await db.get(Event, id)
     if event is None or not event.enabled:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+        return None
 
     return event
