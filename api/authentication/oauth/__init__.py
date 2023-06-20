@@ -3,6 +3,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
+from opentelemetry.trace import get_current_span
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -59,6 +60,8 @@ async def callback(
     provider = await db.get(Provider, session.provider)
     if provider is None:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    get_current_span().set_attribute("provider.slug", provider.slug)
 
     token = await client.exchange(
         code, f"{SETTINGS.public_url}/auth/oauth/callback", provider

@@ -1,6 +1,7 @@
 from typing import Any
 
 from aiohttp import ClientResponse, ClientSession, FormData
+from opentelemetry.trace import get_current_span
 from pydantic import BaseModel
 
 from common.database import Provider
@@ -59,6 +60,8 @@ class OAuthClient(object):
             headers={"Authorization": f"Bearer {token}"},
         )
         info = await _deserialize_if_successful(response)
+        print(f"provider {provider.slug} user info:", info)
+
         return UserInfo.parse_obj(info)
 
 
