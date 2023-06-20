@@ -16,7 +16,7 @@ services:
       - "9428:6379"
 
   nats:
-    image: nats:2.8.4-scratch
+    image: nats:2.9.18-scratch
     command:
       - -a=0.0.0.0
       - -p=4222
