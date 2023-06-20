@@ -1,5 +1,3 @@
-from http import HTTPStatus
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, UJSONResponse
@@ -12,6 +10,7 @@ from . import (
     communication,
     integrations,
     operations,
+    public,
     registration,
     statistics,
     workshops,
@@ -33,6 +32,7 @@ app.include_router(authentication.router, prefix="/auth")
 app.include_router(communication.router, prefix="/communication")
 app.include_router(integrations.router, prefix="/integrations")
 app.include_router(operations.router, prefix="/operations")
+app.include_router(public.router, prefix="/public")
 app.include_router(registration.router, prefix="/registration")
 app.include_router(statistics.router, prefix="/statistics")
 app.include_router(workshops.router, prefix="/workshops")
