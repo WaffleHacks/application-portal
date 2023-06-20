@@ -5,10 +5,8 @@ import React from 'react';
 import * as Yup from 'yup';
 
 import { Button, LinkButton } from 'components/buttons';
-import { DateTimeInput, LongTextInput, MarkdownInput, SwitchInput, TextInput } from 'components/input';
+import { DateTimeInput, MarkdownInput, SwitchInput, TextInput } from 'components/input';
 import { Description, Section } from 'organizers/components/description';
-
-import Link from '../../../components/Link';
 
 interface Values {
   name: string;
