@@ -109,6 +109,12 @@ async def merge(
     Merge two schools together. All participants of the `from` school will be migrated and then the school will be
     deleted. The `from` school's name will be added as an alternative for the `to` school.
     """
+    if params.from_ == params.into:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="cannot merge a school into itself",
+        )
+
     # Ensure both schools exist
     school_from = await db.get(
         School,
