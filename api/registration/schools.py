@@ -1,12 +1,12 @@
 from http import HTTPStatus
-from typing import Any, Dict, List
+from typing import List
 
 import nanoid
 from algoliasearch.search_index_async import SearchIndexAsync
 from fastapi import APIRouter, Depends, HTTPException
 from opentelemetry import trace
 from pydantic import BaseModel, parse_obj_as, validate_model
-from sqlalchemy import func
+from sqlalchemy import delete, func, or_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -116,21 +116,26 @@ async def merge(
         )
 
     # Ensure both schools exist
-    school_from = await db.get(
-        School,
-        params.from_,
-        options=[selectinload(School.applications)],
+    result = await db.execute(
+        select(School).where(or_(School.id == params.from_, School.id == params.into))
     )
-    school_into = await db.get(School, params.into)
-    if school_from is None or school_into is None:
+    found = map(lambda r: r.School, result.all())
+
+    try:
+        school_from = next(filter(lambda s: s.id == params.from_, found))
+        school_into = next(filter(lambda s: s.id == params.into, found))
+    except StopIteration:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail="both schools must exist",
         )
 
     # Update the applications
-    for application in school_from.applications:
-        application.school = school_into
+    await db.execute(
+        update(Application)
+        .where(Application.school_id == school_from.id)
+        .values(school_id=school_into.id)
+    )
 
     # Add the school's name as an alternative
     with tracer.start_as_current_span("update-index"):
@@ -152,9 +157,9 @@ async def merge(
         )
 
     # Delete the original school
-    with tracer.start_as_current_span("delete"):
+    with tracer.start_as_current_span("delete-index"):
         index.delete_object(school_from.id)
-        await db.delete(school_from)
+    await db.execute(delete(School).where(School.id == school_from.id))
 
     db.add(school_into)
     await db.commit()
@@ -189,7 +194,7 @@ async def read(id: str, db: AsyncSession = Depends(with_db)):
     status_code=HTTPStatus.NO_CONTENT,
     dependencies=[Depends(requires_role(Role.Organizer))],
 )
-async def update(
+async def update_school(
     id: str,
     updates: SchoolUpdate,
     db: AsyncSession = Depends(with_db),
