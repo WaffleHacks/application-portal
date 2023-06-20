@@ -13,9 +13,10 @@ export interface BaseItem {
 
 interface OptionProps {
   value: string;
+  display?: string;
 }
 
-const Option = ({ value }: OptionProps): JSX.Element => (
+const Option = ({ value, display = value }: OptionProps): JSX.Element => (
   <Combobox.Option
     value={value}
     className={({ active }) =>
@@ -27,7 +28,7 @@ const Option = ({ value }: OptionProps): JSX.Element => (
   >
     {({ active, selected }) => (
       <>
-        <span className={classNames('block truncate', selected && 'font-semibold')}>{value}</span>
+        <span className={classNames('block truncate', selected && 'font-semibold')}>{display}</span>
 
         {selected && (
           <span
@@ -140,7 +141,7 @@ const AutoCompleteSelect = <Item extends BaseItem>({
             {options.map((option) => (
               <Option key={option} value={option} />
             ))}
-            {allowArbitrary && <Option value={`Add "${query}"...`} />}
+            {allowArbitrary && <Option display={`Add "${query}"...`} value={query} />}
           </Combobox.Options>
         )}
       </div>
