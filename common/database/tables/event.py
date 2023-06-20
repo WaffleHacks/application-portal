@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 class EventBase(SQLModel):
     name: str
     link: Optional[str] = Field(default=None)
+    description: Optional[str] = Field(default=None)
 
     code: str
 
@@ -85,6 +86,7 @@ class Event(EventBase, table=True):
 class EventCreate(SQLModel):
     name: str
     link: Optional[str]
+    description: Optional[str]
 
     valid_from: datetime
     valid_until: datetime
@@ -108,6 +110,7 @@ class EventRead(EventBase):
 class EventUpdate(SQLModel):
     name: Optional[str]
     link: Optional[str]
+    description: Optional[str]
 
     valid_from: Optional[datetime]
     valid_until: Optional[datetime]

@@ -15,6 +15,7 @@ import { EmptyRow, InlineTable, Pagination, Table, usePagination } from 'organiz
 import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery } from 'store';
 
 import Stars from './Stars';
+import RenderMarkdown from '../../../components/RenderMarkdown';
 
 interface WithMessageId {
   id: string;
@@ -150,6 +151,11 @@ const Detail = (): JSX.Element => {
         <Section>
           <Item name="Starts at">{validFrom}</Item>
           <Item name="Ends at">{validUntil}</Item>
+        </Section>
+        <Section>
+          <Item name="Description" wide>
+            {data.description ? <RenderMarkdown content={data.description} /> : 'N/A'}
+          </Item>
         </Section>
       </Description>
 

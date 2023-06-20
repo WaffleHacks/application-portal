@@ -128,6 +128,7 @@ async def check_in(request: CheckInRequest, db: AsyncSession = Depends(with_db))
 class EventDetails(BaseModel):
     id: int
     name: str
+    description: Optional[str]
 
     url: str
 

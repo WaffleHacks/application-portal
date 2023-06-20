@@ -222,6 +222,7 @@ export interface ReducedEvent {
 
 export interface Event extends ReducedEvent {
   link: string | null;
+  description: string | null;
 
   valid_from: string;
   valid_until: string;
