@@ -31,7 +31,7 @@ async def list(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all workshops
     """
-    result = await db.execute(select(Event))
+    result = await db.execute(select(Event).order_by(Event.valid_from))
     return result.scalars().all()
 
 
