@@ -38,7 +38,7 @@ class SchoolWithCount(SchoolList):
     name="List schools",
     dependencies=[Depends(with_authenticated)],
 )
-async def list(db: AsyncSession = Depends(with_db)):
+async def list_schools(db: AsyncSession = Depends(with_db)):
     """
     Get a list of all school.
     """
@@ -119,7 +119,7 @@ async def merge(
     result = await db.execute(
         select(School).where(or_(School.id == params.from_, School.id == params.into))
     )
-    found = map(lambda r: r.School, result.all())
+    found = list(map(lambda r: r.School, result.all()))
 
     try:
         school_from = next(filter(lambda s: s.id == params.from_, found))
