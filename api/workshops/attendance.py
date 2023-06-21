@@ -56,7 +56,7 @@ async def redirect(
 
     # Check that the code is still valid
     if not event.can_mark_attendance:
-        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="invalid code")
 
     try:
         attendance = EventAttendance(event_id=event.id, participant_id=user_id)
@@ -92,7 +92,7 @@ async def status(
     """
     event = await get_event_by_code(code, db)
     if not event.can_submit_feedback:
-        raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="invalid code")
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="invalid code")
 
     statement = (
         select(Feedback)
@@ -149,10 +149,7 @@ async def get_event_by_code(code: str, db: AsyncSession) -> Event:
     event: Optional[Event] = result.scalars().first()
 
     if event is None:
-        raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail="invalid attendance code",
-        )
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="invalid code")
 
     return event
 
