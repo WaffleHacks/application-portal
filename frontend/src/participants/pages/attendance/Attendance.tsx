@@ -18,8 +18,8 @@ const Attendance = (): JSX.Element => {
     }, 1000);
   }, [isLoading, data]);
 
-  if (isLoading || data === undefined) return <Loading />;
-  if (isError) {
+  if (isLoading) return <Loading />;
+  if (data === undefined || isError) {
     return (
       <Status kind="failure" title="This event URL isn't valid">
         If you believe this is incorrect, please contact an organizer.
