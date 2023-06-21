@@ -9,8 +9,8 @@ interface PaginationParams<Type> extends Props {
 export const usePagination = <Type,>(items: Type[], size = 20): PaginationParams<Type> => {
   const [page, setPage] = useState(0);
 
-  const rawMax = Math.floor(items.length / 20);
-  const max = items.length % 20 === 0 && items.length !== 0 ? rawMax - 1 : rawMax;
+  const rawMax = Math.floor(items.length / size);
+  const max = items.length % size === 0 && items.length !== 0 ? rawMax - 1 : rawMax;
 
   const paginated = items.slice(size * page, size + size * page);
 
