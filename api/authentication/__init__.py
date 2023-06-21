@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from api.session import Session, Status, with_session
 from api.settings import SETTINGS
@@ -39,7 +40,11 @@ async def me(
         return Me(status=session.status, email=session.email)
 
     if session.status == Status.Authenticated:
-        participant = await db.get(Participant, session.id)
+        participant = await db.get(
+            Participant,
+            session.id,
+            options=[selectinload(Participant.swag_tier)],
+        )
         assert participant is not None
 
         return Me(status=session.status, participant=participant)
