@@ -18,6 +18,7 @@ from common.database import (
     Feedback,
     FeedbackCreate,
     Participant,
+    ServiceSettings,
     SwagTier,
     with_db,
 )
@@ -183,4 +184,11 @@ async def update_swag_tier(id: int, db: AsyncSession):
             .values(swag_tier_id=tier_query.scalar_subquery())
         )
         await db.execute(statement)
-        await db.commit()
+
+    with tracer.start_as_current_span("check-in"):
+        if await ServiceSettings.can_check_in(db):
+            await db.execute(
+                update(Participant).values(checked_in=True).where(Participant.id == id)
+            )
+
+    await db.commit()
