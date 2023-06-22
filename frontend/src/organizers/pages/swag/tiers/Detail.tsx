@@ -98,7 +98,7 @@ const Detail = (): JSX.Element => {
             ))}
           </Table.Body>
         </InlineTable>
-        <div className="m-4">
+        <div className="p-4">
           <Pagination {...paginationProps} />
         </div>
       </Description>
