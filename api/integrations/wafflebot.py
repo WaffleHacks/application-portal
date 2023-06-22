@@ -1,6 +1,6 @@
 from datetime import datetime
 from http import HTTPStatus
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -11,7 +11,14 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from api.settings import SETTINGS
-from common.database import Application, ApplicationStatus, Event, Participant, with_db
+from common.database import (
+    Application,
+    ApplicationStatus,
+    Event,
+    Participant,
+    ServiceSettings,
+    with_db,
+)
 
 token_scheme = HTTPBearer()
 
@@ -99,7 +106,7 @@ async def lookup(
 
 
 class CheckInRequest(BaseModel):
-    participants: List[int]
+    participant: Union[int, List[int]]
 
 
 @router.put(
@@ -112,13 +119,22 @@ async def check_in(request: CheckInRequest, db: AsyncSession = Depends(with_db))
     Mark a participant as checked-in from Discord
     """
 
+    if not await ServiceSettings.can_check_in(db):
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="check in not open",
+        )
+
+    if type(request.participant) == int:
+        request.participant = [request.participant]
+
     await db.execute(
         (
             update(Participant)
             .values(checked_in=True)
             .where(Participant.id == Application.participant_id)
             .where(Application.status == ApplicationStatus.ACCEPTED)
-            .where(Participant.id.in_(request.participants))  # type: ignore
+            .where(Participant.id.in_(request.participant))  # type: ignore
             .execution_options(synchronize_session=False)
         )
     )
