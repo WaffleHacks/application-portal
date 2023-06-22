@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from opentelemetry.trace import get_current_span
+from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -63,10 +64,16 @@ async def callback(
 
     get_current_span().set_attribute("provider.slug", provider.slug)
 
-    token = await client.exchange(
-        code, f"{SETTINGS.public_url}/auth/oauth/callback", provider
-    )
-    user_info = await client.user_info(token, provider)
+    try:
+        token = await client.exchange(
+            code, f"{SETTINGS.public_url}/auth/oauth/callback", provider
+        )
+        user_info = await client.user_info(token, provider)
+    except ValidationError:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail="invalid response from provider. please try again with a different provider",
+        )
 
     # Try to find the user by email
     result = await db.execute(

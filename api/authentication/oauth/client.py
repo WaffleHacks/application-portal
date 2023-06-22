@@ -60,7 +60,6 @@ class OAuthClient(object):
             headers={"Authorization": f"Bearer {token}"},
         )
         info = await _deserialize_if_successful(response)
-        print(f"provider {provider.slug} user info:", info)
 
         return UserInfo.parse_obj(info)
 
