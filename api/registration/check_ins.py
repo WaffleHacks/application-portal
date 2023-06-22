@@ -47,11 +47,7 @@ async def mark(
     """
     Mark the current participant as checked in
     """
-    start = await ServiceSettings.checkin_start(db).get()
-    end = await ServiceSettings.checkin_end(db).get()
-
-    now = datetime.now(tz=pytz.utc)
-    if now < start or now > end:
+    if not await ServiceSettings.can_check_in(db):
         raise HTTPException(status_code=HTTPStatus.FORBIDDEN, detail="check-in closed")
 
     participant.checked_in = True

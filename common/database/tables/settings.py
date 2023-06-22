@@ -5,9 +5,11 @@ from enum import Enum
 from typing import Any, Generic, Type, TypeVar
 
 from pydantic.json import pydantic_encoder
-from sqlalchemy import Column
+from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from sqlmodel import Field, SQLModel
 
 
@@ -106,6 +108,21 @@ class Settings(SQLModel, table=True):
     @staticmethod
     def checkin_end(db: AsyncSession) -> Entry[datetime]:
         return Entry(Key.CHECKIN_END, db, formatter=DateTimeFormatter)
+
+    @staticmethod
+    async def can_check_in(db: AsyncSession) -> bool:
+        result = await db.execute(
+            select(
+                func.bit_xor(
+                    func.bit_bool(
+                        Settings.value.cast(DateTime(timezone=True)) > func.now()  # type: ignore
+                    )
+                )
+            ).where(
+                or_(Settings.key == Key.CHECKIN_START, Settings.key == Key.CHECKIN_END)
+            )
+        )
+        return bool(result.scalars().first().to_int())  # type: ignore
 
 
 class SettingsRead(SQLModel):
