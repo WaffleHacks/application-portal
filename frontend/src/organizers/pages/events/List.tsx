@@ -24,10 +24,12 @@ const Row = (event: ReducedEvent) => {
       <Table.Data index>{event.name}</Table.Data>
       <Table.Data>{event.code}</Table.Data>
       <Table.Data>
-        <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
-          Attendance
-          <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
-        </Button>
+        {event.track_attendance && (
+          <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
+            Attendance
+            <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />
+          </Button>
+        )}
         <Button className="ml-2" type="button" size="xs" style="secondary" onClick={onCopyFeedback}>
           Feedback
           <ClipboardDocumentIcon className="ml-2 h-4 w-4 text-gray-700 hover:text-indigo-600" />

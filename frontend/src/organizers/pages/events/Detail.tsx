@@ -8,6 +8,7 @@ import Badge from 'components/Badge';
 import { Button, LinkButton } from 'components/buttons';
 import Confirm from 'components/Confirm';
 import Link from 'components/Link';
+import RenderMarkdown from 'components/RenderMarkdown';
 import { Description, Item, Section } from 'organizers/components/description';
 import Loading from 'organizers/components/Loading';
 import NotFound from 'organizers/components/NotFound';
@@ -15,7 +16,6 @@ import { EmptyRow, InlineTable, Pagination, Table, usePagination } from 'organiz
 import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery } from 'store';
 
 import Stars from './Stars';
-import RenderMarkdown from '../../../components/RenderMarkdown';
 
 interface WithMessageId {
   id: string;
@@ -123,9 +123,13 @@ const Detail = (): JSX.Element => {
       >
         <Section>
           <Item name="Attendance URL">
-            <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
-              Copy
-            </Button>
+            {data.track_attendance ? (
+              <Button type="button" size="xs" style="secondary" onClick={onCopyAttendance}>
+                Copy
+              </Button>
+            ) : (
+              <Badge color="red">Disabled</Badge>
+            )}
           </Item>
           <Item name="Feedback URL">
             <Button type="button" size="xs" style="secondary" onClick={onCopyFeedback}>
@@ -151,6 +155,9 @@ const Detail = (): JSX.Element => {
         <Section>
           <Item name="Starts at">{validFrom}</Item>
           <Item name="Ends at">{validUntil}</Item>
+          <Item name="Track Attendance?">
+            <Badge color={data.track_attendance ? 'green' : 'red'}>{data.track_attendance ? 'Yes' : 'No'}</Badge>
+          </Item>
         </Section>
         <Section>
           <Item name="Description" wide>

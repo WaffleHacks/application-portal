@@ -15,6 +15,7 @@ interface Values {
   valid_from: string;
   valid_until: string;
   enabled: boolean;
+  track_attendance: boolean;
 }
 
 const initialValues: Values = {
@@ -24,6 +25,7 @@ const initialValues: Values = {
   valid_from: '',
   valid_until: '',
   enabled: false,
+  track_attendance: true,
 };
 
 interface Props {
@@ -55,6 +57,7 @@ const validationSchema = Yup.object({
       } else return true;
     }),
   enabled: Yup.boolean(),
+  track_attendance: Yup.boolean(),
 });
 
 const Form = ({
@@ -110,6 +113,13 @@ const Form = ({
           <Section>
             <DateTimeInput label="Starts at" required {...getFieldProps('valid_from')} />
             <DateTimeInput label="Ends at" required {...getFieldProps('valid_until')} />
+            <SwitchInput
+              className="max-w-xs"
+              label="Track attendance?"
+              description="Whether this event should track participant attendance"
+              required
+              {...getFieldProps('track_attendance')}
+            />
           </Section>
 
           <Section>

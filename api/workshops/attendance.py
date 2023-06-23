@@ -55,21 +55,22 @@ async def redirect(
     event = await get_event_by_code(code, db)
     response = dict(code=event.code, name=event.name, link=event.link)
 
-    # Check that the code is still valid
-    if not event.can_mark_attendance:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="invalid code")
+    if event.track_attendance:
+        # Check that the code is still valid
+        if not event.can_mark_attendance:
+            raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="invalid code")
 
-    try:
-        attendance = EventAttendance(event_id=event.id, participant_id=user_id)
+        try:
+            attendance = EventAttendance(event_id=event.id, participant_id=user_id)
 
-        db.add(attendance)
-        await db.commit()
+            db.add(attendance)
+            await db.commit()
 
-        # Only update tier when attendance successfully marked
-        tasks.add_task(update_swag_tier, id=user_id, db=db)
-    except IntegrityError:
-        # Already marked attendance, all good
-        pass
+            # Only update tier when attendance successfully marked
+            tasks.add_task(update_swag_tier, id=user_id, db=db)
+        except IntegrityError:
+            # Already marked attendance, all good
+            pass
 
     return response
 

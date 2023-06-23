@@ -218,6 +218,7 @@ export interface ReducedEvent {
 
   code: string;
   enabled: boolean;
+  track_attendance: boolean;
 }
 
 export interface Event extends ReducedEvent {

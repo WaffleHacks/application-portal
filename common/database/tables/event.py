@@ -37,6 +37,7 @@ class EventBase(SQLModel):
     )
 
     enabled: bool = Field(default=True, nullable=False)
+    track_attendance: bool = Field(default=True, nullable=False)
 
     @root_validator()
     def range_is_positive(cls, values: Dict[str, datetime]):
@@ -91,6 +92,8 @@ class EventCreate(SQLModel):
     valid_from: datetime
     valid_until: datetime
 
+    track_attendance: bool
+
 
 class EventList(SQLModel):
     id: int
@@ -98,6 +101,7 @@ class EventList(SQLModel):
 
     code: str
     enabled: bool
+    track_attendance: bool
 
 
 class EventRead(EventBase):
@@ -116,3 +120,4 @@ class EventUpdate(SQLModel):
     valid_until: Optional[datetime]
 
     enabled: Optional[bool]
+    track_attendance: Optional[bool]

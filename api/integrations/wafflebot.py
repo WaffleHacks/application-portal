@@ -158,14 +158,21 @@ class EventDetails(BaseModel):
         valid_from: datetime,
         valid_until: datetime,
         code: str,
+        link: str,
+        track_attendance: bool,
         **kwargs,
     ):
+        if track_attendance or link is None:
+            url = f"{SETTINGS.app_url}/workshop/{code}"
+        else:
+            url = link
+
         super().__init__(
             id=id,
             name=name,
             start=valid_from,
             end=valid_until,
-            url=f"{SETTINGS.app_url}/workshop/{code}",
+            url=url,
             **kwargs,
         )
 
