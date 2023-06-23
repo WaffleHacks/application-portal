@@ -7,15 +7,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Badge from 'components/Badge';
 import { Button, LinkButton } from 'components/buttons';
 import Confirm from 'components/Confirm';
-import Link from 'components/Link';
 import RenderMarkdown from 'components/RenderMarkdown';
 import { Description, Item, Section } from 'organizers/components/description';
 import Loading from 'organizers/components/Loading';
 import NotFound from 'organizers/components/NotFound';
-import { EmptyRow, InlineTable, Pagination, Table, usePagination } from 'organizers/components/table';
-import { Participant, ReducedFeedback, useDeleteEventMutation, useGetEventQuery } from 'store';
+import { useDeleteEventMutation, useGetEventQuery } from 'store';
 
-import Stars from './Stars';
+import Attendance from './Attendance';
+import Feedback from './Feedback';
 
 interface WithMessageId {
   id: string;
@@ -49,50 +48,9 @@ const DeleteButton = ({ id }: WithMessageId): JSX.Element => {
   );
 };
 
-const ParticipantRow = (participant: Participant): JSX.Element => (
-  <tr>
-    <Table.Data index>
-      {participant.first_name} {participant.last_name}
-    </Table.Data>
-    <Table.Data>{participant.email}</Table.Data>
-    <Table.Data>
-      <Link to={`/applications/${participant.id}`}>Details</Link>
-    </Table.Data>
-  </tr>
-);
-
-interface FeedbackProps extends ReducedFeedback {
-  eventId: string;
-}
-
-const FeedbackRow = (feedback: FeedbackProps): JSX.Element => (
-  <tr>
-    <Table.Data index>
-      <Link to={`/applications/${feedback.participant.id}`}>
-        {feedback.participant.first_name} {feedback.participant.last_name}
-      </Link>
-    </Table.Data>
-    <Table.Data>
-      <Stars value={feedback.presentation} />
-    </Table.Data>
-    <Table.Data>
-      <Stars value={feedback.content} />
-    </Table.Data>
-    <Table.Data>
-      <Stars value={feedback.interest} />
-    </Table.Data>
-    <Table.Data>
-      <Link to={`/events/${feedback.eventId}/feedback/${feedback.participant.id}`}>Details</Link>
-    </Table.Data>
-  </tr>
-);
-
 const Detail = (): JSX.Element => {
   const { id } = useParams();
   const { data, isLoading } = useGetEventQuery(id as string);
-
-  const { paginated: paginatedAttendees, ...attendeePaginatedProps } = usePagination(data?.attendees || [], 5);
-  const { paginated: paginatedFeedback, ...feedbackPaginatedProps } = usePagination(data?.feedback || [], 5);
 
   if (isLoading) return <Loading />;
   if (data === undefined) return <NotFound message="We couldn't find that event" returnTo="/events" />;
@@ -166,51 +124,8 @@ const Detail = (): JSX.Element => {
         </Section>
       </Description>
 
-      <Description title="Attendance">
-        <div className="ml-8 mb-4">
-          <p className="text-sm font-medium text-gray-500">Total</p>
-          <p className="mt-1 text-sm text-gray-900">
-            {data.attendees.length} participant{data.attendees.length === 1 ? '' : 's'}
-          </p>
-        </div>
-        <InlineTable className="mx-4">
-          <Table.Head className="bg-white">
-            <Table.Label index>Name</Table.Label>
-            <Table.Label>Email</Table.Label>
-            <Table.InvisibleLabel>Detail</Table.InvisibleLabel>
-          </Table.Head>
-          <Table.Body>
-            {paginatedAttendees.length === 0 && <EmptyRow message="No attendees yet" />}
-            {paginatedAttendees.map((p) => (
-              <ParticipantRow key={p.id} {...p} />
-            ))}
-          </Table.Body>
-        </InlineTable>
-        <div className="mx-4 my-4 pb-4">
-          <Pagination {...attendeePaginatedProps} />
-        </div>
-      </Description>
-
-      <Description title="Feedback">
-        <InlineTable className="mx-4">
-          <Table.Head className="bg-white">
-            <Table.Label index>From</Table.Label>
-            <Table.Label>Presentation</Table.Label>
-            <Table.Label>Content</Table.Label>
-            <Table.Label>Engagement</Table.Label>
-            <Table.InvisibleLabel>Detail</Table.InvisibleLabel>
-          </Table.Head>
-          <Table.Body>
-            {paginatedFeedback.length === 0 && <EmptyRow message="No feedback yet" />}
-            {paginatedFeedback.map((f) => (
-              <FeedbackRow key={f.participant.id} eventId={id as string} {...f} />
-            ))}
-          </Table.Body>
-        </InlineTable>
-        <div className="mx-4 my-4 pb-4">
-          <Pagination {...feedbackPaginatedProps} />
-        </div>
-      </Description>
+      <Attendance attendees={data.attendees} />
+      <Feedback feedback={data.feedback} />
 
       <div className="mt-3 flex justify-between">
         <LinkButton to="/events">

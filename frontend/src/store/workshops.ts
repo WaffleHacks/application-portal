@@ -39,11 +39,6 @@ interface SwagProgress {
   tiers: Omit<SwagTier, 'participants'>[];
 }
 
-interface DetailedFeedbackRequest {
-  event_id: string;
-  participant_id: string;
-}
-
 type ParticipantEventDetails = Omit<Event, 'enabled' | 'attendees' | 'feedback' | 'valid_until' | 'valid_from'>;
 
 const api = createApi({
@@ -77,10 +72,6 @@ const api = createApi({
     getEvent: builder.query<Event, string>({
       query: (id) => `/workshops/events/${id}`,
       providesTags: (result, error, arg) => [{ type: Tag.Event, id: arg }],
-    }),
-    getDetailedEventFeedback: builder.query<Feedback, DetailedFeedbackRequest>({
-      query: ({ event_id, participant_id }) => `/workshops/events/${event_id}/feedback/${participant_id}`,
-      providesTags: (result, error, { participant_id }) => [{ type: Tag.Feedback, id: participant_id }],
     }),
     createEvent: builder.mutation<void, EventCreate>({
       query: (body) => ({
@@ -161,7 +152,6 @@ export const {
   useSubmitFeedbackMutation,
   useListEventsQuery,
   useGetEventQuery,
-  useGetDetailedEventFeedbackQuery,
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,

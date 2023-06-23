@@ -10,7 +10,7 @@ from .event_attendance import EventAttendance
 from .types import TimeStamp
 
 if TYPE_CHECKING:
-    from .feedback import Feedback, FeedbackList
+    from .feedback import Feedback, FeedbackRead
     from .participant import Participant, ParticipantList
 
 
@@ -107,7 +107,7 @@ class EventList(SQLModel):
 class EventRead(EventBase):
     id: int
 
-    feedback: List["FeedbackList"]
+    feedback: List["FeedbackRead"]
     attendees: List["ParticipantList"]
 
 

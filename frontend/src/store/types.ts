@@ -197,19 +197,15 @@ export interface MessageTrigger {
   message: ReducedMessage | null;
 }
 
-export interface ReducedFeedback {
+export interface Feedback {
   participant: Participant;
 
   presentation: number;
   content: number;
   interest: number;
-}
 
-export interface Feedback extends ReducedFeedback {
   comments: string;
   again: boolean;
-
-  event: ReducedEvent;
 }
 
 export interface ReducedEvent {
@@ -228,7 +224,7 @@ export interface Event extends ReducedEvent {
   valid_from: string;
   valid_until: string;
 
-  feedback: ReducedFeedback[];
+  feedback: Feedback[];
   attendees: Participant[];
 }
 

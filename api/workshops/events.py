@@ -17,7 +17,6 @@ from common.database import (
     EventRead,
     EventUpdate,
     Feedback,
-    FeedbackRead,
     with_db,
 )
 from common.tasks import broadcast
@@ -67,41 +66,6 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return workshop
-
-
-@router.get(
-    "/{event_id}/feedback/{user_id}",
-    name="Read detailed workshop feedback",
-    response_model=FeedbackRead,
-)
-async def read_feedback(
-    event_id: int, user_id: int, db: AsyncSession = Depends(with_db)
-):
-    """
-    Get the detailed feedback for a given participant
-    """
-    workshop = await db.get(
-        Event,
-        event_id,
-        options=[selectinload(Event.feedback).selectinload(Feedback.participant)],
-    )
-    if workshop is None:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-
-    statement = (
-        select(Feedback)
-        .where(Feedback.event_id == workshop.id)
-        .where(Feedback.participant_id == user_id)
-        .options(selectinload(Feedback.participant))
-    )
-    result = await db.execute(statement)
-    feedback = result.scalars().first()
-
-    if feedback is None:
-        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
-
-    feedback.event = workshop  # populate the event field in the response
-    return feedback
 
 
 @router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)

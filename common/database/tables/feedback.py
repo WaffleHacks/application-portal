@@ -52,14 +52,5 @@ class FeedbackCreate(FeedbackBase):
     pass
 
 
-class FeedbackList(SQLModel):
-    participant: "ParticipantList"
-
-    presentation: int
-    content: int
-    interest: int
-
-
 class FeedbackRead(FeedbackBase):
     participant: "ParticipantList"
-    event: "EventList"

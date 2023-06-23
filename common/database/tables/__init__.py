@@ -13,7 +13,7 @@ from .event import Event, EventCreate, EventList, EventRead, EventUpdate
 from .event_attendance import EventAttendance
 from .export import Export, ExportCreate, ExportList
 from .export import Status as ExportStatus
-from .feedback import Feedback, FeedbackCreate, FeedbackList, FeedbackRead
+from .feedback import Feedback, FeedbackCreate, FeedbackRead
 from .message import (
     Message,
     MessageBase,
@@ -69,10 +69,9 @@ ApplicationRead.update_forward_refs(
     SchoolList=SchoolList,
 )
 EventRead.update_forward_refs(
-    FeedbackList=FeedbackList,
+    FeedbackRead=FeedbackRead,
     ParticipantList=ParticipantList,
 )
-FeedbackList.update_forward_refs(ParticipantList=ParticipantList)
 FeedbackRead.update_forward_refs(EventList=EventList, ParticipantList=ParticipantList)
 MessageCreate.update_forward_refs(Group=Group)
 MessageRead.update_forward_refs(RecipientRead=RecipientRead)
