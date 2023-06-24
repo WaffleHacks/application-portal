@@ -75,7 +75,7 @@ const Participants = (): JSX.Element => {
     case ApplicationStatus.Accepted:
       return (
         <Base accepted={true}>
-          <Route index element={<AcceptedStatus />} />
+          <Route index element={<AcceptedStatus projectCode={application.participant.project_code} />} />
           <Route path="/swag" element={<SwagProgress />} />
           <Route path="/workshop/:code" element={<Attendance />} />
           <Route path="/workshop/:code/feedback" element={<EventFeedback />} />

@@ -55,6 +55,7 @@ export interface Participant {
   email: string;
   role: Role;
   is_admin: boolean;
+  project_code: string;
 }
 
 export interface ParticipantWithSwag extends Participant {
