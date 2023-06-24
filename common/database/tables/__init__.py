@@ -9,7 +9,14 @@ from .application import (
     RaceEthnicity,
 )
 from .application import Status as ApplicationStatus
-from .event import Event, EventCreate, EventList, EventRead, EventUpdate
+from .event import (
+    Event,
+    EventCreate,
+    EventList,
+    EventRead,
+    EventReadWithFeedback,
+    EventUpdate,
+)
 from .event_attendance import EventAttendance
 from .export import Export, ExportCreate, ExportList
 from .export import Status as ExportStatus
@@ -68,7 +75,7 @@ ApplicationRead.update_forward_refs(
     ParticipantList=ParticipantList,
     SchoolList=SchoolList,
 )
-EventRead.update_forward_refs(
+EventReadWithFeedback.update_forward_refs(
     FeedbackRead=FeedbackRead,
     ParticipantList=ParticipantList,
 )

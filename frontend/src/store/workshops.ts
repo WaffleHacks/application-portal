@@ -73,6 +73,9 @@ const api = createApi({
       query: (id) => `/workshops/events/${id}`,
       providesTags: (result, error, arg) => [{ type: Tag.Event, id: arg }],
     }),
+    getEventByCode: builder.query<Event, string>({
+      query: (code) => `/workshops/events/by-code/${code}`,
+    }),
     createEvent: builder.mutation<void, EventCreate>({
       query: (body) => ({
         url: '/workshops/events/',
@@ -152,6 +155,7 @@ export const {
   useSubmitFeedbackMutation,
   useListEventsQuery,
   useGetEventQuery,
+  useGetEventByCodeQuery,
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,

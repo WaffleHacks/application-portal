@@ -107,6 +107,10 @@ class EventList(SQLModel):
 class EventRead(EventBase):
     id: int
 
+
+class EventReadWithFeedback(EventBase):
+    id: int
+
     feedback: List["FeedbackRead"]
     attendees: List["ParticipantList"]
 

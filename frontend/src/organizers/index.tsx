@@ -14,6 +14,7 @@ const EventDetail = lazy(() => import('./pages/events/Detail/Detail'));
 const EventEdit = lazy(() => import('./pages/events/Edit'));
 const ListEvents = lazy(() => import('./pages/events/List'));
 const EventNew = lazy(() => import('./pages/events/New'));
+const EventRedirect = lazy(() => import('./pages/events/Redirect'));
 const CheckIns = lazy(() => import('./pages/check-ins/CheckIns'));
 const ExportList = lazy(() => import('./pages/exports/List'));
 const NewExport = lazy(() => import('./pages/exports/New'));
@@ -65,6 +66,7 @@ const Organizers = (): JSX.Element => (
         <Route path="/events/new" element={<EventNew />} />
         <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/events/:id/edit" element={<EventEdit />} />
+        <Route path="/workshop/:code" element={<EventRedirect />} />
 
         <Route path="/check-ins" element={<CheckIns />} />
 

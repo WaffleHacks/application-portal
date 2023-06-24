@@ -50,6 +50,7 @@ const navigation: NavSection[] = [
     name: 'Attendance',
     items: [
       { name: 'Events', href: '/events', icon: CalendarIcon },
+      { name: 'Events', href: '/workshop/', hidden: true },
       { name: 'Check-ins', href: '/check-ins', icon: ClipboardDocumentCheckIcon },
     ],
   },

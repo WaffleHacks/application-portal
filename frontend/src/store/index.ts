@@ -139,6 +139,7 @@ export {
   useSubmitFeedbackMutation,
   useListEventsQuery,
   useGetEventQuery,
+  useGetEventByCodeQuery,
   useCreateEventMutation,
   useUpdateEventMutation,
   useDeleteEventMutation,

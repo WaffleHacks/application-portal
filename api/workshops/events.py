@@ -15,6 +15,7 @@ from common.database import (
     EventCreate,
     EventList,
     EventRead,
+    EventReadWithFeedback,
     EventUpdate,
     Feedback,
     with_db,
@@ -49,7 +50,7 @@ async def create(params: EventCreate, db: AsyncSession = Depends(with_db)):
     return workshop
 
 
-@router.get("/{id}", name="Read workshop", response_model=EventRead)
+@router.get("/{id}", name="Read workshop", response_model=EventReadWithFeedback)
 async def read(id: int, db: AsyncSession = Depends(with_db)):
     """
     Get all the details about a workshop
@@ -66,6 +67,20 @@ async def read(id: int, db: AsyncSession = Depends(with_db)):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
 
     return workshop
+
+
+@router.get("/by-code/{code}", name="Read workshop by code", response_model=EventRead)
+async def read_by_code(code: str, db: AsyncSession = Depends(with_db)):
+    """
+    Get all the details about a workshop by it's code
+    """
+    result = await db.execute(select(Event).where(Event.code == code))
+    event = result.scalars().first()
+
+    if event is None:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="not found")
+
+    return event
 
 
 @router.patch("/{id}", name="Update workshop", status_code=HTTPStatus.NO_CONTENT)
