@@ -1,6 +1,6 @@
 from datetime import datetime
 from http import HTTPStatus
-from typing import List, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -189,16 +189,36 @@ async def events(db: AsyncSession = Depends(with_db)):
 
 
 @router.get(
-    "/events/{id}",
-    name="Get event details",
+    "/events/{key}",
+    name="Get event details by a key",
     response_model=Optional[EventDetails],
 )
-async def event_details(id: int, db: AsyncSession = Depends(with_db)):
+async def event_by(
+    key: Union[int, str],
+    by: Union[Literal["id"], Literal["code"]] = "id",
+    db: AsyncSession = Depends(with_db),
+):
     """
-    Get the details about a specific event
+    Get the details of an event by its ID or code
     """
-    event = await db.get(Event, id)
-    if event is None or not event.enabled:
-        return None
 
-    return event
+    if by == "id":
+        if type(key) != int:
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                detail="key must be an integer",
+            )
+
+        event = await db.get(Event, key)
+        if event is None or not event.enabled:
+            return None
+
+        return event
+
+    elif by == "code":
+        result = await db.execute(
+            select(Event).where(Event.code == str(key), Event.enabled)
+        )
+        return result.scalar_one_or_none()
+
+    return None
