@@ -1,11 +1,10 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import React, { ChangeEvent, ReactNode, useEffect, useId, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useId, useState } from 'react';
 
+import { Button } from 'components/buttons';
 import Card from 'components/Card';
 import Loading from 'organizers/components/Loading';
 import { useGetJudgingHeadersListQuery, useInitiateJudgingDataProcessMutation } from 'store';
-
-import { Button } from '../../../components/buttons';
 
 interface Props {
   next: () => void;
