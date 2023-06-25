@@ -1,4 +1,6 @@
+from binascii import hexlify
 from enum import Enum
+from os import urandom
 from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import EmailStr
@@ -40,7 +42,7 @@ class ParticipantBase(SQLModel):
 
     is_admin: bool = Field(default=False)
     checked_in: Optional[bool]
-    project_code: str
+    project_code: str = Field(default_factory=lambda: hexlify(urandom(4))[:7].decode())
 
 
 class Participant(ParticipantBase, table=True):
