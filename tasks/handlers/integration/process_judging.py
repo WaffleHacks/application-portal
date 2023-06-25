@@ -2,7 +2,7 @@ import codecs
 import logging
 from csv import DictReader, DictWriter, excel
 from io import BytesIO, StringIO
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 from botocore.exceptions import ClientError
 from opentelemetry import trace
@@ -111,12 +111,18 @@ async def process_row(
             "Reason": "project marked as don't judge",
         }
 
-    codes = set(row[columns.submission_code].replace(" ", "").split("-"))
-    if len(codes) == 0 or len(codes) > 4:
+    codes = parse_codes(row[columns.submission_code])
+    if len(codes) == 0:
         return False, {
             "Name": name,
             "URL": url,
-            "Reason": f"invalid submission codes: {row[columns.submission_code]}",
+            "Reason": f"could not parse submission codes: {row[columns.submission_code]}",
+        }
+    if len(codes) > 4:
+        return False, {
+            "Name": name,
+            "URL": url,
+            "Reason": f"too many codes provided: {', '.join(codes)}",
         }
 
     query_result = await db.execute(
@@ -131,7 +137,7 @@ async def process_row(
     i = 0
     for i, p in enumerate(participants):
         codes.remove(p.project_code)
-        result[f"Participant {i+1}"] = f"{p.first_name} {p.last_name} (ID: {p.id})"
+        result[f"Participant {i + 1}"] = f"{p.first_name} {p.last_name} (ID: {p.id})"
 
     if len(codes) > 0:
         return False, {
@@ -141,9 +147,27 @@ async def process_row(
         }
 
     for j in range(i + 1, 4):
-        result[f"Participant {j+1}"] = ""
+        result[f"Participant {j + 1}"] = ""
 
     return True, result
+
+
+def parse_codes(raw: str) -> Set[str]:
+    raw = raw.lower().replace(" ", "")
+
+    if "-" in raw:
+        return set(raw.split("-"))
+
+    if "," in raw:
+        return set(raw.split(","))
+
+    if len(raw) % 7 == 0:
+        codes = set()
+        for i in range(0, len(raw), 7):
+            codes.add(raw[i : i + 7])
+        return codes
+
+    return set()
 
 
 async def load_columns(file: str) -> Optional[Data]:
