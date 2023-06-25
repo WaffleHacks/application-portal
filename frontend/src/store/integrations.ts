@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import type { Export, ReducedWebhook, Webhook, WebhookWithSecret } from './types';
+import type { Export, JudgingUpload, ReducedWebhook, Webhook, WebhookWithSecret } from './types';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
@@ -24,6 +24,33 @@ interface ExportCreate {
   name: string;
   table: string;
   kind: string;
+}
+
+interface JudgingProcess {
+  file: string;
+
+  name: string;
+  url: string;
+  project_status: string;
+  judging_status: string;
+  submission_code: string;
+}
+
+interface JudgingProcessingStatus {
+  status: 'pending' | 'success' | 'failure';
+}
+
+type JudgingProcessResult = JudgingProcessSuccessResult | JudgingProcessFailureResult;
+
+interface JudgingProcessSuccessResult {
+  status: 'success';
+  valid: string;
+  invalid: string;
+}
+
+interface JudgingProcessFailureResult {
+  status: 'failure';
+  reason: string;
 }
 
 const api = createApi({
@@ -83,6 +110,27 @@ const api = createApi({
       }),
       invalidatesTags: [Tag.Export],
     }),
+
+    // Judging endpoints
+    getJudgingUploadUrl: builder.query<JudgingUpload, void>({
+      query: () => '/integrations/judging/upload',
+    }),
+    getJudgingHeadersList: builder.query<string[], string>({
+      query: (file) => `/integrations/judging/${file}/headers`,
+    }),
+    initiateJudgingDataProcess: builder.mutation<void, JudgingProcess>({
+      query: ({ file, ...body }) => ({
+        url: `/integrations/judging/${file}/process`,
+        method: 'PUT',
+        body,
+      }),
+    }),
+    getJudgingDataProcessingStatus: builder.query<JudgingProcessingStatus, string>({
+      query: (file) => `/integrations/judging/${file}/process`,
+    }),
+    getJudgingProcessResult: builder.query<JudgingProcessResult, string>({
+      query: (file) => `/integrations/judging/${file}/result`,
+    }),
   }),
 });
 
@@ -96,4 +144,9 @@ export const {
   useListExportsQuery,
   useGetExportDownloadUrlQuery,
   useInitiateExportMutation,
+  useGetJudgingUploadUrlQuery,
+  useGetJudgingHeadersListQuery,
+  useInitiateJudgingDataProcessMutation,
+  useGetJudgingDataProcessingStatusQuery,
+  useGetJudgingProcessResultQuery,
 } = api;

@@ -1,4 +1,4 @@
-from typing import IO, Any, Dict, List, Literal
+from typing import IO, Any, BinaryIO, Dict, List, Literal
 
 from botocore.client import BaseClient
 
@@ -17,6 +17,9 @@ ObjectCannedACLType = Literal[
 
 
 class S3Client(BaseClient):
+    def download_fileobj(self, Bucket: str, Key: str, Fileobj: BinaryIO):
+        pass
+
     def generate_presigned_post(  # type: ignore [empty-body]
         self,
         Bucket: str,
@@ -25,6 +28,9 @@ class S3Client(BaseClient):
         Conditions: List[Any],
         ExpiresIn: int = 3600,
     ) -> Dict[str, Any]:
+        pass
+
+    def head_object(self, Bucket: str, Key: str) -> Dict[str, Any]:  # type: ignore [empty-body]
         pass
 
     def put_object(  # type: ignore [empty-body]

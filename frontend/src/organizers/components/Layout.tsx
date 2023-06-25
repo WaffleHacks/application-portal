@@ -11,6 +11,7 @@ import {
   HomeIcon,
   LockClosedIcon,
   QuestionMarkCircleIcon,
+  ScaleIcon,
   ShareIcon,
   UserGroupIcon,
   UserIcon,
@@ -67,6 +68,7 @@ const navigation: NavSection[] = [
     name: 'Integrations',
     items: [
       { name: 'Export Data', href: '/exports', icon: DocumentArrowDownIcon },
+      { name: 'Judging', href: '/judging', icon: ScaleIcon },
       { name: 'Webhooks', href: '/webhooks', icon: ShareIcon },
     ],
   },

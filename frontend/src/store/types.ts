@@ -321,3 +321,12 @@ export interface Export {
   created_at: string;
   finished_at: string | null;
 }
+
+export interface UploadPreSignedUrl {
+  url: string;
+  fields: Record<string, string>;
+}
+
+export interface JudgingUpload extends UploadPreSignedUrl {
+  name: string;
+}

@@ -43,6 +43,7 @@ const WebhookDetail = lazy(() => import('./pages/webhooks/Detail'));
 const WebhookEdit = lazy(() => import('./pages/webhooks/Edit'));
 const WebhookList = lazy(() => import('./pages/webhooks/List'));
 const NewWebhook = lazy(() => import('./pages/webhooks/New'));
+const Judging = lazy(() => import('./pages/judging'));
 
 const Organizers = (): JSX.Element => (
   <Layout>
@@ -105,6 +106,8 @@ const Organizers = (): JSX.Element => (
         <Route path="/webhooks/new" element={<NewWebhook />} />
         <Route path="/webhooks/:id" element={<WebhookDetail />} />
         <Route path="/webhooks/:id/edit" element={<WebhookEdit />} />
+
+        <Route path="/judging" element={<Judging />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

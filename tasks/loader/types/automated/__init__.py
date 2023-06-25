@@ -19,7 +19,7 @@ from .workshops import Workshops as _WorkshopsAction
 class Service(Enum):
     Authentication = "authentication"
     Communication = "communication"
-    Integrations = "integrations"
+    Integrations = "integration"
     Registration = "registration"
     Workshops = "workshops"
 

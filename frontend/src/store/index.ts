@@ -67,6 +67,11 @@ export {
   useListExportsQuery,
   useGetExportDownloadUrlQuery,
   useInitiateExportMutation,
+  useGetJudgingUploadUrlQuery,
+  useGetJudgingHeadersListQuery,
+  useInitiateJudgingDataProcessMutation,
+  useGetJudgingDataProcessingStatusQuery,
+  useGetJudgingProcessResultQuery,
 } from './integrations';
 export {
   useGetSettingsQuery,
@@ -122,6 +127,8 @@ export type {
   ReducedWebhook,
   StatisticEntry,
   SchoolStatisticEntry,
+  UploadPreSignedUrl,
+  JudgingUpload,
 } from './types';
 export {
   ExportStatus,

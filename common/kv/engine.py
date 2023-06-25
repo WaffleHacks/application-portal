@@ -1,6 +1,7 @@
 import json
 from typing import Any, Optional
 
+from pydantic.json import pydantic_encoder
 from redis.asyncio import ConnectionPool, Redis
 
 GLOBAL_PREFIX = "application-portal"
@@ -67,7 +68,7 @@ class NamespacedClient(object):
         :param expires_in: when the value should expire
         """
         if not isinstance(value, str):
-            value = json.dumps(value)
+            value = json.dumps(value, default=pydantic_encoder)
 
         if expires_in is None:
             await self._client.set(self.__format_key(key), value)
