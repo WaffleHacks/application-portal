@@ -3,6 +3,7 @@ from sqlalchemy.future import select
 
 from common.database import (
     Application,
+    ApplicationStatus,
     Event,
     EventAttendance,
     Feedback,
@@ -40,6 +41,7 @@ class CheckIns(Exporter):
         .join_from(Application, Participant)
         .join_from(Application, School)
         .where(Participant.checked_in)
+        .where(Application.status == ApplicationStatus.ACCEPTED)
     )
 
 

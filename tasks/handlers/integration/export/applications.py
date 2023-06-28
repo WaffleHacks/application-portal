@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, cast, extract, func
 from sqlalchemy.future import select
 
-from common.database import Application, Participant, School
+from common.database import Application, ApplicationStatus, Participant, School
 
 from .base import Exporter
 
@@ -67,5 +67,6 @@ class ResumeBook(Exporter):
         )
         .join_from(Application, Participant)
         .join_from(Application, School)
+        .where(Application.status == ApplicationStatus.ACCEPTED)
         .where(Application.share_information)
     )
