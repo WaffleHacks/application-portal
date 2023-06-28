@@ -15,7 +15,11 @@ enum Table {
 }
 
 const KINDS: Record<string, Record<string, string>> = {
-  [Table.Applications]: { 'mlh-registered': 'MLH Registrations', 'resume-book': 'Resume Book' },
+  [Table.Applications]: {
+    all: 'All',
+    'mlh-registered': 'MLH Registrations',
+    'resume-book': 'Resume Book',
+  },
   [Table.Attendance]: { 'check-ins': 'Check-ins', events: 'Events', 'event-feedback': 'Event Feedback' },
 };
 

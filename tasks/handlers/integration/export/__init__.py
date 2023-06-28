@@ -9,7 +9,7 @@ from common.aws import with_s3
 from common.database import Export, ExportStatus, db_context
 from common.settings import SETTINGS
 
-from .applications import MLHRegistered, ResumeBook
+from .applications import All, MLHRegistered, ResumeBook
 from .attendance import CheckIns, EventFeedback, Events
 from .base import Exporter
 
@@ -21,6 +21,7 @@ s3 = with_s3()
 
 EXPORTERS: Dict[str, Dict[str, Exporter]] = {
     "applications": {
+        "all": All(),
         "mlh-registered": MLHRegistered(),
         "resume-book": ResumeBook(),
     },
