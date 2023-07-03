@@ -20,7 +20,12 @@ const KINDS: Record<string, Record<string, string>> = {
     'mlh-registered': 'MLH Registrations',
     'resume-book': 'Resume Book',
   },
-  [Table.Attendance]: { 'check-ins': 'Check-ins', events: 'Events', 'event-feedback': 'Event Feedback' },
+  [Table.Attendance]: {
+    'check-ins': 'Check-ins',
+    events: 'Events',
+    'event-feedback': 'Event Feedback',
+    'swag-tiers': 'Swag Tiers',
+  },
 };
 
 interface Values {

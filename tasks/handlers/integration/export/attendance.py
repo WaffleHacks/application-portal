@@ -9,6 +9,7 @@ from common.database import (
     Feedback,
     Participant,
     School,
+    SwagTier,
 )
 
 from .base import Exporter
@@ -72,4 +73,19 @@ class EventFeedback(Exporter):
         )
         .join_from(Event, Feedback)
         .group_by(Event.name)
+    )
+
+
+class SwagTiers(Exporter):
+    header = ["ID", "First Name", "Last Name", "Email", "Tier"]
+    statement = (
+        select(
+            Participant.id,
+            Participant.first_name,
+            Participant.last_name,
+            Participant.email,
+            SwagTier.name,
+        )
+        .join_from(Participant, SwagTier)
+        .order_by(Participant.swag_tier_id)
     )

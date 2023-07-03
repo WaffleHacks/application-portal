@@ -10,7 +10,7 @@ from common.database import Export, ExportStatus, db_context
 from common.settings import SETTINGS
 
 from .applications import All, MLHRegistered, ResumeBook
-from .attendance import CheckIns, EventFeedback, Events
+from .attendance import CheckIns, EventFeedback, Events, SwagTiers
 from .base import Exporter
 
 manual = True
@@ -29,6 +29,7 @@ EXPORTERS: Dict[str, Dict[str, Exporter]] = {
         "check-ins": CheckIns(),
         "events": Events(),
         "event-feedback": EventFeedback(),
+        "swag-tiers": SwagTiers(),
     },
 }
 

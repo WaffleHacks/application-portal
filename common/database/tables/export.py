@@ -12,7 +12,7 @@ from .types import TimeStamp
 # The valid exports for each table
 VALID_EXPORTS = {
     "applications": {"all", "mlh-registered", "resume-book"},
-    "attendance": {"check-ins", "events", "event-feedback"},
+    "attendance": {"check-ins", "events", "event-feedback", "swag-tiers"},
 }
 
 
