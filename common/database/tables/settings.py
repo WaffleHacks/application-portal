@@ -27,13 +27,11 @@ U = TypeVar("U")
 class Formatter(ABC, Generic[U]):
     @staticmethod
     @abstractmethod
-    def encode(value: U) -> str:
-        ...
+    def encode(value: U) -> str: ...
 
     @staticmethod
     @abstractmethod
-    def decode(raw: str) -> U:
-        ...
+    def decode(raw: str) -> U: ...
 
 
 class JSONFormatter(Formatter[Any]):
